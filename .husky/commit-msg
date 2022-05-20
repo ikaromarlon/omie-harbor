@@ -1,0 +1,9 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+file=.git/hooks/commit-msg
+fixed="$file.cjs"
+
+test -f "$file" && cp $file $fixed
+
+$fixed $1

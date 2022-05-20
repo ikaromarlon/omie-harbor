@@ -1,0 +1,20 @@
+{
+  "activity" : null,
+  "address" : {},
+  "characteristics" : [],
+  "cnae" : {},
+  "companyId" : "ba18ec26-3b76-4327-9e80-77d008e1e9af",
+  "contact" : null,
+  "cpfcnpj" : null,
+  "email" : null,
+  "externalId" : null,
+  "isActive" : true,
+  "municipalRegistration" : null,
+  "name" : null,
+  "nickName" : null,
+  "personType" : null,
+  "phones" : [],
+  "provider" : "Omie",
+  "stateRegistration" : null,
+  "tags" : []
+}

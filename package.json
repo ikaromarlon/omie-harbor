@@ -1,0 +1,63 @@
+{
+  "name": "full-bpo-bfb",
+  "version": "1.0.0",
+  "description": "FullBPO BFB (Back-end For Back-end) service",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "lint": "standard",
+    "lint:fix": "npm run lint -- --fix",
+    "lint:staged": "lint-staged",
+    "test": "jest --passWithNoTests --runInBand --silent",
+    "test:verbose": "jest --passWithNoTests --runInBand --verbose",
+    "test:staged": "npm test -- --findRelatedTests",
+    "test:unit": "npm test -- --watch ./tests/unit",
+    "test:integration": "npm test -- --watch ./tests/integration",
+    "test:coverage": "npm run test -- --collectCoverage",
+    "bin": "node ./bin/index.js --",
+    "ci": "npm run test:coverage",
+    "predeploy:dev": "npm run ci -- --stage dev",
+    "predeploy:prd": "npm run ci -- --stage prd",
+    "deploy": "sls deploy --verbose",
+    "postdeploy": "npm run bin -- --setupDb",
+    "deploy:dev": "export STAGE=dev; npm run deploy -- --stage dev",
+    "deploy:prd": "export STAGE=prd; npm run deploy -- --stage prd"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fullbpo/full-bpo-bfb.git"
+  },
+  "author": "Icaro Silva",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fullbpo/full-bpo-bfb/issues"
+  },
+  "homepage": "https://github.com/fullbpo/full-bpo-bfb#readme",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "joi": "^17.4.2",
+    "mongodb": "^4.2.1",
+    "uuid-by-string": "^3.0.6"
+  },
+  "devDependencies": {
+    "@shelf/jest-mongodb": "^2.1.0",
+    "@types/jest": "^27.0.2",
+    "aws-sdk": "^2.1053.0",
+    "dotenv": "^10.0.0",
+    "git-commit-msg-linter": "^3.2.8",
+    "husky": "^7.0.4",
+    "jest": "^27.3.1",
+    "lint-staged": "^11.2.3",
+    "serverless": "^3.0.0",
+    "serverless-cloudside-plugin": "^1.0.6",
+    "serverless-iam-roles-per-function": "^3.2.0",
+    "standard": "^16.0.4"
+  },
+  "standard": {
+    "env": [
+      "jest"
+    ]
+  }
+}

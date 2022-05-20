@@ -1,0 +1,52 @@
+{
+  "nPagina": 1,
+  "nTotPaginas": 1,
+  "nRegistros": 1,
+  "nTotRegistros": 1,
+  "cadastros": [
+    {
+      "cabecalho": {
+        "cCodCateg": "",
+        "cCodLC116": "8.02",
+        "cCodServMun": "8.02",
+        "cCodigo": "SRV00001",
+        "cDescricao": "Treinamentos Gerenciais",
+        "cIdTrib": "",
+        "nIdNBS": "",
+        "nPrecoUnit": 13215.44
+      },
+      "descricao": {
+        "cDescrCompleta": "Treinamentos Gerenciais"
+      },
+      "impostos": {
+        "cRetCOFINS": "N",
+        "cRetCSLL": "N",
+        "cRetINSS": "N",
+        "cRetIR": "N",
+        "cRetISS": "N",
+        "cRetPIS": "N",
+        "nAliqCOFINS": 0,
+        "nAliqCSLL": 0,
+        "nAliqINSS": 0,
+        "nAliqIR": 0,
+        "nAliqISS": 0,
+        "nAliqPIS": 0,
+        "nRedBaseINSS": 0
+      },
+      "info": {
+        "cImpAPI": "N",
+        "dAlt": "16/04/2019",
+        "dInc": "03/05/2019",
+        "hAlt": "11:46:40",
+        "hInc": "17:15:14",
+        "inativo": "N",
+        "uAlt": "P000114759",
+        "uInc": "P000114759"
+      },
+      "intListar": {
+        "cCodIntServ": "",
+        "nCodServ": 617704895
+      }
+    }
+  ]
+}

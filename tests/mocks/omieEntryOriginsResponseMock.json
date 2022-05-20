@@ -1,0 +1,152 @@
+{
+  "pagina": 0,
+  "total_de_paginas": 0,
+  "registros": 0,
+  "total_de_registros": 0,
+  "origem": [
+    {
+      "codigo": "ADCP",
+      "descricao": "Adiantamento de Compra a Pagar"
+    },
+    {
+      "codigo": "ADCR",
+      "descricao": "Adiantamento de Compra em Aberto"
+    },
+    {
+      "codigo": "ADVP",
+      "descricao": "Adiantamento de Venda em Aberto"
+    },
+    {
+      "codigo": "ADVR",
+      "descricao": "Adiantamento de Venda a Receber"
+    },
+    {
+      "codigo": "APBP",
+      "descricao": "Integração de Pagamento de Conta"
+    },
+    {
+      "codigo": "APBR",
+      "descricao": "Integração de Recebimento de Conta"
+    },
+    {
+      "codigo": "APEP",
+      "descricao": "Integração de Lançamento de Despesa"
+    },
+    {
+      "codigo": "APER",
+      "descricao": "Integração de Lançamento de Receita"
+    },
+    {
+      "codigo": "APIP",
+      "descricao": "Integração de Conta a Pagar"
+    },
+    {
+      "codigo": "APIR",
+      "descricao": "Integração de Conta a Receber"
+    },
+    {
+      "codigo": "BARP",
+      "descricao": "Conta a Pagar Importada por Código de Barras"
+    },
+    {
+      "codigo": "BARR",
+      "descricao": "Conta a Receber Importada por Código de Barras"
+    },
+    {
+      "codigo": "BAXP",
+      "descricao": "Pagamento de Conta a Pagar"
+    },
+    {
+      "codigo": "BAXR",
+      "descricao": "Recebimento de Conta a Receber"
+    },
+    {
+      "codigo": "COMP",
+      "descricao": "Parcela a Pagar de Compras"
+    },
+    {
+      "codigo": "CTEP",
+      "descricao": "Parcela a Pagar de um CT-e"
+    },
+    {
+      "codigo": "CTER",
+      "descricao": "Parcela a Receber de um CT-e"
+    },
+    {
+      "codigo": "DEVP",
+      "descricao": "Conta a Pagar da Devolução de Venda"
+    },
+    {
+      "codigo": "DEVR",
+      "descricao": "Conta a Receber da Devolução ao Fornecedor"
+    },
+    {
+      "codigo": "EXTP",
+      "descricao": "Lançamento Manual de Despesa"
+    },
+    {
+      "codigo": "EXTR",
+      "descricao": "Lançamento Manual de Receita"
+    },
+    {
+      "codigo": "IMPP",
+      "descricao": "Parcela a Pagar de uma Nota de Importação"
+    },
+    {
+      "codigo": "IRTP",
+      "descricao": "Imposto Retido a Pagar"
+    },
+    {
+      "codigo": "MANP",
+      "descricao": "Lançamento Manual de Conta a Pagar"
+    },
+    {
+      "codigo": "MANR",
+      "descricao": "Lançamento Manual de Conta a Receber"
+    },
+    {
+      "codigo": "NFEP",
+      "descricao": "Conta a Pagar Importada de uma NF-e"
+    },
+    {
+      "codigo": "NFER",
+      "descricao": "Conta a Receber Importada de uma NF-e"
+    },
+    {
+      "codigo": "OFXP",
+      "descricao": "Pagamento Importado de um arquivo OFX"
+    },
+    {
+      "codigo": "OFXR",
+      "descricao": "Recebimento Importado de um arquivo OFX"
+    },
+    {
+      "codigo": "RPTP",
+      "descricao": "Repetição de Contas a Pagar"
+    },
+    {
+      "codigo": "RPTR",
+      "descricao": "Repetição de Contas a Receber"
+    },
+    {
+      "codigo": "TRAP",
+      "descricao": "Débito de Transf. entre Contas Correntes"
+    },
+    {
+      "codigo": "TRAR",
+      "descricao": "Crédito de Transf. entre Contas Correntes"
+    },
+    {
+      "codigo": "VENR",
+      "descricao": "Parcela a Receber de Vendas"
+    },
+    {
+      "codigo": "XMLP",
+      "descricao": "Conta a Pagar Importada de um arquivo XML"
+    },
+    {
+      "codigo": "XMLR",
+      "descricao": "Conta a Receber Importada de um arquivo XML"
+    }
+  ]
+}

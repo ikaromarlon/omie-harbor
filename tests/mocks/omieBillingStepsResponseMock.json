@@ -1,0 +1,240 @@
+{
+  "pagina": 1,
+  "total_de_paginas": 1,
+  "registros": 33,
+  "total_de_registros": 33,
+  "cadastros": [
+    {},
+    {
+      "cCodOperacao": "01",
+      "cDescOperacao": "Venda de Serviço",
+      "etapas": [
+        {
+          "cCodigo": "00",
+          "cDescrPadrao": "Proposta",
+          "cDescricao": ""
+        },
+        {
+          "cCodigo": "10",
+          "cDescrPadrao": "Ordem de Serviço",
+          "cDescricao": "Ordem de Serviço"
+        },
+        {
+          "cCodigo": "20",
+          "cDescrPadrao": "Em Execução",
+          "cDescricao": "Em Execução"
+        },
+        {
+          "cCodigo": "30",
+          "cDescrPadrao": "Executada",
+          "cDescricao": "Executada"
+        },
+        {
+          "cCodigo": "40",
+          "cDescrPadrao": "<disponível>",
+          "cDescricao": "<disponível>"
+        },
+        {
+          "cCodigo": "50",
+          "cDescrPadrao": "Faturar",
+          "cDescricao": "Faturar"
+        },
+        {
+          "cCodigo": "60",
+          "cDescrPadrao": "Faturado",
+          "cDescricao": "Faturado"
+        }
+      ]
+    },
+    {
+      "cCodOperacao": "11",
+      "cDescOperacao": "Venda de Produto",
+      "etapas": [
+        {
+          "cCodigo": "00",
+          "cDescrPadrao": "Proposta",
+          "cDescricao": "Orçamento"
+        },
+        {
+          "cCodigo": "10",
+          "cDescrPadrao": "Pedido de Venda",
+          "cDescricao": "Pedido de Venda (Orçamento)"
+        },
+        {
+          "cCodigo": "20",
+          "cDescrPadrao": "Separar Estoque",
+          "cDescricao": "Produção"
+        },
+        {
+          "cCodigo": "50",
+          "cDescrPadrao": "Faturar",
+          "cDescricao": "Estoque"
+        },
+        {
+          "cCodigo": "60",
+          "cDescrPadrao": "Faturado",
+          "cDescricao": "Faturado"
+        },
+        {
+          "cCodigo": "70",
+          "cDescrPadrao": "Entrega",
+          "cDescricao": "Entrega"
+        },
+        {
+          "cCodigo": "80",
+          "cDescrPadrao": "<disponível>",
+          "cDescricao": "Envase"
+        }
+      ]
+    },
+    {
+      "cCodOperacao": "13",
+      "cDescOperacao": "Devolução de Venda",
+      "etapas": [
+        {
+          "cCodigo": "10",
+          "cDescrPadrao": "Devolução de Venda",
+          "cDescricao": "Devolução de Venda"
+        }
+      ]
+    },
+    {
+      "cCodOperacao": "14",
+      "cDescOperacao": "Remessa de Produto",
+      "etapas": [
+        {
+          "cCodigo": "10",
+          "cDescrPadrao": "Remessa de Produto",
+          "cDescricao": "Remessa de Produto"
+        }
+      ]
+    },
+    {
+      "cCodOperacao": "16",
+      "cDescOperacao": "Nota Complementar de Saída",
+      "etapas": [
+        {
+          "cCodigo": "10",
+          "cDescrPadrao": "Complementar ou Ajuste",
+          "cDescricao": "Complementar ou Ajuste"
+        }
+      ]
+    },
+    {
+      "cCodOperacao": "21",
+      "cDescOperacao": "Compra de Produto",
+      "etapas": [
+        {
+          "cCodigo": "10",
+          "cDescrPadrao": "Pedido de Compra",
+          "cDescricao": "Pedido de Compra"
+        },
+        {
+          "cCodigo": "20",
+          "cDescrPadrao": "Requisição",
+          "cDescricao": "Requisição"
+        },
+        {
+          "cCodigo": "30",
+          "cDescrPadrao": "Marketplace",
+          "cDescricao": "Marketplace"
+        },
+        {
+          "cCodigo": "40",
+          "cDescrPadrao": "Faturado pelo Fornecedor",
+          "cDescricao": "Faturado pelo Fornecedor"
+        },
+        {
+          "cCodigo": "60",
+          "cDescrPadrao": "Recebido",
+          "cDescricao": "Recebido"
+        },
+        {
+          "cCodigo": "80",
+          "cDescrPadrao": "Conferido",
+          "cDescricao": "Conferido"
+        }
+      ]
+    },
+    {
+      "cCodOperacao": "22",
+      "cDescOperacao": "Compra de Produto (Importação)",
+      "etapas": [
+        {
+          "cCodigo": "10",
+          "cDescrPadrao": "Importação de Mercadoria",
+          "cDescricao": "Importação de Mercadoria"
+        }
+      ]
+    },
+    {
+      "cCodOperacao": "23",
+      "cDescOperacao": "Devolução ao Fornecedor",
+      "etapas": [
+        {
+          "cCodigo": "10",
+          "cDescrPadrao": "Devolução ao Fornecedor",
+          "cDescricao": "Devolução ao Fornecedor"
+        }
+      ]
+    },
+    {
+      "cCodOperacao": "24",
+      "cDescOperacao": "Retorno de Remessa",
+      "etapas": [
+        {
+          "cCodigo": "10",
+          "cDescrPadrao": "Nota de Entrada",
+          "cDescricao": "Nota de Entrada"
+        }
+      ]
+    },
+    {
+      "cCodOperacao": "26",
+      "cDescOperacao": "Nota Complementar de Entrada",
+      "etapas": [
+        {
+          "cCodigo": "10",
+          "cDescrPadrao": "Complementar ou Ajuste",
+          "cDescricao": "Complementar ou Ajuste"
+        }
+      ]
+    },
+    {
+      "cCodOperacao": "28",
+      "cDescOperacao": "Ordem de Produção",
+      "etapas": [
+        {
+          "cCodigo": "10",
+          "cDescrPadrao": "A Produzir",
+          "cDescricao": "A Produzir"
+        },
+        {
+          "cCodigo": "20",
+          "cDescrPadrao": "Produzindo",
+          "cDescricao": "Produzindo"
+        },
+        {
+          "cCodigo": "30",
+          "cDescrPadrao": "Qualidade",
+          "cDescricao": "Qualidade"
+        },
+        {
+          "cCodigo": "40",
+          "cDescrPadrao": "Conferido",
+          "cDescricao": "Conferido"
+        },
+        {
+          "cCodigo": "60",
+          "cDescrPadrao": "Concluído",
+          "cDescricao": "Concluído"
+        },
+        {
+          "cCodigo": "80",
+          "cDescrPadrao": "Armazenado",
+          "cDescricao": "Armazenado"
+        }
+      ]
+    }
+  ]
+}

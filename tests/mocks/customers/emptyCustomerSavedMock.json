@@ -1,0 +1,23 @@
+{
+  "_id" : "f57d463c-a6f8-50e5-a2ca-d9e1bffd0e69",
+  "activity" : null,
+  "address" : {},
+  "characteristics" : [],
+  "cnae" : {},
+  "companyId" : "ba18ec26-3b76-4327-9e80-77d008e1e9af",
+  "contact" : null,
+  "cpfcnpj" : null,
+  "createdAt" : "2022-03-26T15:39:45.974Z",
+  "email" : null,
+  "externalId" : null,
+  "isActive" : true,
+  "municipalRegistration" : null,
+  "name" : null,
+  "nickName" : null,
+  "personType" : null,
+  "phones" : [],
+  "provider" : "Omie",
+  "stateRegistration" : null,
+  "tags" : [],
+  "updatedAt" : "2022-03-26T15:39:45.974Z"
+}

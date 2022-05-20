@@ -1,0 +1,109 @@
+{
+  "nPagina": 1,
+  "nTotPaginas": 1,
+  "nRegistros": 1,
+  "nTotRegistros": 1,
+  "nfseEncontradas": [
+    {
+      "Adicionais": {
+        "cCodigoCategoria": "1.01.01",
+        "nCodigoCC": 630881258,
+        "nCodigoProjeto": 617693956
+      },
+      "Alteracao": {
+        "cDataAlteracao": "03/05/2019",
+        "cHoraAlteracao": "16:54:34",
+        "cUsuarioAlteracao": "P000114759"
+      },
+      "Cabecalho": {
+        "cAmbienteNFSe": "P",
+        "cCNPJDestinatario": "08.336.849/0001-42",
+        "cCNPJEmissor": "25.292.334/0001-07",
+        "cCidadeEmissor": "BRASILIA (DF)",
+        "cCodigoVerifNFSe": "353190018638199",
+        "cIMDestinatario": "ISENTO",
+        "cIMEmissor": "0777761600186",
+        "cStatusNFSe": "F",
+        "nChaveNFe": "53190525292334000107550010000000081822169371",
+        "nCodNF": 618754182,
+        "nCodigoCliente": 617700984,
+        "nNumeroNFSe": "8",
+        "nValorNFSe": 13215.44
+      },
+      "Emissao": {
+        "cDataEmissao": "03/05/2019",
+        "cHoraEmissao": "16:54:34",
+        "cUsuarioEmissao": "P000114759"
+      },
+      "Inclusao": {
+        "cDataInclusao": "03/05/2019",
+        "cHoraInclusao": "16:54:34",
+        "cUsuarioInclusao": "P000114759"
+      },
+      "ListaServicos": [
+        {
+          "CidadePrestacao": "BRASILIA (DF)",
+          "CodigoLC116": "8.02",
+          "CodigoServico": "8.02",
+          "NBS": "",
+          "cDescricao": "Treinamentos Gerenciais",
+          "cRetCOFINS": "N",
+          "cRetCSLL": "N",
+          "cRetINSS": "N",
+          "cRetIR": "N",
+          "cRetISS": "N",
+          "cRetPIS": "N",
+          "nAliquotaCOFINS": 0,
+          "nAliquotaCSLL": 0,
+          "nAliquotaINSS": 0,
+          "nAliquotaIR": 0,
+          "nAliquotaISS": 0,
+          "nAliquotaPIS": 0,
+          "nDescontoValor": 0,
+          "nQuantidade": 1,
+          "nValorCOFINS": 0,
+          "nValorCSLL": 0,
+          "nValorINSS": 0,
+          "nValorIR": 0,
+          "nValorISS": 0,
+          "nValorOutrasDespesas": 0,
+          "nValorPIS": 0,
+          "nValorServico": 13215.44,
+          "nValorTotal": 13215.44,
+          "nValorUnitario": 13215.44
+        }
+      ],
+      "OrdemServico": {
+        "Departamentos": [
+          {
+            "cCodigoDepartamento": "617693138",
+            "nPercentualDistribuicao": 100,
+            "nValorDistribuicao": 13215.44,
+            "nValorFixo": "N"
+          }
+        ],
+        "cNumeroContrato": "2018/2019",
+        "nCodigoContrato": 617704532,
+        "nCodigoOS": 618754178,
+        "nNumeroOS": "15",
+        "nValorOS": 13215.44
+      },
+      "RPS": {
+        "cProtocoloRPS": "353190018638199",
+        "cSerieRPS": "NFSE",
+        "cStatusRPS": "004",
+        "nNumeroLote": 618754184,
+        "nNumeroRPS": "2",
+        "nStatusLote": "004"
+      },
+      "Servicos": {
+        "CidadePrestacao": "BRASILIA (DF)"
+      },
+      "Valores": {
+        "cIssRetido": "N",
+        "nValorLiquido": 13215.44,
+        "nValorTotalServicos": 13215.44
+      }
+    }
+  ]
+}

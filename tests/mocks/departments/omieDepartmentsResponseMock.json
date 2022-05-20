@@ -1,0 +1,26 @@
+{
+  "pagina": 1,
+  "total_de_paginas": 1,
+  "registros": 3,
+  "total_de_registros": 3,
+  "departamentos": [
+    {
+      "codigo": "619153916",
+      "descricao": "PEAT",
+      "estrutura": "001.004.001",
+      "inativo": "N"
+    },
+    {
+      "codigo": "619153908",
+      "descricao": "Programas",
+      "estrutura": "001.004",
+      "inativo": "N"
+    },
+    {
+      "codigo": "617693138",
+      "descricao": "Dois Soluções Gerenciais Ltda",
+      "estrutura": "001",
+      "inativo": "N"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "externalId": "630881258",
+  "provider": "Omie",
+  "companyId": "25c176b6-b200-4575-9217-e23c6105163c",
+  "bank": {
+    "code": "077",
+    "name": "Banco Inter"
+  },
+  "branch": "0001-9",
+  "number": "3286745-0",
+  "description": "Banco Inter",
+  "type": {
+    "code": "CC",
+    "description": "Conta Corrente"
+  },
+  "initialBalance": 0,
+  "initialBalanceDate": "2019-07-01",
+  "blocked": false,
+  "isActive": true
+}

@@ -1,0 +1,17 @@
+{
+  "_id" : "430cb604-ec83-5c5d-9086-848a6d4e24b4",
+  "bank" : {},
+  "blocked" : null,
+  "branch" : null,
+  "companyId" : "ba18ec26-3b76-4327-9e80-77d008e1e9af",
+  "createdAt" : "2022-03-26T15:39:45.976Z",
+  "description" : null,
+  "externalId" : null,
+  "initialBalance" : null,
+  "initialBalanceDate" : null,
+  "isActive" : true,
+  "number" : null,
+  "provider" : "Omie",
+  "type" : {},
+  "updatedAt" : "2022-03-26T15:39:45.976Z"
+}

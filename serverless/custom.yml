@@ -1,0 +1,36 @@
+# serverless plugins
+serverless-iam-roles-per-function:
+  defaultInherit: true
+
+# serverless general config
+accountId: 820389075840
+basename: ${self:service}-${self:provider.stage}
+
+# serverless config by environment
+region:
+  dev: us-east-1
+  prd: sa-east-1
+appApiKeys:
+    dev: 9284a1afee204e4d9b34442bc3e44636
+    prd: 20067a7d3f784e6da7e911a656b5dc9b
+enableIngestionPerformerSchedule1:
+  dev: true
+  prd: false
+enableIngestionPerformerSchedule2:
+  dev: false
+  prd: false
+enableIngestionPerformerSchedule3:
+  dev: false
+  prd: false
+
+# application environment variables
+env:
+  FLAGS_LOG_EACH_OMIE_ERROR:
+    dev: false
+    prd: false
+  FLAGS_UPDATE_EMPTY_RECORDS:
+    dev: false
+    prd: false
+
+  
+  

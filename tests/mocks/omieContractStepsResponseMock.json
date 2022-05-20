@@ -1,0 +1,72 @@
+[
+  {
+    "etapa": "20",
+    "descricao": "NAO_FATURADO",
+    "contratos": [
+      {
+        "cNumCtr": "2018/2019",
+        "nCodCtr": 617704532
+      }
+    ]
+  },
+  {
+    "etapa": "30",
+    "descricao": "FATURADO_NO_MES",
+    "contratos": [
+      {
+        "cNumCtr": "2021/00001",
+        "nCodCtr": 2298128673
+      },
+      {
+        "cNumCtr": "2021/00002",
+        "nCodCtr": 2298129404
+      },
+      {
+        "cNumCtr": "2021/00003",
+        "nCodCtr": 2298761632
+      },
+      {
+        "cNumCtr": "2021/00004",
+        "nCodCtr": 2666236910
+      },
+      {
+        "cNumCtr": "2021/00005",
+        "nCodCtr": 2677641353
+      },
+      {
+        "cNumCtr": "2021/0005",
+        "nCodCtr": 2704107212
+      },
+      {
+        "cNumCtr": "2021/0007",
+        "nCodCtr": 2718100449
+      },
+      {
+        "cNumCtr": "2022/00001",
+        "nCodCtr": 2720086100
+      }
+    ]
+  },
+  {
+    "etapa": "40",
+    "descricao": "A_RENOVAR",
+    "contratos": [
+      {
+        "cNumCtr": "2021/00001",
+        "nCodCtr": 2298128673
+      },
+      {
+        "cNumCtr": "2021/00002",
+        "nCodCtr": 2298129404
+      },
+      {
+        "cNumCtr": "2021/00003",
+        "nCodCtr": 2298761632
+      },
+      {
+        "cNumCtr": "2021/0007",
+        "nCodCtr": 2718100449
+      }
+    ]
+  }
+]

@@ -1,0 +1,660 @@
+{
+  "tipo_documento_cadastro": [
+    {
+      "codigo": "DIN",
+      "descricao": "Dinheiro"
+    },
+    {
+      "codigo": "CHQ",
+      "descricao": "Cheque"
+    },
+    {
+      "codigo": "BOL",
+      "descricao": "Boleto"
+    },
+    {
+      "codigo": "CRT",
+      "descricao": "Cartão"
+    },
+    {
+      "codigo": "CRE",
+      "descricao": "Crediário"
+    },
+    {
+      "codigo": "CON",
+      "descricao": "Convênios"
+    },
+    {
+      "codigo": "DOC",
+      "descricao": "DOC"
+    },
+    {
+      "codigo": "TED",
+      "descricao": "TED"
+    },
+    {
+      "codigo": "99999",
+      "descricao": "Outros"
+    },
+    {
+      "codigo": "TRA",
+      "descricao": "Transferência"
+    },
+    {
+      "codigo": "DRF",
+      "descricao": "DARF"
+    },
+    {
+      "codigo": "DEB",
+      "descricao": "Débito em Conta"
+    },
+    {
+      "codigo": "DAS",
+      "descricao": "DAS"
+    },
+    {
+      "codigo": "GUIA",
+      "descricao": "Guia de Recolhimento"
+    },
+    {
+      "codigo": "PROT",
+      "descricao": "Protesto"
+    },
+    {
+      "codigo": "ADI",
+      "descricao": "Adiantamento"
+    },
+    {
+      "codigo": "REC",
+      "descricao": "Recibo"
+    },
+    {
+      "codigo": "RPA",
+      "descricao": "RPA"
+    },
+    {
+      "codigo": "RES",
+      "descricao": "Resgate"
+    },
+    {
+      "codigo": "DARM",
+      "descricao": "DARM"
+    },
+    {
+      "codigo": "GRU",
+      "descricao": "GRU"
+    },
+    {
+      "codigo": "CNT",
+      "descricao": "Crédito em Conta"
+    },
+    {
+      "codigo": "ACO",
+      "descricao": "Acordo"
+    },
+    {
+      "codigo": "DEBA",
+      "descricao": "Débito Automático"
+    },
+    {
+      "codigo": "PROV",
+      "descricao": "Provisão"
+    },
+    {
+      "codigo": "DUA",
+      "descricao": "DUA"
+    },
+    {
+      "codigo": "CHT",
+      "descricao": "Cheque de Terceiros"
+    },
+    {
+      "codigo": "DAM",
+      "descricao": "DAM"
+    },
+    {
+      "codigo": "GPS",
+      "descricao": "GPS"
+    },
+    {
+      "codigo": "DAJE",
+      "descricao": "DAJE"
+    },
+    {
+      "codigo": "GNRE",
+      "descricao": "GNRE"
+    },
+    {
+      "codigo": "DAE",
+      "descricao": "DAE"
+    },
+    {
+      "codigo": "DARE",
+      "descricao": "DARE"
+    },
+    {
+      "codigo": "ND",
+      "descricao": "Nota de Débito"
+    },
+    {
+      "codigo": "DEP",
+      "descricao": "Depósito"
+    },
+    {
+      "codigo": "IMP",
+      "descricao": "Imposto"
+    },
+    {
+      "codigo": "CHP",
+      "descricao": "Cheque Pré"
+    },
+    {
+      "codigo": "FPGT",
+      "descricao": "Folha de Pagamento"
+    },
+    {
+      "codigo": "FAT",
+      "descricao": "Fatura"
+    },
+    {
+      "codigo": "NFE",
+      "descricao": "Nota Fiscal Eletrônica"
+    },
+    {
+      "codigo": "DANFE",
+      "descricao": "DANFE"
+    },
+    {
+      "codigo": "CTE",
+      "descricao": "CT-e"
+    },
+    {
+      "codigo": "TX",
+      "descricao": "Taxa"
+    },
+    {
+      "codigo": "FIN",
+      "descricao": "Financiamento"
+    },
+    {
+      "codigo": "DARJ",
+      "descricao": "DARJ"
+    },
+    {
+      "codigo": "SAQ",
+      "descricao": "Saque"
+    },
+    {
+      "codigo": "CRC",
+      "descricao": "Cartão de Crédito"
+    },
+    {
+      "codigo": "CRD",
+      "descricao": "Cartão de Débito"
+    },
+    {
+      "codigo": "TIC",
+      "descricao": "Ticket"
+    },
+    {
+      "codigo": "NFCE",
+      "descricao": "Nota Fiscal de Consumidor Eletrônica"
+    },
+    {
+      "codigo": "APL",
+      "descricao": "Aplicação"
+    },
+    {
+      "codigo": "GRCS",
+      "descricao": "GRCS"
+    },
+    {
+      "codigo": "NF",
+      "descricao": "Nota Fiscal"
+    },
+    {
+      "codigo": "CF",
+      "descricao": "Cupom Fiscal"
+    },
+    {
+      "codigo": "DNF",
+      "descricao": "Documento não fiscal"
+    },
+    {
+      "codigo": "REE",
+      "descricao": "Reembolso"
+    },
+    {
+      "codigo": "ENC",
+      "descricao": "Encargos"
+    },
+    {
+      "codigo": "DDA",
+      "descricao": "DDA"
+    },
+    {
+      "codigo": "VOU",
+      "descricao": "Voucher"
+    },
+    {
+      "codigo": "GARE",
+      "descricao": "GARE"
+    },
+    {
+      "codigo": "GRCSU",
+      "descricao": "GRCSU"
+    },
+    {
+      "codigo": "DAR",
+      "descricao": "DAR"
+    },
+    {
+      "codigo": "MUTUO",
+      "descricao": "Mútuo"
+    },
+    {
+      "codigo": "CTR",
+      "descricao": "Contrato"
+    },
+    {
+      "codigo": "INV",
+      "descricao": "Invoice"
+    },
+    {
+      "codigo": "DNFSE",
+      "descricao": "DANFSE"
+    },
+    {
+      "codigo": "CHD",
+      "descricao": "Cheque Devolvido"
+    },
+    {
+      "codigo": "ANT",
+      "descricao": "Antecipação"
+    },
+    {
+      "codigo": "DUP",
+      "descricao": "Duplicata"
+    },
+    {
+      "codigo": "DEV",
+      "descricao": "Devolução"
+    },
+    {
+      "codigo": "VIST",
+      "descricao": "A Vista"
+    },
+    {
+      "codigo": "PER",
+      "descricao": "Permuta"
+    },
+    {
+      "codigo": "FIA",
+      "descricao": "Fiado"
+    },
+    {
+      "codigo": "TAR",
+      "descricao": "Tarifa"
+    },
+    {
+      "codigo": "DFE",
+      "descricao": "Documento Fiscal Equivalente"
+    },
+    {
+      "codigo": "DPVAT",
+      "descricao": "DPVAT"
+    },
+    {
+      "codigo": "NFS",
+      "descricao": "Nota Fiscal de Serviço"
+    },
+    {
+      "codigo": "NFA",
+      "descricao": "Nota Fiscal de Abastecimento"
+    },
+    {
+      "codigo": "EMP",
+      "descricao": "Empréstimo"
+    },
+    {
+      "codigo": "APO",
+      "descricao": "Apólice"
+    },
+    {
+      "codigo": "DLC",
+      "descricao": "Distribuição de Lucros"
+    },
+    {
+      "codigo": "NFC",
+      "descricao": "Nota Fiscal de Consumidor"
+    },
+    {
+      "codigo": "RET",
+      "descricao": "Rescisão Trabalhista"
+    },
+    {
+      "codigo": "PROL",
+      "descricao": "Pro-Labore"
+    },
+    {
+      "codigo": "MED",
+      "descricao": "Medição"
+    },
+    {
+      "codigo": "PEN",
+      "descricao": "Pensão Alimentícia"
+    },
+    {
+      "codigo": "BIL",
+      "descricao": "Bilhete"
+    },
+    {
+      "codigo": "NFST",
+      "descricao": "Nota Fiscal de Telecomunicações"
+    },
+    {
+      "codigo": "NC",
+      "descricao": "Nota de Crédito"
+    },
+    {
+      "codigo": "NFD",
+      "descricao": "Nota Fiscal de Devolução"
+    },
+    {
+      "codigo": "FER",
+      "descricao": "Férias"
+    },
+    {
+      "codigo": "PED",
+      "descricao": "Pedido"
+    },
+    {
+      "codigo": "DUAM",
+      "descricao": "DUAM"
+    },
+    {
+      "codigo": "CAP",
+      "descricao": "Capitalização"
+    },
+    {
+      "codigo": "TRLAV",
+      "descricao": "Licenciamento"
+    },
+    {
+      "codigo": "IPVA",
+      "descricao": "IPVA"
+    },
+    {
+      "codigo": "MULTA",
+      "descricao": "Multas"
+    },
+    {
+      "codigo": "COM",
+      "descricao": "Comissão"
+    },
+    {
+      "codigo": "CONC",
+      "descricao": "Cobrança de Concessionária"
+    },
+    {
+      "codigo": "HOL",
+      "descricao": "Holerite"
+    },
+    {
+      "codigo": "DACTE",
+      "descricao": "DACTE"
+    },
+    {
+      "codigo": "IPTU",
+      "descricao": "IPTU"
+    },
+    {
+      "codigo": "BONUS",
+      "descricao": "Bonus"
+    },
+    {
+      "codigo": "JUROS",
+      "descricao": "Juros Limite"
+    },
+    {
+      "codigo": "WSITE",
+      "descricao": "Website"
+    },
+    {
+      "codigo": "COB",
+      "descricao": "Cobrança"
+    },
+    {
+      "codigo": "REND",
+      "descricao": "Rendimentos"
+    },
+    {
+      "codigo": "TID",
+      "descricao": "Título Descontado"
+    },
+    {
+      "codigo": "CONS",
+      "descricao": "Consignado"
+    },
+    {
+      "codigo": "COND",
+      "descricao": "Condicional"
+    },
+    {
+      "codigo": "BOLV",
+      "descricao": "Boleto à Vista"
+    },
+    {
+      "codigo": "TRAV",
+      "descricao": "Transferência à Vista"
+    },
+    {
+      "codigo": "TFE",
+      "descricao": "Taxa de Fiscalização de Estabelecimentos"
+    },
+    {
+      "codigo": "CONSO",
+      "descricao": "Consórcio"
+    },
+    {
+      "codigo": "ACOB",
+      "descricao": "Acordo - Boleto"
+    },
+    {
+      "codigo": "ACOT",
+      "descricao": "Acordo - Transferência"
+    },
+    {
+      "codigo": "13S",
+      "descricao": "13o. Salário"
+    },
+    {
+      "codigo": "CUSJ",
+      "descricao": "Custos Judiciais"
+    },
+    {
+      "codigo": "PROF",
+      "descricao": "Proforma Invoice"
+    },
+    {
+      "codigo": "DOA",
+      "descricao": "Doação"
+    },
+    {
+      "codigo": "SUP",
+      "descricao": "Suprimento"
+    },
+    {
+      "codigo": "SAN",
+      "descricao": "Sangria"
+    },
+    {
+      "codigo": "PIX",
+      "descricao": "Pix"
+    },
+    {
+      "codigo": "ETAR",
+      "descricao": "Estorno de Tarifa"
+    },
+    {
+      "codigo": "CART",
+      "descricao": "Carteira"
+    },
+    {
+      "codigo": "CRTO",
+      "descricao": "Cartório"
+    },
+    {
+      "codigo": "NFSTM",
+      "descricao": "Nota Fiscal de Serviço Tomado"
+    },
+    {
+      "codigo": "CRP",
+      "descricao": "Cartão Pré-Pago"
+    },
+    {
+      "codigo": "GAR",
+      "descricao": "Garantia"
+    },
+    {
+      "codigo": "NFEE",
+      "descricao": "Nota Fiscal Energia Elétrica"
+    },
+    {
+      "codigo": "NF3E",
+      "descricao": "Nota Fiscal de Energia Elétrica Eletrônica"
+    },
+    {
+      "codigo": "ASS",
+      "descricao": "Assinatura"
+    },
+    {
+      "codigo": "PDD",
+      "descricao": "PDD"
+    },
+    {
+      "codigo": "APOR",
+      "descricao": "Aporte"
+    },
+    {
+      "codigo": "AFAT",
+      "descricao": "A faturar"
+    },
+    {
+      "codigo": "BDV",
+      "descricao": "BDV"
+    },
+    {
+      "codigo": "BDI",
+      "descricao": "BDI"
+    },
+    {
+      "codigo": "MIN",
+      "descricao": "Minuta de Despacho"
+    },
+    {
+      "codigo": "VT",
+      "descricao": "Vale-Transporte"
+    },
+    {
+      "codigo": "IRSR",
+      "descricao": "IRRF Sobre Rendimentos"
+    },
+    {
+      "codigo": "CAMB",
+      "descricao": "Câmbio"
+    },
+    {
+      "codigo": "GRF",
+      "descricao": "GRF"
+    },
+    {
+      "codigo": "COMI",
+      "descricao": "Comissária"
+    },
+    {
+      "codigo": "NLOC",
+      "descricao": "Nota de Locação"
+    },
+    {
+      "codigo": "DAI",
+      "descricao": "Documento de Arrecadação de Importação"
+    },
+    {
+      "codigo": "IOF",
+      "descricao": "IOF"
+    },
+    {
+      "codigo": "CR",
+      "descricao": "Crédito Recorrente"
+    },
+    {
+      "codigo": "DIV",
+      "descricao": "Dividendo"
+    },
+    {
+      "codigo": "INVT",
+      "descricao": "Investimentos"
+    },
+    {
+      "codigo": "DIS",
+      "descricao": "Dissídio"
+    },
+    {
+      "codigo": "REF",
+      "descricao": "Refeição"
+    },
+    {
+      "codigo": "JUR",
+      "descricao": "Juros de Empréstimos"
+    },
+    {
+      "codigo": "TEF",
+      "descricao": "TEF"
+    },
+    {
+      "codigo": "TEDD",
+      "descricao": "TED/DOC"
+    },
+    {
+      "codigo": "PARI",
+      "descricao": "Parcelamento de Impostos"
+    },
+    {
+      "codigo": "GISS",
+      "descricao": "GISS"
+    },
+    {
+      "codigo": "CDC",
+      "descricao": "Crédito Direto ao Consumidor"
+    },
+    {
+      "codigo": "PROTE",
+      "descricao": "Proter"
+    },
+    {
+      "codigo": "GA",
+      "descricao": "Guia de Arrecadação"
+    },
+    {
+      "codigo": "CARNE",
+      "descricao": "Carnê"
+    },
+    {
+      "codigo": "VR",
+      "descricao": "Vale-Refeição"
+    },
+    {
+      "codigo": "LINK",
+      "descricao": "Link de Pagamento"
+    },
+    {
+      "codigo": "TARP",
+      "descricao": "Tarifa - Pix"
+    },
+    {
+      "codigo": "SEG",
+      "descricao": "Seguro"
+    }
+  ]
+}

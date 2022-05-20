@@ -1,0 +1,38 @@
+{
+  "cnpj": "25292334000107",
+  "address": {
+    "zipCode": "72460310",
+    "street": "Quadra 32",
+    "number": "16",
+    "neighborhood": "Gama",
+    "city": "BRASILIA (DF)",
+    "state": "DF",
+    "additionalInfo": "Lote 16, Setor Leste"
+  },
+  "email": "financeiro@doissolucoes.com.br",
+  "phones": [
+    {
+      "areaCode": "32",
+      "number": "991736987"
+    },
+    {
+      "areaCode": "32",
+      "number": "991736987"
+    }
+  ],
+  "externalId": "617693136",
+  "provider": "Omie",
+  "credentials": {
+    "appKey": "the_app_key",
+    "appSecret": "the_app_secret"
+  },
+  "municipalRegistration": "0777761600186",
+  "cnae": {
+    "code": "8599604",
+    "description": "Treinamento em desenvolvimento profissional e gerencial"
+  },
+  "name": "DOIS SOLUCOES GERENCIAIS LTDA",
+  "nickName": "DOIS SOLUCOES",
+  "stateRegistration": "0777761600186",
+  "isActive": true
+}

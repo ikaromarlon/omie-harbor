@@ -1,0 +1,268 @@
+{
+  "pagina": 1,
+  "total_de_paginas": 1,
+  "registros": 1,
+  "total_de_registros": 1,
+  "pedido_venda_produto": [
+    {
+      "cabecalho": {
+        "bloqueado": "N",
+        "codigo_cenario_impostos": "903496335",
+        "codigo_cliente": 617700984,
+        "codigo_empresa": 902020013,
+        "codigo_parcela": "000",
+        "codigo_pedido": 915642742,
+        "codigo_pedido_integracao": "",
+        "data_previsao": "02/06/2021",
+        "etapa": "70",
+        "importado_api": "",
+        "numero_pedido": "000000000000013",
+        "origem_pedido": "",
+        "qtde_parcelas": 1,
+        "quantidade_itens": 8
+      },
+      "departamentos": [
+        {
+          "cCodDepto": "617693138",
+          "nPerc": 100,
+          "nValor": 240.5,
+          "nValorFixo": "N"
+        }
+      ],
+      "det": [
+        {
+          "combustivel": {},
+          "ide": {
+            "codigo_item": 915649116,
+            "codigo_item_integracao": "",
+            "simples_nacional": "N"
+          },
+          "imposto": {
+            "cofins_padrao": {
+              "aliq_cofins": 0,
+              "base_cofins": 0,
+              "cod_sit_trib_cofins": "07",
+              "qtde_unid_trib_cofins": 0,
+              "tipo_calculo_cofins": "",
+              "valor_cofins": 0,
+              "valor_unid_trib_cofins": 0
+            },
+            "cofins_st": {
+              "aliq_cofins_st": 0,
+              "base_cofins_st": 0,
+              "cod_sit_trib_cofins_st": "07",
+              "margem_cofins_st": 0,
+              "qtde_unid_trib_cofins_st": 0,
+              "tipo_calculo_cofins_st": "",
+              "valor_cofins_st": 0,
+              "valor_unid_trib_cofins_st": 0
+            },
+            "csll": {
+              "aliq_csll": 0,
+              "valor_csll": 0
+            },
+            "icms": {},
+            "icms_ie": {
+              "aliq_icms_FCP": 0,
+              "aliq_interestadual": 0,
+              "aliq_interna_uf_destino": 0,
+              "aliq_partilha_icms": 0,
+              "base_icms_uf_destino": 0,
+              "valor_fcp_icms_inter": 0,
+              "valor_icms_uf_dest": 0,
+              "valor_icms_uf_remet": 0
+            },
+            "icms_sn": {
+              "aliq_icms_sn": 0,
+              "base_icms_sn": 0,
+              "cod_sit_trib_icms_sn": "102",
+              "origem_icms_sn": "0",
+              "valor_credito_icms_sn": 0,
+              "valor_icms_sn": 0
+            },
+            "icms_st": {
+              "aliq_icms_opprop": 0,
+              "aliq_icms_st": 0,
+              "base_icms_st": 0,
+              "cest": "",
+              "cod_sit_trib_icms_st": "",
+              "margem_icms_st": 0,
+              "modalidade_icms_st": "4",
+              "perc_red_base_icms_st": 0,
+              "valor_icms_st": 0
+            },
+            "inss": {
+              "aliq_inss": 0,
+              "valor_inss": 0
+            },
+            "ipi": {
+              "aliq_ipi": 0,
+              "base_ipi": 0,
+              "cod_sit_trib_ipi": "53",
+              "enquadramento_ipi": "999",
+              "qtde_unid_trib_ipi": 0,
+              "tipo_calculo_ipi": "",
+              "valor_ipi": 0,
+              "valor_unid_trib_ipi": 0
+            },
+            "irrf": {
+              "aliq_irrf": 0,
+              "valor_irrf": 0
+            },
+            "iss": {
+              "aliq_iss": 0,
+              "base_iss": 0,
+              "retem_iss": "",
+              "valor_iss": 0
+            },
+            "pis_padrao": {
+              "aliq_pis": 0,
+              "base_pis": 0,
+              "cod_sit_trib_pis": "07",
+              "qtde_unid_trib_pis": 0,
+              "tipo_calculo_pis": "",
+              "valor_pis": 0,
+              "valor_unid_trib_pis": 0
+            },
+            "pis_st": {
+              "aliq_pis_st": 0,
+              "base_pis_st": 0,
+              "cod_sit_trib_pis_st": "07",
+              "margem_pis_st": 0,
+              "qtde_unid_trib_pis_st": 0,
+              "tipo_calculo_pis_st": "",
+              "valor_pis_st": 0,
+              "valor_unid_trib_pis_st": 0
+            }
+          },
+          "inf_adic": {
+            "codigo_categoria_item": "1.01.01",
+            "codigo_cenario_impostos_item": "903496335",
+            "codigo_local_estoque": 902020027,
+            "dados_adicionais_item": "",
+            "item_pedido_compra": 0,
+            "nao_gerar_financeiro": "N",
+            "nao_movimentar_estoque": "N",
+            "numero_pedido_compra": "",
+            "peso_bruto": 0,
+            "peso_liquido": 0
+          },
+          "observacao": {},
+          "produto": {
+            "cfop": "5.102",
+            "cnpj_fabricante": "",
+            "codigo": "374",
+            "codigo_produto": 640524827,
+            "codigo_tabela_preco": 0,
+            "descricao": "300 ML SEM ACUCAR LARANJA",
+            "ean": "",
+            "indicador_escala": "",
+            "motivo_icms_desonerado": "",
+            "ncm": "2009.89.19",
+            "percentual_desconto": 0,
+            "quantidade": 10,
+            "reservado": "N",
+            "tipo_desconto": "",
+            "unidade": "UN",
+            "valor_deducao": 0,
+            "valor_desconto": 0,
+            "valor_icms_desonerado": 0,
+            "valor_mercadoria": 37,
+            "valor_total": 37,
+            "valor_unitario": 3.7
+          },
+          "rastreabilidade": {}
+        }
+      ],
+      "exportacao": {
+        "nao_exportacao": "N"
+      },
+      "frete": {
+        "codigo_rastreio": "",
+        "codigo_tipo_entrega": 0,
+        "codigo_transportadora": 0,
+        "especie_volumes": "",
+        "marca_volumes": "",
+        "modalidade": "9",
+        "numeracao_volumes": "",
+        "numero_lacre": "",
+        "outras_despesas": 0,
+        "peso_bruto": 0,
+        "peso_liquido": 0,
+        "placa": "",
+        "placa_estado": "",
+        "previsao_entrega": "",
+        "quantidade_volumes": 0,
+        "registro_transportador": "",
+        "valor_frete": 0,
+        "valor_seguro": 0,
+        "veiculo_proprio": ""
+      },
+      "infoCadastro": {
+        "autorizado": "S",
+        "cImpAPI": "N",
+        "cancelado": "N",
+        "dAlt": "02/06/2021",
+        "dFat": "01/06/2021",
+        "dInc": "01/06/2021",
+        "denegado": "N",
+        "devolvido": "N",
+        "devolvido_parcial": "N",
+        "faturado": "S",
+        "hAlt": "07:58:26",
+        "hFat": "10:13:07",
+        "hInc": "09:32:05",
+        "uAlt": "P000272380",
+        "uFat": "P000267804",
+        "uInc": "P000267804"
+      },
+      "informacoes_adicionais": {
+        "codProj": 617693956,
+        "codVend": 914370835,
+        "codigo_categoria": "1.01.01",
+        "codigo_conta_corrente": 903529904,
+        "consumidor_final": "S",
+        "contato": "(61) 3551-5521",
+        "dados_adicionais_nf": "",
+        "enviar_email": "N",
+        "numero_contrato": "",
+        "numero_pedido_cliente": "",
+        "outros_detalhes": {},
+        "utilizar_emails": "telvascodorna@gmail.com"
+      },
+      "lista_parcelas": {
+        "parcela": [
+          {
+            "data_vencimento": "11/06/2021",
+            "meio_pagamento": "15",
+            "numero_parcela": 1,
+            "percentual": 100,
+            "quantidade_dias": 0,
+            "tipo_documento": "BOL",
+            "valor": 240.5
+          }
+        ]
+      },
+      "observacoes": {
+        "obs_venda": ""
+      },
+      "total_pedido": {
+        "base_calculo_icms": 0,
+        "base_calculo_st": 0,
+        "valor_IPI": 0,
+        "valor_cofins": 0,
+        "valor_csll": 0,
+        "valor_deducoes": 0,
+        "valor_descontos": 0,
+        "valor_icms": 0,
+        "valor_inss": 0,
+        "valor_ir": 0,
+        "valor_iss": 0,
+        "valor_mercadorias": 240.5,
+        "valor_pis": 0,
+        "valor_st": 0,
+        "valor_total_pedido": 240.5
+      }
+    }
+  ]
+}

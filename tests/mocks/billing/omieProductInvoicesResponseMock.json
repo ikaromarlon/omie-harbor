@@ -1,0 +1,193 @@
+{
+  "pagina": 1,
+  "total_de_paginas": 1,
+  "registros": 1,
+  "total_de_registros": 1,
+  "nfCadastro": [
+    {
+      "compl": {
+        "cChaveNFe": "53210618648566000190550010000068711858417598",
+        "cCodCateg": "1.01.01",
+        "cModFrete": "9",
+        "nIdNF": 915658260,
+        "nIdPedido": 915642742,
+        "nIdReceb": 0,
+        "nIdTransp": 0
+      },
+      "det": [
+        {
+          "itemPedido": {
+            "cItemDevolvido": "",
+            "nIdItemPedido": 915649116,
+            "nItemQtdDevolvida": 0
+          },
+          "nfProdInt": {
+            "cCodItemInt": "",
+            "cCodProdInt": "",
+            "nCodItem": 915649116,
+            "nCodProd": 640524827
+          },
+          "prod": {
+            "CFOP": "5.102",
+            "EXTIPI": "",
+            "NCM": "2009.89.19",
+            "cCOFINSRetido": "N",
+            "cCSLLRetido": "N",
+            "cEAN": "",
+            "cEANTrib": "",
+            "cINSSRetido": "N",
+            "cIRRetido": "N",
+            "cISSRetido": "N",
+            "cOrigem": "0",
+            "cPISRetido": "N",
+            "cProd": "374",
+            "cProdOrig": "",
+            "codigo_local_estoque": 902020027,
+            "indTot": "1",
+            "nCMCTotal": 0,
+            "nCMCUnitario": 0,
+            "pMVAST": 0,
+            "pRedBC": 0,
+            "qCom": 10,
+            "qTrib": 0,
+            "uCom": "UN",
+            "uTrib": "",
+            "vBC": 0,
+            "vBCCOFINS": 0,
+            "vBCIPI": 0,
+            "vBCISS": 0,
+            "vBCPIS": 0,
+            "vBCST": 0,
+            "vBCUFDest": 0,
+            "vDesc": 0,
+            "vFrete": 0,
+            "vOutro": 0,
+            "vProd": 37,
+            "vSeg": 0,
+            "vTotItem": 37,
+            "vUnCom": 3.7,
+            "vUnTrib": 0,
+            "xProd": "300 ML SEM ACUCAR LARANJA",
+            "xProdOrig": ""
+          },
+          "rastreabilidade": {}
+        }
+      ],
+      "ide": {
+        "cDeneg": "N",
+        "dCan": "",
+        "dEmi": "01/06/2021",
+        "dInut": "",
+        "dReg": "01/06/2021",
+        "dSaiEnt": "01/06/2021",
+        "finNFe": "1",
+        "hEmi": "12:24:24",
+        "hSaiEnt": "12:24:24",
+        "indPag": "0",
+        "mod": "55",
+        "nNF": "00006871",
+        "serie": "001",
+        "tpAmb": "1",
+        "tpNF": "1"
+      },
+      "info": {
+        "cImpAPI": "N",
+        "dAlt": "01/06/2021",
+        "dInc": "01/06/2021",
+        "hAlt": "12:24:24",
+        "hInc": "10:13:07",
+        "uAlt": "P000272380",
+        "uInc": "P000267804"
+      },
+      "nfDestInt": {
+        "cCodCliInt": "",
+        "cRazao": "AMBIENTARE SOLUCOES AMBIENTAIS LTDA",
+        "cnpj_cpf": "08336849000142",
+        "nCodCli": 617700984
+      },
+      "nfEmitInt": {
+        "cCodEmpInt": "",
+        "nCodEmp": 902020013
+      },
+      "pedido": {
+        "Departamentos": [
+          {
+            "cCodigoDepartamento": "617693138",
+            "nPercentualDistribuicao": 100,
+            "nValorDistribuicao": 240.5,
+            "nValorFixo": "N"
+          }
+        ],
+        "cCancelado": "N",
+        "cDevParcial": "N",
+        "cDevolvido": "N",
+        "cNumPedido": "13",
+        "dAltPedido": "02/06/2021",
+        "dIncPedido": "01/06/2021",
+        "hAltPedido": "07:58:26",
+        "hIncPedido": "09:32:05",
+        "nIdVendedor": 914370835,
+        "opPedido": "11",
+        "uAltPedido": "P000272380",
+        "uIncPedido": "P000267804"
+      },
+      "titulos": [
+        {
+          "cCodCateg": "1.01.01",
+          "cCodIntTitulo": "",
+          "cDoc": "BOL",
+          "cNumTitulo": "",
+          "cPagForma": "",
+          "dDtEmissao": "01/06/2021",
+          "dDtPrevisao": "01/01/2050",
+          "dDtVenc": "11/06/2021",
+          "dReg": "01/06/2021",
+          "nCodComprador": 0,
+          "nCodProjeto": 0,
+          "nCodTitRepet": 915747552,
+          "nCodTitulo": 915747552,
+          "nCodVendedor": 914370835,
+          "nParcela": 1,
+          "nTotParc": 1,
+          "nValorTitulo": 240.5
+        }
+      ],
+      "total": {
+        "ICMSTot": {
+          "vBC": 0,
+          "vBCST": 0,
+          "vCOFINS": 0,
+          "vDesc": 0,
+          "vFrete": 0,
+          "vICMS": 0,
+          "vICMSDesonerado": 0,
+          "vII": 0,
+          "vIPI": 0,
+          "vNF": 240.5,
+          "vOutro": 0,
+          "vPIS": 0,
+          "vProd": 240.5,
+          "vST": 0,
+          "vSeg": 0,
+          "vTotTrib": 75.66
+        },
+        "ISSQNtot": {
+          "vBC": 0,
+          "vCOFINS": 0,
+          "vISS": 0,
+          "vPIS": 0,
+          "vServ": 0
+        },
+        "retTrib": {
+          "vBCIRRF": 0,
+          "vBCRetPrev": 0,
+          "vIRRF": 0,
+          "vRetCOFINS": 0,
+          "vRetCSLL": 0,
+          "vRetPIS": 0,
+          "vRetPrev ": 0
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Start HTTP server",
+      "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
+      "cwd": "${workspaceFolder}",
+      "localRoot": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "offline",
+        "cloudside"
+      ],
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "env": {
+        "SLS_DEBUG": "*"
+      },
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Invoke ingestionDispatcher function",
+      "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
+      "cwd": "${workspaceFolder}",
+      "localRoot": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "invoke",
+        "local",
+        "-f", "ingestionDispatcher",
+        "-p", "${workspaceFolder}/.vscode/payloads/ingestionDispatcher.json"
+      ],
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "env": {
+        "SLS_DEBUG": "*"
+      },
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Invoke ingestionPerformer function",
+      "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
+      "cwd": "${workspaceFolder}",
+      "localRoot": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "invoke",
+        "local",
+        "-f", "ingestionPerformer",
+        "-p", "${workspaceFolder}/.vscode/payloads/ingestionPerformer.json"
+      ],
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "env": {
+        "SLS_DEBUG": "*"
+      },
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Invoke dataExport function",
+      "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
+      "cwd": "${workspaceFolder}",
+      "localRoot": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "invoke",
+        "local",
+        "-f", "dataExport",
+        "-p", "${workspaceFolder}/.vscode/payloads/dataExport.json"
+      ],
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "env": {
+        "SLS_DEBUG": "*"
+      },
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Invoke getDataByCompany function",
+      "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
+      "cwd": "${workspaceFolder}",
+      "localRoot": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "invoke",
+        "local",
+        "-f", "getDataByCompany",
+        "-p", "${workspaceFolder}/.vscode/payloads/getDataByCompany.json"
+      ],
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "env": {
+        "SLS_DEBUG": "*"
+      },
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run bin",
+      "program": "${workspaceFolder}/bin/index.js",
+      "cwd": "${workspaceFolder}",
+      "localRoot": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": []
+    }
+  ]
+}

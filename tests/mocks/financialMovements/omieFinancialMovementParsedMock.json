@@ -1,0 +1,41 @@
+{
+  "externalId": "618738728",
+  "movementId": "618738728",
+  "titleNumber": "08702484",
+  "documentNumber": "08702484",
+  "provider": "Omie",
+  "companyId": "25c176b6-b200-4575-9217-e23c6105163c",
+  "customerId": "3a58bc83-dec0-436e-a98c-20fba8f58b56",
+  "projectId": "3fbf0118-b5f9-48b0-8269-40cf0fd28d55",
+  "categoryId": "44d50267-4bc1-42bc-923a-00df2968a2be",
+  "departmentId": "5f008bd0-cc25-4433-9cff-a5d9fdd79642",
+  "checkingAccountId": "e5e74170-40ee-42d9-9741-6d708200e306",
+  "departmentPercentage": 100,
+  "categoryPercentage": 100,
+  "contractId": "9f9bdfdd-2851-471c-b9e9-a798a3090d93",
+  "orderId": "854806eb-b46f-476d-9d3c-88e1bdf17c95",
+  "orderNumber": "15",
+  "billingId": "7be89715-63e6-426a-a952-ae19b700a28f",
+  "origin": "NFS-e",
+  "accountPayableId": "2f9671a0-1b1e-4e45-8f59-b76f10af37e1",
+  "accountReceivableId": "04116369-c871-534a-ada6-5ee0e57b4a47",
+  "type": {
+    "code": "NFS",
+    "description": "Nota Fiscal de Serviço"
+  },
+  "entryOrigin": {
+    "code": "MANP",
+    "description": "Lançamento Manual de Conta a Pagar"
+  },
+  "group": "CONTA_A_PAGAR",
+  "installment": "001/001",
+  "registerDate": "2019-05-03",
+  "issueDate": "2019-05-02",
+  "dueDate": "2019-05-03",
+  "expectedPaymentDate": "2019-05-03",
+  "paymentDate": "2019-05-03",
+  "reconciliationDate": null,
+  "value": 195,
+  "status": "PAGO",
+  "titleNotes": null
+}

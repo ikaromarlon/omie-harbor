@@ -1,0 +1,41 @@
+{
+  "pagina": 1,
+  "total_de_paginas": 1,
+  "registros": 7,
+  "total_de_registros": 7,
+  "ListarContasCorrentes": [
+    {
+      "bloqueado": "N",
+      "bol_instr1": "Sr. Caixa, receber até 10 dias após o vencimento.",
+      "bol_sn": "N",
+      "cTipoCartao": "0",
+      "cobr_sn": "N",
+      "codigo_agencia": "0001-9",
+      "codigo_banco": "077",
+      "data_alt": "19/07/2019",
+      "data_inc": "19/07/2019",
+      "descricao": "Banco Inter",
+      "hora_alt": "14:27:03",
+      "hora_inc": "14:24:36",
+      "importado_api": "N",
+      "inativo": "N",
+      "nCodCC": 630881258,
+      "nao_fluxo": "N",
+      "nao_resumo": "N",
+      "numero_conta_corrente": "3286745-0",
+      "pdv_categoria": "1.01.03",
+      "pdv_dias_venc": 30,
+      "pdv_enviar": "N",
+      "pdv_limite_pacelas": 6,
+      "pdv_num_parcelas": 6,
+      "pdv_sincr_analitica": "S",
+      "pdv_tipo_tef": 1,
+      "saldo_data": "01/07/2019",
+      "saldo_inicial": 0,
+      "tipo": "CC",
+      "tipo_conta_corrente": "CC",
+      "user_alt": "P000117233",
+      "user_inc": "P000117233"
+    }
+  ]
+}

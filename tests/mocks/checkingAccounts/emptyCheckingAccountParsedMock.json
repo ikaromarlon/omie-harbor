@@ -1,0 +1,14 @@
+{
+  "bank" : {},
+  "blocked" : null,
+  "branch" : null,
+  "companyId" : "ba18ec26-3b76-4327-9e80-77d008e1e9af",
+  "description" : null,
+  "externalId" : null,
+  "initialBalance" : null,
+  "initialBalanceDate" : null,
+  "isActive" : true,
+  "number" : null,
+  "provider" : "Omie",
+  "type" : {}
+}

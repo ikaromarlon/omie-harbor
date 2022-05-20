@@ -1,0 +1,71 @@
+{
+  "pagina": 1,
+  "total_de_paginas": 1,
+  "registros": 1,
+  "total_de_registros": 1,
+  "clientes_cadastro": [
+    {
+      "bairro": "ASA SUL",
+      "bloquear_faturamento": "N",
+      "caracteristicas": [
+        {
+          "campo": "Porte",
+          "conteudo": "Média Empresa"
+        },
+        {
+          "campo": "Região",
+          "conteudo": "Centro-Oeste"
+        }
+      ],
+      "cep": "70307901",
+      "cidade": "BRASILIA (DF)",
+      "cidade_ibge": "5300108",
+      "cnae": "7112000",
+      "cnpj_cpf": "08.336.849/0001-42",
+      "codigo_cliente_integracao": "",
+      "codigo_cliente_omie": 617700984,
+      "codigo_pais": "1058",
+      "complemento": "SALA: 1017/1019/1021/1023; SALA: 1024 A 1028;",
+      "contato": "Diana Luz",
+      "dadosBancarios": {
+        "agencia": "",
+        "codigo_banco": "",
+        "conta_corrente": "",
+        "doc_titular": "",
+        "nome_titular": ""
+      },
+      "email": "contato@camargoscontadores.com.br",
+      "endereco": "ST SCS QUADRA 7 BLOCO A",
+      "enderecoEntrega": {},
+      "endereco_numero": "100",
+      "estado": "DF",
+      "exterior": "N",
+      "inativo": "N",
+      "info": {
+        "cImpAPI": "N",
+        "dAlt": "12/11/2021",
+        "dInc": "16/04/2019",
+        "hAlt": "16:53:38",
+        "hInc": "11:07:33",
+        "uAlt": "P000116932",
+        "uInc": "P000114759"
+      },
+      "inscricao_estadual": "0756191300187",
+      "inscricao_municipal": "ISENTO",
+      "nome_fantasia": "AMBIENTARE SOLUCOES AMBIENTAIS LTDA",
+      "pessoa_fisica": "N",
+      "razao_social": "AMBIENTARE SOLUCOES AMBIENTAIS LTDA",
+      "recomendacoes": {},
+      "tags": [
+        {
+          "tag": "Cliente"
+        }
+      ],
+      "telefone1_ddd": "61",
+      "telefone1_numero": "3322-0886",
+      "telefone2_ddd": "61",
+      "telefone2_numero": "3322-0886",
+      "tipo_atividade": "2"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "lista_tipos_atividade": [
+    {
+      "cCodigo": "2",
+      "cDescricao": "Prestação de Serviços"
+    },
+    {
+      "cCodigo": "8",
+      "cDescricao": "Associação"
+    },
+    {
+      "cCodigo": "4",
+      "cDescricao": "Comercial (Atacadista)"
+    },
+    {
+      "cCodigo": "5",
+      "cDescricao": "Comercial (Exportadora)"
+    },
+    {
+      "cCodigo": "1",
+      "cDescricao": "Comercial (Varejista)"
+    },
+    {
+      "cCodigo": "3",
+      "cDescricao": "Construção Civil"
+    },
+    {
+      "cCodigo": "7",
+      "cDescricao": "Importador (Atacadista)"
+    },
+    {
+      "cCodigo": "6",
+      "cDescricao": "Importador (Varejista)"
+    },
+    {
+      "cCodigo": "0",
+      "cDescricao": "Industrial"
+    },
+    {
+      "cCodigo": "9",
+      "cDescricao": "Órgão Público"
+    }
+  ]
+}

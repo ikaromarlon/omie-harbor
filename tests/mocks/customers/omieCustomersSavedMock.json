@@ -1,0 +1,56 @@
+[
+  {
+    "_id": "3a58bc83-dec0-436e-a98c-20fba8f58b56",
+    "externalId": "617700984",
+    "provider": "Omie",
+    "companyId": "25c176b6-b200-4575-9217-e23c6105163c",
+    "cpfcnpj": "08336849000142",
+    "personType": "J",
+    "name": "AMBIENTARE SOLUCOES AMBIENTAIS LTDA",
+    "nickName": "AMBIENTARE SOLUCOES AMBIENTAIS LTDA",
+    "stateRegistration": "0756191300187",
+    "municipalRegistration": "ISENTO",
+    "address": {
+      "zipCode": "70307901",
+      "street": "ST SCS QUADRA 7 BLOCO A",
+      "number": "100",
+      "neighborhood": "ASA SUL",
+      "city": "BRASILIA (DF)",
+      "state": "DF",
+      "additionalInfo": "SALA: 1017/1019/1021/1023; SALA: 1024 A 1028;"
+    },
+    "contact": "Diana Luz",
+    "email": "contato@camargoscontadores.com.br",
+    "phones": [
+      {
+        "areaCode": "61",
+        "number": "33220886"
+      },
+      {
+        "areaCode": "61",
+        "number": "33220886"
+      }
+    ],
+    "cnae": {
+      "code": "7112000",
+      "description": "Serviços de engenharia"
+    },
+    "activity": "Prestação de Serviços",
+    "tags": [
+      "Cliente"
+    ],
+    "characteristics": [
+      {
+        "name" : "Porte",
+        "content" : "Média Empresa"
+      },
+      {
+        "name" : "Região",
+        "content" : "Centro-Oeste"
+      }
+    ],
+    "createdAt": "2021-11-05T15:05:38.233Z",
+    "updatedAt": "2021-11-05T15:29:58.455Z",
+    "isActive": true
+  }
+]

@@ -1,0 +1,28 @@
+Resources:
+
+  IngestionQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: ${self:custom.basename}-ingestion-queue.fifo
+      FifoQueue: true
+      ContentBasedDeduplication: true
+      DeduplicationScope: queue
+      MessageRetentionPeriod: 43200 # 12h
+      ReceiveMessageWaitTimeSeconds: 20
+      VisibilityTimeout: ${self:functions.ingestionPerformer.timeout}
+
+  DataExportQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: ${self:custom.basename}-dataExport-queue.fifo
+      FifoQueue: true
+      ContentBasedDeduplication: true
+      DeduplicationScope: queue
+      MessageRetentionPeriod: 43200 # 12h
+      ReceiveMessageWaitTimeSeconds: 20
+      VisibilityTimeout: ${self:functions.dataExport.timeout}
+
+  DataExportBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: ${self:custom.basename}-data-export-bucket

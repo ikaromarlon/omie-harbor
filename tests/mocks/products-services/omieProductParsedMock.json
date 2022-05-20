@@ -1,0 +1,25 @@
+{
+  "externalId": "640524827",
+  "provider": "Omie",
+  "code": "PRD00001",
+  "ncm": "3923.21.90",
+  "cfop": null,
+  "municipalCode": null,
+  "companyId": "25c176b6-b200-4575-9217-e23c6105163c",
+  "description": "TESTE",
+  "family": {
+    "code": 0,
+    "description": ""
+  },
+  "characteristics": [
+    {
+      "name" : "Voltagem",
+      "content" : "220V"
+    }
+  ],
+  "unity": "UN",
+  "value": 0,
+  "type": "PRODUTO",
+  "notes": "",
+  "isActive": true
+}

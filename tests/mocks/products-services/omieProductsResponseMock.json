@@ -1,0 +1,103 @@
+{
+  "pagina": 1,
+  "total_de_paginas": 1,
+  "registros": 1,
+  "total_de_registros": 1,
+  "produto_servico_cadastro": [
+    {
+      "aliquota_cofins": 0,
+      "aliquota_ibpt": 0,
+      "aliquota_icms": 0,
+      "aliquota_pis": 0,
+      "altura": 0,
+      "bloqueado": "N",
+      "bloquear_exclusao": "N",
+      "caracteristicas": [
+        {
+          "cCodIntCaract": "",
+          "cCodIntProd": "",
+          "cConteudo": "220V",
+          "cExibirItemNF": "N",
+          "cExibirItemPedido": "N",
+          "cExibirOrdemProd": "N",
+          "cNomeCaract": "Voltagem",
+          "info": {
+            "dAlt": "22/11/2021",
+            "dInc": "22/11/2021",
+            "hAlt": "14:34:44",
+            "hInc": "14:34:30",
+            "uAlt": "P000116932",
+            "uInc": "P000116932"
+          },
+          "nCodCaract": 1531718741,
+          "nCodProd": 618730356
+        }
+      ],
+      "cest": "",
+      "cfop": "",
+      "codInt_familia": "",
+      "codigo": "PRD00001",
+      "codigo_beneficio": "",
+      "codigo_familia": 0,
+      "codigo_produto": 640524827,
+      "codigo_produto_integracao": "",
+      "csosn_icms": "",
+      "cst_cofins": "",
+      "cst_icms": "",
+      "cst_pis": "",
+      "dadosIbpt": {
+        "aliqEstadual": 18,
+        "aliqFederal": 17.13,
+        "aliqMunicipal": 0,
+        "chave": "F9A436",
+        "fonte": "IBPT/empresometro.com.br",
+        "valido_ate": "30/11/2021",
+        "valido_de": "20/10/2021",
+        "versao": "21.2.F"
+      },
+      "descr_detalhada": "",
+      "descricao": "TESTE",
+      "descricao_familia": "",
+      "dias_crossdocking": 0,
+      "dias_garantia": 0,
+      "ean": "",
+      "estoque_minimo": 0,
+      "exibir_descricao_nfe": "N",
+      "exibir_descricao_pedido": "N",
+      "importado_api": "N",
+      "inativo": "N",
+      "info": {
+        "dAlt": "06/09/2019",
+        "dInc": "06/09/2019",
+        "hAlt": "10:36:25",
+        "hInc": "10:35:34",
+        "uAlt": "P000116932",
+        "uInc": "P000116932"
+      },
+      "largura": 0,
+      "marca": "",
+      "modelo": "",
+      "motivo_deson_icms": "",
+      "ncm": "3923.21.90",
+      "obs_internas": "",
+      "per_icms_fcp": 0,
+      "peso_bruto": 0,
+      "peso_liq": 0,
+      "profundidade": 0,
+      "quantidade_estoque": 0,
+      "recomendacoes_fiscais": {
+        "cnpj_fabricante": "",
+        "cupom_fiscal": "N",
+        "id_cest": "",
+        "id_preco_tabelado": 0,
+        "indicador_escala": "",
+        "market_place": "N",
+        "origem_mercadoria": ""
+      },
+      "red_base_icms": 0,
+      "tipoItem": "99",
+      "unidade": "UN",
+      "valor_unitario": 0
+    }
+  ]
+}

@@ -1,0 +1,258 @@
+{
+  "pagina": 1,
+  "total_de_paginas": 1,
+  "registros": 50,
+  "total_de_registros": 50,
+  "cadastros": [
+    {
+      "cDescricao": "AGRICULTURA, PECUÁRIA E SERVIÇOS RELACIONADOS",
+      "cEstrutura": "",
+      "nCodigo": "01"
+    },
+    {
+      "cDescricao": "PRODUÇÃO DE LAVOURAS TEMPORÁRIAS",
+      "cEstrutura": "",
+      "nCodigo": "011"
+    },
+    {
+      "cDescricao": "Cultivo de cereais para grãos",
+      "cEstrutura": "A0111-2",
+      "nCodigo": "01112"
+    },
+    {
+      "cDescricao": "Cultivo de arroz",
+      "cEstrutura": "A0111-2/01",
+      "nCodigo": "0111201"
+    },
+    {
+      "cDescricao": "Cultivo de milho",
+      "cEstrutura": "A0111-2/02",
+      "nCodigo": "0111202"
+    },
+    {
+      "cDescricao": "Cultivo de trigo",
+      "cEstrutura": "A0111-2/03",
+      "nCodigo": "0111203"
+    },
+    {
+      "cDescricao": "Cultivo de outros cereais para grãos",
+      "cEstrutura": "A0111-2/99",
+      "nCodigo": "0111299"
+    },
+    {
+      "cDescricao": "Cultivo de cereais",
+      "cEstrutura": "A0111-3",
+      "nCodigo": "01113"
+    },
+    {
+      "cDescricao": "Cultivo de arroz",
+      "cEstrutura": "A0111-3/01",
+      "nCodigo": "0111301"
+    },
+    {
+      "cDescricao": "Cultivo de milho",
+      "cEstrutura": "A0111-3/02",
+      "nCodigo": "0111302"
+    },
+    {
+      "cDescricao": "Cultivo de trigo",
+      "cEstrutura": "A0111-3/03",
+      "nCodigo": "0111303"
+    },
+    {
+      "cDescricao": "Cultivo de outros cereais não especificados anteriormente",
+      "cEstrutura": "A0111-3/99",
+      "nCodigo": "0111399"
+    },
+    {
+      "cDescricao": "Cultivo de algodão herbáceo",
+      "cEstrutura": "A0112-0",
+      "nCodigo": "01120"
+    },
+    {
+      "cDescricao": "Cultivo de algodão herbáceo",
+      "cEstrutura": "A0112-0/00",
+      "nCodigo": "0112000"
+    },
+    {
+      "cDescricao": "Cultivo de algodão herbáceo e de outras fibras de lavoura temporária",
+      "cEstrutura": "A0112-1",
+      "nCodigo": "01121"
+    },
+    {
+      "cDescricao": "Cultivo de algodão herbáceo",
+      "cEstrutura": "A0112-1/01",
+      "nCodigo": "0112101"
+    },
+    {
+      "cDescricao": "Cultivo de juta",
+      "cEstrutura": "A0112-1/02",
+      "nCodigo": "0112102"
+    },
+    {
+      "cDescricao": "Cultivo de outras fibras de lavoura temporária não especificadas anteriormente",
+      "cEstrutura": "A0112-1/99",
+      "nCodigo": "0112199"
+    },
+    {
+      "cDescricao": "Cultivo de cana-de-açucar",
+      "cEstrutura": "A0113-0",
+      "nCodigo": "01130"
+    },
+    {
+      "cDescricao": "Cultivo de cana-de-açucar",
+      "cEstrutura": "A0113-0/00",
+      "nCodigo": "0113000"
+    },
+    {
+      "cDescricao": "Cultivo de cana-de-açúcar",
+      "cEstrutura": "A0113-9",
+      "nCodigo": "01139"
+    },
+    {
+      "cDescricao": "Cultivo de cana-de-açúcar",
+      "cEstrutura": "A0113-9/00",
+      "nCodigo": "0113900"
+    },
+    {
+      "cDescricao": "Cultivo de fumo",
+      "cEstrutura": "A0114-7",
+      "nCodigo": "01147"
+    },
+    {
+      "cDescricao": "Cultivo de fumo",
+      "cEstrutura": "A0114-7/00",
+      "nCodigo": "0114700"
+    },
+    {
+      "cDescricao": "Cultivo de fumo",
+      "cEstrutura": "A0114-8",
+      "nCodigo": "01148"
+    },
+    {
+      "cDescricao": "Cultivo de fumo",
+      "cEstrutura": "A0114-8/00",
+      "nCodigo": "0114800"
+    },
+    {
+      "cDescricao": "Cultivo de soja",
+      "cEstrutura": "A0115-5",
+      "nCodigo": "01155"
+    },
+    {
+      "cDescricao": "Cultivo de soja",
+      "cEstrutura": "A0115-5/00",
+      "nCodigo": "0115500"
+    },
+    {
+      "cDescricao": "Cultivo de soja",
+      "cEstrutura": "A0115-6",
+      "nCodigo": "01156"
+    },
+    {
+      "cDescricao": "Cultivo de soja",
+      "cEstrutura": "A0115-6/00",
+      "nCodigo": "0115600"
+    },
+    {
+      "cDescricao": "Cultivo de oleaginosas de lavoura temporária, exceto soja",
+      "cEstrutura": "A0116-4",
+      "nCodigo": "01164"
+    },
+    {
+      "cDescricao": "Cultivo de amendoim",
+      "cEstrutura": "A0116-4/01",
+      "nCodigo": "0116401"
+    },
+    {
+      "cDescricao": "Cultivo de girassol",
+      "cEstrutura": "A0116-4/02",
+      "nCodigo": "0116402"
+    },
+    {
+      "cDescricao": "Cultivo de mamona",
+      "cEstrutura": "A0116-4/03",
+      "nCodigo": "0116403"
+    },
+    {
+      "cDescricao": "Cultivo de outras oleaginosas de lavoura temporária não especificadas anteriormente",
+      "cEstrutura": "A0116-4/99",
+      "nCodigo": "0116499"
+    },
+    {
+      "cDescricao": "Cultivo de outros produtos de lavoura temporária",
+      "cEstrutura": "A0119-8",
+      "nCodigo": "01198"
+    },
+    {
+      "cDescricao": "Cultivo de abacaxi",
+      "cEstrutura": "A0119-8/01",
+      "nCodigo": "0119801"
+    },
+    {
+      "cDescricao": "Cultivo de amendoim",
+      "cEstrutura": "A0119-8/02",
+      "nCodigo": "0119802"
+    },
+    {
+      "cDescricao": "Cultivo de batata inglesa",
+      "cEstrutura": "A0119-8/03",
+      "nCodigo": "0119803"
+    },
+    {
+      "cDescricao": "Cultivo de mandioca",
+      "cEstrutura": "A0119-8/05",
+      "nCodigo": "0119805"
+    },
+    {
+      "cDescricao": "Cultivo de feijão",
+      "cEstrutura": "A0119-8/06",
+      "nCodigo": "0119806"
+    },
+    {
+      "cDescricao": "Cultivo de juta",
+      "cEstrutura": "A0119-8/07",
+      "nCodigo": "0119807"
+    },
+    {
+      "cDescricao": "Cultivo de mamona",
+      "cEstrutura": "A0119-8/08",
+      "nCodigo": "0119808"
+    },
+    {
+      "cDescricao": "Cultivo de melão",
+      "cEstrutura": "A0119-8/09",
+      "nCodigo": "0119809"
+    },
+    {
+      "cDescricao": "Cultivo de tomate (rasteiro)",
+      "cEstrutura": "A0119-8/10",
+      "nCodigo": "0119810"
+    },
+    {
+      "cDescricao": "Cultivo de girassol",
+      "cEstrutura": "A0119-8/14",
+      "nCodigo": "0119814"
+    },
+    {
+      "cDescricao": "Cultivo de melancia",
+      "cEstrutura": "A0119-8/15",
+      "nCodigo": "0119815"
+    },
+    {
+      "cDescricao": "Treinamento em desenvolvimento profissional e gerencial",
+      "cEstrutura": "P8599-6/04",
+      "nCodigo": "8599604"
+    },
+    {
+      "cDescricao": "Serviços de engenharia",
+      "cEstrutura": "M7112-0/00",
+      "nCodigo": "7112000"
+    },
+    {
+      "cDescricao": "Cultivo de outros produtos de lavoura temporária, não especificados anteriormente",
+      "cEstrutura": "A0119-8/99",
+      "nCodigo": "0119899"
+    }
+  ]
+}

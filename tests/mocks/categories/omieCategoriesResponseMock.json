@@ -1,0 +1,51 @@
+{
+  "pagina": 1,
+  "total_de_paginas": 1,
+  "registros": 2,
+  "total_de_registros": 2,
+  "categoria_cadastro": [
+    {
+      "categoria_superior": "1.01",
+      "codigo": "1.01.01",
+      "codigo_dre": "1.01.01",
+      "conta_despesa": "N",
+      "conta_inativa": "N",
+      "conta_receita": "S",
+      "dadosDRE": {
+        "codigoDRE": "1.01.01",
+        "descricaoDRE": "Receita Bruta de Vendas",
+        "naoExibirDRE": "N",
+        "nivelDRE": 3,
+        "sinalDRE": "+",
+        "totalizaDRE": "N"
+      },
+      "definida_pelo_usuario": "N",
+      "descricao": "Clientes - Venda de Mercadoria Fabricadas",
+      "descricao_padrao": "Clientes - Venda de Mercadoria Fabricadas",
+      "id_conta_contabil": "",
+      "nao_exibir": "N",
+      "natureza": "Esta categoria deve ser utilizada para receitas provenientes de vendas de produtos fabricados.",
+      "tag_conta_contabil": "",
+      "totalizadora": "N",
+      "transferencia": "N"
+    },
+    {
+      "categoria_superior": "1",
+      "codigo": "1.01",
+      "codigo_dre": "",
+      "conta_despesa": "N",
+      "conta_inativa": "N",
+      "conta_receita": "S",
+      "dadosDRE": {},
+      "definida_pelo_usuario": "N",
+      "descricao": "Receitas Diretas",
+      "descricao_padrao": "Receitas Diretas",
+      "id_conta_contabil": "",
+      "nao_exibir": "N",
+      "natureza": "",
+      "tag_conta_contabil": "",
+      "totalizadora": "S",
+      "transferencia": "N"
+    }
+  ]
+}

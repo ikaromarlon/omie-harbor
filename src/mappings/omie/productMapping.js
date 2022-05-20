@@ -1,0 +1,17 @@
+module.exports = ({ providerName }) => ({ omieProduct, companyId }) => ({
+  externalId: String(omieProduct.codigo_produto),
+  provider: providerName,
+  code: omieProduct.codigo,
+  ncm: omieProduct.ncm,
+  cfop: omieProduct.cfop || null,
+  municipalCode: null, /** only for services */
+  companyId,
+  description: omieProduct.descricao,
+  family: { code: omieProduct.codigo_familia ?? null, description: omieProduct.descricao_familia ?? null },
+  characteristics: (omieProduct.caracteristicas ?? []).map(e => ({ name: e.cNomeCaract, content: e.cConteudo })),
+  unity: omieProduct.unidade,
+  value: omieProduct.valor_unitario,
+  type: 'PRODUTO',
+  notes: omieProduct.obs_internas,
+  isActive: omieProduct.inativo === 'N'
+})

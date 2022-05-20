@@ -1,0 +1,36 @@
+{
+  "pagina": 1,
+  "total_de_paginas": 1,
+  "registros": 7,
+  "total_de_registros": 7,
+  "cadastros": [
+    {
+      "cCodigo": "01",
+      "cDescricao": "Todo Mês (mensal)"
+    },
+    {
+      "cCodigo": "02",
+      "cDescricao": "A cada 2 meses (bimestral)"
+    },
+    {
+      "cCodigo": "03",
+      "cDescricao": "A cada 3 meses (trimestral)"
+    },
+    {
+      "cCodigo": "04",
+      "cDescricao": "A cada 4 meses (quadrimestral)"
+    },
+    {
+      "cCodigo": "05",
+      "cDescricao": "A cada 5 meses (quinquemestral)"
+    },
+    {
+      "cCodigo": "06",
+      "cDescricao": "A cada 6 meses (semestral)"
+    },
+    {
+      "cCodigo": "12",
+      "cDescricao": "A cada 12 meses (anual)"
+    }
+  ]
+}

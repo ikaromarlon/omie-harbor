@@ -1,0 +1,64 @@
+ingestionPerformer:
+  handler: src/index.handler
+  memorySize: 256
+  timeout: 900
+  iamRoleStatementsName: ${self:custom.basename}-ingestionPerformer-role
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sqs:SendMessage
+      Resource:
+        - Fn::GetAtt: [ DataExportQueue, Arn ]
+    - Effect: Allow
+      Action:
+        - events:PutEvents
+      Resource: '*'
+  events:
+    - schedule:
+        name: ${self:custom.basename}-ingestionPerformer-eventRule-1
+        rate: cron(0 3 ? * * *) # everyday at 03:00 UTC (00:00 BR)
+        enabled: ${self:custom.enableIngestionPerformerSchedule1.${self:provider.stage}}
+    - schedule:
+        name: ${self:custom.basename}-ingestionPerformer-eventRule-2
+        rate: cron(0 15 ? * * *) # everyday at 15:00 UTC (12:00 BR)
+        enabled: ${self:custom.enableIngestionPerformerSchedule2.${self:provider.stage}}
+    - schedule:
+        name: ${self:custom.basename}-ingestionPerformer-eventRule-3
+        rate: cron(0 21 ? * * *) # everyday at 21:00 UTC (18:00 BR)
+        enabled: ${self:custom.enableIngestionPerformerSchedule3.${self:provider.stage}}
+    - sqs:
+        arn:
+          Fn::GetAtt: [ IngestionQueue, Arn ]
+        batchSize: 1
+  package:
+    patterns:
+      - 'src/functions/ingestionPerformer/**'
+
+dataExport:
+  handler: src/index.handler
+  memorySize: 4096
+  timeout: 900
+  iamRoleStatementsName: ${self:custom.basename}-dataExport-role
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+      Resource:
+        - Fn::Join: ['', [Fn::GetAtt: [ DataExportBucket, Arn ], '/*']]
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt: [ DataExportQueue, Arn ]
+        batchSize: 1
+    # - eventBridge:
+    #   pattern:
+    #     source:
+    #       - custom
+    #     detail-type:
+    #       - AWS API Call via CloudTrail
+    #     detail:
+    #       eventSource:
+    #         - cloudformation.amazonaws.com
+  package:
+    patterns:
+      - 'src/functions/dataExport/**'

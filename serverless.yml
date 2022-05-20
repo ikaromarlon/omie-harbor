@@ -1,0 +1,43 @@
+service: full-bpo-bfb
+frameworkVersion: '3'
+useDotenv: true
+configValidationMode: error
+deprecationNotificationMode: error
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: ${opt:stage, 'dev'}
+  region: ${self:custom.region.${self:provider.stage}}
+  profile: fullbpo
+  stackName: ${self:custom.basename}
+  apiName: ${self:custom.basename}
+  memorySize: 128
+  timeout: 30
+  logRetentionInDays: 3
+  deploymentBucket:
+    name: ${self:custom.accountId}-deployment-artifacts
+    blockPublicAccess: true
+    maxPreviousDeploymentArtifacts: 5
+  deploymentPrefix: ${self:provider.region}/serverless
+  versionFunctions: false
+  environment: ${file(./serverless/env.yml)}
+  stackTags:
+    HOLDING: dois
+    COMPANY: full-bpo
+    PROJECT: full-bpo
+    SERVICE: full-bpo-bfb
+functions: ${file(./serverless/functions.yml)}
+resources: ${file(./serverless/resources.yml)}
+custom: ${file(./serverless/custom.yml)}
+package:
+  excludeDevDependencies: true
+  individually: true
+  patterns:
+    - '!**'
+    - 'node_modules/**'
+    - 'src/**'
+    - '!src/functions/**'
+    - 'package.json'
+plugins:
+  - serverless-iam-roles-per-function
+  - serverless-cloudside-plugin

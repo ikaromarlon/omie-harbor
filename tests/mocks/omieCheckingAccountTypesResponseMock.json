@@ -1,0 +1,68 @@
+{
+  "pagina": 1,
+  "total_de_paginas": 1,
+  "registros": 12,
+  "total_de_registros": 12,
+  "cadastros": [
+    {
+      "cCodigo": "AC",
+      "cDescricao": "Administradora de Cartões",
+      "cGrupo": "AC"
+    },
+    {
+      "cCodigo": "AD",
+      "cDescricao": "Adiantamento",
+      "cGrupo": "AD"
+    },
+    {
+      "cCodigo": "CA",
+      "cDescricao": "Conta Aplicação",
+      "cGrupo": "CB"
+    },
+    {
+      "cCodigo": "CC",
+      "cDescricao": "Conta Corrente",
+      "cGrupo": "CB"
+    },
+    {
+      "cCodigo": "CE",
+      "cDescricao": "Conta Empréstimo",
+      "cGrupo": "CB"
+    },
+    {
+      "cCodigo": "CG",
+      "cDescricao": "Conta Garantida",
+      "cGrupo": "CB"
+    },
+    {
+      "cCodigo": "CN",
+      "cDescricao": "Crediário / Carnê",
+      "cGrupo": "CX"
+    },
+    {
+      "cCodigo": "CP",
+      "cDescricao": "Conta Poupança",
+      "cGrupo": "CB"
+    },
+    {
+      "cCodigo": "CR",
+      "cDescricao": "Cartão de Crédito",
+      "cGrupo": "CR"
+    },
+    {
+      "cCodigo": "CV",
+      "cDescricao": "Carteira Virtual",
+      "cGrupo": "CV"
+    },
+    {
+      "cCodigo": "CX",
+      "cDescricao": "Caixinha",
+      "cGrupo": "CX"
+    },
+    {
+      "cCodigo": "MT",
+      "cDescricao": "Mútuo",
+      "cGrupo": "CX"
+    }
+  ]
+}

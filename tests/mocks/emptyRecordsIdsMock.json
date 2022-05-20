@@ -1,0 +1,14 @@
+{
+  "category": "7c788545-8789-575c-972e-d0fbf770d104",
+  "department": "61870a0c-0768-5770-80ad-d35a7e7c52fc",
+  "project": "2d714fb6-eaa7-5c1c-ab3c-7e5b393dfbf4",
+  "customer": "f57d463c-a6f8-50e5-a2ca-d9e1bffd0e69",
+  "checkingAccount": "430cb604-ec83-5c5d-9086-848a6d4e24b4",
+  "productService": "f9c8310c-6378-58bc-a8cf-cfa293a2cf1b",
+  "contract": "11a73cc1-9fda-51cb-b02c-d8a740aa6452",
+  "order": "9b31ea10-04b2-5303-9251-84a896c7cedd",
+  "billing": "24f0fee0-2411-55df-abe1-2ba928867687",
+  "accountPayable": "490a66b6-0fa0-5140-af04-d4c291855346",
+  "accountReceivable": "04116369-c871-534a-ada6-5ee0e57b4a47",
+  "financialMovement": "91a11f6f-3baf-5c33-a14c-8099e026a419"
+}
