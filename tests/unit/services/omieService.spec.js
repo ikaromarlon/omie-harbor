@@ -3,7 +3,6 @@ jest.mock('../../../src/services/utils/omieErrorHandler', () => jest.fn((omieErr
 const omieErrorHandler = require('../../../src/services/utils/omieErrorHandler')
 const makeOmieService = require('../../../src/services/omieService')
 const {
-  omieCompaniesResponseMock,
   omieActivitiesResponseMock,
   omieCnaeResponseMock,
   omieCustomersResponseMock,
@@ -33,24 +32,6 @@ const makeSut = () => {
 }
 
 describe('Omie Service', () => {
-  describe('getCompany method', () => {
-    it('Should return null if getCompany throws an error', async () => {
-      const { sut, payloadMock, requesterMock, omieErrorMock } = makeSut()
-      const spyPost = jest.spyOn(requesterMock, 'post').mockRejectedValueOnce(omieErrorMock)
-      const result = await sut.getCompany(payloadMock)
-      expect(spyPost).toHaveBeenCalledTimes(1)
-      expect(omieErrorHandler).toHaveBeenCalledWith(omieErrorMock, null, false)
-      expect(result).toBe(null)
-    })
-    it('Should return a company response successfully', async () => {
-      const { sut, payloadMock, requesterMock } = makeSut()
-      const spyPost = jest.spyOn(requesterMock, 'post').mockResolvedValueOnce({ data: omieCompaniesResponseMock })
-      const result = await sut.getCompany(payloadMock)
-      expect(spyPost).toHaveBeenCalledTimes(1)
-      expect(result).toEqual(omieCompaniesResponseMock.empresas_cadastro[0])
-    })
-  })
-
   describe('getActivities method', () => {
     it('Should return an empty array if getActivities throws an error', async () => {
       const { sut, payloadMock, requesterMock, omieErrorMock } = makeSut()

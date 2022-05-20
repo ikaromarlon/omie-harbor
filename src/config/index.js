@@ -12,13 +12,11 @@ module.exports = Object.seal({
     dbName: env.MONGODB_DB_NAME
   },
   sqs: {
-    ingestionQueueUrl: env.SQS_INGESTION_QUEUE_URL,
     dataExportQueueUrl: env.SQS_DATA_EXPORT_QUEUE_URL
   },
   s3: {
     detaExport: {
-      bucketName: env.S3_DATA_EXPORT_BUCKET_NAME,
-      signedUrlExpirationSeconds: 10
+      bucketName: env.S3_DATA_EXPORT_BUCKET_NAME
     }
   },
   services: {
