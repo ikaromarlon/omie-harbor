@@ -6,27 +6,6 @@ class ApplicationError extends Error {
   }
 }
 
-class AuthError extends ApplicationError {
-  constructor (message) {
-    super(message, 401)
-    this.name = 'AuthError'
-  }
-}
-
-class AccessDeniedError extends ApplicationError {
-  constructor (message = 'User not allowed access this resource') {
-    super(message, 403)
-    this.name = 'AccessDeniedError'
-  }
-}
-
-class NotFoundError extends ApplicationError {
-  constructor (message) {
-    super(message, 404)
-    this.name = 'NotFoundError'
-  }
-}
-
 class ValidationError extends ApplicationError {
   constructor (message) {
     super(message, 422)
@@ -51,9 +30,6 @@ class ExternalServerError extends ApplicationError {
 
 module.exports = {
   ApplicationError,
-  NotFoundError,
-  AuthError,
-  AccessDeniedError,
   ValidationError,
   InternalServerError,
   ExternalServerError
