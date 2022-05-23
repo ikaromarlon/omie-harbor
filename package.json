@@ -23,7 +23,8 @@
     "deploy": "sls deploy --verbose",
     "postdeploy": "npm run bin -- --setupDb",
     "deploy:dev": "export STAGE=dev; npm run deploy -- --stage dev",
-    "deploy:prd": "export STAGE=prd; npm run deploy -- --stage prd"
+    "deploy:prd": "export STAGE=prd; npm run deploy -- --stage prd",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -47,7 +48,7 @@
     "aws-sdk": "^2.1053.0",
     "dotenv": "^10.0.0",
     "git-commit-msg-linter": "^3.2.8",
-    "husky": "^7.0.4",
+    "husky": "^8.0.1",
     "jest": "^27.3.1",
     "lint-staged": "^11.2.3",
     "serverless": "^3.0.0",
