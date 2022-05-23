@@ -1,4 +1,4 @@
-const { tryJsonParse } = require('../utils/helpers')
+const { tryJsonParse } = require('./helpers')
 
 module.exports = (event) => {
   const {

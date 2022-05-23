@@ -24,7 +24,7 @@ module.exports = {
     '<rootDir>/src/**/*.js',
     '!<rootDir>/src/config/**',
     '!<rootDir>/src/functions/**/utils/schema.js',
-    '!<rootDir>/src/repositories/adapters/mongodb.js', // for some reason the coverage for this file is not working well
+    '!<rootDir>/src/repositories/utils/mongodb.js', // for some reason the coverage for this file is not working well
     '!<rootDir>/src/services/**',
     '!<rootDir>/src/utils/**'
   ],

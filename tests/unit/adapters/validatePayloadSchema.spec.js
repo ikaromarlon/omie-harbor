@@ -1,4 +1,4 @@
-const validatePayloadSchema = require('../../../src/adapters/validatePayloadSchema')
+const validatePayloadSchema = require('../../../src/utils/validatePayloadSchema')
 const { ValidationError } = require('../../../src/utils/errors')
 
 const makeSut = () => {

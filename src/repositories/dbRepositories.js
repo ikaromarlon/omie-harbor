@@ -1,5 +1,5 @@
 const config = require('../config')
-const mongodb = require('./adapters/mongodb')
+const mongodb = require('./utils/mongodb')
 const makeDbRepository = require('./utils/makeDbRepository')
 
 module.exports = async () => {

@@ -1,4 +1,4 @@
-const makeRequester = require('../../../src/adapters/queuer')
+const makeRequester = require('../../../src/utils/queuer')
 
 const mockSendMessage = jest.fn(() => ({ promise: () => new Promise((resolve, reject) => resolve(true)) }))
 const mockReceiveMessage = jest.fn(() => ({ promise: () => new Promise((resolve, reject) => resolve(true)) }))

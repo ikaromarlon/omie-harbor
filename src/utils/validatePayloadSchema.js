@@ -1,4 +1,4 @@
-const { ValidationError } = require('../utils/errors')
+const { ValidationError } = require('./errors')
 
 module.exports = (payload, schema) => {
   const { error, value } = schema.validate(payload, { abortEarly: false })

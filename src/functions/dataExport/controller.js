@@ -1,4 +1,5 @@
-const { successHandler, errorHandler, helpers: { tryJsonParse } } = require('../../utils')
+const { successHandler, errorHandler } = require('../../utils')
+const { tryJsonParse } = require('../../utils/helpers')
 
 module.exports = ({
   validatePayloadSchema,

@@ -1,6 +1,6 @@
 const config = require('../../config')
 const { ExternalServerError } = require('../../utils/errors')
-const { logger: makeLogger } = require('../../adapters')
+const { logger: makeLogger } = require('../../utils')
 
 /**
  * Receive an error from Omie API and check if it should be thrown or not

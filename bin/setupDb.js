@@ -1,4 +1,4 @@
-const mongodb = require('../src/repositories/adapters/mongodb')
+const mongodb = require('../src/repositories/utils/mongodb')
 
 module.exports = async (arg, config) => {
   try {

@@ -1,4 +1,5 @@
-const { requestHandler, responseHandler, helpers: { uuid } } = require('./utils')
+const { requestHandler, responseHandler } = require('./utils')
+const { uuid } = require('./utils/helpers')
 
 exports.handler = async (event, context) => {
   if (event.warmUp) return console.warn(`Warming up function ${context.functionName}...`)

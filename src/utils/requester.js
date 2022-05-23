@@ -1,5 +1,5 @@
 const axios = require('axios')
-const { millisecondsToSeconds } = require('../utils/helpers')
+const { millisecondsToSeconds } = require('./helpers')
 
 module.exports = () => {
   const makeResponse = ({ startDate, endDate, response }) => ({

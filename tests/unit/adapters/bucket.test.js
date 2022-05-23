@@ -1,4 +1,4 @@
-const makeRequester = require('../../../src/adapters/bucket')
+const makeRequester = require('../../../src/utils/bucket')
 
 const mockPutObject = jest.fn(() => ({ promise: () => new Promise((resolve, reject) => resolve(true)) }))
 

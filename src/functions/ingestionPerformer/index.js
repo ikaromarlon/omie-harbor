@@ -4,7 +4,7 @@ const schema = require('./utils/schema')
 const { dbRepositories } = require('../../repositories')
 const { omieMappings } = require('../../mappings')
 const makeServices = require('../../services')
-const { queuer: makeQueuer, logger: makeLogger, validatePayloadSchema } = require('../../adapters')
+const { queuer: makeQueuer, logger: makeLogger, validatePayloadSchema } = require('../../utils')
 
 module.exports = async () => {
   const { omieService } = makeServices()
