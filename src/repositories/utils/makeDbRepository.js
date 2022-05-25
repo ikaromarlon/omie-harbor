@@ -1,3 +1,4 @@
+const config = require('../../config')
 const { uuid } = require('../../utils/helpers')
 
 module.exports = (name, db, customOperations = () => ({})) => {
@@ -6,7 +7,7 @@ module.exports = (name, db, customOperations = () => ({})) => {
     find: async (filter) => {
       const parsedFilter = Object.entries(filter).reduce((acc, [k, v]) => {
         acc[k] = v
-        if (k.indexOf('$') !== 0) { /** does not contains a special mongodb operator */
+        if (k.indexOf('$') !== 0) { // does not contains a special mongodb operator
           if (Array.isArray(v)) {
             acc[k] = v.length > 1 ? { $in: v } : v[0]
           }
@@ -25,13 +26,21 @@ module.exports = (name, db, customOperations = () => ({})) => {
       return result.value
     },
     createOrUpdateOne: async (filter, data) => {
-      const id = uuid()
+      const _id = uuid()
       const date = new Date()
       const result = await collection.findOneAndUpdate(
-        filter ?? { _id: id },
+        filter ?? { _id },
         {
-          $set: { ...data, updatedAt: date },
-          $setOnInsert: { _id: id, createdAt: date }
+          $setOnInsert: {
+            _id: data._id ?? _id,
+            createdAt: date,
+            createdBy: config.app.user
+          },
+          $set: {
+            updatedAt: date,
+            updatedBy: config.app.user,
+            ...data
+          }
         },
         { upsert: true, returnDocument: 'after' }
       )
@@ -49,8 +58,16 @@ module.exports = (name, db, customOperations = () => ({})) => {
           updateOne: {
             filter: fieldsToBuildFilter.reduce((acc, f) => ({ ...acc, [f]: data[f] }), {}),
             update: {
-              $set: { ...data, updatedAt: date },
-              $setOnInsert: { _id: uuid(), createdAt: date }
+              $setOnInsert: {
+                _id: data._id ?? uuid(),
+                createdAt: date,
+                createdBy: config.app.user
+              },
+              $set: {
+                updatedAt: date,
+                updatedBy: config.app.user,
+                ...data
+              }
             },
             upsert: true
           }
@@ -73,11 +90,22 @@ module.exports = (name, db, customOperations = () => ({})) => {
         batch.forEach((data) => {
           recordsToDelete.add(JSON.stringify(fieldsToBuildFilter.reduce((acc, f) => ({ ...acc, [f]: data[f] }), {})))
         })
-        recordsToDelete.forEach(e => bulkDelete.push({ deleteMany: { filter: JSON.parse(e) } }))
+        recordsToDelete.forEach(data => bulkDelete.push({ deleteMany: { filter: JSON.parse(data) } }))
 
         const date = new Date()
         const bulkInsert = []
-        batch.forEach(e => bulkInsert.push({ insertOne: { document: { _id: uuid(), ...e, createdAt: date, updatedAt: date } } }))
+        batch.forEach(data => bulkInsert.push({
+          insertOne: {
+            document: {
+              _id: data._id ?? uuid(),
+              createdAt: date,
+              createdBy: config.app.user,
+              updatedAt: date,
+              updatedBy: config.app.user,
+              ...data
+            }
+          }
+        }))
 
         const result = await collection.bulkWrite([...bulkDelete, ...bulkInsert], { ordered: true })
         response.deleted = result.result.nRemoved
