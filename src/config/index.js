@@ -1,16 +1,18 @@
 const { name, version } = require('../../package.json')
 const { env } = process
 
+const stage = env.STAGE || 'dev'
+
 module.exports = Object.seal({
   app: {
     name: env.SERVICE || name,
-    stage: env.STAGE || 'dev',
+    stage,
     version,
     user: 'SYSTEM'
   },
   mongodb: {
-    uri: env.MONGODB_URI,
-    dbName: env.MONGODB_DB_NAME
+    dbName: `full-bpo-${stage}`,
+    uri: `mongodb+srv://${env.MONGODB_CREDENTIALS}@full-bpo-${stage}.vkvc7.mongodb.net/full-bpo-${stage}?retryWrites=true&w=majority`
   },
   sqs: {
     dataExportQueueUrl: env.SQS_DATA_EXPORT_QUEUE_URL
