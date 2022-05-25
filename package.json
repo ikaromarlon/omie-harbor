@@ -18,12 +18,14 @@
     "test:coverage": "npm run test -- --collectCoverage",
     "bin": "node ./bin/index.js --",
     "ci": "npm run test:coverage",
-    "predeploy:dev": "npm run ci -- --stage dev",
-    "predeploy:prd": "npm run ci -- --stage prd",
+    "predeploy:dev": "export STAGE=dev && npm run ci -- --stage dev",
+    "predeploy:prd": "export STAGE=dev && npm run ci -- --stage prd",
     "deploy": "sls deploy --verbose",
-    "postdeploy": "npm run bin -- --setupDb",
-    "deploy:dev": "export STAGE=dev && npm run deploy -- --stage dev",
+    "deploy:dev": "npm run deploy -- --stage dev",
+    "deploy:function:dev": "npm run deploy:dev -- function -f",
     "deploy:prd": "export STAGE=prd && npm run deploy -- --stage prd",
+    "deploy:function:prd": "npm run deploy:prd -- function -f",
+    "postdeploy": "npm run bin -- --setupDb",
     "prepare": "husky install"
   },
   "repository": {
