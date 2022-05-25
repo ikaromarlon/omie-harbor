@@ -5,7 +5,8 @@ module.exports = Object.seal({
   app: {
     name: env.SERVICE || name,
     stage: env.STAGE || 'dev',
-    version
+    version,
+    user: 'SYSTEM'
   },
   mongodb: {
     uri: env.MONGODB_URI,

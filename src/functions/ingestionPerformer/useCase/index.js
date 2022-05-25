@@ -29,10 +29,15 @@ module.exports = ({
     }
   }
 
-  const updateCompany = async ({ credentials, companyId, omieCnae, companyMapping, companiesRepository }) => {
+  const updateCompany = async ({ credentials, company, omieCnae, companyMapping, companiesRepository }) => {
     const omieCompany = await omieService.getCompany(credentials)
-    const company = companyMapping({ omieCompany, omieCnae, credentials })
-    await companiesRepository.createOrUpdateOne({ _id: companyId }, company)
+    const companyData = companyMapping({ omieCompany, omieCnae, credentials })
+    if (companyData.isActive !== company.isActive) {
+      const date = new Date()
+      companyData.statusAt = date
+      companyData.statusBy = config.app.user
+    }
+    await companiesRepository.createOrUpdateOne({ _id: company._id }, companyData)
   }
 
   return async ({ payload }) => {
@@ -63,7 +68,7 @@ module.exports = ({
 
       await updateCompany({
         credentials,
-        companyId,
+        company,
         omieCnae,
         companyMapping: omieMappings.company,
         companiesRepository: repositories.companies
