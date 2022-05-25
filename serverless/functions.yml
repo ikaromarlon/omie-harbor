@@ -33,6 +33,7 @@ ingestionPerformer:
   package:
     patterns:
       - 'src/functions/ingestionPerformer/**'
+      - 'tests/mocks/**'
 
 dataExport:
   handler: src/index.handler

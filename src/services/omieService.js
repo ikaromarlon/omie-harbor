@@ -7,6 +7,28 @@ module.exports = ({ requester }) => {
   const defaultPagination = { pageNumber: 1, recordsPerPage: 500 }
   const defaultForceThrow = false
 
+  const getCompany = async ({ appKey, appSecret }, forceThrow = defaultForceThrow) => {
+    const url = `${apiBaseUrl}/geral/empresas/`
+
+    const body = {
+      call: 'ListarEmpresas',
+      app_key: appKey,
+      app_secret: appSecret,
+      param: [{
+        pagina: defaultPagination.pageNumber,
+        registros_por_pagina: defaultPagination.recordsPerPage,
+        apenas_importado_api: 'N'
+      }]
+    }
+
+    try {
+      const response = await requester.post(url, body)
+      return response.data.empresas_cadastro[0]
+    } catch (error) {
+      return omieErrorHandler(error, null, forceThrow)
+    }
+  }
+
   const getActivities = async ({ appKey, appSecret }, forceThrow = defaultForceThrow) => {
     const url = `${apiBaseUrl}/geral/tpativ/`
 
@@ -648,6 +670,7 @@ module.exports = ({ requester }) => {
   }
 
   return {
+    getCompany,
     getActivities,
     getCnae,
     getBanks,
