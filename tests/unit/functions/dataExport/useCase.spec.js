@@ -25,28 +25,28 @@ const makeSut = () => {
   const omieBillingSavedMock = [...omieProductInvoicesSavedMock, ...omieServiceInvoicesSavedMock]
 
   const repositoriesMock = {
-    companies: { find: async (filter) => Promise.resolve(omieCompaniesSavedMock) },
-    categories: { find: async (filter) => Promise.resolve(omieCategoriesSavedMock) },
-    departments: { find: async (filter) => Promise.resolve(omieDepartmentsSavedMock) },
-    projects: { find: async (filter) => Promise.resolve(omieProjectsSavedMock) },
-    customers: { find: async (filter) => Promise.resolve(omieCustomersSavedMock) },
-    productsServices: { find: async (filter) => Promise.resolve(omieProductsServicesSavedMock) },
-    checkingAccounts: { find: async (filter) => Promise.resolve(omieCheckingAccountsSavedMock) },
-    contracts: { find: async (filter) => Promise.resolve(omieContractsSavedMock) },
-    orders: { find: async (filter) => Promise.resolve(omieOrdersSavedMock) },
-    billing: { find: async (filter) => Promise.resolve(omieBillingSavedMock) },
-    accountsPayable: { find: async (filter) => Promise.resolve(omieAccountsPayableSavedMock) },
-    accountsReceivable: { find: async (filter) => Promise.resolve(omieAccountsReceivableSavedMock) },
-    financialMovements: { find: async (filter) => Promise.resolve(omieFinancialMovementsSavedMock) }
+    companies: { find: jest.fn(async () => omieCompaniesSavedMock) },
+    categories: { find: jest.fn(async () => omieCategoriesSavedMock) },
+    departments: { find: jest.fn(async () => omieDepartmentsSavedMock) },
+    projects: { find: jest.fn(async () => omieProjectsSavedMock) },
+    customers: { find: jest.fn(async () => omieCustomersSavedMock) },
+    productsServices: { find: jest.fn(async () => omieProductsServicesSavedMock) },
+    checkingAccounts: { find: jest.fn(async () => omieCheckingAccountsSavedMock) },
+    contracts: { find: jest.fn(async () => omieContractsSavedMock) },
+    orders: { find: jest.fn(async () => omieOrdersSavedMock) },
+    billing: { find: jest.fn(async () => omieBillingSavedMock) },
+    accountsPayable: { find: jest.fn(async () => omieAccountsPayableSavedMock) },
+    accountsReceivable: { find: jest.fn(async () => omieAccountsReceivableSavedMock) },
+    financialMovements: { find: jest.fn(async () => omieFinancialMovementsSavedMock) }
   }
 
   const loggerMock = {
-    info: jest.fn((data) => null),
-    error: jest.fn((data) => null)
+    info: jest.fn(() => null),
+    error: jest.fn(() => null)
   }
 
   const bucketMock = {
-    storeCompanyData: jest.fn(async (companyId, data) => Promise.resolve(null))
+    storeCompanyData: jest.fn(async () => Promise.resolve(null))
   }
 
   const useCase = makeUseCase({
@@ -69,105 +69,22 @@ const makeSut = () => {
 
 describe('dataExport UseCase', () => {
   it('Should call repositories.companies.find successfully', async () => {
-    const { sut, payloadMock, repositoriesMock } = makeSut()
-    const findSpy = jest.spyOn(repositoriesMock.companies, 'find')
-    await sut({ payload: payloadMock })
-    expect(findSpy).toHaveBeenCalledWith({ _id: payloadMock.companyId })
-  })
-
-  it('Should call logger.info successfully', async () => {
-    const { sut, payloadMock, loggerMock } = makeSut()
-    await sut({ payload: payloadMock })
+    const { sut, payloadMock, repositoriesMock, loggerMock, bucketMock, omieProductsServicesSavedMock, omieOrdersSavedMock, omieBillingSavedMock } = makeSut()
+    const result = await sut({ payload: payloadMock })
+    expect(repositoriesMock.companies.find).toHaveBeenCalledWith({ _id: payloadMock.companyId })
     expect(loggerMock.info).toHaveBeenCalledTimes(3)
-  })
-
-  it('Should call repositories.categories.find successfully', async () => {
-    const { sut, payloadMock, repositoriesMock } = makeSut()
-    const findSpy = jest.spyOn(repositoriesMock.categories, 'find')
-    await sut({ payload: payloadMock })
-    expect(findSpy).toHaveBeenCalledWith({ companyId: omieCompaniesSavedMock[0]._id })
-  })
-
-  it('Should call repositories.departments.find successfully', async () => {
-    const { sut, payloadMock, repositoriesMock } = makeSut()
-    const findSpy = jest.spyOn(repositoriesMock.departments, 'find')
-    await sut({ payload: payloadMock })
-    expect(findSpy).toHaveBeenCalledWith({ companyId: omieCompaniesSavedMock[0]._id })
-  })
-
-  it('Should call repositories.projects.find successfully', async () => {
-    const { sut, payloadMock, repositoriesMock } = makeSut()
-    const findSpy = jest.spyOn(repositoriesMock.projects, 'find')
-    await sut({ payload: payloadMock })
-    expect(findSpy).toHaveBeenCalledWith({ companyId: omieCompaniesSavedMock[0]._id })
-  })
-
-  it('Should call repositories.customers.find successfully', async () => {
-    const { sut, payloadMock, repositoriesMock } = makeSut()
-    const findSpy = jest.spyOn(repositoriesMock.customers, 'find')
-    await sut({ payload: payloadMock })
-    expect(findSpy).toHaveBeenCalledWith({ companyId: omieCompaniesSavedMock[0]._id })
-  })
-
-  it('Should call repositories.productsServices.find successfully', async () => {
-    const { sut, payloadMock, repositoriesMock } = makeSut()
-    const findSpy = jest.spyOn(repositoriesMock.productsServices, 'find')
-    await sut({ payload: payloadMock })
-    expect(findSpy).toHaveBeenCalledWith({ companyId: omieCompaniesSavedMock[0]._id })
-  })
-
-  it('Should call repositories.checkingAccounts.find successfully', async () => {
-    const { sut, payloadMock, repositoriesMock } = makeSut()
-    const findSpy = jest.spyOn(repositoriesMock.checkingAccounts, 'find')
-    await sut({ payload: payloadMock })
-    expect(findSpy).toHaveBeenCalledWith({ companyId: omieCompaniesSavedMock[0]._id })
-  })
-
-  it('Should call repositories.contracts.find successfully', async () => {
-    const { sut, payloadMock, repositoriesMock } = makeSut()
-    const findSpy = jest.spyOn(repositoriesMock.contracts, 'find')
-    await sut({ payload: payloadMock })
-    expect(findSpy).toHaveBeenCalledWith({ companyId: omieCompaniesSavedMock[0]._id })
-  })
-
-  it('Should call repositories.orders.find successfully', async () => {
-    const { sut, payloadMock, repositoriesMock } = makeSut()
-    const findSpy = jest.spyOn(repositoriesMock.orders, 'find')
-    await sut({ payload: payloadMock })
-    expect(findSpy).toHaveBeenCalledWith({ companyId: omieCompaniesSavedMock[0]._id })
-  })
-
-  it('Should call repositories.billing.find successfully', async () => {
-    const { sut, payloadMock, repositoriesMock } = makeSut()
-    const findSpy = jest.spyOn(repositoriesMock.billing, 'find')
-    await sut({ payload: payloadMock })
-    expect(findSpy).toHaveBeenCalledWith({ companyId: omieCompaniesSavedMock[0]._id })
-  })
-
-  it('Should call repositories.accountsPayable.find successfully', async () => {
-    const { sut, payloadMock, repositoriesMock } = makeSut()
-    const findSpy = jest.spyOn(repositoriesMock.accountsPayable, 'find')
-    await sut({ payload: payloadMock })
-    expect(findSpy).toHaveBeenCalledWith({ companyId: omieCompaniesSavedMock[0]._id })
-  })
-
-  it('Should call repositories.accountsReceivable.find successfully', async () => {
-    const { sut, payloadMock, repositoriesMock } = makeSut()
-    const findSpy = jest.spyOn(repositoriesMock.accountsReceivable, 'find')
-    await sut({ payload: payloadMock })
-    expect(findSpy).toHaveBeenCalledWith({ companyId: omieCompaniesSavedMock[0]._id })
-  })
-
-  it('Should call repositories.financialMovements.find successfully', async () => {
-    const { sut, payloadMock, repositoriesMock } = makeSut()
-    const findSpy = jest.spyOn(repositoriesMock.financialMovements, 'find')
-    await sut({ payload: payloadMock })
-    expect(findSpy).toHaveBeenCalledWith({ companyId: omieCompaniesSavedMock[0]._id })
-  })
-
-  it('Should call bucket.storeCompanyData successfully', async () => {
-    const { sut, payloadMock, bucketMock, omieProductsServicesSavedMock, omieOrdersSavedMock, omieBillingSavedMock } = makeSut()
-    await sut({ payload: payloadMock })
+    expect(repositoriesMock.categories.find).toHaveBeenCalledWith({ companyId: payloadMock.companyId })
+    expect(repositoriesMock.departments.find).toHaveBeenCalledWith({ companyId: payloadMock.companyId })
+    expect(repositoriesMock.projects.find).toHaveBeenCalledWith({ companyId: payloadMock.companyId })
+    expect(repositoriesMock.customers.find).toHaveBeenCalledWith({ companyId: payloadMock.companyId })
+    expect(repositoriesMock.productsServices.find).toHaveBeenCalledWith({ companyId: payloadMock.companyId })
+    expect(repositoriesMock.checkingAccounts.find).toHaveBeenCalledWith({ companyId: payloadMock.companyId })
+    expect(repositoriesMock.contracts.find).toHaveBeenCalledWith({ companyId: payloadMock.companyId })
+    expect(repositoriesMock.orders.find).toHaveBeenCalledWith({ companyId: payloadMock.companyId })
+    expect(repositoriesMock.billing.find).toHaveBeenCalledWith({ companyId: payloadMock.companyId })
+    expect(repositoriesMock.accountsPayable.find).toHaveBeenCalledWith({ companyId: payloadMock.companyId })
+    expect(repositoriesMock.accountsReceivable.find).toHaveBeenCalledWith({ companyId: payloadMock.companyId })
+    expect(repositoriesMock.financialMovements.find).toHaveBeenCalledWith({ companyId: payloadMock.companyId })
     expect(bucketMock.storeCompanyData).toHaveBeenCalledWith(payloadMock.companyId, {
       companies: omieCompaniesSavedMock,
       categories: omieCategoriesSavedMock,
@@ -183,11 +100,6 @@ describe('dataExport UseCase', () => {
       accountsReceivable: omieAccountsReceivableSavedMock,
       financialMovements: omieFinancialMovementsSavedMock
     })
-  })
-
-  it('Should return success', async () => {
-    const { sut, payloadMock } = makeSut()
-    const result = await sut({ payload: payloadMock })
     expect(result).toEqual({ success: true })
   })
 })

@@ -26,20 +26,15 @@ const makeSut = () => {
 
 describe('Bucket Adapter', () => {
   describe('storeCompanyData method', () => {
-    it('Should call s3.putObject successfully', async () => {
+    it('Should execute successfully', async () => {
       const { sut, companyIdMock } = makeSut()
-      await sut.storeCompanyData(companyIdMock, {})
+      const result = await sut.storeCompanyData(companyIdMock, {})
       expect(mockPutObject).toHaveBeenCalledWith({
         Bucket: 'the-bucket',
         Key: `${companyIdMock}.json`,
         Body: Buffer.from(JSON.stringify({})),
         ContentType: 'application/json'
       })
-    })
-
-    it('Should execute successfully', async () => {
-      const { sut, companyIdMock } = makeSut()
-      const result = await sut.storeCompanyData(companyIdMock, {})
       expect(result).toBe(true)
     })
   })

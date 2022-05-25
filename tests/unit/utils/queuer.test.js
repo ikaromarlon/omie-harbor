@@ -29,19 +29,14 @@ const makeSut = () => {
 
 describe('Queuer Adapter', () => {
   describe('sendCompanyToDataExportQueue method', () => {
-    it('Should call sqs.sendMessage successfully', async () => {
+    it('Should execute successfully', async () => {
       const { sut, companyIdMock } = makeSut()
-      await sut.sendCompanyToDataExportQueue(companyIdMock)
+      const result = await sut.sendCompanyToDataExportQueue(companyIdMock)
       expect(mockSendMessage).toHaveBeenCalledWith({
         QueueUrl: 'https://the-dataExportQueueUrl',
         MessageGroupId: companyIdMock,
         MessageBody: JSON.stringify({ companyId: companyIdMock })
       })
-    })
-
-    it('Should execute successfully', async () => {
-      const { sut, companyIdMock } = makeSut()
-      const result = await sut.sendCompanyToDataExportQueue(companyIdMock)
       expect(result).toBe(true)
     })
   })

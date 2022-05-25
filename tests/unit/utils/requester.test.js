@@ -2,8 +2,8 @@ const axios = require('axios')
 const makeRequester = require('../../../src/utils/requester')
 
 jest.mock('axios', () => ({
-  get: async (url, config) => Promise.resolve({ status: 200, headers: {}, data: { success: true } }),
-  post: async (url, data, config) => Promise.resolve({ status: 200, headers: {}, data: { success: true } })
+  get: async () => Promise.resolve({ status: 200, headers: {}, data: { success: true } }),
+  post: async () => Promise.resolve({ status: 200, headers: {}, data: { success: true } })
 }))
 
 const makeSut = () => {
