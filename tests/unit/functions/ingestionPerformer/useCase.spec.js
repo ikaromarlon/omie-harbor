@@ -1,5 +1,8 @@
+const config = require('../../../../src/config')
 const makeUseCase = require('../../../../src/functions/ingestionPerformer/useCase')
 const mocks = require('../../../mocks')
+
+jest.useFakeTimers('modern').setSystemTime(new Date())
 
 const makeSut = () => {
   const companyIdMock = '25c176b6-b200-4575-9217-e23c6105163c'
@@ -207,8 +210,22 @@ describe('ingestionPerformer UseCase', () => {
       await sut({ payload: payloadMock })
       expect(omieServiceMock.getCompany).toHaveBeenCalledTimes(1)
       expect(omieMappingsMock.company).toHaveBeenCalledWith({ omieCompany: mocks.omieCompaniesResponseMock.empresas_cadastro[0], omieCnae: mocks.omieCnaeResponseMock.cadastros, credentials: credentialsMock })
-      expect(omieMappingsMock.company).toHaveReturnedWith(mocks.omieCompanyParsedMock)
       expect(repositoriesMock.companies.createOrUpdateOne).toHaveBeenCalledWith({ _id: companyIdMock }, mocks.omieCompanyParsedMock)
+    })
+    it('Should updated company with inactive record successfully', async () => {
+      const { sut, payloadMock, omieServiceMock, credentialsMock, omieMappingsMock, companyIdMock, repositoriesMock } = makeSut()
+      const omieCompanyResponseMock = { ...mocks.omieCompaniesResponseMock.empresas_cadastro[0], inativa: 'S' }
+      omieServiceMock.getCompany.mockResolvedValueOnce(omieCompanyResponseMock)
+      omieMappingsMock.company.mockReturnValueOnce({ ...mocks.omieCompanyParsedMock, isActive: false })
+      await sut({ payload: payloadMock })
+      expect(omieServiceMock.getCompany).toHaveBeenCalledTimes(1)
+      expect(omieMappingsMock.company).toHaveBeenCalledWith({ omieCompany: omieCompanyResponseMock, omieCnae: mocks.omieCnaeResponseMock.cadastros, credentials: credentialsMock })
+      expect(repositoriesMock.companies.createOrUpdateOne).toHaveBeenCalledWith({ _id: companyIdMock }, {
+        ...mocks.omieCompanyParsedMock,
+        isActive: false,
+        statusAt: new Date(),
+        statusBy: config.app.user
+      })
     })
   })
 
