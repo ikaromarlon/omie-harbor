@@ -22,8 +22,8 @@
     "predeploy:prd": "npm run ci -- --stage prd",
     "deploy": "sls deploy --verbose",
     "postdeploy": "npm run bin -- --setupDb",
-    "deploy:dev": "export STAGE=dev; npm run deploy -- --stage dev",
-    "deploy:prd": "export STAGE=prd; npm run deploy -- --stage prd",
+    "deploy:dev": "export STAGE=dev && npm run deploy -- --stage dev",
+    "deploy:prd": "export STAGE=prd && npm run deploy -- --stage prd",
     "prepare": "husky install"
   },
   "repository": {
