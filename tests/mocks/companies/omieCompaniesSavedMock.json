@@ -36,8 +36,12 @@
     "name": "DOIS SOLUCOES GERENCIAIS LTDA",
     "nickName": "DOIS SOLUCOES",
     "stateRegistration": "0777761600186",
+    "isActive": true,
+    "statusAt": null,
+    "statusBy": null,
     "createdAt": "2021-11-05T15:05:38.233Z",
+    "createdBy": "5429ae58-b264-4f3b-ba63-3dd304b272a1",
     "updatedAt": "2021-11-05T15:29:58.455Z",
-    "isActive": true
+    "updatedBy": "5429ae58-b264-4f3b-ba63-3dd304b272a1"
   }
 ]
