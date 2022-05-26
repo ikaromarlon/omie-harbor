@@ -4,7 +4,7 @@
   "description": "FullBPO BFB (Back-end For Back-end) service",
   "main": "src/index.js",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0"
   },
   "scripts": {
     "lint": "standard",
@@ -15,9 +15,9 @@
     "test:staged": "npm test -- --findRelatedTests",
     "test:unit": "npm test -- --watch ./tests/unit",
     "test:integration": "npm test -- --watch ./tests/integration",
-    "test:coverage": "npm run test -- --collectCoverage",
+    "test:coverage": "npm test -- --collectCoverage",
     "bin": "node ./bin/index.js --",
-    "ci": "npm run test:coverage",
+    "ci": "npm install && npm run test",
     "predeploy:dev": "export STAGE=dev && npm run ci -- --stage dev",
     "predeploy:prd": "export STAGE=dev && npm run ci -- --stage prd",
     "deploy": "sls deploy --verbose",
@@ -25,7 +25,6 @@
     "deploy:function:dev": "npm run deploy:dev -- function -f",
     "deploy:prd": "export STAGE=prd && npm run deploy -- --stage prd",
     "deploy:function:prd": "npm run deploy:prd -- function -f",
-    "postdeploy": "npm run bin -- --setupDb",
     "prepare": "husky install"
   },
   "repository": {
