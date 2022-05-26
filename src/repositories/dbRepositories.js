@@ -6,7 +6,6 @@ module.exports = async () => {
   const db = await mongodb.connect(config.mongodb.uri, config.mongodb.dbName)
   return {
     companies: makeDbRepository('companies', db),
-    users: makeDbRepository('users', db),
     categories: makeDbRepository('categories', db),
     departments: makeDbRepository('departments', db),
     projects: makeDbRepository('projects', db),
