@@ -31,7 +31,7 @@ module.exports = ({ providerName, helpers: { brDateToISO, multiply } }) => ({
     departmentId: departmentId ?? emptyRecordsIds.department,
     departmentPercentage,
     cfop: null, /** only for products */
-    municipalServiceCode: null,
+    municipalServiceCode: omieInvoiceItem.CodigoServico, /** Omie returns CodigoServico as municipalServiceCode in NFS-e API */
     contractId: contractId ?? emptyRecordsIds.contract,
     origin: order?.type ?? null,
     type: 'NFS-e',

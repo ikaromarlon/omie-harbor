@@ -204,4 +204,36 @@ describe('Service Order Mapping', () => {
 
     expect(result).toEqual({ ...omieServiceOrderParsedMock, billingStep: 'Default description' })
   })
+
+  it('Should return mapped product sale order successfully without municipalServiceCode', () => {
+    const {
+      sut,
+      omieServiceOrderMock,
+      omieBillingStepsMock,
+      companyIdMock,
+      customerIdMock,
+      projectIdMock,
+      departmentIdMock,
+      productServiceIdMock,
+      categoryIdMock,
+      contractIdMock
+    } = makeSut()
+
+    const result = sut({
+      omieOrder: omieServiceOrderMock,
+      omieOrderDepartment: omieServiceOrderMock.Departamentos[0],
+      omieOrderItem: { ...omieServiceOrderMock.ServicosPrestados[0], cCodServMun: '' },
+      omieBillingSteps: omieBillingStepsMock,
+      emptyRecordsIds: emptyRecordsIdsMock,
+      companyId: companyIdMock,
+      customerId: customerIdMock,
+      projectId: projectIdMock,
+      departmentId: departmentIdMock,
+      productServiceId: productServiceIdMock,
+      categoryId: categoryIdMock,
+      contractId: contractIdMock
+    })
+
+    expect(result).toEqual({ ...omieServiceOrderParsedMock, municipalServiceCode: null })
+  })
 })

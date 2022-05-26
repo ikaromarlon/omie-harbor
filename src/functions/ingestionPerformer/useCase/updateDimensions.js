@@ -8,7 +8,8 @@ module.exports = async ({
   repositories,
   omieCnae,
   emptyRecordsIds,
-  makeEmptyRecord
+  makeEmptyRecord,
+  joinRecordsByCfopAndMunicipalServiceCode
 }) => {
   const updateCategories = async ({ credentials, companyId, categoryMapping, categoriesRepository }) => {
     const omieCategories = await omieService.getCategories(credentials)
@@ -153,10 +154,11 @@ module.exports = async ({
           })
         })
       }).flatMap(x => x.flatMap(y => y))
+        .reduce(joinRecordsByCfopAndMunicipalServiceCode, [])
 
       const emptyRecord = await makeEmptyRecord(emptyRecordsIds.contract, contracts[0])
       contracts.push(emptyRecord)
-      await repositories.contracts.deleteOldAndCreateNew(['companyId', 'externalId'], contracts)
+      await repositories.contracts.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'type'], contracts)
     }
   }
 
@@ -250,45 +252,8 @@ module.exports = async ({
             })
           })
         })
-      })
-        .flatMap(x => x.flatMap(y => y))
-        .reduce((acc, order, i, source) => {
-          const stored = acc.some(e => e.customerId === order.customerId && e.externalId === order.externalId && e.type === order.type && e.departmentId === order.departmentId && e.productServiceId === order.productServiceId && e.cfop === order.cfop)
-          const pending = source.filter(e => e.customerId === order.customerId && e.externalId === order.externalId && e.type === order.type && e.departmentId === order.departmentId && e.productServiceId === order.productServiceId && e.cfop === order.cfop)
-          if (!stored) {
-            acc.push({
-              ...order,
-              ...(pending.reduce((sum, e) => ({
-                grossValue: sum.grossValue + e.grossValue,
-                netValue: sum.netValue + e.netValue,
-                discounts: sum.discounts + e.discounts,
-                taxAmount: sum.taxAmount + e.taxAmount,
-                taxes: {
-                  ir: sum.taxes.ir + e.taxes.ir,
-                  pis: sum.taxes.pis + e.taxes.pis,
-                  cofins: sum.taxes.cofins + e.taxes.cofins,
-                  csll: sum.taxes.csll + e.taxes.csll,
-                  icms: sum.taxes.icms + e.taxes.icms,
-                  iss: sum.taxes.iss + e.taxes.iss
-                }
-              }), {
-                grossValue: 0,
-                netValue: 0,
-                discounts: 0,
-                taxAmount: 0,
-                taxes: {
-                  ir: 0,
-                  pis: 0,
-                  cofins: 0,
-                  csll: 0,
-                  icms: 0,
-                  iss: 0
-                }
-              }))
-            })
-          }
-          return acc
-        }, [])
+      }).flatMap(x => x.flatMap(y => y))
+        .reduce(joinRecordsByCfopAndMunicipalServiceCode, [])
 
       const serviceOrders = omieServiceOrders.map(omieOrder => {
         const customer = customers.find(e => e.externalId === String(omieOrder.Cabecalho.nCodCli))
@@ -316,6 +281,7 @@ module.exports = async ({
           })
         })
       }).flatMap(x => x.flatMap(y => y))
+        .reduce(joinRecordsByCfopAndMunicipalServiceCode, [])
 
       const orders = [...productOrders, ...serviceOrders]
 

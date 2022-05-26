@@ -195,4 +195,36 @@ describe('Contract Mapping', () => {
 
     expect(result).toEqual({ ...omieContractParsedMock, externalId: '123456', step: null })
   })
+
+  it('Should return mapped contract successfully without municipalServiceCode', () => {
+    const {
+      sut,
+      omieContractMock,
+      omieContractStepsMock,
+      omieContractBillingTypesMock,
+      companyIdMock,
+      customerIdMock,
+      projectIdMock,
+      departmentIdMock,
+      productServiceIdMock,
+      categoryIdMock
+    } = makeSut()
+
+    const result = sut({
+      omieContract: omieContractMock,
+      omieContractDepartment: omieContractMock.departamentos[0],
+      omieContractItem: { ...omieContractMock.itensContrato[0], itemCabecalho: { ...omieContractMock.itensContrato[0].itemCabecalho, codServMunic: '' } },
+      omieContractBillingTypes: omieContractBillingTypesMock,
+      omieContractSteps: omieContractStepsMock,
+      emptyRecordsIds: emptyRecordsIdsMock,
+      companyId: companyIdMock,
+      customerId: customerIdMock,
+      projectId: projectIdMock,
+      departmentId: departmentIdMock,
+      productServiceId: productServiceIdMock,
+      categoryId: categoryIdMock
+    })
+
+    expect(result).toEqual({ ...omieContractParsedMock, municipalServiceCode: null })
+  })
 })

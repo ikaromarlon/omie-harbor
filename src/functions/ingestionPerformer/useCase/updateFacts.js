@@ -9,7 +9,8 @@ module.exports = async ({
   omieEntryOrigins,
   omieDocumentTypes,
   emptyRecordsIds,
-  makeEmptyRecord
+  makeEmptyRecord,
+  joinRecordsByCfopAndMunicipalServiceCode
 }) => {
   const updateBilling = async ({ credentials, companyId, startDate, endDate, emptyRecordsIds, productInvoiceMapping, serviceInvoiceMapping, productTaxCouponMapping, repositories }) => {
     const [
@@ -78,7 +79,7 @@ module.exports = async ({
         projectsFilter.length ? repositories.projects.find({ companyId, externalId: projectsFilter }) : [],
         departmentsFilter.length ? repositories.departments.find({ companyId, externalId: departmentsFilter }) : [],
         productsFilter.length ? repositories.productsServices.find({ companyId, externalId: productsFilter, type: 'PRODUTO' }) : [],
-        servicesFilter.length ? repositories.productsServices.find({ companyId, municipalServiceCode: servicesFilter, type: 'SERVICO' }) : [],
+        servicesFilter.length ? repositories.productsServices.find({ companyId, municipalServiceCode: servicesFilter, type: 'SERVICO' }) : [], /** Omie returns CodigoServico as municipalServiceCode in NFS-e API */
         contractsFilter.length ? repositories.contracts.find({ companyId, externalId: contractsFilter }) : [],
         ordersFilter.length ? repositories.orders.find({ companyId, externalId: ordersFilter }) : []
       ])
@@ -109,46 +110,9 @@ module.exports = async ({
           })
         }
         return null
-      })
-        .filter(Boolean)
+      }).filter(Boolean)
         .flatMap(x => x.flatMap(y => y))
-        .reduce((invoices, invoice, i, source) => {
-          const stored = invoices.some(e => e.customerId === invoice.customerId && e.externalId === invoice.externalId && e.type === invoice.type && e.departmentId === invoice.departmentId && e.productServiceId === invoice.productServiceId && e.cfop === invoice.cfop)
-          const pending = source.filter(e => e.customerId === invoice.customerId && e.externalId === invoice.externalId && e.type === invoice.type && e.departmentId === invoice.departmentId && e.productServiceId === invoice.productServiceId && e.cfop === invoice.cfop)
-          if (!stored) {
-            invoices.push({
-              ...invoice,
-              ...(pending.reduce((sum, e) => ({
-                grossValue: sum.grossValue + e.grossValue,
-                netValue: sum.netValue + e.netValue,
-                discounts: sum.discounts + e.discounts,
-                taxAmount: sum.taxAmount + e.taxAmount,
-                taxes: {
-                  ir: sum.taxes.ir + e.taxes.ir,
-                  pis: sum.taxes.pis + e.taxes.pis,
-                  cofins: sum.taxes.cofins + e.taxes.cofins,
-                  csll: sum.taxes.csll + e.taxes.csll,
-                  icms: sum.taxes.icms + e.taxes.icms,
-                  iss: sum.taxes.iss + e.taxes.iss
-                }
-              }), {
-                grossValue: 0,
-                netValue: 0,
-                discounts: 0,
-                taxAmount: 0,
-                taxes: {
-                  ir: 0,
-                  pis: 0,
-                  cofins: 0,
-                  csll: 0,
-                  icms: 0,
-                  iss: 0
-                }
-              }))
-            })
-          }
-          return invoices
-        }, [])
+        .reduce(joinRecordsByCfopAndMunicipalServiceCode, [])
 
       const serviceInvoices = omieServiceInvoices.map(omieInvoice => {
         const customer = customers.find(e => e.externalId === String(omieInvoice.Cabecalho.nCodigoCliente))
@@ -177,11 +141,14 @@ module.exports = async ({
           })
         })
       }).flatMap(x => x.flatMap(y => y))
+        .reduce(joinRecordsByCfopAndMunicipalServiceCode, [])
 
       const invoices = [...productInvoices, ...serviceInvoices]
 
-      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.billing, invoices[0])
-      invoices.push(emptyRecord)
+      if (invoices.length) {
+        const emptyRecord = await makeEmptyRecord(emptyRecordsIds.billing, invoices[0])
+        invoices.push(emptyRecord)
+      }
       await repositories.billing.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'type'], invoices)
     }
   }
@@ -280,8 +247,10 @@ module.exports = async ({
         })
       }).flatMap(x => x.flatMap(y => y.flatMap(z => z)))
 
-      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.accountPayable, accountsPayable[0])
-      accountsPayable.push(emptyRecord)
+      if (accountsPayable.length) {
+        const emptyRecord = await makeEmptyRecord(emptyRecordsIds.accountPayable, accountsPayable[0])
+        accountsPayable.push(emptyRecord)
+      }
       await repositories.accountsPayable.deleteOldAndCreateNew(['companyId', 'customerId', 'titleId'], accountsPayable)
     }
   }
@@ -380,8 +349,10 @@ module.exports = async ({
         })
       }).flatMap(x => x.flatMap(y => y.flatMap(z => z)))
 
-      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.accountReceivable, accountsReceivable[0])
-      accountsReceivable.push(emptyRecord)
+      if (accountsReceivable.length) {
+        const emptyRecord = await makeEmptyRecord(emptyRecordsIds.accountReceivable, accountsReceivable[0])
+        accountsReceivable.push(emptyRecord)
+      }
       await repositories.accountsReceivable.deleteOldAndCreateNew(['companyId', 'customerId', 'titleId'], accountsReceivable)
     }
   }

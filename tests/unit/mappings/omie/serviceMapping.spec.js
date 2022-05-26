@@ -22,4 +22,10 @@ describe('Service Mapping', () => {
     const result = sut({ omieService: omieServiceMock, companyId: companyIdMock })
     expect(result).toEqual(omieServiceParsedMock)
   })
+
+  it('Should return mapped service successfully without municipalServiceCode', () => {
+    const { sut, omieServiceMock, companyIdMock } = makeSut()
+    const result = sut({ omieService: { ...omieServiceMock, cabecalho: { ...omieServiceMock.cabecalho, cCodServMun: '' } }, companyId: companyIdMock })
+    expect(result).toEqual({ ...omieServiceParsedMock, municipalServiceCode: null })
+  })
 })

@@ -153,4 +153,34 @@ describe('Product Invoice Mapping', () => {
 
     expect(result).toEqual(omieProductInvoiceParsedMock)
   })
+
+  it('Should return mapped product invoice successfully without cfop', () => {
+    const {
+      sut,
+      omieProductInvoiceMock,
+      orderMock,
+      companyIdMock,
+      customerIdMock,
+      projectIdMock,
+      departmentIdMock,
+      productServiceIdMock,
+      categoryIdMock
+    } = makeSut()
+
+    const result = sut({
+      omieInvoice: omieProductInvoiceMock,
+      omieInvoiceDepartment: omieProductInvoiceMock.pedido.Departamentos[0],
+      omieInvoiceItem: { ...omieProductInvoiceMock.det[0], prod: { ...omieProductInvoiceMock.det[0].prod, CFOP: '' } },
+      emptyRecordsIds: emptyRecordsIdsMock,
+      order: orderMock,
+      companyId: companyIdMock,
+      customerId: customerIdMock,
+      projectId: projectIdMock,
+      departmentId: departmentIdMock,
+      productServiceId: productServiceIdMock,
+      categoryId: categoryIdMock
+    })
+
+    expect(result).toEqual({ ...omieProductInvoiceParsedMock, cfop: null })
+  })
 })

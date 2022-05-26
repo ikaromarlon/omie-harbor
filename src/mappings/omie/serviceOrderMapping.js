@@ -33,7 +33,7 @@ module.exports = ({ providerName, helpers: { brDateToISO, multiply } }) => ({
     departmentId: departmentId ?? emptyRecordsIds.department,
     departmentPercentage,
     cfop: null, /** only for PEDIDO */
-    municipalServiceCode: null,
+    municipalServiceCode: omieOrderItem.cCodServMun || null,
     contractId: contractId ?? emptyRecordsIds.contract,
     type: 'OS',
     registerDate: brDateToISO(omieOrder.InfoCadastro.dDtInc, omieOrder.InfoCadastro.cHrInc),

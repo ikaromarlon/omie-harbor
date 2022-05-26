@@ -192,4 +192,34 @@ describe('Product Sale Order Mapping', () => {
 
     expect(result).toEqual({ ...omieProductOrderParsedMock, billingStep: 'Default description' })
   })
+
+  it('Should return mapped product sale order successfully without cfop', () => {
+    const {
+      sut,
+      omieProductOrderMock,
+      omieBillingStepsMock,
+      companyIdMock,
+      customerIdMock,
+      projectIdMock,
+      departmentIdMock,
+      productServiceIdMock,
+      categoryIdMock
+    } = makeSut()
+
+    const result = sut({
+      omieOrder: omieProductOrderMock,
+      omieOrderDepartment: omieProductOrderMock.departamentos[0],
+      omieOrderItem: { ...omieProductOrderMock.det[0], produto: { ...omieProductOrderMock.det[0].produto, cfop: '' } },
+      omieBillingSteps: omieBillingStepsMock,
+      emptyRecordsIds: emptyRecordsIdsMock,
+      companyId: companyIdMock,
+      customerId: customerIdMock,
+      projectId: projectIdMock,
+      departmentId: departmentIdMock,
+      productServiceId: productServiceIdMock,
+      categoryId: categoryIdMock
+    })
+
+    expect(result).toEqual({ ...omieProductOrderParsedMock, cfop: null })
+  })
 })

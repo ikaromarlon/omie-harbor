@@ -300,7 +300,7 @@ describe('ingestionPerformer UseCase', () => {
           emptyRecordsIds: mocks.emptyRecordsIdsMock
         })
         expect(omieMappingsMock.contract).toHaveReturnedWith(mocks.omieContractParsedMock)
-        expect(repositoriesMock.contracts.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'externalId'], [mocks.omieContractParsedMock, mocks.emptyContractMock])
+        expect(repositoriesMock.contracts.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'customerId', 'externalId', 'type'], [mocks.omieContractParsedMock, mocks.emptyContractMock])
       })
 
       it('Should receive contracts from Omie with departments array but missing department id', async () => {
