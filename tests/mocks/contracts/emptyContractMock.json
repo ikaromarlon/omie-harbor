@@ -11,6 +11,7 @@
   "departmentId": null,
   "departmentPercentage": null,
   "type": null,
+  "municipalServiceCode": null,
   "registerDate": null,
   "startDate": null,
   "endDate": null,
@@ -24,7 +25,5 @@
   "billed": null,
   "billingType": null,
   "step": null,
-  "notes": null,
-  "createdAt": "2022-05-11T15:21:55.516Z",
-  "updatedAt": "2022-05-11T15:21:55.516Z"
+  "notes": null
 }

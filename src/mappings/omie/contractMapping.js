@@ -36,6 +36,7 @@ module.exports = ({ providerName, helpers: { brDateToISO, multiply } }) => ({
     departmentId: departmentId ?? emptyRecordsIds.department,
     departmentPercentage,
     type: 'SERVICO',
+    municipalServiceCode: String(omieContractItem.itemCabecalho.codServMunic) || null,
     registerDate: brDateToISO(omieContract.infoCadastro.dInc, omieContract.infoCadastro.hInc),
     startDate: brDateToISO(omieContract.cabecalho.dVigInicial),
     endDate: brDateToISO(omieContract.cabecalho.dVigFinal),

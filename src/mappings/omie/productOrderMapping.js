@@ -32,7 +32,8 @@ module.exports = ({ providerName, helpers: { brDateToISO, multiply } }) => ({
     categoryId: categoryId ?? emptyRecordsIds.category,
     departmentId: departmentId ?? emptyRecordsIds.department,
     departmentPercentage,
-    cfop: omieOrderItem.produto.cfop,
+    cfop: omieOrderItem.produto.cfop ? String(omieOrderItem.produto.cfop) : null,
+    municipalServiceCode: null, /** only for OS */
     contractId: emptyRecordsIds.contract, /** only for OS */
     type: 'PEDIDO',
     registerDate: brDateToISO(omieOrder.infoCadastro.dInc, omieOrder.infoCadastro.hInc),

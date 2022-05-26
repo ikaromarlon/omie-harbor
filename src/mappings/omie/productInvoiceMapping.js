@@ -29,7 +29,8 @@ module.exports = ({ providerName, helpers: { brDateToISO, multiply } }) => ({
     categoryId: categoryId ?? emptyRecordsIds.category,
     departmentId: departmentId ?? emptyRecordsIds.department,
     departmentPercentage,
-    cfop: omieInvoiceItem.prod.CFOP,
+    cfop: omieInvoiceItem.prod.CFOP ? String(omieInvoiceItem.prod.CFOP) : null,
+    municipalServiceCode: null, /** only for NFS-e */
     contractId: emptyRecordsIds.contract, /** only for NFS-e */
     origin: order?.type ?? null,
     type: 'NF-e',

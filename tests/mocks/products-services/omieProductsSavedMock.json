@@ -4,9 +4,8 @@
     "externalId": "640524827",
     "provider": "Omie",
     "code": "PRD00001",
-    "ncm": "3923.21.90",
     "cfop": null,
-    "municipalCode": null,
+    "municipalServiceCode": null,
     "companyId": "25c176b6-b200-4575-9217-e23c6105163c",
     "description": "TESTE",
     "family": {

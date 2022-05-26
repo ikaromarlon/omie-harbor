@@ -15,6 +15,7 @@
   "departmentId": null,
   "departmentPercentage": null,
   "cfop": null,
+  "municipalServiceCode": null,
   "contractId": null,
   "origin": null,
   "type": null,
@@ -27,7 +28,5 @@
   "taxes": {},
   "cancelled": null,
   "denied": null,
-  "billed": null,
-  "createdAt": "2022-05-11T15:20:48.489Z",
-  "updatedAt": "2022-05-11T15:20:48.489Z"
+  "billed": null
 }

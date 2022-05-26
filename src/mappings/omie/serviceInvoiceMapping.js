@@ -31,6 +31,7 @@ module.exports = ({ providerName, helpers: { brDateToISO, multiply } }) => ({
     departmentId: departmentId ?? emptyRecordsIds.department,
     departmentPercentage,
     cfop: null, /** only for products */
+    municipalServiceCode: null,
     contractId: contractId ?? emptyRecordsIds.contract,
     origin: order?.type ?? null,
     type: 'NFS-e',

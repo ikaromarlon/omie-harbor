@@ -4,11 +4,12 @@ module.exports = async ({
   startDate,
   endDate,
   companyId,
-  emptyRecordsIds,
   omieMappings,
   repositories,
   omieEntryOrigins,
-  omieDocumentTypes
+  omieDocumentTypes,
+  emptyRecordsIds,
+  makeEmptyRecord
 }) => {
   const updateBilling = async ({ credentials, companyId, startDate, endDate, emptyRecordsIds, productInvoiceMapping, serviceInvoiceMapping, productTaxCouponMapping, repositories }) => {
     const [
@@ -22,8 +23,6 @@ module.exports = async ({
       // omieService.getTaxCoupons(credentials, { startDate, endDate }),
       // omieService.getTaxCouponsItems(credentials, { startDate, endDate })
     ])
-    // eslint-disable-next-line no-unused-vars
-    // const omieTaxCouponsWithItems = omieTaxCoupons.map(omieCoupon => ({ ...omieCoupon, items: omieTaxCouponsItems.filter(e => e.nIdCupom) }))
 
     if (omieProductInvoices.length || omieServiceInvoices.length) {
       const customersSet = new Set()
@@ -79,7 +78,7 @@ module.exports = async ({
         projectsFilter.length ? repositories.projects.find({ companyId, externalId: projectsFilter }) : [],
         departmentsFilter.length ? repositories.departments.find({ companyId, externalId: departmentsFilter }) : [],
         productsFilter.length ? repositories.productsServices.find({ companyId, externalId: productsFilter, type: 'PRODUTO' }) : [],
-        servicesFilter.length ? repositories.productsServices.find({ companyId, municipalCode: servicesFilter, type: 'SERVICO' }) : [],
+        servicesFilter.length ? repositories.productsServices.find({ companyId, municipalServiceCode: servicesFilter, type: 'SERVICO' }) : [],
         contractsFilter.length ? repositories.contracts.find({ companyId, externalId: contractsFilter }) : [],
         ordersFilter.length ? repositories.orders.find({ companyId, externalId: ordersFilter }) : []
       ])
@@ -159,7 +158,7 @@ module.exports = async ({
         return (omieInvoice.OrdemServico.Departamentos?.length ? omieInvoice.OrdemServico.Departamentos : [{}]).map(omieInvoiceDepartment => {
           const department = departments.find(e => e.externalId === String(omieInvoiceDepartment.cCodigoDepartamento))
           return omieInvoice.ListaServicos.map(omieInvoiceItem => {
-            const service = services.find(e => e.municipalCode === String(omieInvoiceItem.CodigoServico))
+            const service = services.find(e => e.municipalServiceCode === String(omieInvoiceItem.CodigoServico))
             const order = serviceOrders.find(e => e.productServiceId === service?._id && [department?._id, emptyRecordsIds.department].includes(e.departmentId))
             return serviceInvoiceMapping({
               omieInvoice,
@@ -179,7 +178,11 @@ module.exports = async ({
         })
       }).flatMap(x => x.flatMap(y => y))
 
-      await repositories.billing.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'type'], [...productInvoices, ...serviceInvoices])
+      const invoices = [...productInvoices, ...serviceInvoices]
+
+      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.billing, invoices[0])
+      invoices.push(emptyRecord)
+      await repositories.billing.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'type'], invoices)
     }
   }
 
@@ -277,6 +280,8 @@ module.exports = async ({
         })
       }).flatMap(x => x.flatMap(y => y.flatMap(z => z)))
 
+      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.accountPayable, accountsPayable[0])
+      accountsPayable.push(emptyRecord)
       await repositories.accountsPayable.deleteOldAndCreateNew(['companyId', 'customerId', 'titleId'], accountsPayable)
     }
   }
@@ -375,6 +380,8 @@ module.exports = async ({
         })
       }).flatMap(x => x.flatMap(y => y.flatMap(z => z)))
 
+      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.accountReceivable, accountsReceivable[0])
+      accountsReceivable.push(emptyRecord)
       await repositories.accountsReceivable.deleteOldAndCreateNew(['companyId', 'customerId', 'titleId'], accountsReceivable)
     }
   }
@@ -480,6 +487,8 @@ module.exports = async ({
         })
       }).flatMap(x => x.flatMap(y => y))
 
+      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.financialMovement, financialMovements[0])
+      financialMovements.push(emptyRecord)
       await repositories.financialMovements.deleteOldAndCreateNew(['companyId', 'customerId', 'movementId'], financialMovements)
     }
   }

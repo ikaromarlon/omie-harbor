@@ -7,24 +7,37 @@ module.exports = async ({
   omieMappings,
   repositories,
   omieCnae,
-  emptyRecordsIds
+  emptyRecordsIds,
+  makeEmptyRecord
 }) => {
   const updateCategories = async ({ credentials, companyId, categoryMapping, categoriesRepository }) => {
     const omieCategories = await omieService.getCategories(credentials)
     const categories = omieCategories.map(omieCategory => categoryMapping({ omieCategory, companyId }))
-    await categoriesRepository.createOrUpdateMany(['companyId', 'externalId'], categories)
+    if (categories.length) {
+      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.category, categories[0])
+      categories.push(emptyRecord)
+      await categoriesRepository.createOrUpdateMany(['companyId', 'externalId'], categories)
+    }
   }
 
   const updateDepartments = async ({ credentials, companyId, startDate, endDate, departmentMapping, departmentsRepository }) => {
     const omieDepartments = await omieService.getDepartments(credentials, { startDate, endDate })
     const departments = omieDepartments.map(omieDepartment => departmentMapping({ omieDepartment, companyId }))
-    await departmentsRepository.createOrUpdateMany(['companyId', 'externalId'], departments)
+    if (departments.length) {
+      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.department, departments[0])
+      departments.push(emptyRecord)
+      await departmentsRepository.createOrUpdateMany(['companyId', 'externalId'], departments)
+    }
   }
 
   const updateProjects = async ({ credentials, companyId, startDate, endDate, projectMapping, projectsRepository }) => {
     const omieProjects = await omieService.getProjects(credentials, { startDate, endDate })
     const projects = omieProjects.map(omieProject => projectMapping({ omieProject, companyId }))
-    await projectsRepository.createOrUpdateMany(['companyId', 'externalId'], projects)
+    if (projects.length) {
+      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.project, projects[0])
+      projects.push(emptyRecord)
+      await projectsRepository.createOrUpdateMany(['companyId', 'externalId'], projects)
+    }
   }
 
   const updateCustomers = async ({ credentials, companyId, startDate, endDate, customerMapping, customersRepository }) => {
@@ -32,7 +45,11 @@ module.exports = async ({
     if (omieCustomers.length) {
       const omieActivities = await omieService.getActivities(credentials)
       const customers = omieCustomers.map(omieCustomer => customerMapping({ omieCustomer, omieActivities, omieCnae, companyId }))
-      await customersRepository.createOrUpdateMany(['companyId', 'externalId'], customers)
+      if (customers.length) {
+        const emptyRecord = await makeEmptyRecord(emptyRecordsIds.customer, customers[0])
+        customers.push(emptyRecord)
+        await customersRepository.createOrUpdateMany(['companyId', 'externalId'], customers)
+      }
     }
   }
 
@@ -47,7 +64,11 @@ module.exports = async ({
     const products = omieProducts.map(omieProduct => productMapping({ omieProduct, companyId }))
     const services = omieServices.map(omieService => serviceMapping({ omieService, companyId }))
     const productsServices = [...products, ...services]
-    await productsServicesRepository.createOrUpdateMany(['companyId', 'externalId'], productsServices)
+    if (productsServices.length) {
+      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.productService, productsServices[0])
+      productsServices.push(emptyRecord)
+      await productsServicesRepository.createOrUpdateMany(['companyId', 'externalId'], productsServices)
+    }
   }
 
   const updateCheckingAccounts = async ({ credentials, companyId, startDate, endDate, checkingAccountMapping, checkingAccountsRepository }) => {
@@ -56,6 +77,8 @@ module.exports = async ({
       const omieBanks = await omieService.getBanks(credentials)
       const omieCheckingAccountTypes = await omieService.getCheckingAccountTypes(credentials)
       const checkingAccounts = omieCheckingAccounts.map(omieCheckingAccount => checkingAccountMapping({ omieCheckingAccount, omieBanks, omieCheckingAccountTypes, companyId }))
+      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.checkingAccount, checkingAccounts[0])
+      checkingAccounts.push(emptyRecord)
       await checkingAccountsRepository.createOrUpdateMany(['companyId', 'externalId'], checkingAccounts)
     }
   }
@@ -131,6 +154,8 @@ module.exports = async ({
         })
       }).flatMap(x => x.flatMap(y => y))
 
+      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.contract, contracts[0])
+      contracts.push(emptyRecord)
       await repositories.contracts.deleteOldAndCreateNew(['companyId', 'externalId'], contracts)
     }
   }
@@ -227,11 +252,11 @@ module.exports = async ({
         })
       })
         .flatMap(x => x.flatMap(y => y))
-        .reduce((orders, order, i, source) => {
-          const stored = orders.some(e => e.customerId === order.customerId && e.externalId === order.externalId && e.type === order.type && e.departmentId === order.departmentId && e.productServiceId === order.productServiceId && e.cfop === order.cfop)
+        .reduce((acc, order, i, source) => {
+          const stored = acc.some(e => e.customerId === order.customerId && e.externalId === order.externalId && e.type === order.type && e.departmentId === order.departmentId && e.productServiceId === order.productServiceId && e.cfop === order.cfop)
           const pending = source.filter(e => e.customerId === order.customerId && e.externalId === order.externalId && e.type === order.type && e.departmentId === order.departmentId && e.productServiceId === order.productServiceId && e.cfop === order.cfop)
           if (!stored) {
-            orders.push({
+            acc.push({
               ...order,
               ...(pending.reduce((sum, e) => ({
                 grossValue: sum.grossValue + e.grossValue,
@@ -262,7 +287,7 @@ module.exports = async ({
               }))
             })
           }
-          return orders
+          return acc
         }, [])
 
       const serviceOrders = omieServiceOrders.map(omieOrder => {
@@ -292,7 +317,11 @@ module.exports = async ({
         })
       }).flatMap(x => x.flatMap(y => y))
 
-      await repositories.orders.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'type'], [...productOrders, ...serviceOrders])
+      const orders = [...productOrders, ...serviceOrders]
+
+      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.order, orders[0])
+      orders.push(emptyRecord)
+      await repositories.orders.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'type'], orders)
     }
   }
 

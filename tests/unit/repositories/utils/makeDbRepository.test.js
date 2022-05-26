@@ -73,27 +73,6 @@ describe('SetupRepository Util', () => {
     })
   })
 
-  describe('CreateOrUpdateOneRaw method', () => {
-    it('Should call createOrUpdateOneRaw and stores a new record with _id and timestamps', async () => {
-      const { sut } = makeSut()
-      const data = { _id: 'my_id', name: 'Any Name' }
-      const result = await sut.createOrUpdateOneRaw({ anyFiled: 'any_value' }, data)
-      expect(result).toBeTruthy()
-      expect(result._id).toBe('my_id')
-      expect(result.name).toBe('Any Name')
-    })
-    it('Should call createOrUpdateOneRaw and update a record', async () => {
-      const { sut } = makeSut()
-      const data1 = { _id: 'my_id', name: 'Any Name' }
-      const result1 = await sut.createOrUpdateOneRaw({ anyFiled: 'any_value' }, data1)
-      const data2 = { name: 'Updated Name' }
-      const result2 = await sut.createOrUpdateOneRaw({ _id: result1._id }, data2)
-      expect(result2).toBeTruthy()
-      expect(result2._id).toBe(result1._id)
-      expect(result2.name).toBe('Updated Name')
-    })
-  })
-
   describe('CreateOrUpdateOne method', () => {
     it('Should call createOrUpdateOne without filter and stores a new record with _id and timestamps', async () => {
       const { sut } = makeSut()

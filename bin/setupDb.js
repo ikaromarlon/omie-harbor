@@ -50,20 +50,19 @@ module.exports = async (arg, config) => {
 
     console.log('Updating contracts indexes...')
     await db.collection('contracts').createIndexes([
-      { name: 'companyId_externalId', key: { companyId: 1, externalId: 1 }, unique: true },
-      { name: 'companyId_contractNumber', key: { companyId: 1, contractNumber: 1 }, unique: true }
+      { name: 'companyId_externalId_departmentId_productServiceId_municipalServiceCode', key: { companyId: 1, externalId: 1, departmentId: 1, productServiceId: 1, municipalServiceCode: 1 }, unique: true }
     ])
     console.log('done!')
 
     console.log('Updating orders indexes...')
     await db.collection('orders').createIndexes([
-      { name: 'companyId_customerId_externalId_type_departmentId_productServiceId_cfop', key: { companyId: 1, customerId: 1, externalId: 1, type: 1, departmentId: 1, productServiceId: 1, cfop: 1 }, unique: true }
+      { name: 'companyId_customerId_externalId_type_departmentId_productServiceId_cfop_municipalServiceCode', key: { companyId: 1, customerId: 1, externalId: 1, type: 1, departmentId: 1, productServiceId: 1, cfop: 1, municipalServiceCode: 1 }, unique: true }
     ])
     console.log('done!')
 
     console.log('Updating billing indexes...')
     await db.collection('billing').createIndexes([
-      { name: 'companyId_customerId_externalId_type_departmentId_productServiceId_cfop', key: { companyId: 1, customerId: 1, externalId: 1, type: 1, departmentId: 1, productServiceId: 1, cfop: 1 }, unique: true }
+      { name: 'companyId_customerId_externalId_type_departmentId_productServiceId_cfop_municipalServiceCode', key: { companyId: 1, customerId: 1, externalId: 1, type: 1, departmentId: 1, productServiceId: 1, cfop: 1, municipalServiceCode: 1 }, unique: true }
     ])
     console.log('done!')
 

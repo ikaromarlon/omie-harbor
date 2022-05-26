@@ -2,9 +2,8 @@ module.exports = ({ providerName }) => ({ omieProduct, companyId }) => ({
   externalId: String(omieProduct.codigo_produto),
   provider: providerName,
   code: omieProduct.codigo,
-  ncm: omieProduct.ncm,
-  cfop: omieProduct.cfop || null,
-  municipalCode: null, /** only for services */
+  cfop: omieProduct.cfop ? String(omieProduct.cfop) : null,
+  municipalServiceCode: null, /** only for services */
   companyId,
   description: omieProduct.descricao,
   family: { code: omieProduct.codigo_familia ?? null, description: omieProduct.descricao_familia ?? null },

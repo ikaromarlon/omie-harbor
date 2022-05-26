@@ -17,29 +17,21 @@ module.exports = (name, db, customOperations = () => ({})) => {
       return collection.find(parsedFilter).toArray()
     },
     findOne: async (filter) => collection.findOne(filter),
-    createOrUpdateOneRaw: async (filter, data) => {
-      const result = await collection.findOneAndUpdate(
-        filter,
-        { $set: data },
-        { upsert: true, returnDocument: 'after' }
-      )
-      return result.value
-    },
-    createOrUpdateOne: async (filter, data) => {
-      const _id = uuid()
+    createOrUpdateOne: async (filter, { _id, createdAt, createdBy, updatedAt, updatedBy, ...data }) => {
+      const id = uuid()
       const date = new Date()
       const result = await collection.findOneAndUpdate(
-        filter ?? { _id },
+        filter ?? { _id: id },
         {
           $setOnInsert: {
-            _id: data._id ?? _id,
-            createdAt: date,
-            createdBy: config.app.user
+            _id: _id ?? id,
+            createdAt: createdAt ?? date,
+            createdBy: createdBy ?? config.app.user
           },
           $set: {
-            updatedAt: date,
-            updatedBy: config.app.user,
-            ...data
+            ...data,
+            updatedAt: updatedAt ?? date,
+            updatedBy: updatedBy ?? config.app.user
           }
         },
         { upsert: true, returnDocument: 'after' }
@@ -54,25 +46,25 @@ module.exports = (name, db, customOperations = () => ({})) => {
       }
       if (fieldsToBuildFilter.length && batch.length) {
         const date = new Date()
-        const batchWrite = batch.map(data => ({
+        const batchWrite = batch.map(({ _id, createdAt, createdBy, updatedAt, updatedBy, ...data }) => ({
           updateOne: {
-            filter: fieldsToBuildFilter.reduce((acc, f) => ({ ...acc, [f]: data[f] }), {}),
+            filter: fieldsToBuildFilter.reduce((acc, f) => ({ ...acc, [f]: ({ _id, createdAt, createdBy, updatedAt, updatedBy, ...data })[f] }), {}),
             update: {
               $setOnInsert: {
-                _id: data._id ?? uuid(),
-                createdAt: date,
-                createdBy: config.app.user
+                _id: _id ?? uuid(),
+                createdAt: createdAt ?? date,
+                createdBy: createdBy ?? config.app.user
               },
               $set: {
-                updatedAt: date,
-                updatedBy: config.app.user,
-                ...data
+                ...data,
+                updatedAt: updatedAt ?? date,
+                updatedBy: updatedBy ?? config.app.user
               }
             },
             upsert: true
           }
         }))
-        const result = await collection.bulkWrite(batchWrite)
+        const result = await collection.bulkWrite(batchWrite, { ordered: true })
         response.written = result.result.nInserted + result.result.nUpserted + result.result.nModified
         response.created = result.result.nInserted + result.result.nUpserted
         response.updated = result.result.nModified
@@ -94,14 +86,14 @@ module.exports = (name, db, customOperations = () => ({})) => {
 
         const date = new Date()
         const bulkInsert = []
-        batch.forEach(data => bulkInsert.push({
+        batch.forEach(({ _id, createdAt, createdBy, updatedAt, updatedBy, ...data }) => bulkInsert.push({
           insertOne: {
             document: {
-              _id: data._id ?? uuid(),
-              createdAt: date,
-              createdBy: config.app.user,
-              updatedAt: date,
-              updatedBy: config.app.user,
+              _id: _id ?? uuid(),
+              createdAt: createdAt ?? date,
+              createdBy: createdBy ?? config.app.user,
+              updatedAt: updatedAt ?? date,
+              updatedBy: updatedBy ?? config.app.user,
               ...data
             }
           }

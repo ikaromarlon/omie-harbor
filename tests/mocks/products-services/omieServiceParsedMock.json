@@ -2,9 +2,8 @@
   "externalId": "617704895",
   "provider": "Omie",
   "code": "SRV00001",
-  "ncm": null,
   "cfop": null,
-  "municipalCode": "8.02",
+  "municipalServiceCode": "8.02",
   "companyId": "25c176b6-b200-4575-9217-e23c6105163c",
   "description": "Treinamentos Gerenciais",
   "family": {

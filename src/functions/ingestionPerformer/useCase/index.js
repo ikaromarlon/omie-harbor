@@ -1,6 +1,5 @@
 const config = require('../../../config')
-const { daysToMilliseconds } = require('../../../utils/helpers')
-const createEmptyRecords = require('./createEmptyRecords')
+const { daysToMilliseconds, uuidFrom, emptyProperties } = require('../../../utils/helpers')
 const updateDimensions = require('./updateDimensions')
 const updateFacts = require('./updateFacts')
 
@@ -11,6 +10,17 @@ module.exports = ({
   queuer,
   logger
 }) => {
+  const makeEmptyRecord = async (id, { companyId, provider, isActive, ...data }) => {
+    const emptyRecord = {
+      _id: id,
+      companyId,
+      provider,
+      ...emptyProperties(data, true)
+    }
+    if (isActive !== undefined) emptyRecord.isActive = true
+    return emptyRecord
+  }
+
   const getAuxiliaryRecords = async (credentials) => {
     const [
       omieCnae,
@@ -41,12 +51,10 @@ module.exports = ({
   }
 
   return async ({ payload }) => {
-    const { companyId } = payload
-
-    const filter = { isActive: true }
-    if (companyId) filter._id = companyId
-
-    const companies = await repositories.companies.find(filter)
+    const companies = await repositories.companies.find({
+      _id: payload?.companyId,
+      isActive: true
+    })
 
     let { startDate, endDate } = payload
 
@@ -57,6 +65,21 @@ module.exports = ({
 
     await Promise.all(companies.map(async (company) => {
       const { _id: companyId, name, credentials } = company
+
+      const emptyRecordsIds = {
+        category: uuidFrom(`${companyId}-category`),
+        department: uuidFrom(`${companyId}-department`),
+        project: uuidFrom(`${companyId}-project`),
+        customer: uuidFrom(`${companyId}-customer`),
+        checkingAccount: uuidFrom(`${companyId}-checkingAccount`),
+        productService: uuidFrom(`${companyId}-productService`),
+        contract: uuidFrom(`${companyId}-contract`),
+        order: uuidFrom(`${companyId}-order`),
+        billing: uuidFrom(`${companyId}-billing`),
+        accountPayable: uuidFrom(`${companyId}-accountPayable`),
+        accountReceivable: uuidFrom(`${companyId}-accountReceivable`),
+        financialMovement: uuidFrom(`${companyId}-financialMovement`)
+      }
 
       logger.info({ title: 'Ingestion: Performer', message: `Starting ingestion for company ${companyId} - ${name}` })
 
@@ -74,8 +97,6 @@ module.exports = ({
         companiesRepository: repositories.companies
       })
 
-      const emptyRecordsIds = await createEmptyRecords({ companyId, omieMappings, repositories })
-
       await updateDimensions({
         omieService,
         credentials,
@@ -85,7 +106,8 @@ module.exports = ({
         omieMappings,
         repositories,
         omieCnae,
-        emptyRecordsIds
+        emptyRecordsIds,
+        makeEmptyRecord
       })
 
       await updateFacts({
@@ -94,11 +116,12 @@ module.exports = ({
         startDate,
         endDate,
         companyId,
-        emptyRecordsIds,
         omieMappings,
         repositories,
         omieEntryOrigins,
-        omieDocumentTypes
+        omieDocumentTypes,
+        emptyRecordsIds,
+        makeEmptyRecord
       })
 
       logger.info({ title: 'Ingestion: Performer', message: `Ingestion completed for company ${companyId} - ${name}` })

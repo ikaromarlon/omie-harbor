@@ -1,8 +1,9 @@
 {
+  "_id": "430cb604-ec83-5c5d-9086-848a6d4e24b4",
   "bank" : {},
   "blocked" : null,
   "branch" : null,
-  "companyId" : "ba18ec26-3b76-4327-9e80-77d008e1e9af",
+  "companyId" : "25c176b6-b200-4575-9217-e23c6105163c",
   "description" : null,
   "externalId" : null,
   "initialBalance" : null,
