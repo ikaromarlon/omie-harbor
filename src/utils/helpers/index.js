@@ -21,6 +21,8 @@ const brDateToISO = (date, time = '') => {
 
 const millisecondsToSeconds = (milliseconds) => milliseconds / 1000
 
+const secondsToMilliseconds = (seconds) => seconds * 1000
+
 const daysToMilliseconds = (days) => days * 8.64e+7
 
 const tryJsonParse = (value) => { try { return JSON.parse(value) } catch (err) { return value } }
@@ -44,6 +46,8 @@ const emptyProperties = (data, forceEmptyFirstLevelObjects = false) => {
 
 const multiply = (value1, value2) => (((value1 * 100) * (value2 * 100)) / 100) / 100
 
+const sleep = (seconds) => new Promise(resolve => setTimeout(resolve, secondsToMilliseconds(seconds)))
+
 module.exports = {
   getNumbers,
   uuid,
@@ -51,8 +55,10 @@ module.exports = {
   isoDateToBR,
   brDateToISO,
   millisecondsToSeconds,
+  secondsToMilliseconds,
   daysToMilliseconds,
   tryJsonParse,
   emptyProperties,
-  multiply
+  multiply,
+  sleep
 }
