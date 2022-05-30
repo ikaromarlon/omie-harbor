@@ -2,6 +2,17 @@
 serverless-iam-roles-per-function:
   defaultInherit: true
 
+vpcConfig:
+  enabled: true
+  cidrBlock: '10.0.0.0/16'
+  zones: ${self:custom.zones.${self:provider.stage}}
+  services:
+    - lambda
+    - execute-api
+  subnetGroups: false
+  createFlowLogs: false
+  exportOutputs: true
+
 # serverless general config
 accountId: 820389075840
 basename: ${self:service}-${self:provider.stage}
@@ -10,6 +21,12 @@ basename: ${self:service}-${self:provider.stage}
 region:
   dev: us-east-1
   prd: sa-east-1
+zones:
+  dev:
+    - ${self:custom.region.${self:provider.stage}}a
+  prd:
+    - ${self:custom.region.${self:provider.stage}}a
+    - ${self:custom.region.${self:provider.stage}}b
 appApiKeys:
     dev: 9284a1afee204e4d9b34442bc3e44636
     prd: 20067a7d3f784e6da7e911a656b5dc9b
