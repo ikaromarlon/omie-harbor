@@ -25,12 +25,12 @@ enableIngestionPerformerSchedule3:
 
 # application environment variables
 env:
-  FLAGS_LOG_EACH_OMIE_ERROR:
-    dev: false
-    prd: false
+  WAIT_SECONDS_BEFORE_NEXT_OMIE_PAGE_REQUEST:
+    dev: 0
+    prd: 0
   FLAGS_UPDATE_EMPTY_RECORDS:
     dev: false
     prd: false
-
-  
-  
+  FLAGS_LOG_EACH_OMIE_ERROR:
+    dev: false
+    prd: false
