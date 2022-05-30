@@ -55,6 +55,7 @@
     "serverless": "^3.0.0",
     "serverless-cloudside-plugin": "^1.0.6",
     "serverless-iam-roles-per-function": "^3.2.0",
+    "serverless-vpc-plugin": "^1.0.4",
     "standard": "^16.0.4"
   },
   "standard": {
