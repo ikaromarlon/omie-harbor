@@ -15,7 +15,7 @@ provider:
   timeout: 30
   logRetentionInDays: 3
   deploymentBucket:
-    name: ${self:custom.accountId}-deployment-artifacts
+    name: ${self:custom.accountId}-deployment-artifacts-${self:provider.stage}
     blockPublicAccess: true
     maxPreviousDeploymentArtifacts: 5
   deploymentPrefix: ${self:provider.region}/serverless
@@ -40,5 +40,5 @@ package:
     - 'package.json'
 plugins:
   - serverless-iam-roles-per-function
-  - serverless-vpc-plugin
+  # - serverless-vpc-plugin
   - serverless-cloudside-plugin

@@ -16,16 +16,16 @@ ingestionPerformer:
   events:
     - schedule:
         name: ${self:custom.basename}-ingestionPerformer-eventRule-1
-        rate: cron(0 3 ? * * *) # everyday at 03:00 UTC (00:00 BR)
-        enabled: ${self:custom.enableIngestionPerformerSchedule1.${self:provider.stage}}
+        rate: ${self:custom.ingestionPerformerSchedule1.${self:provider.stage}.rate}
+        enabled: ${self:custom.ingestionPerformerSchedule1.${self:provider.stage}.enabled}
     - schedule:
         name: ${self:custom.basename}-ingestionPerformer-eventRule-2
-        rate: cron(0 15 ? * * *) # everyday at 15:00 UTC (12:00 BR)
-        enabled: ${self:custom.enableIngestionPerformerSchedule2.${self:provider.stage}}
+        rate: ${self:custom.ingestionPerformerSchedule2.${self:provider.stage}.rate}
+        enabled: ${self:custom.ingestionPerformerSchedule2.${self:provider.stage}.enabled}
     - schedule:
         name: ${self:custom.basename}-ingestionPerformer-eventRule-3
-        rate: cron(0 21 ? * * *) # everyday at 21:00 UTC (18:00 BR)
-        enabled: ${self:custom.enableIngestionPerformerSchedule3.${self:provider.stage}}
+        rate: ${self:custom.ingestionPerformerSchedule3.${self:provider.stage}.rate}
+        enabled: ${self:custom.ingestionPerformerSchedule3.${self:provider.stage}.enabled}
     - sqs:
         arn:
           Fn::GetAtt: [ IngestionQueue, Arn ]

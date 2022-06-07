@@ -2,16 +2,16 @@
 serverless-iam-roles-per-function:
   defaultInherit: true
 
-vpcConfig:
-  enabled: true
-  cidrBlock: '10.0.0.0/16'
-  zones: ${self:custom.zones.${self:provider.stage}}
-  services:
-    - lambda
-    - execute-api
-  subnetGroups: false
-  createFlowLogs: false
-  exportOutputs: true
+# vpcConfig:
+#   enabled: true
+#   cidrBlock: '10.0.0.0/16'
+#   zones: ${self:custom.zones.${self:provider.stage}}
+#   services:
+#     - lambda
+#     - execute-api
+#   subnetGroups: false
+#   createFlowLogs: false
+#   exportOutputs: true
 
 # serverless general config
 accountId: 820389075840
@@ -30,15 +30,27 @@ zones:
 appApiKeys:
     dev: 9284a1afee204e4d9b34442bc3e44636
     prd: 20067a7d3f784e6da7e911a656b5dc9b
-enableIngestionPerformerSchedule1:
-  dev: true
-  prd: false
-enableIngestionPerformerSchedule2:
-  dev: false
-  prd: false
-enableIngestionPerformerSchedule3:
-  dev: false
-  prd: false
+ingestionPerformerSchedule1:
+  dev:
+    rate: cron(0 2 ? * * *) # everyday at 02:00 UTC (23:00 BR)
+    enabled: true
+  prd:
+    rate: cron(0 3 ? * * *) # everyday at 03:00 UTC (00:00 BR)
+    enabled: true
+ingestionPerformerSchedule2:
+  dev:
+    rate: cron(0 14 ? * * *) # everyday at 14:00 UTC (11:00 BR)
+    enabled: false
+  prd:
+    rate: cron(0 15 ? * * *) # everyday at 15:00 UTC (12:00 BR)
+    enabled: true
+ingestionPerformerSchedule3:
+  dev:
+    rate: cron(0 20 ? * * *) # everyday at 20:00 UTC (17:00 BR)
+    enabled: false
+  prd:
+    rate: cron(0 21 ? * * *) # everyday at 21:00 UTC (18:00 BR)
+    enabled: true
 
 # application environment variables
 env:

@@ -11,8 +11,8 @@ module.exports = Object.seal({
     user: 'SYSTEM'
   },
   mongodb: {
-    dbName: `full-bpo-${stage}`,
-    uri: `mongodb+srv://${env.MONGODB_CREDENTIALS}@full-bpo-${stage}.vkvc7.mongodb.net/full-bpo-${stage}?retryWrites=true&w=majority`
+    uri: env.MONGODB_URI,
+    dbName: env.MONGODB_DB_NAME
   },
   sqs: {
     dataExportQueueUrl: env.SQS_DATA_EXPORT_QUEUE_URL
