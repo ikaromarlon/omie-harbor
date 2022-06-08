@@ -1,4 +1,5 @@
 const config = require('../../../config')
+const { NotFoundError, ValidationError } = require('../../../utils/errors')
 const { daysToMilliseconds, uuidFrom, emptyProperties } = require('../../../utils/helpers')
 const updateDimensions = require('./updateDimensions')
 const updateFacts = require('./updateFacts')
@@ -89,10 +90,14 @@ module.exports = ({
   }
 
   return async ({ payload }) => {
-    const companies = await repositories.companies.find({
-      _id: payload?.companyId,
-      isActive: true
-    })
+    const company = await repositories.companies.findOne({ _id: payload.companyId })
+
+    if (!company) {
+      throw new NotFoundError(`Company ${payload.companyId} not found`)
+    }
+    if (company.isActive !== true) {
+      throw new ValidationError(`Company ${payload.companyId} is not active`)
+    }
 
     let { startDate, endDate } = payload
 
@@ -101,75 +106,73 @@ module.exports = ({
       startDate.setMilliseconds(startDate.getMilliseconds() - daysToMilliseconds(config.services.omie.ingestionPeriod))
     }
 
-    await Promise.all(companies.map(async (company) => {
-      const { _id: companyId, name, credentials } = company
+    const { _id: companyId, name, credentials } = company
 
-      const emptyRecordsIds = {
-        category: uuidFrom(`${companyId}-category`),
-        department: uuidFrom(`${companyId}-department`),
-        project: uuidFrom(`${companyId}-project`),
-        customer: uuidFrom(`${companyId}-customer`),
-        checkingAccount: uuidFrom(`${companyId}-checkingAccount`),
-        productService: uuidFrom(`${companyId}-productService`),
-        contract: uuidFrom(`${companyId}-contract`),
-        order: uuidFrom(`${companyId}-order`),
-        billing: uuidFrom(`${companyId}-billing`),
-        accountPayable: uuidFrom(`${companyId}-accountPayable`),
-        accountReceivable: uuidFrom(`${companyId}-accountReceivable`),
-        financialMovement: uuidFrom(`${companyId}-financialMovement`)
-      }
+    const emptyRecordsIds = {
+      category: uuidFrom(`${companyId}-category`),
+      department: uuidFrom(`${companyId}-department`),
+      project: uuidFrom(`${companyId}-project`),
+      customer: uuidFrom(`${companyId}-customer`),
+      checkingAccount: uuidFrom(`${companyId}-checkingAccount`),
+      productService: uuidFrom(`${companyId}-productService`),
+      contract: uuidFrom(`${companyId}-contract`),
+      order: uuidFrom(`${companyId}-order`),
+      billing: uuidFrom(`${companyId}-billing`),
+      accountPayable: uuidFrom(`${companyId}-accountPayable`),
+      accountReceivable: uuidFrom(`${companyId}-accountReceivable`),
+      financialMovement: uuidFrom(`${companyId}-financialMovement`)
+    }
 
-      logger.info({ title: 'Ingestion: Performer', message: `Starting ingestion for company ${companyId} - ${name}` })
+    logger.info({ title: 'Ingestion: Performer', message: `Starting ingestion for company ${companyId} - ${name}` })
 
-      const {
-        omieCnae,
-        omieEntryOrigins,
-        omieDocumentTypes
-      } = await getAuxiliaryRecords(credentials)
+    const {
+      omieCnae,
+      omieEntryOrigins,
+      omieDocumentTypes
+    } = await getAuxiliaryRecords(credentials)
 
-      await updateCompany({
-        credentials,
-        company,
-        omieCnae,
-        companyMapping: omieMappings.company,
-        companiesRepository: repositories.companies
-      })
+    await updateCompany({
+      credentials,
+      company,
+      omieCnae,
+      companyMapping: omieMappings.company,
+      companiesRepository: repositories.companies
+    })
 
-      await updateDimensions({
-        omieService,
-        credentials,
-        startDate,
-        endDate,
-        companyId,
-        omieMappings,
-        repositories,
-        omieCnae,
-        emptyRecordsIds,
-        makeEmptyRecord,
-        joinRecordsByCfopAndMunicipalServiceCode
-      })
+    await updateDimensions({
+      omieService,
+      credentials,
+      startDate,
+      endDate,
+      companyId,
+      omieMappings,
+      repositories,
+      omieCnae,
+      emptyRecordsIds,
+      makeEmptyRecord,
+      joinRecordsByCfopAndMunicipalServiceCode
+    })
 
-      await updateFacts({
-        omieService,
-        credentials,
-        startDate,
-        endDate,
-        companyId,
-        omieMappings,
-        repositories,
-        omieEntryOrigins,
-        omieDocumentTypes,
-        emptyRecordsIds,
-        makeEmptyRecord,
-        joinRecordsByCfopAndMunicipalServiceCode
-      })
+    await updateFacts({
+      omieService,
+      credentials,
+      startDate,
+      endDate,
+      companyId,
+      omieMappings,
+      repositories,
+      omieEntryOrigins,
+      omieDocumentTypes,
+      emptyRecordsIds,
+      makeEmptyRecord,
+      joinRecordsByCfopAndMunicipalServiceCode
+    })
 
-      logger.info({ title: 'Ingestion: Performer', message: `Ingestion completed for company ${companyId} - ${name}` })
+    logger.info({ title: 'Ingestion: Performer', message: `Ingestion completed for company ${companyId} - ${name}` })
 
-      await queuer.sendCompanyToDataExportQueue(companyId)
+    await queuer.sendCompanyToDataExportQueue(companyId)
 
-      logger.info({ title: 'Ingestion: Performer', message: '1 record(s) sent to dataExport queue', data: { companyId } })
-    }))
+    logger.info({ title: 'Ingestion: Performer', message: '1 record(s) sent to dataExport queue', data: { companyId } })
 
     return { success: true }
   }

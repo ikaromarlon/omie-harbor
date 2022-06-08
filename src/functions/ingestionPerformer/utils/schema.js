@@ -10,9 +10,9 @@ const schema = joi.object({
       return value.companyId.length === 1 ? value.companyId[0] : value.companyId
     }),
     arrayOfUuidsSchema
-  ),
-  startDate: joi.date().iso().optional(),
-  endDate: joi.date().iso().optional()
+  ).required(),
+  startDate: joi.date().iso(),
+  endDate: joi.date().iso()
 })
 
 module.exports = schema
