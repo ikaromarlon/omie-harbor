@@ -15,8 +15,15 @@ const makeSut = () => {
 
 describe('Main Handler - Functions Loader', () => {
   beforeAll(() => {
-    functions = fs.readdirSync('./src/functions')
-    expect(functions.length).toBeGreaterThanOrEqual(1)
+    functions = Object.values(fs.readdirSync('./src/functions')).filter(f => !['.DS_Store', 'desktop.ini'].includes(f))
+    expect(functions.length).toBeGreaterThan(0)
+  })
+
+  it('Should find all functions', async () => {
+    expect(functions).toEqual([
+      'dataExport',
+      'ingestionPerformer'
+    ])
   })
 
   it('Should load functions modules and return success response', async () => {
