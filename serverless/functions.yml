@@ -36,7 +36,7 @@ ingestionPerformer:
 
 dataExport:
   handler: src/index.handler
-  memorySize: 3008
+  memorySize: ${self:custom.dataExport.${self:provider.stage}.memorySize}
   timeout: 900
   iamRoleStatementsName: ${self:custom.basename}-dataExport-role
   iamRoleStatements:

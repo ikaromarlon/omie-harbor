@@ -51,6 +51,11 @@ ingestionPerformerSchedule3:
   prd:
     rate: cron(0 21 ? * * *) # everyday at 21:00 UTC (18:00 BR)
     enabled: true
+dataExport:
+  dev:
+    memorySize: 4096
+  prd:
+    memorySize: 3008
 
 # application environment variables
 env:
