@@ -50,15 +50,6 @@ dataExport:
         arn:
           Fn::GetAtt: [ DataExportQueue, Arn ]
         batchSize: 1
-    # - eventBridge:
-    #   pattern:
-    #     source:
-    #       - custom
-    #     detail-type:
-    #       - AWS API Call via CloudTrail
-    #     detail:
-    #       eventSource:
-    #         - cloudformation.amazonaws.com
   package:
     patterns:
       - 'src/functions/dataExport/**'

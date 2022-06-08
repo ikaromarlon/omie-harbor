@@ -40,5 +40,4 @@ package:
     - 'package.json'
 plugins:
   - serverless-iam-roles-per-function
-  # - serverless-vpc-plugin
   - serverless-cloudside-plugin
