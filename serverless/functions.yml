@@ -8,7 +8,6 @@ ingestionDispatcher:
       Resource:
         - Fn::GetAtt: [ IngestionQueue, Arn ]
   events:
-    - schedule: ${self:custom.functionsWarmUpScheduleEvent}
     - schedule:
         name: ${self:custom.basename}-ingestionDispatcher-eventRule-1
         rate: ${self:custom.ingestionDispatcherSchedule1.${self:provider.stage}.rate}
