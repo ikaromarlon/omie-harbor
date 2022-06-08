@@ -6,6 +6,13 @@ class ApplicationError extends Error {
   }
 }
 
+class NotFoundError extends ApplicationError {
+  constructor (message = 'Resource not found') {
+    super(message, 404)
+    this.name = 'NotFoundError'
+  }
+}
+
 class ValidationError extends ApplicationError {
   constructor (message) {
     super(message, 422)
@@ -30,6 +37,7 @@ class ExternalServerError extends ApplicationError {
 
 module.exports = {
   ApplicationError,
+  NotFoundError,
   ValidationError,
   InternalServerError,
   ExternalServerError
