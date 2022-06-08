@@ -1,12 +1,10 @@
 const { name, version } = require('../../package.json')
 const { env } = process
 
-const stage = env.STAGE || 'dev'
-
 module.exports = Object.seal({
   app: {
     name: env.SERVICE || name,
-    stage,
+    stage: env.STAGE || 'dev',
     version,
     user: 'SYSTEM'
   },
