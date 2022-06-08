@@ -1,5 +1,6 @@
 const config = require('../../../../src/config')
 const makeUseCase = require('../../../../src/functions/ingestionPerformer/useCase')
+const { NotFoundError, ValidationError } = require('../../../../src/utils/errors')
 const mocks = require('../../../mocks')
 
 jest.useFakeTimers('modern').setSystemTime(new Date())
@@ -70,7 +71,7 @@ const makeSut = () => {
   const repositoriesMock = {
     /** dimensions */
     companies: {
-      find: jest.fn(async () => mocks.omieCompaniesSavedMock),
+      findOne: jest.fn(async () => mocks.omieCompaniesSavedMock[0]),
       createOrUpdateOne: jest.fn(async () => null)
     },
     categories: {
@@ -164,10 +165,43 @@ const makeSut = () => {
 }
 
 describe('ingestionPerformer UseCase', () => {
-  it('Should call repositories.companies.find successfully', async () => {
+  it('Should not find company and throws a NotFoundError', async () => {
+    const sutPackage = makeSut()
+    const { sut, payloadMock, repositoriesMock } = sutPackage
+    const spySut = jest.spyOn(sutPackage, 'sut')
+    payloadMock.companyId = 'any-invalid-or-non-existing-id'
+    repositoriesMock.companies.findOne.mockResolvedValueOnce(null)
+    try {
+      await sut({ payload: payloadMock })
+    } catch (error) {
+      expect(error).toBeInstanceOf(NotFoundError)
+      expect(error.statusCode).toBe(404)
+      expect(error.message).toBe(`Company ${payloadMock.companyId} not found`)
+    }
+    expect(repositoriesMock.companies.findOne).toHaveBeenCalledWith({ _id: payloadMock.companyId })
+    expect(spySut).toReturnTimes(0)
+  })
+
+  it('Should find company but throws a ValidationError', async () => {
+    const sutPackage = makeSut()
+    const { sut, payloadMock, repositoriesMock } = sutPackage
+    const spySut = jest.spyOn(sutPackage, 'sut')
+    repositoriesMock.companies.findOne.mockResolvedValueOnce({ ...mocks.omieCompaniesSavedMock[0], isActive: false })
+    try {
+      await sut({ payload: payloadMock })
+    } catch (error) {
+      expect(error).toBeInstanceOf(ValidationError)
+      expect(error.statusCode).toBe(422)
+      expect(error.message).toBe(`Company ${payloadMock.companyId} is not active`)
+    }
+    expect(repositoriesMock.companies.findOne).toHaveBeenCalledWith({ _id: payloadMock.companyId })
+    expect(spySut).toReturnTimes(0)
+  })
+
+  it('Should call repositories.companies.findOne successfully', async () => {
     const { sut, payloadMock, repositoriesMock } = makeSut()
     await sut({ payload: payloadMock })
-    expect(repositoriesMock.companies.find).toHaveBeenCalledWith({ isActive: true, _id: payloadMock.companyId })
+    expect(repositoriesMock.companies.findOne).toHaveBeenCalledWith({ _id: payloadMock.companyId })
   })
 
   describe('getAuxiliaryRecords', () => {
