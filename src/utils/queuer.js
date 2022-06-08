@@ -3,8 +3,13 @@ const config = require('../config')
 
 module.exports = () => {
   const sqs = new aws.SQS()
-  const { dataExportQueueUrl } = config.sqs
+  const { ingestionQueueUrl, dataExportQueueUrl } = config.sqs
   return {
+    sendCompanyToIngestionQueue: async (companyId) => sqs.sendMessage({
+      QueueUrl: ingestionQueueUrl,
+      MessageGroupId: companyId,
+      MessageBody: JSON.stringify({ companyId })
+    }).promise(),
     sendCompanyToDataExportQueue: async (companyId) => sqs.sendMessage({
       QueueUrl: dataExportQueueUrl,
       MessageGroupId: companyId,

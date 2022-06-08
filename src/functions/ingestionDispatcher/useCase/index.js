@@ -6,7 +6,7 @@ module.exports = ({
   const companies = await repositories.companies.find({ isActive: true })
 
   const companiesSent = await Promise.all(companies.map(async ({ _id: companyId }) => {
-    await queuer.sendCompanyToIngestionQueue({ companyId })
+    await queuer.sendCompanyToIngestionQueue(companyId)
     return companyId
   }))
 

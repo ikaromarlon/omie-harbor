@@ -33,7 +33,7 @@ describe('ingestionDispatcher UseCase', () => {
     const { sut, repositoriesMock, queuerMock, loggerMock } = makeSut()
     const result = await sut()
     expect(repositoriesMock.companies.find).toHaveBeenCalledWith({ isActive: true })
-    expect(queuerMock.sendCompanyToIngestionQueue).toHaveBeenCalledWith({ companyId: omieCompaniesSavedMock[0]._id })
+    expect(queuerMock.sendCompanyToIngestionQueue).toHaveBeenCalledWith(omieCompaniesSavedMock[0]._id)
     expect(loggerMock.info).toHaveBeenCalledTimes(1)
     expect(result).toEqual({ success: true })
   })
