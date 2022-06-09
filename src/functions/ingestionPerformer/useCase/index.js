@@ -123,7 +123,7 @@ module.exports = ({
       financialMovement: uuidFrom(`${companyId}-financialMovement`)
     }
 
-    logger.info({ title: 'Ingestion: Performer', message: `Starting ingestion for company ${companyId} - ${name}` })
+    logger.info({ title: 'Ingestion: Performer', message: `Ingestion started for company ${companyId} - ${name}` })
 
     const {
       omieCnae,
