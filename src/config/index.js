@@ -24,7 +24,7 @@ module.exports = Object.seal({
   services: {
     omie: {
       providerName: 'Omie',
-      ingestionPeriod: 3, /** days back */
+      ingestionPeriod: 2, /** days back */
       apiBaseUrl: 'https://app.omie.com.br/api/v1',
       waitSecondsBeforeNextPageRequest: Number.parseInt(env.WAIT_SECONDS_BEFORE_NEXT_OMIE_PAGE_REQUEST) ?? 0
     }
