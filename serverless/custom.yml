@@ -57,3 +57,6 @@ env:
   FLAGS_LOG_EACH_OMIE_ERROR:
     dev: false
     prd: false
+  ERROR_NOTIFICATION_RECIPIENT_ADDRESS:
+    dev: ikaromarlon@gmail.com
+    prd: pedro.magnago@fullbpo.com

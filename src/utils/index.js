@@ -1,6 +1,7 @@
 const bucket = require('./bucket')
 const errorHandler = require('./errorHandler')
 const logger = require('./logger')
+const mailer = require('./mailer')
 const queuer = require('./queuer')
 const requester = require('./requester')
 const requestHandler = require('./requestHandler')
@@ -12,6 +13,7 @@ module.exports = {
   bucket,
   errorHandler,
   logger,
+  mailer,
   queuer,
   requester,
   requestHandler,

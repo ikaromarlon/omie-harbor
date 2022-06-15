@@ -9,7 +9,7 @@ jest.mock('aws-sdk', () => ({
 }))
 
 jest.mock('../../../src/config', () => ({
-  s3: {
+  S3: {
     detaExport: {
       bucketName: 'the-bucket'
     }

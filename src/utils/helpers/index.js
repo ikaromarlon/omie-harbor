@@ -50,6 +50,8 @@ const sleep = (seconds) => {
   if (seconds) return new Promise(resolve => setTimeout(resolve, secondsToMilliseconds(seconds)))
 }
 
+const stripTags = (value) => value.replace(/<[^>]*>?/gm, '')
+
 module.exports = {
   getNumbers,
   uuid,
@@ -62,5 +64,6 @@ module.exports = {
   tryJsonParse,
   emptyProperties,
   multiply,
-  sleep
+  sleep,
+  stripTags
 }

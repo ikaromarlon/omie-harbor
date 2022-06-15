@@ -11,7 +11,7 @@ jest.mock('aws-sdk', () => ({
 }))
 
 jest.mock('../../../src/config', () => ({
-  sqs: { ingestionQueueUrl: 'https://the-ingestionQueueUrl', dataExportQueueUrl: 'https://the-dataExportQueueUrl' }
+  SQS: { ingestionQueueUrl: 'https://the-ingestionQueueUrl', dataExportQueueUrl: 'https://the-dataExportQueueUrl' }
 }))
 
 const makeSut = () => {
