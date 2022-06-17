@@ -5,6 +5,8 @@ serverless-iam-roles-per-function:
 # serverless general config
 accountId: 820389075840
 basename: ${self:service}-${self:provider.stage}
+sesRegion: us-east-1
+appDomain: fullbpo.app
 
 # serverless config by environment
 region:
@@ -16,9 +18,6 @@ zones:
   prd:
     - ${self:custom.region.${self:provider.stage}}a
     - ${self:custom.region.${self:provider.stage}}b
-appApiKeys:
-    dev: 9284a1afee204e4d9b34442bc3e44636
-    prd: 20067a7d3f784e6da7e911a656b5dc9b
 ingestionDispatcherSchedule1:
   dev:
     rate: cron(0 2 ? * * *) # everyday at 02:00 UTC (23:00 BR)

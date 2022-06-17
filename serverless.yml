@@ -26,6 +26,15 @@ provider:
     COMPANY: full-bpo
     PROJECT: full-bpo
     SERVICE: full-bpo-bfb
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - 'ses:SendEmail'
+          Resource:
+            - arn:aws:ses:${self:custom.sesRegion}:${self:custom.accountId}:identity/${self:custom.appDomain}
+      name: ${self:custom.basename}-dafault-role
 functions: ${file(./serverless/functions.yml)}
 resources: ${file(./serverless/resources.yml)}
 custom: ${file(./serverless/custom.yml)}

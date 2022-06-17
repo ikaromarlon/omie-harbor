@@ -22,7 +22,7 @@ module.exports = Object.seal({
     }
   },
   SES: {
-    region: 'us-east-1'
+    region: env.SES_REGION
   },
   services: {
     omie: {
@@ -32,7 +32,7 @@ module.exports = Object.seal({
       waitSecondsBeforeNextPageRequest: Number.parseInt(env.WAIT_SECONDS_BEFORE_NEXT_OMIE_PAGE_REQUEST) ?? 0
     },
     mailer: {
-      defaultSender: 'no-reply@fullbpo.app',
+      defaultSender: `no-reply@${env.APP_DOMAIN}`,
       errorNotificationRecipientAddres: env.ERROR_NOTIFICATION_RECIPIENT_ADDRESS
     }
   },
