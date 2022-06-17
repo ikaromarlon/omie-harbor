@@ -26,9 +26,9 @@ describe('Services Omie Error Handler Adapter', () => {
       expect(error).toBeInstanceOf(ExternalServerError)
       expect(error.statusCode).toBe(502)
       expect(error.message).toBe('Omie Service Request Error')
-      expect(error.externalCallData).toBeTruthy()
-      expect(error.externalCallData.message).toBe('Omie HTTP error response message')
-      expect(error.externalCallData.response).toEqual(omieErrorMock.response)
+      expect(error.data).toBeTruthy()
+      expect(error.data.message).toBe('Omie HTTP error response message')
+      expect(error.data.response).toEqual(omieErrorMock.response)
     }
   })
 
@@ -49,9 +49,9 @@ describe('Services Omie Error Handler Adapter', () => {
       expect(error).toBeInstanceOf(ExternalServerError)
       expect(error.statusCode).toBe(502)
       expect(error.message).toBe('Omie Service Request Error')
-      expect(error.externalCallData).toBeTruthy()
-      expect(error.externalCallData.message).toBe('Omie HTTP error response message')
-      expect(error.externalCallData.response).toEqual(omieErrorMock.response)
+      expect(error.data).toBeTruthy()
+      expect(error.data.message).toBe('Omie HTTP error response message')
+      expect(error.data.response).toEqual(omieErrorMock.response)
     }
   })
 })

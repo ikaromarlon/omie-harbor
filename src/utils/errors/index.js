@@ -28,10 +28,10 @@ class InternalServerError extends ApplicationError {
   }
 }
 class ExternalServerError extends ApplicationError {
-  constructor (message, externalCallData) {
+  constructor (message, data) {
     super(message, 502)
     this.name = 'ExternalServerError'
-    if (externalCallData) this.externalCallData = { message: externalCallData.message, ...externalCallData }
+    if (data) this.data = { message: data.message, ...data }
   }
 }
 
