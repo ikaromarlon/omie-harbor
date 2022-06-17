@@ -12,7 +12,8 @@ const mailer = () => {
     <p>
       Message: <strong>${data.message}</strong><br>
       Error Type: <strong>${data.name ?? data.constructor.name}</strong><br>
-      ${data?.data ? `Detail: <strong>${data.data.message}</strong><br>` : ''}
+      ${data?.data ? `Detail 1: <strong>${data.data.message}</strong><br>` : ''}
+      ${data.response?.data?.faultstring ? `Detail 2: <strong>${data.response.data.faultstring}</strong><br>` : ''}
       <br>
       <code style="display:block; padding: 10px; background-color: black; color: white !important;">
         {{content}}
@@ -27,11 +28,11 @@ const mailer = () => {
         Body: {
           Html: {
             Charset,
-            Data: template.replace('{{content}}', JSON.stringify(data, null, '&nbsp;').split('\n').join('<br>'))
+            Data: template.replace('{{content}}', JSON.stringify(data, null, '&nbsp;').split("\n").join('<br>')) // eslint-disable-line
           },
           Text: {
             Charset,
-            Data: stripTags(template).replace('{{content}}', JSON.stringify(data, null, 2))
+            Data: stripTags(template.replace('<br>', "\n")).replace('{{content}}', JSON.stringify(data, null, 2)) // eslint-disable-line
           }
         },
         Subject: {
