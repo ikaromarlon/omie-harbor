@@ -15,10 +15,10 @@ provider:
   timeout: 30
   logRetentionInDays: 3
   deploymentBucket:
-    name: ${self:custom.accountId}-deployment-artifacts-${self:provider.stage}
+    name: ${self:custom.accountId}-deployment-artifacts-${self:provider.region}
     blockPublicAccess: true
     maxPreviousDeploymentArtifacts: 5
-  deploymentPrefix: ${self:provider.region}/serverless
+  deploymentPrefix: serverless
   versionFunctions: false
   environment: ${file(./serverless/env.yml)}
   stackTags:

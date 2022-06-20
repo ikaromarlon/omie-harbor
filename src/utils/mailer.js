@@ -13,7 +13,7 @@ const mailer = () => {
       Message: <strong>${data.message}</strong><br>
       Error Type: <strong>${data.name ?? data.constructor.name}</strong><br>
       ${data?.data ? `Detail 1: <strong>${data.data.message}</strong><br>` : ''}
-      ${data.response?.data?.faultstring ? `Detail 2: <strong>${data.response.data.faultstring}</strong><br>` : ''}
+      ${data?.data.response?.data?.faultstring ? `Detail 2: <strong>${data?.data.response?.data?.faultstring}</strong><br>` : ''}
       <br>
       <code style="display:block; padding: 10px; background-color: black; color: white !important;">
         {{content}}

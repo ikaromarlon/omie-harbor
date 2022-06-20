@@ -1,11 +1,10 @@
 const makeController = require('./controller')
 const makeUseCase = require('./useCase')
 const { dbRepositories } = require('../../repositories')
-const { queuer: makeQueuer, logger: makeLogger } = require('../../utils')
+const { queuer: makeQueuer, logger } = require('../../utils')
 
 module.exports = async () => {
   const repositories = await dbRepositories()
-  const logger = makeLogger()
   const queuer = makeQueuer()
 
   const useCase = makeUseCase({

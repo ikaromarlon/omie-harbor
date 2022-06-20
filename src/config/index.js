@@ -1,12 +1,14 @@
 const { name, version } = require('../../package.json')
 const { env } = process
 
-module.exports = Object.seal({
+module.exports = Object.freeze({
   app: {
     name: env.SERVICE || name,
     stage: env.STAGE || 'dev',
     version,
-    user: 'SYSTEM'
+    user: 'SYSTEM',
+    charset: 'UTF-8',
+    region: env.REGION
   },
   mongodb: {
     uri: env.MONGODB_URI,
@@ -33,11 +35,11 @@ module.exports = Object.seal({
     },
     mailer: {
       defaultSender: `no-reply@${env.APP_DOMAIN}`,
-      errorNotificationRecipientAddres: env.ERROR_NOTIFICATION_RECIPIENT_ADDRESS
+      errorNotificationRecipientAddres: env.ERROR_NOTIFICATION_RECIPIENT_ADDRESS || null
     }
   },
   flags: {
-    logEachOmieError: env.FLAGS_LOG_EACH_OMIE_ERROR === 'true',
-    updateEmptyRecords: env.FLAGS_UPDATE_EMPTY_RECORDS === 'true'
+    logEachOmieError: env.FLAG_LOG_EACH_OMIE_ERROR === 'true',
+    updateEmptyRecords: env.FLAG_UPDATE_EMPTY_RECORDS === 'true'
   }
 })

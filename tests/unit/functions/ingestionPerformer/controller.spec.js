@@ -7,10 +7,6 @@ const makeSut = () => {
   const requestMock = {
     payload: { records: [{ body: `{"companyId":["${companyId}"]}` }] }
   }
-  const loggerMock = {
-    info: jest.fn(() => null),
-    error: jest.fn(() => null)
-  }
 
   const validatePayloadSchemaStub = jest.fn(() => ({ companyId }))
   const schemaMock = {}
@@ -19,8 +15,7 @@ const makeSut = () => {
   const controller = makeController({
     validatePayloadSchema: validatePayloadSchemaStub,
     schema: schemaMock,
-    useCase: useCaseStub,
-    logger: loggerMock
+    useCase: useCaseStub
   })
 
   return {
@@ -28,14 +23,13 @@ const makeSut = () => {
     validatePayloadSchemaStub,
     useCaseStub,
     requestMock,
-    schemaMock,
-    loggerMock
+    schemaMock
   }
 }
 
 describe('IngestionPerformer Controller', () => {
   it('Should throw an InternalServerError if validatePayloadSchema throws an Error', async () => {
-    const { sut, validatePayloadSchemaStub, requestMock, loggerMock } = makeSut()
+    const { sut, validatePayloadSchemaStub, requestMock } = makeSut()
     validatePayloadSchemaStub.mockImplementationOnce(() => { throw new Error('Generic error') })
     try {
       await sut(requestMock)
@@ -43,12 +37,11 @@ describe('IngestionPerformer Controller', () => {
       expect(error).toBeInstanceOf(InternalServerError)
       expect(error.statusCode).toBe(500)
       expect(error.message).toBe('Generic error')
-      expect(loggerMock.error).toHaveBeenCalledTimes(1)
     }
   })
 
   it('Should throw an ValidationError if validatePayloadSchema throws a ValidationError', async () => {
-    const { sut, validatePayloadSchemaStub, requestMock, loggerMock } = makeSut()
+    const { sut, validatePayloadSchemaStub, requestMock } = makeSut()
     validatePayloadSchemaStub.mockImplementationOnce(() => { throw new ValidationError('Invalid field') })
     requestMock.payload.companyId = 'invalid_companyId'
     try {
@@ -57,12 +50,11 @@ describe('IngestionPerformer Controller', () => {
       expect(error).toBeInstanceOf(ValidationError)
       expect(error.statusCode).toBe(422)
       expect(error.message).toBe('Invalid field')
-      expect(loggerMock.error).toHaveBeenCalledTimes(1)
     }
   })
 
   it('Should throw an InternalServerError if useCase throws an Error', async () => {
-    const { sut, useCaseStub, requestMock, loggerMock } = makeSut()
+    const { sut, useCaseStub, requestMock } = makeSut()
     useCaseStub.mockRejectedValueOnce(new Error('Generic error'))
     try {
       await sut(requestMock)
@@ -70,27 +62,24 @@ describe('IngestionPerformer Controller', () => {
       expect(error).toBeInstanceOf(InternalServerError)
       expect(error.statusCode).toBe(500)
       expect(error.message).toBe('Generic error')
-      expect(loggerMock.error).toHaveBeenCalledTimes(1)
     }
   })
 
   it('Should return success: queue request (default)', async () => {
-    const { sut, validatePayloadSchemaStub, useCaseStub, loggerMock, requestMock, schemaMock } = makeSut()
+    const { sut, validatePayloadSchemaStub, useCaseStub, requestMock, schemaMock } = makeSut()
     const result = await sut(requestMock)
     expect(validatePayloadSchemaStub).toHaveBeenCalledWith({ companyId: [companyId] }, schemaMock)
     expect(useCaseStub).toHaveBeenCalledWith({ payload: { companyId } })
-    expect(loggerMock.info).toHaveBeenCalledTimes(2)
     expect(result.statusCode).toBe(200)
     expect(result.data).toEqual({ success: true })
   })
 
   it('Should return success: http request', async () => {
-    const { sut, validatePayloadSchemaStub, useCaseStub, loggerMock, schemaMock } = makeSut()
+    const { sut, validatePayloadSchemaStub, useCaseStub, schemaMock } = makeSut()
     const requestMock = { payload: { companyId } }
     const result = await sut(requestMock)
     expect(validatePayloadSchemaStub).toHaveBeenCalledWith(requestMock.payload, schemaMock)
     expect(useCaseStub).toHaveBeenCalledWith({ payload: { companyId } })
-    expect(loggerMock.info).toHaveBeenCalledTimes(2)
     expect(result.statusCode).toBe(200)
     expect(result.data).toEqual({ success: true })
   })

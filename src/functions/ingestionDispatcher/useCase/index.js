@@ -10,7 +10,7 @@ module.exports = ({
     return companyId
   }))
 
-  logger.info({ title: 'Ingestion: Dispatcher', message: `${companiesSent.length} record(s) sent to ingestion queue`, data: { companyId: companiesSent } })
+  logger.info({ title: 'Ingestion Dispatcher', message: `${companiesSent.length} record(s) sent to ingestion queue`, data: { companyId: companiesSent } })
 
   return { success: true }
 }

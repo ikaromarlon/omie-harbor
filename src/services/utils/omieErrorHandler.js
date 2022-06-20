@@ -1,6 +1,6 @@
 const config = require('../../config')
 const { ExternalServerError } = require('../../utils/errors')
-const { logger: makeLogger } = require('../../utils')
+const { logger } = require('../../utils')
 
 /**
  * Receive an error from Omie API and check if it should be thrown or not
@@ -11,9 +11,7 @@ const { logger: makeLogger } = require('../../utils')
  * @throws {ExternalServerError} The message iuncludes the information provided by error with Bad Gateway HTTP response
  */
 module.exports = (error, response = null, forceThrow = false) => {
-  const logger = makeLogger()
-
-  if (config.flags.logEachOmieError) logger.info({ title: 'Omie Service Request', message: 'An error ocurred calling Omie service', data: error })
+  if (config.flags.logEachOmieError) logger.info({ title: 'Omie Service Request Error', message: 'An error ocurred calling Omie service', data: error })
 
   const { faultcode } = error.response?.data || {}
 

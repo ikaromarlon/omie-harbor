@@ -50,12 +50,9 @@ env:
   WAIT_SECONDS_BEFORE_NEXT_OMIE_PAGE_REQUEST:
     dev: 0
     prd: 0
-  FLAGS_UPDATE_EMPTY_RECORDS:
+  FLAG_UPDATE_EMPTY_RECORDS:
     dev: false
     prd: false
-  FLAGS_LOG_EACH_OMIE_ERROR:
+  FLAG_LOG_EACH_OMIE_ERROR:
     dev: false
     prd: false
-  ERROR_NOTIFICATION_RECIPIENT_ADDRESS:
-    dev: ikaromarlon@gmail.com
-    prd: pedro.magnago@fullbpo.com

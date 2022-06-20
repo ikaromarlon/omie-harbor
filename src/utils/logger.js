@@ -1,7 +1,4 @@
-module.exports = () => {
-  const { UUID } = process.env
-  return {
-    info: ({ title, message, data = null }) => console.info(`${title} ${UUID}\n${JSON.stringify({ UUID, data, message, timestamp: new Date() }, null, 2)}`),
-    error: ({ title, message, data = null }) => console.error(`${title} ${UUID}\n${JSON.stringify({ UUID, data, message, timestamp: new Date() }, null, 2)}`)
-  }
+module.exports = {
+  info: ({ title, message, data }) => console.info(`[${process.env.UUID}]${title ? ` ${title}:` : ''}${message ? ` ${message}` : ''}\n${JSON.stringify({ processId: process.env.UUID, timestamp: new Date(), message, data }, null, 2)}`.trim()),
+  error: ({ title, message, data }) => console.error(`[${process.env.UUID}]${title ? ` ${title}:` : ''}${message ? ` ${message}` : ''}\n${JSON.stringify({ processId: process.env.UUID, timestamp: new Date(), message, data }, null, 2)}`.trim())
 }

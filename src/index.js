@@ -1,10 +1,9 @@
+process.env.UUID = require('crypto').randomUUID() /** It must run before everything */
 const { requestHandler, responseHandler } = require('./utils')
-const { uuid } = require('./utils/helpers')
 
 exports.handler = async (event, context) => {
   if (event.warmUp) return console.warn(`Warming up function ${context.functionName}...`)
   try {
-    process.env.UUID = uuid()
     const fnName = context.functionName.split('-').pop()
     const fn = require(`./functions/${fnName}`)
     const controller = await fn()

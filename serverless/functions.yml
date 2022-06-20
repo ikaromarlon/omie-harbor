@@ -26,7 +26,7 @@ ingestionDispatcher:
 
 ingestionPerformer:
   handler: src/index.handler
-  memorySize: 512
+  memorySize: 1024
   timeout: 900
   iamRoleStatementsName: ${self:custom.basename}-ingestionPerformer-role
   iamRoleStatements:

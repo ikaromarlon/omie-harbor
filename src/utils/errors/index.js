@@ -35,16 +35,10 @@ class ExternalServerError extends ApplicationError {
   }
 }
 
-const expectedErrors = [
-  NotFoundError.name,
-  ValidationError.name
-]
-
 module.exports = {
   ApplicationError,
   NotFoundError,
   ValidationError,
   InternalServerError,
-  ExternalServerError,
-  expectedErrors
+  ExternalServerError
 }

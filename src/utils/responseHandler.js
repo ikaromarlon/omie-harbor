@@ -1,6 +1,6 @@
-const { app: { stage } } = require('../config')
-const { expectedErrors } = require('./errors')
+const config = require('../config')
 const mailer = require('./mailer')
+const logger = require('./logger')
 
 module.exports = (data, headers) => {
   const response = (statusCode, responseData) => {
@@ -19,19 +19,17 @@ module.exports = (data, headers) => {
 
   return {
     success: (statusCode = 200) => {
+      logger.info({ title: 'PROCESS COMPLETED SUCCESSFULLY' })
       return response(statusCode, data)
     },
     error: async (statusCode = 500) => {
       const { message, stack } = data
       const error = { message, ...data, stack }
-      const parsedError = JSON.stringify(error, null, 2)
-      if (!expectedErrors.includes(error.name)) {
-        console.error(`PROCESS ENDED WITH ERRORS\n${parsedError}`)
+      logger.error({ title: 'PROCESS ENDED WITH ERROR', message, data: error })
+      if (config.services.mailer.errorNotificationRecipientAddres) {
         await mailer().sendErrorNotification(error)
-      } else {
-        console.error(`PROCESS ENDED SUCCESSFULLY BUT WITH ERROR\n${parsedError}`)
       }
-      if (stage === 'prd') {
+      if (config.app.stage === 'prd') {
         return response(statusCode, { message })
       }
       return response(statusCode, error)

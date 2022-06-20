@@ -4,12 +4,11 @@ const schema = require('./utils/schema')
 const { dbRepositories } = require('../../repositories')
 const { omieMappings } = require('../../mappings')
 const makeServices = require('../../services')
-const { queuer: makeQueuer, logger: makeLogger, validatePayloadSchema } = require('../../utils')
+const { queuer: makeQueuer, logger, validatePayloadSchema } = require('../../utils')
 
 module.exports = async () => {
   const { omieService } = makeServices()
   const repositories = await dbRepositories()
-  const logger = makeLogger()
   const queuer = makeQueuer()
 
   const useCase = makeUseCase({
@@ -23,8 +22,7 @@ module.exports = async () => {
   const controller = makeController({
     schema,
     validatePayloadSchema,
-    useCase: useCase,
-    logger
+    useCase: useCase
   })
 
   return controller
