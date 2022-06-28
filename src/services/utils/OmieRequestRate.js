@@ -11,10 +11,14 @@ const OmieRequestRate = function () {
       this.count === maxRequestPerPeriod &&
       millisecondsToSeconds(Date.now() - this.lastRequestTime) <= requestPeriodSeconds
     ) {
-      this.count = 0
+      this.resetRequests()
       await sleep(requestPeriodSeconds)
     }
     this.lastRequestTime = Date.now()
+  }
+
+  this.resetRequests = () => {
+    this.count = 0
   }
 }
 
