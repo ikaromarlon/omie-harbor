@@ -21,9 +21,11 @@ module.exports = ({ requester }) => {
       }]
     }
 
+    const propertiesMapping = { data: 'empresas_cadastro', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
+
     try {
-      const response = await requester.post(url, body)
-      return response.data.empresas_cadastro[0]
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response[0]
     } catch (error) {
       return omieErrorHandler(error, null, forceThrow)
     }
@@ -45,7 +47,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'lista_tipos_atividade', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -67,7 +70,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'cadastros', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -89,7 +93,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'fin_banco_cadastro', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -111,7 +116,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'cadastros', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -135,7 +141,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'ListarContasCorrentes', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -161,7 +168,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'clientes_cadastro', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -183,7 +191,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'categoria_cadastro', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -207,7 +216,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'departamentos', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -232,7 +242,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'cadastro', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -259,7 +270,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'produto_servico_cadastro', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -289,7 +301,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'cadastros', pagination: { currentPage: 'nPagina', totalPages: 'nTotPaginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -311,7 +324,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'cadastros', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -333,7 +347,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'cadastros', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -386,7 +401,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'contratoCadastro', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -411,7 +427,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'pedido_venda_produto', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -436,7 +453,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'osCadastro', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -465,7 +483,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'nfCadastro', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -492,7 +511,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'nfseEncontradas', pagination: { currentPage: 'nPagina', totalPages: 'nTotPaginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -522,7 +542,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'pagamentos', pagination: { currentPage: 'nPagina', totalPages: 'nTotPaginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -552,7 +573,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'itens', pagination: { currentPage: 'nPagina', totalPages: 'nTotPaginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -573,7 +595,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'origem', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -594,7 +617,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'tipo_documento_cadastro', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -627,7 +651,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'titulosEncontrados', pagination: { currentPage: 'nPagina', totalPages: 'nTotPaginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }
@@ -663,7 +688,8 @@ module.exports = ({ requester }) => {
     const propertiesMapping = { data: 'movimentos', pagination: { currentPage: 'nPagina', totalPages: 'nTotPaginas' } }
 
     try {
-      return await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
+      return response
     } catch (error) {
       return omieErrorHandler(error, [], forceThrow)
     }

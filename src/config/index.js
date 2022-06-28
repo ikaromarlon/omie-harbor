@@ -31,7 +31,8 @@ module.exports = Object.freeze({
       providerName: 'Omie',
       ingestionPeriod: 2, /** days back */
       apiBaseUrl: 'https://app.omie.com.br/api/v1',
-      waitSecondsBeforeNextPageRequest: Number.parseInt(env.WAIT_SECONDS_BEFORE_NEXT_OMIE_PAGE_REQUEST) ?? 0
+      maxRequestPerPeriod: 240,
+      requestPeriodSeconds: 60
     },
     mailer: {
       defaultSender: `no-reply@${env.APP_DOMAIN}`,
