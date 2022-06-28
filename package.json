@@ -24,6 +24,7 @@
     "deploy:function:dev": "npm run deploy:dev -- function -f",
     "deploy:prd": "export STAGE=prd && npm run deploy -- --stage prd",
     "deploy:function:prd": "npm run deploy:prd -- function -f",
+    "deploy:all": "npm run deploy:dev && npm run deploy:prd",
     "prepare": "husky install"
   },
   "repository": {
