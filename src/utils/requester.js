@@ -2,6 +2,8 @@ const axios = require('axios')
 const { millisecondsToSeconds } = require('./helpers')
 
 module.exports = () => {
+  const requester = axios
+
   const makeResponse = ({ startDate, endDate, response }) => ({
     startDate: new Date(startDate),
     endDate: new Date(endDate),
@@ -41,7 +43,7 @@ module.exports = () => {
     get: async (url, headers = {}) => {
       const startDate = Date.now()
       try {
-        const response = await axios.get(url, { headers })
+        const response = await requester.get(url, { headers })
         return makeResponse({ startDate, endDate: Date.now(), response })
       } catch (error) {
         throw errorHandler({ startDate, endDate: Date.now(), error })
@@ -50,7 +52,7 @@ module.exports = () => {
     post: async (url, data = {}, headers = {}) => {
       const startDate = Date.now()
       try {
-        const response = await axios.post(url, data, { headers })
+        const response = await requester.post(url, data, { headers })
         return makeResponse({ startDate, endDate: Date.now(), response })
       } catch (error) {
         throw errorHandler({ startDate, endDate: Date.now(), error })

@@ -25,7 +25,7 @@ describe('Services Omie Error Handler Adapter', () => {
     } catch (error) {
       expect(error).toBeInstanceOf(ExternalServerError)
       expect(error.statusCode).toBe(502)
-      expect(error.message).toBe('Omie Service Request Error')
+      expect(error.message).toBe('Omie Service Request Error: [SOAP-ENV:Server] The server error message')
       expect(error.data).toBeTruthy()
       expect(error.data.message).toBe('Omie HTTP error response message')
       expect(error.data.response).toEqual(omieErrorMock.response)
@@ -48,7 +48,7 @@ describe('Services Omie Error Handler Adapter', () => {
     } catch (error) {
       expect(error).toBeInstanceOf(ExternalServerError)
       expect(error.statusCode).toBe(502)
-      expect(error.message).toBe('Omie Service Request Error')
+      expect(error.message).toBe('Omie Service Request Error: [SOAP-ENV:Client-8020] The server error message')
       expect(error.data).toBeTruthy()
       expect(error.data.message).toBe('Omie HTTP error response message')
       expect(error.data.response).toEqual(omieErrorMock.response)

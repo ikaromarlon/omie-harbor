@@ -3,22 +3,22 @@ const { sleep, millisecondsToSeconds } = require('../../utils/helpers')
 
 const OmieRequestRate = function () {
   this.count = 0
-  this.lastRequestTime = null
+  this.lastBatchRequestTime = Date.now()
 
   this.addRequest = async () => {
     this.count++
     if (
       this.count === maxRequestPerPeriod &&
-      millisecondsToSeconds(Date.now() - this.lastRequestTime) <= requestPeriodSeconds
+      millisecondsToSeconds(Date.now() - this.lastBatchRequestTime) <= requestPeriodSeconds
     ) {
-      this.resetRequests()
       await sleep(requestPeriodSeconds)
+      this.resetRequests()
     }
-    this.lastRequestTime = Date.now()
   }
 
   this.resetRequests = () => {
     this.count = 0
+    this.lastBatchRequestTime = Date.now()
   }
 }
 
