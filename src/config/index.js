@@ -29,10 +29,12 @@ module.exports = Object.freeze({
   services: {
     omie: {
       providerName: 'Omie',
-      ingestionPeriod: 2, /** days back */
+      /** days back */
+      ingestionPeriod: 2,
       apiBaseUrl: 'https://app.omie.com.br/api/v1',
-      maxRequestPerPeriod: 240,
-      requestPeriodSeconds: 60
+      maxRequestPerPeriod: 200,
+      /** in seconds */
+      requestPeriod: 60
     },
     mailer: {
       defaultSender: `no-reply@${env.APP_DOMAIN}`,
