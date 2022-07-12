@@ -29,7 +29,7 @@ module.exports = ({ providerName, helpers: { brDateToISO, multiply } }) => ({
     titleId: String(omieTitle.cabecTitulo.nCodTitRepet),
     titleNumber: omieTitle.cabecTitulo.cNumTitulo,
     documentNumber: omieTitle.cabecTitulo.cNumDocFiscal ?? null,
-    entryCode: String(omieTitleEntry.nCodLanc),
+    entryCode: omieTitleEntry?.nCodLanc ? String(omieTitleEntry.nCodLanc) : null,
     provider: providerName,
     companyId,
     customerId: customerId ?? emptyRecordsIds.customer,
@@ -58,23 +58,24 @@ module.exports = ({ providerName, helpers: { brDateToISO, multiply } }) => ({
     dueDate: brDateToISO(omieTitle.cabecTitulo.dDtVenc),
     expectedPaymentDate: brDateToISO(omieTitle.cabecTitulo.dDtPrevisao),
     paymentDate: omieTitle.cabecTitulo.dDtPagamento ? brDateToISO(omieTitle.cabecTitulo.dDtPagamento) : null,
-    grossValue: multiply(multiply(omieTitleEntry.nValLanc, depPerc), catPerc),
-    netValue: multiply(multiply(omieTitleEntry.nValLanc - omieTitleEntry.nDesconto - omieTitleEntry.nMulta - omieTitleEntry.nJuros, depPerc), catPerc),
-    discounts: multiply(multiply(omieTitleEntry.nDesconto, depPerc), catPerc),
-    paymentFine: multiply(multiply(omieTitleEntry.nMulta, depPerc), catPerc),
-    fees: multiply(multiply(omieTitleEntry.nJuros, depPerc), catPerc),
-    taxAmount: multiply(multiply(omieTitle.cabecTitulo.nValorIR + omieTitle.cabecTitulo.nValorPIS + omieTitle.cabecTitulo.nValorCOFINS + omieTitle.cabecTitulo.nValorCSLL + (omieTitle.cabecTitulo.nValorICMS ?? 0) + (omieTitle.cabecTitulo.nValorISS ?? 0), depPerc), catPerc),
+    titleValue: omieTitle.cabecTitulo.nValorTitulo,
+    grossValue: multiply(multiply(omieTitleEntry?.nValLanc, depPerc), catPerc),
+    netValue: multiply(multiply((omieTitleEntry?.nValLanc ?? 0) - (omieTitleEntry?.nDesconto ?? 0) - (omieTitleEntry?.nMulta ?? 0) - (omieTitleEntry?.nJuros ?? 0), depPerc), catPerc),
+    discounts: multiply(multiply(omieTitleEntry?.nDesconto, depPerc), catPerc),
+    paymentFine: multiply(multiply(omieTitleEntry?.nMulta, depPerc), catPerc),
+    fees: multiply(multiply(omieTitleEntry?.nJuros, depPerc), catPerc),
+    taxAmount: multiply(multiply((omieTitle.cabecTitulo.nValorIR ?? 0) + (omieTitle.cabecTitulo.nValorPIS ?? 0) + (omieTitle.cabecTitulo.nValorCOFINS ?? 0) + (omieTitle.cabecTitulo.nValorCSLL ?? 0) + (omieTitle.cabecTitulo.nValorICMS ?? 0) + (omieTitle.cabecTitulo.nValorISS ?? 0), depPerc), catPerc),
     taxes: {
       ir: multiply(multiply(omieTitle.cabecTitulo.nValorIR, depPerc), catPerc),
       pis: multiply(multiply(omieTitle.cabecTitulo.nValorPIS, depPerc), catPerc),
       cofins: multiply(multiply(omieTitle.cabecTitulo.nValorCOFINS, depPerc), catPerc),
       csll: multiply(multiply(omieTitle.cabecTitulo.nValorCSLL, depPerc), catPerc),
-      icms: multiply(multiply(omieTitle.cabecTitulo.nValorICMS ?? 0, depPerc), catPerc),
-      iss: multiply(multiply(omieTitle.cabecTitulo.nValorISS ?? 0, depPerc), catPerc)
+      icms: multiply(multiply(omieTitle.cabecTitulo.nValorICMS, depPerc), catPerc),
+      iss: multiply(multiply(omieTitle.cabecTitulo.nValorISS, depPerc), catPerc)
     },
     status: omieTitle.cabecTitulo.cStatus,
     paidOff: omieTitle.resumo.cLiquidado === 'S',
     titleNotes: omieTitle.cabecTitulo.observacao || null,
-    entryNotes: omieTitleEntry.cObsLanc || null
+    entryNotes: omieTitleEntry?.cObsLanc || null
   }
 }

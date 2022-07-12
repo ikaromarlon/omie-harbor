@@ -32,6 +32,7 @@
   "dueDate": "2019-05-03",
   "expectedPaymentDate": "2019-05-03",
   "paymentDate": "2019-05-03",
+  "titleValue": 27.3,
   "grossValue": 27.3,
   "netValue": 27.026999999999997,
   "discounts": 0.273,

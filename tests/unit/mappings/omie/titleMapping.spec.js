@@ -119,6 +119,45 @@ describe('Title Mapping', () => {
     expect(result).toEqual({ ...omieAccountReceivableParsedMock, documentNumber: null })
   })
 
+  it('Should return mapped title successfully without Entry', () => {
+    const {
+      sut,
+      omieTitleMock,
+      omieDocumentTypesMock,
+      omieEntryOriginsMock,
+      orderMock,
+      billingMock,
+      companyIdMock,
+      customerIdMock,
+      projectIdMock,
+      departmentIdMock,
+      categoryIdMock,
+      checkingAccountIdMock,
+      contractIdMock
+    } = makeSut()
+
+    const result = sut({
+      omieTitle: omieTitleMock,
+      omieTitleEntry: {},
+      omieTitleDepartment: omieTitleMock.departamentos[0],
+      omieTitleCategory: omieTitleMock.cabecTitulo.aCodCateg[0],
+      omieEntryOrigins: omieEntryOriginsMock,
+      omieDocumentTypes: omieDocumentTypesMock,
+      order: orderMock,
+      billing: billingMock,
+      emptyRecordsIds: emptyRecordsIdsMock,
+      companyId: companyIdMock,
+      customerId: customerIdMock,
+      projectId: projectIdMock,
+      departmentId: departmentIdMock,
+      categoryId: categoryIdMock,
+      checkingAccountId: checkingAccountIdMock,
+      contractId: contractIdMock
+    })
+
+    expect(result).toEqual({ ...omieAccountReceivableParsedMock, entryCode: null, grossValue: 0, netValue: 0 })
+  })
+
   it('Should return mapped title successfully missing some dates', () => {
     const {
       sut,
@@ -277,7 +316,7 @@ describe('Title Mapping', () => {
     })
   })
 
-  it('Should return mapped title successfully with taxes', () => {
+  it('Should return mapped title successfully without taxes', () => {
     const {
       sut,
       omieTitleMock,
@@ -295,7 +334,7 @@ describe('Title Mapping', () => {
     } = makeSut()
 
     const result = sut({
-      omieTitle: { ...omieTitleMock, cabecTitulo: { ...omieTitleMock.cabecTitulo, nValorICMS: undefined, nValorISS: undefined } },
+      omieTitle: { ...omieTitleMock, cabecTitulo: { ...omieTitleMock.cabecTitulo, nValorIR: undefined, nValorPIS: undefined, nValorCOFINS: undefined, nValorCSLL: undefined, nValorICMS: undefined, nValorISS: undefined } },
       omieTitleEntry: omieTitleMock.lancamentos[0],
       omieTitleDepartment: omieTitleMock.departamentos[0],
       omieTitleCategory: omieTitleMock.cabecTitulo.aCodCateg[0],

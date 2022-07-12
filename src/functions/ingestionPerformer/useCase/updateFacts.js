@@ -218,7 +218,7 @@ module.exports = async ({
         const contract = contracts.find(e => e.externalId === String(omieAccountPayable.cabecTitulo.nCodCtr))
         const order = orders.find(e => e.customerId === customer._id && e.externalId === String(omieAccountPayable.cabecTitulo.nCodOS))
         const invoice = billing.find(e => e.customerId === customer._id && e.externalId === String(omieAccountPayable.cabecTitulo.nCodNF))
-        return omieAccountPayable.lancamentos.map(omieAccountPayableEntry => {
+        return (omieAccountPayable.lancamentos?.length ? omieAccountPayable.lancamentos : [{}]).map(omieAccountPayableEntry => {
           const checkingAccount = checkingAccounts.find(e => e.externalId === String(omieAccountPayableEntry.nCodCC))
           return (omieAccountPayable.departamentos?.length ? omieAccountPayable.departamentos : [{}]).map(omieAccountPayableDepartment => {
             const department = departments.find(e => e.externalId === String(omieAccountPayableDepartment.cCodDepartamento))
@@ -320,7 +320,7 @@ module.exports = async ({
         const contract = contracts.find(e => e.externalId === String(omieAccountReceivable.cabecTitulo.nCodCtr))
         const order = orders.find(e => e.customerId === customer._id && e.externalId === String(omieAccountReceivable.cabecTitulo.nCodOS))
         const invoice = billing.find(e => e.customerId === customer._id && e.externalId === String(omieAccountReceivable.cabecTitulo.nCodNF))
-        return omieAccountReceivable.lancamentos.map(omieAccountReceivableEntry => {
+        return (omieAccountReceivable.lancamentos?.length ? omieAccountReceivable.lancamentos : [{}]).map(omieAccountReceivableEntry => {
           const checkingAccount = checkingAccounts.find(e => e.externalId === String(omieAccountReceivableEntry.nCodCC))
           return (omieAccountReceivable.departamentos?.length ? omieAccountReceivable.departamentos : [{}]).map(omieAccountReceivableDepartment => {
             const department = departments.find(e => e.externalId === String(omieAccountReceivableDepartment.cCodDepartamento))

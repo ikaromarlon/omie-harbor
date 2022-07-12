@@ -27,6 +27,7 @@
   "dueDate": null,
   "expectedPaymentDate": null,
   "paymentDate": null,
+  "titleValue": null,
   "grossValue": null,
   "netValue": null,
   "discounts": null,
