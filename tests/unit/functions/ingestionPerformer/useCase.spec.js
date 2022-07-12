@@ -643,6 +643,34 @@ describe('ingestionPerformer UseCase', () => {
         await sut({ payload: payloadMock })
       })
 
+      it('Should call omieMappings.title without title entry', async () => {
+        const { sut, payloadMock, omieServiceMock, companyIdMock, omieMappingsMock, customerIdMock, projectIdMock, departmentIdMock, categoryIdMock, contractIdMock, repositoriesMock } = makeSut()
+        const omieAccountPayableMock = { ...mocks.omieAccountsPayableResponseMock.titulosEncontrados[0], lancamentos: [] }
+        omieServiceMock.getAccountsPayable.mockResolvedValueOnce([omieAccountPayableMock])
+        await sut({ payload: payloadMock })
+        expect(omieServiceMock.getAccountsPayable).toHaveBeenCalledTimes(1)
+        expect(omieMappingsMock.title).toHaveBeenCalledWith({
+          omieTitle: omieAccountPayableMock,
+          omieTitleDepartment: omieAccountPayableMock.departamentos[0],
+          omieTitleCategory: omieAccountPayableMock.cabecTitulo.aCodCateg[0],
+          omieTitleEntry: {},
+          omieEntryOrigins: mocks.omieEntryOriginsResponseMock.origem,
+          omieDocumentTypes: mocks.omieDocumentTypesResponseMock.tipo_documento_cadastro,
+          order: mocks.omieServiceOrdersSavedMock[0],
+          billing: mocks.omieServiceInvoicesSavedMock[0],
+          companyId: companyIdMock,
+          customerId: customerIdMock,
+          projectId: projectIdMock,
+          departmentId: departmentIdMock,
+          categoryId: categoryIdMock,
+          checkingAccountId: undefined,
+          emptyRecordsIds: mocks.emptyRecordsIdsMock,
+          contractId: contractIdMock
+        })
+        expect(omieMappingsMock.title).toHaveNthReturnedWith(1, mocks.omieAccountPayableParsedMock)
+        expect(repositoriesMock.accountsPayable.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'customerId', 'titleId'], [mocks.omieAccountPayableParsedMock, mocks.emptyAccountPayableMock])
+      })
+
       it('Should call omieMappings.title without categories list: use fixed category in title details', async () => {
         const { sut, payloadMock, companyIdMock, omieMappingsMock, omieServiceMock, customerIdMock, projectIdMock, departmentIdMock, categoryIdMock, checkingAccountIdMock, contractIdMock } = makeSut()
         const omieAccountPayableMock = { ...mocks.omieAccountsPayableResponseMock.titulosEncontrados[0], cabecTitulo: { ...mocks.omieAccountsPayableResponseMock.titulosEncontrados[0].cabecTitulo, aCodCateg: [] } }
@@ -716,6 +744,34 @@ describe('ingestionPerformer UseCase', () => {
           departmentId: departmentIdMock,
           categoryId: categoryIdMock,
           checkingAccountId: checkingAccountIdMock,
+          emptyRecordsIds: mocks.emptyRecordsIdsMock,
+          contractId: contractIdMock
+        })
+        expect(omieMappingsMock.title).toHaveNthReturnedWith(2, mocks.omieAccountReceivableParsedMock)
+        expect(repositoriesMock.accountsReceivable.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'customerId', 'titleId'], [mocks.omieAccountReceivableParsedMock, mocks.emptyAccountReceivableMock])
+      })
+
+      it('Should call omieMappings.title without title entry', async () => {
+        const { sut, payloadMock, omieServiceMock, companyIdMock, omieMappingsMock, customerIdMock, projectIdMock, departmentIdMock, categoryIdMock, contractIdMock, repositoriesMock } = makeSut()
+        const omieAccountReceivableMock = { ...mocks.omieAccountsReceivableResponseMock.titulosEncontrados[0], lancamentos: [] }
+        omieServiceMock.getAccountsReceivable.mockResolvedValueOnce([omieAccountReceivableMock])
+        await sut({ payload: payloadMock })
+        expect(omieServiceMock.getAccountsReceivable).toHaveBeenCalledTimes(1)
+        expect(omieMappingsMock.title).toHaveBeenCalledWith({
+          omieTitle: omieAccountReceivableMock,
+          omieTitleDepartment: omieAccountReceivableMock.departamentos[0],
+          omieTitleCategory: omieAccountReceivableMock.cabecTitulo.aCodCateg[0],
+          omieTitleEntry: {},
+          omieEntryOrigins: mocks.omieEntryOriginsResponseMock.origem,
+          omieDocumentTypes: mocks.omieDocumentTypesResponseMock.tipo_documento_cadastro,
+          order: mocks.omieServiceOrdersSavedMock[0],
+          billing: mocks.omieServiceInvoicesSavedMock[0],
+          companyId: companyIdMock,
+          customerId: customerIdMock,
+          projectId: projectIdMock,
+          departmentId: departmentIdMock,
+          categoryId: categoryIdMock,
+          checkingAccountId: undefined,
           emptyRecordsIds: mocks.emptyRecordsIdsMock,
           contractId: contractIdMock
         })

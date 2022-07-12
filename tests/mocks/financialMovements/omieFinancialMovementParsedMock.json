@@ -36,6 +36,7 @@
   "paymentDate": "2019-05-03",
   "reconciliationDate": null,
   "value": 195,
+  "paidValue": 195,
   "status": "PAGO",
   "titleNotes": null
 }

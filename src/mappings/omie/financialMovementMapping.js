@@ -67,7 +67,8 @@ module.exports = ({ providerName, helpers: { brDateToISO, multiply } }) => ({
     expectedPaymentDate: omieFinancialMovement.detalhes.dDtPrevisao ? brDateToISO(omieFinancialMovement.detalhes.dDtPrevisao) : null,
     paymentDate: omieFinancialMovement.detalhes.dDtPagamento ? brDateToISO(omieFinancialMovement.detalhes.dDtPagamento) : null,
     reconciliationDate: omieFinancialMovement.detalhes.dDtConcilia ? brDateToISO(omieFinancialMovement.detalhes.dDtConcilia) : null,
-    value: multiply(multiply(omieFinancialMovement.resumo.nValPago, depPerc), catPerc),
+    value: multiply(multiply(omieFinancialMovement.detalhes.nValorTitulo, depPerc), catPerc),
+    paidValue: multiply(multiply(omieFinancialMovement.resumo.nValPago, depPerc), catPerc),
     status: omieFinancialMovement.detalhes.cStatus,
     titleNotes: omieFinancialMovement.detalhes.observacao || null
   }
