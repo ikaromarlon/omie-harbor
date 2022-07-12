@@ -38,7 +38,8 @@ module.exports = Object.freeze({
     },
     mailer: {
       defaultSender: `no-reply@${env.APP_DOMAIN}`,
-      errorNotificationRecipientAddres: env.ERROR_NOTIFICATION_RECIPIENT_ADDRESS || null
+      errorNotificationRecipientAddress: env.ERROR_NOTIFICATION_RECIPIENT_ADDRESS || '',
+      errorNotificationRecipientAddressCopy: env.ERROR_NOTIFICATION_RECIPIENT_ADDRESS_COPY || ''
     }
   },
   flags: {

@@ -22,7 +22,8 @@ const mailer = () => {
 
     const params = {
       Destination: {
-        ToAddresses: [config.services.mailer.errorNotificationRecipientAddres]
+        ToAddresses: config.services.mailer.errorNotificationRecipientAddress.split(',').map(e => e.trim()),
+        CcAddresses: config.services.mailer.errorNotificationRecipientAddressCopy.split(',').map(e => e.trim())
       },
       Message: {
         Body: {
