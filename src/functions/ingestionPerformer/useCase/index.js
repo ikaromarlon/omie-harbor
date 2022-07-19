@@ -64,19 +64,16 @@ module.exports = ({
     const [
       omieBanks,
       omieCnae,
-      omieEntryOrigins,
       omieDocumentTypes
     ] = await Promise.all([
       omieService.getBanks(credentials),
       omieService.getCnae(credentials),
-      omieService.getEntryOrigins(credentials),
       omieService.getDocumentTypes(credentials)
     ])
 
     return {
       omieBanks,
       omieCnae,
-      omieEntryOrigins,
       omieDocumentTypes
     }
   }
@@ -131,7 +128,6 @@ module.exports = ({
     const {
       omieBanks,
       omieCnae,
-      omieEntryOrigins,
       omieDocumentTypes
     } = await getAuxiliaryRecords(credentials)
 
@@ -166,7 +162,6 @@ module.exports = ({
       companyId,
       omieMappings,
       repositories,
-      omieEntryOrigins,
       omieDocumentTypes,
       emptyRecordsIds,
       makeEmptyRecord,

@@ -210,7 +210,6 @@ describe('ingestionPerformer UseCase', () => {
       await sut({ payload: payloadMock })
       expect(omieServiceMock.getBanks).toHaveBeenCalledTimes(1)
       expect(omieServiceMock.getCnae).toHaveBeenCalledTimes(1)
-      expect(omieServiceMock.getEntryOrigins).toHaveBeenCalledTimes(1)
       expect(omieServiceMock.getDocumentTypes).toHaveBeenCalledTimes(1)
     })
   })
@@ -612,15 +611,14 @@ describe('ingestionPerformer UseCase', () => {
 
     describe('updateAccountsPayable', () => {
       it('Should update accounts payable successfully', async () => {
-        const { sut, payloadMock, omieServiceMock, companyIdMock, omieMappingsMock, customerIdMock, projectIdMock, departmentIdMock, categoryIdMock, checkingAccountIdMock, contractIdMock, repositoriesMock } = makeSut()
+        const { sut, payloadMock, omieServiceMock, companyIdMock, omieMappingsMock, customerIdMock, projectIdMock, departmentIdMock, categoryIdMock, contractIdMock, repositoriesMock } = makeSut()
         await sut({ payload: payloadMock })
         expect(omieServiceMock.getAccountsPayable).toHaveBeenCalledTimes(1)
         expect(omieMappingsMock.title).toHaveBeenCalledWith({
           omieTitle: mocks.omieAccountsPayableResponseMock.titulosEncontrados[0],
           omieTitleDepartment: mocks.omieAccountsPayableResponseMock.titulosEncontrados[0].departamentos[0],
           omieTitleCategory: mocks.omieAccountsPayableResponseMock.titulosEncontrados[0].cabecTitulo.aCodCateg[0],
-          omieTitleEntry: mocks.omieAccountsPayableResponseMock.titulosEncontrados[0].lancamentos[0],
-          omieEntryOrigins: mocks.omieEntryOriginsResponseMock.origem,
+          omieTitleEntries: mocks.omieAccountsPayableResponseMock.titulosEncontrados[0].lancamentos,
           omieDocumentTypes: mocks.omieDocumentTypesResponseMock.tipo_documento_cadastro,
           order: mocks.omieServiceOrdersSavedMock[0],
           billing: mocks.omieServiceInvoicesSavedMock[0],
@@ -629,7 +627,6 @@ describe('ingestionPerformer UseCase', () => {
           projectId: projectIdMock,
           departmentId: departmentIdMock,
           categoryId: categoryIdMock,
-          checkingAccountId: checkingAccountIdMock,
           emptyRecordsIds: mocks.emptyRecordsIdsMock,
           contractId: contractIdMock
         })
@@ -643,9 +640,9 @@ describe('ingestionPerformer UseCase', () => {
         await sut({ payload: payloadMock })
       })
 
-      it('Should call omieMappings.title without title entry', async () => {
+      it('Should call omieMappings.title without title entries', async () => {
         const { sut, payloadMock, omieServiceMock, companyIdMock, omieMappingsMock, customerIdMock, projectIdMock, departmentIdMock, categoryIdMock, contractIdMock, repositoriesMock } = makeSut()
-        const omieAccountPayableMock = { ...mocks.omieAccountsPayableResponseMock.titulosEncontrados[0], lancamentos: [] }
+        const omieAccountPayableMock = { ...mocks.omieAccountsPayableResponseMock.titulosEncontrados[0], lancamentos: undefined }
         omieServiceMock.getAccountsPayable.mockResolvedValueOnce([omieAccountPayableMock])
         await sut({ payload: payloadMock })
         expect(omieServiceMock.getAccountsPayable).toHaveBeenCalledTimes(1)
@@ -653,8 +650,7 @@ describe('ingestionPerformer UseCase', () => {
           omieTitle: omieAccountPayableMock,
           omieTitleDepartment: omieAccountPayableMock.departamentos[0],
           omieTitleCategory: omieAccountPayableMock.cabecTitulo.aCodCateg[0],
-          omieTitleEntry: {},
-          omieEntryOrigins: mocks.omieEntryOriginsResponseMock.origem,
+          omieTitleEntries: [],
           omieDocumentTypes: mocks.omieDocumentTypesResponseMock.tipo_documento_cadastro,
           order: mocks.omieServiceOrdersSavedMock[0],
           billing: mocks.omieServiceInvoicesSavedMock[0],
@@ -663,7 +659,6 @@ describe('ingestionPerformer UseCase', () => {
           projectId: projectIdMock,
           departmentId: departmentIdMock,
           categoryId: categoryIdMock,
-          checkingAccountId: undefined,
           emptyRecordsIds: mocks.emptyRecordsIdsMock,
           contractId: contractIdMock
         })
@@ -672,7 +667,7 @@ describe('ingestionPerformer UseCase', () => {
       })
 
       it('Should call omieMappings.title without categories list: use fixed category in title details', async () => {
-        const { sut, payloadMock, companyIdMock, omieMappingsMock, omieServiceMock, customerIdMock, projectIdMock, departmentIdMock, categoryIdMock, checkingAccountIdMock, contractIdMock } = makeSut()
+        const { sut, payloadMock, companyIdMock, omieMappingsMock, omieServiceMock, customerIdMock, projectIdMock, departmentIdMock, categoryIdMock, contractIdMock } = makeSut()
         const omieAccountPayableMock = { ...mocks.omieAccountsPayableResponseMock.titulosEncontrados[0], cabecTitulo: { ...mocks.omieAccountsPayableResponseMock.titulosEncontrados[0].cabecTitulo, aCodCateg: [] } }
         omieServiceMock.getAccountsPayable.mockResolvedValueOnce([omieAccountPayableMock])
         await sut({ payload: payloadMock })
@@ -680,8 +675,7 @@ describe('ingestionPerformer UseCase', () => {
           omieTitle: omieAccountPayableMock,
           omieTitleDepartment: mocks.omieAccountsPayableResponseMock.titulosEncontrados[0].departamentos[0],
           omieTitleCategory: { cCodCateg: mocks.omieAccountsPayableResponseMock.titulosEncontrados[0].cabecTitulo.cCodCateg },
-          omieTitleEntry: mocks.omieAccountsPayableResponseMock.titulosEncontrados[0].lancamentos[0],
-          omieEntryOrigins: mocks.omieEntryOriginsResponseMock.origem,
+          omieTitleEntries: mocks.omieAccountsPayableResponseMock.titulosEncontrados[0].lancamentos,
           omieDocumentTypes: mocks.omieDocumentTypesResponseMock.tipo_documento_cadastro,
           order: mocks.omieServiceOrdersSavedMock[0],
           billing: mocks.omieServiceInvoicesSavedMock[0],
@@ -690,7 +684,6 @@ describe('ingestionPerformer UseCase', () => {
           projectId: projectIdMock,
           departmentId: departmentIdMock,
           categoryId: categoryIdMock,
-          checkingAccountId: checkingAccountIdMock,
           emptyRecordsIds: mocks.emptyRecordsIdsMock,
           contractId: contractIdMock
         })
@@ -706,8 +699,7 @@ describe('ingestionPerformer UseCase', () => {
           omieTitle: omieAccountPayableMock,
           omieTitleDepartment: {},
           omieTitleCategory: {},
-          omieTitleEntry: omieAccountPayableMock.lancamentos[0],
-          omieEntryOrigins: mocks.omieEntryOriginsResponseMock.origem,
+          omieTitleEntries: omieAccountPayableMock.lancamentos,
           omieDocumentTypes: mocks.omieDocumentTypesResponseMock.tipo_documento_cadastro,
           order: undefined,
           billing: undefined,
@@ -716,7 +708,6 @@ describe('ingestionPerformer UseCase', () => {
           projectId: undefined,
           departmentId: undefined,
           categoryId: undefined,
-          checkingAccountId: undefined,
           emptyRecordsIds: mocks.emptyRecordsIdsMock,
           contractId: undefined
         })
@@ -726,15 +717,14 @@ describe('ingestionPerformer UseCase', () => {
 
     describe('updateAccountsReceivable', () => {
       it('Should update accounts receivable successfully', async () => {
-        const { sut, payloadMock, omieServiceMock, companyIdMock, omieMappingsMock, customerIdMock, projectIdMock, departmentIdMock, categoryIdMock, checkingAccountIdMock, contractIdMock, repositoriesMock } = makeSut()
+        const { sut, payloadMock, omieServiceMock, companyIdMock, omieMappingsMock, customerIdMock, projectIdMock, departmentIdMock, categoryIdMock, contractIdMock, repositoriesMock } = makeSut()
         await sut({ payload: payloadMock })
         expect(omieServiceMock.getAccountsReceivable).toHaveBeenCalledTimes(1)
         expect(omieMappingsMock.title).toHaveBeenCalledWith({
           omieTitle: mocks.omieAccountsReceivableResponseMock.titulosEncontrados[0],
           omieTitleDepartment: mocks.omieAccountsReceivableResponseMock.titulosEncontrados[0].departamentos[0],
           omieTitleCategory: mocks.omieAccountsReceivableResponseMock.titulosEncontrados[0].cabecTitulo.aCodCateg[0],
-          omieTitleEntry: mocks.omieAccountsReceivableResponseMock.titulosEncontrados[0].lancamentos[0],
-          omieEntryOrigins: mocks.omieEntryOriginsResponseMock.origem,
+          omieTitleEntries: mocks.omieAccountsReceivableResponseMock.titulosEncontrados[0].lancamentos,
           omieDocumentTypes: mocks.omieDocumentTypesResponseMock.tipo_documento_cadastro,
           order: mocks.omieServiceOrdersSavedMock[0],
           billing: mocks.omieServiceInvoicesSavedMock[0],
@@ -743,7 +733,6 @@ describe('ingestionPerformer UseCase', () => {
           projectId: projectIdMock,
           departmentId: departmentIdMock,
           categoryId: categoryIdMock,
-          checkingAccountId: checkingAccountIdMock,
           emptyRecordsIds: mocks.emptyRecordsIdsMock,
           contractId: contractIdMock
         })
@@ -751,9 +740,9 @@ describe('ingestionPerformer UseCase', () => {
         expect(repositoriesMock.accountsReceivable.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'customerId', 'titleId'], [mocks.omieAccountReceivableParsedMock, mocks.emptyAccountReceivableMock])
       })
 
-      it('Should call omieMappings.title without title entry', async () => {
+      it('Should call omieMappings.title without title entries', async () => {
         const { sut, payloadMock, omieServiceMock, companyIdMock, omieMappingsMock, customerIdMock, projectIdMock, departmentIdMock, categoryIdMock, contractIdMock, repositoriesMock } = makeSut()
-        const omieAccountReceivableMock = { ...mocks.omieAccountsReceivableResponseMock.titulosEncontrados[0], lancamentos: [] }
+        const omieAccountReceivableMock = { ...mocks.omieAccountsReceivableResponseMock.titulosEncontrados[0], lancamentos: undefined }
         omieServiceMock.getAccountsReceivable.mockResolvedValueOnce([omieAccountReceivableMock])
         await sut({ payload: payloadMock })
         expect(omieServiceMock.getAccountsReceivable).toHaveBeenCalledTimes(1)
@@ -761,8 +750,7 @@ describe('ingestionPerformer UseCase', () => {
           omieTitle: omieAccountReceivableMock,
           omieTitleDepartment: omieAccountReceivableMock.departamentos[0],
           omieTitleCategory: omieAccountReceivableMock.cabecTitulo.aCodCateg[0],
-          omieTitleEntry: {},
-          omieEntryOrigins: mocks.omieEntryOriginsResponseMock.origem,
+          omieTitleEntries: [],
           omieDocumentTypes: mocks.omieDocumentTypesResponseMock.tipo_documento_cadastro,
           order: mocks.omieServiceOrdersSavedMock[0],
           billing: mocks.omieServiceInvoicesSavedMock[0],
@@ -771,7 +759,6 @@ describe('ingestionPerformer UseCase', () => {
           projectId: projectIdMock,
           departmentId: departmentIdMock,
           categoryId: categoryIdMock,
-          checkingAccountId: undefined,
           emptyRecordsIds: mocks.emptyRecordsIdsMock,
           contractId: contractIdMock
         })
@@ -786,7 +773,7 @@ describe('ingestionPerformer UseCase', () => {
       })
 
       it('Should call omieMappings.title without categories list: use fixed category in title details', async () => {
-        const { sut, payloadMock, companyIdMock, omieMappingsMock, omieServiceMock, customerIdMock, projectIdMock, departmentIdMock, categoryIdMock, checkingAccountIdMock, contractIdMock } = makeSut()
+        const { sut, payloadMock, companyIdMock, omieMappingsMock, omieServiceMock, customerIdMock, projectIdMock, departmentIdMock, categoryIdMock, contractIdMock } = makeSut()
         const omieAccountReceivableMock = { ...mocks.omieAccountsReceivableResponseMock.titulosEncontrados[0], cabecTitulo: { ...mocks.omieAccountsReceivableResponseMock.titulosEncontrados[0].cabecTitulo, aCodCateg: [] } }
         omieServiceMock.getAccountsReceivable.mockResolvedValueOnce([omieAccountReceivableMock])
         await sut({ payload: payloadMock })
@@ -794,8 +781,7 @@ describe('ingestionPerformer UseCase', () => {
           omieTitle: omieAccountReceivableMock,
           omieTitleDepartment: mocks.omieAccountsReceivableResponseMock.titulosEncontrados[0].departamentos[0],
           omieTitleCategory: { cCodCateg: mocks.omieAccountsReceivableResponseMock.titulosEncontrados[0].cabecTitulo.cCodCateg },
-          omieTitleEntry: mocks.omieAccountsReceivableResponseMock.titulosEncontrados[0].lancamentos[0],
-          omieEntryOrigins: mocks.omieEntryOriginsResponseMock.origem,
+          omieTitleEntries: mocks.omieAccountsReceivableResponseMock.titulosEncontrados[0].lancamentos,
           omieDocumentTypes: mocks.omieDocumentTypesResponseMock.tipo_documento_cadastro,
           order: mocks.omieServiceOrdersSavedMock[0],
           billing: mocks.omieServiceInvoicesSavedMock[0],
@@ -804,7 +790,6 @@ describe('ingestionPerformer UseCase', () => {
           projectId: projectIdMock,
           departmentId: departmentIdMock,
           categoryId: categoryIdMock,
-          checkingAccountId: checkingAccountIdMock,
           emptyRecordsIds: mocks.emptyRecordsIdsMock,
           contractId: contractIdMock
         })
@@ -820,8 +805,7 @@ describe('ingestionPerformer UseCase', () => {
           omieTitle: omieAccountReceivableMock,
           omieTitleDepartment: {},
           omieTitleCategory: {},
-          omieTitleEntry: omieAccountReceivableMock.lancamentos[0],
-          omieEntryOrigins: mocks.omieEntryOriginsResponseMock.origem,
+          omieTitleEntries: omieAccountReceivableMock.lancamentos,
           omieDocumentTypes: mocks.omieDocumentTypesResponseMock.tipo_documento_cadastro,
           order: undefined,
           billing: undefined,
@@ -830,7 +814,6 @@ describe('ingestionPerformer UseCase', () => {
           projectId: undefined,
           departmentId: undefined,
           categoryId: undefined,
-          checkingAccountId: undefined,
           emptyRecordsIds: mocks.emptyRecordsIdsMock,
           contractId: undefined
         })
@@ -842,6 +825,7 @@ describe('ingestionPerformer UseCase', () => {
       it('Should update successfully', async () => {
         const { sut, payloadMock, omieServiceMock, companyIdMock, omieMappingsMock, customerIdMock, projectIdMock, departmentIdMock, categoryIdMock, checkingAccountIdMock, contractIdMock, accountPayableIdMock, repositoriesMock } = makeSut()
         await sut({ payload: payloadMock })
+        expect(omieServiceMock.getEntryOrigins).toHaveBeenCalledTimes(1)
         expect(omieServiceMock.getFinancialMovements).toHaveBeenCalledTimes(1)
         expect(omieMappingsMock.financialMovement).toHaveBeenCalledWith({
           omieFinancialMovement: mocks.omieFinancialMovementsResponseMock.movimentos[0],

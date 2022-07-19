@@ -5,14 +5,12 @@
     "titleId": "618738728",
     "titleNumber": "RPS 2",
     "documentNumber": "8",
-    "entryCode": "662377930",
     "provider": "Omie",
     "companyId": "25c176b6-b200-4575-9217-e23c6105163c",
     "customerId": "3a58bc83-dec0-436e-a98c-20fba8f58b56",
     "projectId": "3fbf0118-b5f9-48b0-8269-40cf0fd28d55",
     "categoryId": "44d50267-4bc1-42bc-923a-00df2968a2be",
     "departmentId": "5f008bd0-cc25-4433-9cff-a5d9fdd79642",
-    "checkingAccountId": "e5e74170-40ee-42d9-9741-6d708200e306",
     "departmentPercentage": 100,
     "categoryPercentage": 100,
     "contractId": "9f9bdfdd-2851-471c-b9e9-a798a3090d93",
@@ -24,10 +22,6 @@
       "code": "99999",
       "description": "Outros"
     },
-    "entryOrigin": {
-      "code": "VENR",
-      "description": "Parcela a Receber de Vendas"
-    },
     "installment": "001/001",
     "registerDate": "2019-05-03",
     "issueDate": "2019-05-03",
@@ -37,6 +31,7 @@
     "grossValue": 13215.44,
     "netValue": 13215.44,
     "discounts": 0,
+    "balanceDue": 0,
     "paymentFine": 0,
     "fees": 0,
     "taxAmount": 0,
@@ -51,7 +46,6 @@
     "status": "RECEBIDO",
     "paidOff": true,
     "titleNotes": null,
-    "entryNotes": null,
     "createdAt": "2021-11-05T15:05:38.233Z",
     "updatedAt": "2021-11-05T15:29:58.455Z"
   }

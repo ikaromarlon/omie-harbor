@@ -3,14 +3,12 @@
   "titleId": "618738728",
   "titleNumber": "08702484",
   "documentNumber": "08702484",
-  "entryCode": "1641228744",
   "provider": "Omie",
   "companyId": "25c176b6-b200-4575-9217-e23c6105163c",
   "customerId": "3a58bc83-dec0-436e-a98c-20fba8f58b56",
   "projectId": "3fbf0118-b5f9-48b0-8269-40cf0fd28d55",
   "categoryId": "44d50267-4bc1-42bc-923a-00df2968a2be",
   "departmentId": "5f008bd0-cc25-4433-9cff-a5d9fdd79642",
-  "checkingAccountId": "e5e74170-40ee-42d9-9741-6d708200e306",
   "departmentPercentage": 100,
   "categoryPercentage": 100,
   "contractId": "9f9bdfdd-2851-471c-b9e9-a798a3090d93",
@@ -22,20 +20,16 @@
     "code": "NFS",
     "description": "Nota Fiscal de Serviço"
   },
-  "entryOrigin": {
-    "code": "MANP",
-    "description": "Lançamento Manual de Conta a Pagar"
-  },
   "installment": "001/001",
   "registerDate": "2019-05-03",
   "issueDate": "2019-05-02",
   "dueDate": "2019-05-03",
   "expectedPaymentDate": "2019-05-03",
   "paymentDate": "2019-05-03",
-  "titleValue": 27.3,
   "grossValue": 27.3,
   "netValue": 27.026999999999997,
   "discounts": 0.273,
+  "balanceDue": 0,
   "paymentFine": 0,
   "fees": 0,
   "taxAmount": 0,
@@ -49,6 +43,5 @@
   },
   "status": "PAGO",
   "paidOff": true,
-  "titleNotes": null,
-  "entryNotes": null
+  "titleNotes": null
 }

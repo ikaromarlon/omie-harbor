@@ -6,7 +6,6 @@ module.exports = async ({
   companyId,
   omieMappings,
   repositories,
-  omieEntryOrigins,
   omieDocumentTypes,
   emptyRecordsIds,
   makeEmptyRecord,
@@ -161,7 +160,6 @@ module.exports = async ({
       const projectsSet = new Set()
       const categoriesSet = new Set()
       const departmentsSet = new Set()
-      const checkingAccountsSet = new Set()
       const contractsSet = new Set()
       const ordersSet = new Set()
       const billingSet = new Set()
@@ -171,10 +169,7 @@ module.exports = async ({
         projectsSet.add(String(omieAccountPayable.cabecTitulo.cCodProjeto || ''))
         contractsSet.add(String(omieAccountPayable.cabecTitulo.nCodCtr || ''))
         ordersSet.add(String(omieAccountPayable.cabecTitulo.nCodOS || ''))
-        billingSet.add(String(omieAccountPayable.cabecTitulo.nCodNF || ''))
-        omieAccountPayable.lancamentos.forEach(omieAccountPayableEntry => {
-          checkingAccountsSet.add(String(omieAccountPayableEntry.nCodCC || ''))
-        });
+        billingSet.add(String(omieAccountPayable.cabecTitulo.nCodNF || ''));
         (omieAccountPayable.departamentos?.length ? omieAccountPayable.departamentos : []).forEach(omieAccountPayableDepartment => {
           departmentsSet.add(String(omieAccountPayableDepartment.cCodDepartamento || ''))
         });
@@ -187,7 +182,6 @@ module.exports = async ({
       const projectsFilter = [...projectsSet].filter(Boolean)
       const categoriesFilter = [...categoriesSet].filter(Boolean)
       const departmentsFilter = [...departmentsSet].filter(Boolean)
-      const checkingAccountsFilter = [...checkingAccountsSet].filter(Boolean)
       const contractsFilter = [...contractsSet].filter(Boolean)
       const ordersFilter = [...ordersSet].filter(Boolean)
       const billingFilter = [...billingSet].filter(Boolean)
@@ -197,7 +191,6 @@ module.exports = async ({
         projects,
         categories,
         departments,
-        checkingAccounts,
         contracts,
         orders,
         billing
@@ -206,7 +199,6 @@ module.exports = async ({
         projectsFilter.length ? repositories.projects.find({ companyId, externalId: projectsFilter }) : [],
         categoriesFilter.length ? repositories.categories.find({ companyId, externalId: categoriesFilter }) : [],
         departmentsFilter.length ? repositories.departments.find({ companyId, externalId: departmentsFilter }) : [],
-        checkingAccountsFilter.length ? repositories.checkingAccounts.find({ companyId, externalId: checkingAccountsFilter }) : [],
         contractsFilter.length ? repositories.contracts.find({ companyId, externalId: contractsFilter }) : [],
         ordersFilter.length ? repositories.orders.find({ companyId, externalId: ordersFilter }) : [],
         billingFilter.length ? repositories.billing.find({ companyId, externalId: billingFilter }) : []
@@ -218,30 +210,25 @@ module.exports = async ({
         const contract = contracts.find(e => e.externalId === String(omieAccountPayable.cabecTitulo.nCodCtr))
         const order = orders.find(e => e.customerId === customer._id && e.externalId === String(omieAccountPayable.cabecTitulo.nCodOS))
         const invoice = billing.find(e => e.customerId === customer._id && e.externalId === String(omieAccountPayable.cabecTitulo.nCodNF))
-        return (omieAccountPayable.lancamentos?.length ? omieAccountPayable.lancamentos : [{}]).map(omieAccountPayableEntry => {
-          const checkingAccount = checkingAccounts.find(e => e.externalId === String(omieAccountPayableEntry.nCodCC))
-          return (omieAccountPayable.departamentos?.length ? omieAccountPayable.departamentos : [{}]).map(omieAccountPayableDepartment => {
-            const department = departments.find(e => e.externalId === String(omieAccountPayableDepartment.cCodDepartamento))
-            return (omieAccountPayable.cabecTitulo.aCodCateg?.length ? omieAccountPayable.cabecTitulo.aCodCateg : [{ cCodCateg: omieAccountPayable.cabecTitulo.cCodCateg }]).map(omieAccountPayableCategory => {
-              const category = categories.find(e => e.externalId === String(omieAccountPayableCategory.cCodCateg))
-              return titleMapping({
-                omieTitle: omieAccountPayable,
-                omieTitleEntry: omieAccountPayableEntry,
-                omieTitleDepartment: omieAccountPayableDepartment,
-                omieTitleCategory: omieAccountPayableCategory,
-                omieEntryOrigins,
-                omieDocumentTypes,
-                companyId,
-                customerId: customer?._id,
-                projectId: project?._id,
-                departmentId: department?._id,
-                categoryId: category?._id,
-                checkingAccountId: checkingAccount?._id,
-                emptyRecordsIds,
-                contractId: contract?._id,
-                order,
-                billing: invoice
-              })
+        return (omieAccountPayable.departamentos?.length ? omieAccountPayable.departamentos : [{}]).map(omieAccountPayableDepartment => {
+          const department = departments.find(e => e.externalId === String(omieAccountPayableDepartment.cCodDepartamento))
+          return (omieAccountPayable.cabecTitulo.aCodCateg?.length ? omieAccountPayable.cabecTitulo.aCodCateg : [{ cCodCateg: omieAccountPayable.cabecTitulo.cCodCateg }]).map(omieAccountPayableCategory => {
+            const category = categories.find(e => e.externalId === String(omieAccountPayableCategory.cCodCateg))
+            return titleMapping({
+              omieTitle: omieAccountPayable,
+              omieTitleEntries: omieAccountPayable.lancamentos ?? [],
+              omieTitleDepartment: omieAccountPayableDepartment,
+              omieTitleCategory: omieAccountPayableCategory,
+              omieDocumentTypes,
+              companyId,
+              customerId: customer?._id,
+              projectId: project?._id,
+              departmentId: department?._id,
+              categoryId: category?._id,
+              emptyRecordsIds,
+              contractId: contract?._id,
+              order,
+              billing: invoice
             })
           })
         })
@@ -263,7 +250,6 @@ module.exports = async ({
       const projectsSet = new Set()
       const categoriesSet = new Set()
       const departmentsSet = new Set()
-      const checkingAccountsSet = new Set()
       const contractsSet = new Set()
       const ordersSet = new Set()
       const billingSet = new Set()
@@ -273,10 +259,7 @@ module.exports = async ({
         projectsSet.add(String(omieAccountReceivable.cabecTitulo.cCodProjeto || ''))
         contractsSet.add(String(omieAccountReceivable.cabecTitulo.nCodCtr || ''))
         ordersSet.add(String(omieAccountReceivable.cabecTitulo.nCodOS || ''))
-        billingSet.add(String(omieAccountReceivable.cabecTitulo.nCodNF || ''))
-        omieAccountReceivable.lancamentos.forEach(omieAccountPayableEntry => {
-          checkingAccountsSet.add(String(omieAccountPayableEntry.nCodCC || ''))
-        });
+        billingSet.add(String(omieAccountReceivable.cabecTitulo.nCodNF || ''));
         (omieAccountReceivable.departamentos?.length ? omieAccountReceivable.departamentos : []).forEach(omieAccountReceivableDepartment => {
           departmentsSet.add(String(omieAccountReceivableDepartment.cCodDepartamento || ''))
         });
@@ -289,7 +272,6 @@ module.exports = async ({
       const projectsFilter = [...projectsSet].filter(Boolean)
       const categoriesFilter = [...categoriesSet].filter(Boolean)
       const departmentsFilter = [...departmentsSet].filter(Boolean)
-      const checkingAccountsFilter = [...checkingAccountsSet].filter(Boolean)
       const contractsFilter = [...contractsSet].filter(Boolean)
       const ordersFilter = [...ordersSet].filter(Boolean)
       const billingFilter = [...billingSet].filter(Boolean)
@@ -299,7 +281,6 @@ module.exports = async ({
         projects,
         categories,
         departments,
-        checkingAccounts,
         contracts,
         orders,
         billing
@@ -308,7 +289,6 @@ module.exports = async ({
         projectsFilter.length ? repositories.projects.find({ companyId, externalId: projectsFilter }) : [],
         categoriesFilter.length ? repositories.categories.find({ companyId, externalId: categoriesFilter }) : [],
         departmentsFilter.length ? repositories.departments.find({ companyId, externalId: departmentsFilter }) : [],
-        checkingAccountsFilter.length ? repositories.checkingAccounts.find({ companyId, externalId: checkingAccountsFilter }) : [],
         contractsFilter.length ? repositories.contracts.find({ companyId, externalId: contractsFilter }) : [],
         ordersFilter.length ? repositories.orders.find({ companyId, externalId: ordersFilter }) : [],
         billingFilter.length ? repositories.billing.find({ companyId, externalId: billingFilter }) : []
@@ -320,30 +300,25 @@ module.exports = async ({
         const contract = contracts.find(e => e.externalId === String(omieAccountReceivable.cabecTitulo.nCodCtr))
         const order = orders.find(e => e.customerId === customer._id && e.externalId === String(omieAccountReceivable.cabecTitulo.nCodOS))
         const invoice = billing.find(e => e.customerId === customer._id && e.externalId === String(omieAccountReceivable.cabecTitulo.nCodNF))
-        return (omieAccountReceivable.lancamentos?.length ? omieAccountReceivable.lancamentos : [{}]).map(omieAccountReceivableEntry => {
-          const checkingAccount = checkingAccounts.find(e => e.externalId === String(omieAccountReceivableEntry.nCodCC))
-          return (omieAccountReceivable.departamentos?.length ? omieAccountReceivable.departamentos : [{}]).map(omieAccountReceivableDepartment => {
-            const department = departments.find(e => e.externalId === String(omieAccountReceivableDepartment.cCodDepartamento))
-            return (omieAccountReceivable.cabecTitulo.aCodCateg?.length ? omieAccountReceivable.cabecTitulo.aCodCateg : [{ cCodCateg: omieAccountReceivable.cabecTitulo.cCodCateg }]).map(omieAccountReceivableCategory => {
-              const category = categories.find(e => e.externalId === String(omieAccountReceivableCategory.cCodCateg))
-              return titleMapping({
-                omieTitle: omieAccountReceivable,
-                omieTitleEntry: omieAccountReceivableEntry,
-                omieTitleDepartment: omieAccountReceivableDepartment,
-                omieTitleCategory: omieAccountReceivableCategory,
-                omieEntryOrigins,
-                omieDocumentTypes,
-                companyId,
-                customerId: customer?._id,
-                projectId: project?._id,
-                departmentId: department?._id,
-                categoryId: category?._id,
-                checkingAccountId: checkingAccount?._id,
-                emptyRecordsIds,
-                contractId: contract?._id,
-                order,
-                billing: invoice
-              })
+        return (omieAccountReceivable.departamentos?.length ? omieAccountReceivable.departamentos : [{}]).map(omieAccountReceivableDepartment => {
+          const department = departments.find(e => e.externalId === String(omieAccountReceivableDepartment.cCodDepartamento))
+          return (omieAccountReceivable.cabecTitulo.aCodCateg?.length ? omieAccountReceivable.cabecTitulo.aCodCateg : [{ cCodCateg: omieAccountReceivable.cabecTitulo.cCodCateg }]).map(omieAccountReceivableCategory => {
+            const category = categories.find(e => e.externalId === String(omieAccountReceivableCategory.cCodCateg))
+            return titleMapping({
+              omieTitle: omieAccountReceivable,
+              omieTitleEntries: omieAccountReceivable.lancamentos ?? [],
+              omieTitleDepartment: omieAccountReceivableDepartment,
+              omieTitleCategory: omieAccountReceivableCategory,
+              omieDocumentTypes,
+              companyId,
+              customerId: customer?._id,
+              projectId: project?._id,
+              departmentId: department?._id,
+              categoryId: category?._id,
+              emptyRecordsIds,
+              contractId: contract?._id,
+              order,
+              billing: invoice
             })
           })
         })
@@ -362,6 +337,8 @@ module.exports = async ({
     const omieFinancialMovements = omieFinancialMovementsResult.filter(e => e.detalhes.cStatus !== 'PREVISAO')
 
     if (omieFinancialMovements.length) {
+      const omieEntryOrigins = await omieService.getEntryOrigins(credentials)
+
       const customersSet = new Set()
       const projectsSet = new Set()
       const categoriesSet = new Set()
