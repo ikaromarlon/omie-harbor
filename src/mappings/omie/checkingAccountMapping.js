@@ -11,7 +11,7 @@ module.exports = ({ providerName, helpers: { brDateToISO } }) => ({ omieChecking
       name: omieBank?.nome ?? null
     },
     branch: omieCheckingAccount.codigo_agencia ?? null,
-    number: omieCheckingAccount.numero_conta_corrente ?? null,
+    accountNumber: omieCheckingAccount.numero_conta_corrente ?? null,
     description: omieCheckingAccount.descricao,
     type: {
       code: omieCheckingAccountType?.cCodigo ?? null,

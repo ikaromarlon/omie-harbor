@@ -15,6 +15,7 @@
   "nickName" : null,
   "personType" : null,
   "phones" : [],
+  "checkingAccount" : {},
   "provider" : "Omie",
   "stateRegistration" : null,
   "tags" : []

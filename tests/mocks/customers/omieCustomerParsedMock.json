@@ -29,6 +29,18 @@
       "number": "33220886"
     }
   ],
+  "checkingAccount": {
+    "bank": {
+      "code": "077",
+      "name": "Banco Inter"
+    },
+    "branch": "0001-9",
+    "accountNumber": "3286745-0",
+    "holder": {
+      "cpfcnpj": "12412412412",
+      "name": "Pedrinho"
+    }
+  },
   "cnae": {
     "code": "7112000",
     "description": "Serviços de engenharia"

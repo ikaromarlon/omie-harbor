@@ -51,7 +51,7 @@ describe('CheckingAccount Mapping', () => {
   it('Should return mapped checkingAccount without number', () => {
     const { sut, omieCheckingAccountMock, omieBanksMock, omieCheckingAccountTypesMock, companyIdMock } = makeSut()
     const result = sut({ omieCheckingAccount: { ...omieCheckingAccountMock, numero_conta_corrente: null }, omieBanks: omieBanksMock, omieCheckingAccountTypes: omieCheckingAccountTypesMock, companyId: companyIdMock })
-    expect(result).toEqual({ ...omieCheckingAccountParsedMock, number: null })
+    expect(result).toEqual({ ...omieCheckingAccountParsedMock, accountNumber: null })
   })
 
   it('Should return mapped checkingAccount without initialBalance', () => {

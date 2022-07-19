@@ -6,6 +6,7 @@ module.exports = async ({
   companyId,
   omieMappings,
   repositories,
+  omieBanks,
   omieCnae,
   emptyRecordsIds,
   makeEmptyRecord,
@@ -41,11 +42,11 @@ module.exports = async ({
     }
   }
 
-  const updateCustomers = async ({ credentials, companyId, startDate, endDate, customerMapping, customersRepository }) => {
+  const updateCustomers = async ({ credentials, companyId, startDate, endDate, omieCnae, omieBanks, customerMapping, customersRepository }) => {
     const omieCustomers = await omieService.getCustomers(credentials, { startDate, endDate })
     if (omieCustomers.length) {
       const omieActivities = await omieService.getActivities(credentials)
-      const customers = omieCustomers.map(omieCustomer => customerMapping({ omieCustomer, omieActivities, omieCnae, companyId }))
+      const customers = omieCustomers.map(omieCustomer => customerMapping({ omieCustomer, omieActivities, omieCnae, omieBanks, companyId }))
       if (customers.length) {
         const emptyRecord = await makeEmptyRecord(emptyRecordsIds.customer, customers[0])
         customers.push(emptyRecord)
@@ -72,10 +73,9 @@ module.exports = async ({
     }
   }
 
-  const updateCheckingAccounts = async ({ credentials, companyId, startDate, endDate, checkingAccountMapping, checkingAccountsRepository }) => {
+  const updateCheckingAccounts = async ({ credentials, companyId, startDate, endDate, omieBanks, checkingAccountMapping, checkingAccountsRepository }) => {
     const omieCheckingAccounts = await omieService.getCheckingAccounts(credentials, { startDate, endDate })
     if (omieCheckingAccounts.length) {
-      const omieBanks = await omieService.getBanks(credentials)
       const omieCheckingAccountTypes = await omieService.getCheckingAccountTypes(credentials)
       const checkingAccounts = omieCheckingAccounts.map(omieCheckingAccount => checkingAccountMapping({ omieCheckingAccount, omieBanks, omieCheckingAccountTypes, companyId }))
       const emptyRecord = await makeEmptyRecord(emptyRecordsIds.checkingAccount, checkingAccounts[0])
@@ -322,6 +322,7 @@ module.exports = async ({
     startDate,
     endDate,
     omieCnae,
+    omieBanks,
     customerMapping: omieMappings.customer,
     customersRepository: repositories.customers
   })
@@ -341,6 +342,7 @@ module.exports = async ({
     companyId,
     startDate,
     endDate,
+    omieBanks,
     checkingAccountMapping: omieMappings.checkingAccount,
     checkingAccountsRepository: repositories.checkingAccounts
   })
