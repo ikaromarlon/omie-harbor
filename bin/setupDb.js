@@ -68,13 +68,13 @@ module.exports = async (arg, config) => {
 
     console.log('Updating accounts-payable indexes...')
     await db.collection('accounts-payable').createIndexes([
-      { name: 'companyId_customerId_titleId_externalId_entryCode_departmentId_categoryId', key: { companyId: 1, customerId: 1, titleId: 1, externalId: 1, entryCode: 1, departmentId: 1, categoryId: 1 }, unique: true }
+      { name: 'companyId_customerId_titleId_externalId_departmentId_categoryId', key: { companyId: 1, customerId: 1, titleId: 1, externalId: 1, departmentId: 1, categoryId: 1 }, unique: true }
     ])
     console.log('done!')
 
     console.log('Updating accounts-receivable indexes...')
     await db.collection('accounts-receivable').createIndexes([
-      { name: 'companyId_customerId_titleId_externalId_entryCode_departmentId_categoryId', key: { companyId: 1, customerId: 1, titleId: 1, externalId: 1, entryCode: 1, departmentId: 1, categoryId: 1 }, unique: true }
+      { name: 'companyId_customerId_titleId_externalId_departmentId_categoryId', key: { companyId: 1, customerId: 1, titleId: 1, externalId: 1, departmentId: 1, categoryId: 1 }, unique: true }
     ])
     console.log('done!')
 
