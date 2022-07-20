@@ -7,12 +7,12 @@ module.exports = () => {
   return {
     sendCompanyToIngestionQueue: async (companyId) => SQS.sendMessage({
       QueueUrl: ingestionQueueUrl,
-      MessageGroupId: companyId,
+      MessageGroupId: `${config.services.omie.providerName}-ingestion`,
       MessageBody: JSON.stringify({ companyId })
     }).promise(),
     sendCompanyToDataExportQueue: async (companyId) => SQS.sendMessage({
       QueueUrl: dataExportQueueUrl,
-      MessageGroupId: companyId,
+      MessageGroupId: 'data-export',
       MessageBody: JSON.stringify({ companyId })
     }).promise()
   }

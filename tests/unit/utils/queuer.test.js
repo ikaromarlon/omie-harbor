@@ -11,7 +11,12 @@ jest.mock('aws-sdk', () => ({
 }))
 
 jest.mock('../../../src/config', () => ({
-  SQS: { ingestionQueueUrl: 'https://the-ingestionQueueUrl', dataExportQueueUrl: 'https://the-dataExportQueueUrl' }
+  SQS: { ingestionQueueUrl: 'https://the-ingestionQueueUrl', dataExportQueueUrl: 'https://the-dataExportQueueUrl' },
+  services: {
+    omie: {
+      providerName: 'Omie'
+    }
+  }
 }))
 
 const makeSut = () => {
@@ -30,7 +35,7 @@ describe('Queuer Adapter', () => {
       const result = await sut.sendCompanyToIngestionQueue(companyIdMock)
       expect(mockSendMessage).toHaveBeenCalledWith({
         QueueUrl: 'https://the-ingestionQueueUrl',
-        MessageGroupId: companyIdMock,
+        MessageGroupId: 'Omie-ingestion',
         MessageBody: JSON.stringify({ companyId: companyIdMock })
       })
       expect(result).toBe(true)
@@ -43,7 +48,7 @@ describe('Queuer Adapter', () => {
       const result = await sut.sendCompanyToDataExportQueue(companyIdMock)
       expect(mockSendMessage).toHaveBeenCalledWith({
         QueueUrl: 'https://the-dataExportQueueUrl',
-        MessageGroupId: companyIdMock,
+        MessageGroupId: 'data-export',
         MessageBody: JSON.stringify({ companyId: companyIdMock })
       })
       expect(result).toBe(true)
