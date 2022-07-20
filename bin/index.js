@@ -16,7 +16,7 @@ async function bin () {
     }
   }
 
-  const sliceIndex = process.argv[2].trim() === '--' ? 3 : 2
+  const sliceIndex = process.argv[2]?.trim() === '--' ? 3 : 2
   const args = [...new Set(process.argv.slice(sliceIndex).map(a => a.trim()))]
 
   console.log(config.bin.layout.starRuler)

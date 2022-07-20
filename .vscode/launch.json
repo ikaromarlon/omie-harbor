@@ -49,12 +49,28 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Run bin",
+      "name": "Run bin - DEV",
       "program": "${workspaceFolder}/bin/index.js",
       "cwd": "${workspaceFolder}",
       "localRoot": "${workspaceFolder}",
       "console": "integratedTerminal",
-      "args": []
+      "args": [],
+      "env": {
+        "STAGE": "dev"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run bin - PRD",
+      "program": "${workspaceFolder}/bin/index.js",
+      "cwd": "${workspaceFolder}",
+      "localRoot": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [],
+      "env": {
+        "STAGE": "prd"
+      }
     }
   ]
 }
