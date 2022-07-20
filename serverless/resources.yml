@@ -7,9 +7,20 @@ Resources:
       FifoQueue: true
       ContentBasedDeduplication: true
       DeduplicationScope: queue
-      MessageRetentionPeriod: 43200 # 12h
+      MessageRetentionPeriod: 60 # 1min
       ReceiveMessageWaitTimeSeconds: 20
       VisibilityTimeout: ${self:functions.ingestionPerformer.timeout}
+
+  DataProcessingQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: ${self:custom.basename}-dataProcessing-queue.fifo
+      FifoQueue: true
+      ContentBasedDeduplication: true
+      DeduplicationScope: queue
+      MessageRetentionPeriod: 60 # 1min
+      ReceiveMessageWaitTimeSeconds: 20
+      VisibilityTimeout: ${self:functions.dataProcessing.timeout}
 
   DataExportQueue:
     Type: AWS::SQS::Queue
@@ -18,7 +29,7 @@ Resources:
       FifoQueue: true
       ContentBasedDeduplication: true
       DeduplicationScope: queue
-      MessageRetentionPeriod: 43200 # 12h
+      MessageRetentionPeriod: 60 # 1min
       ReceiveMessageWaitTimeSeconds: 20
       VisibilityTimeout: ${self:functions.dataExport.timeout}
 
@@ -36,6 +47,14 @@ Outputs:
     Value: !Ref IngestionQueue
     Export:
       Name: ${self:custom.basename}:IngestionQueueUrl
+  DataProcessingQueueArn:
+    Value: !GetAtt DataProcessingQueue.Arn
+    Export:
+      Name: ${self:custom.basename}:DataProcessingQueueArn
+  DataProcessingQueueUrl:
+    Value: !Ref DataProcessingQueue
+    Export:
+      Name: ${self:custom.basename}:DataProcessingQueueUrl
   DataExportBucketArn:
     Value: !GetAtt DataExportBucket.Arn
     Export:
