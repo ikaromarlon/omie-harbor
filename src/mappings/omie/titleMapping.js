@@ -22,12 +22,12 @@ module.exports = ({ providerName, helpers: { brDateToISO, multiply } }) => ({
   const omieDocumentType = omieDocumentTypes.find(e => e.codigo === omieTitle.cabecTitulo.cTipo)
 
   const values = omieTitleEntries.reduce((acc, omieTitleEntry) => {
-    acc.balanceDue += (omieTitle.cabecTitulo.nValorTitulo - omieTitleEntry.nValLanc)
+    acc.balanceDue -= omieTitleEntry.nValLanc
     acc.discounts += omieTitleEntry.nDesconto
     acc.fees += omieTitleEntry.nJuros
     acc.paymentFine += omieTitleEntry.nMulta
     return acc
-  }, { balanceDue: 0, discounts: 0, fees: 0, paymentFine: 0 })
+  }, { balanceDue: omieTitle.cabecTitulo.nValorTitulo, discounts: 0, fees: 0, paymentFine: 0 })
 
   return {
     externalId: String(omieTitle.cabecTitulo.nCodTitulo),
@@ -60,7 +60,7 @@ module.exports = ({ providerName, helpers: { brDateToISO, multiply } }) => ({
     grossValue: multiply(multiply(omieTitle.cabecTitulo.nValorTitulo, depPerc), catPerc),
     netValue: multiply(multiply(omieTitle.cabecTitulo.nValorTitulo - values.discounts - values.paymentFine - values.fees, depPerc), catPerc),
     discounts: multiply(multiply(values.discounts, depPerc), catPerc),
-    balanceDue: values.balanceDue,
+    balanceDue: multiply(multiply(values.balanceDue), catPerc),
     paymentFine: multiply(multiply(values.paymentFine, depPerc), catPerc),
     fees: multiply(multiply(values.fees, depPerc), catPerc),
     taxAmount: multiply(multiply((omieTitle.cabecTitulo.nValorIR ?? 0) + (omieTitle.cabecTitulo.nValorPIS ?? 0) + (omieTitle.cabecTitulo.nValorCOFINS ?? 0) + (omieTitle.cabecTitulo.nValorCSLL ?? 0) + (omieTitle.cabecTitulo.nValorICMS ?? 0) + (omieTitle.cabecTitulo.nValorISS ?? 0), depPerc), catPerc),

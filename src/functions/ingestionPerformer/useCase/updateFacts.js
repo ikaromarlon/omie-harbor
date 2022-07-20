@@ -238,7 +238,7 @@ module.exports = async ({
         const emptyRecord = await makeEmptyRecord(emptyRecordsIds.accountPayable, accountsPayable[0])
         accountsPayable.push(emptyRecord)
       }
-      await repositories.accountsPayable.deleteOldAndCreateNew(['companyId', 'customerId', 'titleId'], accountsPayable)
+      await repositories.accountsPayable.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'titleId'], accountsPayable)
     }
   }
 
@@ -328,7 +328,7 @@ module.exports = async ({
         const emptyRecord = await makeEmptyRecord(emptyRecordsIds.accountReceivable, accountsReceivable[0])
         accountsReceivable.push(emptyRecord)
       }
-      await repositories.accountsReceivable.deleteOldAndCreateNew(['companyId', 'customerId', 'titleId'], accountsReceivable)
+      await repositories.accountsReceivable.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'titleId'], accountsReceivable)
     }
   }
 
@@ -437,7 +437,7 @@ module.exports = async ({
 
       const emptyRecord = await makeEmptyRecord(emptyRecordsIds.financialMovement, financialMovements[0])
       financialMovements.push(emptyRecord)
-      await repositories.financialMovements.deleteOldAndCreateNew(['companyId', 'customerId', 'movementId'], financialMovements)
+      await repositories.financialMovements.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'movementId'], financialMovements)
     }
   }
 
