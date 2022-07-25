@@ -60,7 +60,7 @@ module.exports = ({ providerName, helpers: { brDateToISO, multiply } }) => ({
     grossValue: multiply(multiply(omieTitle.cabecTitulo.nValorTitulo, depPerc), catPerc),
     netValue: multiply(multiply(omieTitle.cabecTitulo.nValorTitulo - values.discounts - values.paymentFine - values.fees, depPerc), catPerc),
     discounts: multiply(multiply(values.discounts, depPerc), catPerc),
-    balanceDue: multiply(multiply(values.balanceDue), catPerc),
+    balanceDue: multiply(multiply(values.balanceDue, depPerc), catPerc),
     paymentFine: multiply(multiply(values.paymentFine, depPerc), catPerc),
     fees: multiply(multiply(values.fees, depPerc), catPerc),
     taxAmount: multiply(multiply((omieTitle.cabecTitulo.nValorIR ?? 0) + (omieTitle.cabecTitulo.nValorPIS ?? 0) + (omieTitle.cabecTitulo.nValorCOFINS ?? 0) + (omieTitle.cabecTitulo.nValorCSLL ?? 0) + (omieTitle.cabecTitulo.nValorICMS ?? 0) + (omieTitle.cabecTitulo.nValorISS ?? 0), depPerc), catPerc),
