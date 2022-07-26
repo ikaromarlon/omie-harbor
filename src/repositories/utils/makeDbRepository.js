@@ -1,19 +1,28 @@
 const config = require('../../config')
 const { uuid } = require('../../utils/helpers')
 
-module.exports = (name, db, customOperations = () => ({})) => {
+module.exports = ({
+  name,
+  db,
+  properties = {},
+  customOperations = () => ({})
+}) => {
   const collection = db.collection(name)
+
+  const parseFilter = (filter) => Object.entries(filter).reduce((acc, [k, v]) => {
+    acc[k] = v
+    if (k.indexOf('$') !== 0) { /** does not contains a special mongodb operator */
+      if (Array.isArray(v)) {
+        acc[k] = v.length > 1 ? { $in: v } : v[0]
+      }
+    }
+    return acc
+  }, {})
+
   return {
+    name,
     find: async (filter) => {
-      const parsedFilter = Object.entries(filter).reduce((acc, [k, v]) => {
-        acc[k] = v
-        if (k.indexOf('$') !== 0) { // does not contains a special mongodb operator
-          if (Array.isArray(v)) {
-            acc[k] = v.length > 1 ? { $in: v } : v[0]
-          }
-        }
-        return acc
-      }, {})
+      const parsedFilter = parseFilter(filter)
       return collection.find(parsedFilter).toArray()
     },
     findOne: async (filter) => collection.findOne(filter),
@@ -105,6 +114,11 @@ module.exports = (name, db, customOperations = () => ({})) => {
       }
       return response
     },
-    ...customOperations(collection)
+    deleteMany: async (filter) => {
+      const parsedFilter = parseFilter(filter)
+      return collection.deleteMany(parsedFilter)
+    },
+    ...customOperations(collection),
+    ...properties
   }
 }
