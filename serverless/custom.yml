@@ -8,6 +8,20 @@ basename: ${self:service}-${self:provider.stage}
 sesRegion: us-east-1
 appDomain: fullbpo.app
 
+httpCors:
+  origin: '*'
+  headers:
+    - Content-Type
+    - Cache-Control
+    - X-Api-Key
+  allowCredentials: false
+httpPrivate: false
+functionsWarmUpScheduleEvent:
+  description: Function warm up each five minutes
+  rate: rate(5 minutes)
+  enabled: ${self:custom.functionsWarmUpScheduleEventEnabled.${self:provider.stage}}
+  input: '{"warmUp":true}'
+
 # serverless config by environment
 region:
   dev: us-east-1
@@ -18,6 +32,9 @@ zones:
   prd:
     - ${self:custom.region.${self:provider.stage}}a
     - ${self:custom.region.${self:provider.stage}}b
+functionsWarmUpScheduleEventEnabled:
+  dev: false
+  prd: false
 ingestionDispatcherSchedule1:
   dev:
     rate: cron(0 2 ? * * *) # everyday at 02:00 UTC (23:00 BR)

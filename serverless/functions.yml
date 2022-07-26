@@ -63,3 +63,17 @@ dataExport:
   package:
     patterns:
       - 'src/functions/dataExport/**'
+
+deleteDataByCompany:
+  handler: src/index.handler
+  iamRoleStatementsName: ${self:custom.basename}-deleteDataByCompany-role
+  events:
+    - schedule: ${self:custom.functionsWarmUpScheduleEvent}
+    - http:
+        path: company/{id}/delete-data
+        method: POST
+        cors: ${self:custom.httpCors}
+        private: ${self:custom.httpPrivate}
+  package:
+    patterns:
+      - 'src/functions/deleteDataByCompany/**'
