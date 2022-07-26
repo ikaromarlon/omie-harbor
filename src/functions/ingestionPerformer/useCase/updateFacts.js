@@ -117,7 +117,7 @@ module.exports = async ({
         const customer = customers.find(e => e.externalId === String(omieInvoice.Cabecalho.nCodigoCliente))
         const project = projects.find(e => e.externalId === String(omieInvoice.Adicionais.nCodigoProjeto))
         const contract = contracts.find(e => e.externalId === String(omieInvoice.OrdemServico.nCodigoContrato))
-        const serviceOrders = orders.filter(e => e.customerId === customer._id && e.externalId === String(omieInvoice.OrdemServico.nCodigoOS) && e.type === 'OS')
+        const serviceOrders = orders.filter(e => e.customerId === customer?._id && e.externalId === String(omieInvoice.OrdemServico.nCodigoOS) && e.type === 'OS')
         return (omieInvoice.OrdemServico.Departamentos?.length ? omieInvoice.OrdemServico.Departamentos : [{}]).map(omieInvoiceDepartment => {
           const department = departments.find(e => e.externalId === String(omieInvoiceDepartment.cCodigoDepartamento))
           return omieInvoice.ListaServicos.map(omieInvoiceItem => {
@@ -208,8 +208,8 @@ module.exports = async ({
         const customer = customers.find(e => e.externalId === String(omieAccountPayable.cabecTitulo.nCodCliente))
         const project = projects.find(e => e.externalId === String(omieAccountPayable.cabecTitulo.cCodProjeto))
         const contract = contracts.find(e => e.externalId === String(omieAccountPayable.cabecTitulo.nCodCtr))
-        const order = orders.find(e => e.customerId === customer._id && e.externalId === String(omieAccountPayable.cabecTitulo.nCodOS))
-        const invoice = billing.find(e => e.customerId === customer._id && e.externalId === String(omieAccountPayable.cabecTitulo.nCodNF))
+        const order = orders.find(e => e.customerId === customer?._id && e.externalId === String(omieAccountPayable.cabecTitulo.nCodOS))
+        const invoice = billing.find(e => e.customerId === customer?._id && e.externalId === String(omieAccountPayable.cabecTitulo.nCodNF))
         return (omieAccountPayable.departamentos?.length ? omieAccountPayable.departamentos : [{}]).map(omieAccountPayableDepartment => {
           const department = departments.find(e => e.externalId === String(omieAccountPayableDepartment.cCodDepartamento))
           return (omieAccountPayable.cabecTitulo.aCodCateg?.length ? omieAccountPayable.cabecTitulo.aCodCateg : [{ cCodCateg: omieAccountPayable.cabecTitulo.cCodCateg }]).map(omieAccountPayableCategory => {
@@ -298,8 +298,8 @@ module.exports = async ({
         const customer = customers.find(e => e.externalId === String(omieAccountReceivable.cabecTitulo.nCodCliente))
         const project = projects.find(e => e.externalId === String(omieAccountReceivable.cabecTitulo.cCodProjeto))
         const contract = contracts.find(e => e.externalId === String(omieAccountReceivable.cabecTitulo.nCodCtr))
-        const order = orders.find(e => e.customerId === customer._id && e.externalId === String(omieAccountReceivable.cabecTitulo.nCodOS))
-        const invoice = billing.find(e => e.customerId === customer._id && e.externalId === String(omieAccountReceivable.cabecTitulo.nCodNF))
+        const order = orders.find(e => e.customerId === customer?._id && e.externalId === String(omieAccountReceivable.cabecTitulo.nCodOS))
+        const invoice = billing.find(e => e.customerId === customer?._id && e.externalId === String(omieAccountReceivable.cabecTitulo.nCodNF))
         return (omieAccountReceivable.departamentos?.length ? omieAccountReceivable.departamentos : [{}]).map(omieAccountReceivableDepartment => {
           const department = departments.find(e => e.externalId === String(omieAccountReceivableDepartment.cCodDepartamento))
           return (omieAccountReceivable.cabecTitulo.aCodCateg?.length ? omieAccountReceivable.cabecTitulo.aCodCateg : [{ cCodCateg: omieAccountReceivable.cabecTitulo.cCodCateg }]).map(omieAccountReceivableCategory => {
