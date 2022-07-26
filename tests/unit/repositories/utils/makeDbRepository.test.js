@@ -6,11 +6,11 @@ const dbName = 'test'
 const collectionName = 'test'
 
 const makeSut = () => {
-  const insertMocksForFindMethods = async () => db.collection(collectionName).insertMany([{ _id: '000001', name: 'test_1' }, { _id: '000002', name: 'test_2' }, { _id: '000003', name: 'test_3' }])
+  const insertMocksMethods = async () => db.collection(collectionName).insertMany([{ _id: '000001', name: 'test_1' }, { _id: '000002', name: 'test_2' }, { _id: '000003', name: 'test_3' }])
 
   return {
-    sut: makeDbRepository(collectionName, db),
-    insertMocksForFindMethods
+    sut: makeDbRepository({ name: collectionName, db }),
+    insertMocksMethods
   }
 }
 
@@ -23,8 +23,8 @@ describe('SetupRepository Util', () => {
 
   describe('Find method', () => {
     it('Should call find with an empty filter', async () => {
-      const { sut, insertMocksForFindMethods } = makeSut()
-      await insertMocksForFindMethods()
+      const { sut, insertMocksMethods } = makeSut()
+      await insertMocksMethods()
       const result = await sut.find({})
       expect(result).toBeTruthy()
       expect(result.length).toBeGreaterThanOrEqual(3)
@@ -33,8 +33,8 @@ describe('SetupRepository Util', () => {
       expect(result[2].name).toBe('test_3')
     })
     it('Should call find with a simple filter', async () => {
-      const { sut, insertMocksForFindMethods } = makeSut()
-      await insertMocksForFindMethods()
+      const { sut, insertMocksMethods } = makeSut()
+      await insertMocksMethods()
       const filterMock = { _id: '000002' }
       const result = await sut.find(filterMock)
       expect(result).toBeTruthy()
@@ -42,8 +42,8 @@ describe('SetupRepository Util', () => {
       expect(result[0].name).toBe('test_2')
     })
     it('Should call find with a complex filter: field with a list of single value (do not use $in)', async () => {
-      const { sut, insertMocksForFindMethods } = makeSut()
-      await insertMocksForFindMethods()
+      const { sut, insertMocksMethods } = makeSut()
+      await insertMocksMethods()
       const filterMock = { _id: ['000002'] }
       const result = await sut.find(filterMock)
       expect(result).toBeTruthy()
@@ -51,8 +51,8 @@ describe('SetupRepository Util', () => {
       expect(result[0].name).toBe('test_2')
     })
     it('Should call find with a complex filter: field with a list of values (use $in)', async () => {
-      const { sut, insertMocksForFindMethods } = makeSut()
-      await insertMocksForFindMethods()
+      const { sut, insertMocksMethods } = makeSut()
+      await insertMocksMethods()
       const filterMock = { _id: ['000001', '000003'] }
       const result = await sut.find(filterMock)
       expect(result).toBeTruthy()
@@ -64,8 +64,8 @@ describe('SetupRepository Util', () => {
 
   describe('FindOne method', () => {
     it('Should call findOne and return data of previous inserted records', async () => {
-      const { sut, insertMocksForFindMethods } = makeSut()
-      await insertMocksForFindMethods()
+      const { sut, insertMocksMethods } = makeSut()
+      await insertMocksMethods()
       const result = await sut.findOne({ _id: '000001' })
       expect(result).toBeTruthy()
       expect(result._id).toBe('000001')
@@ -170,6 +170,16 @@ describe('SetupRepository Util', () => {
       expect(Object.keys(result)).toHaveLength(2)
       expect(result.deleted).toBe(0)
       expect(result.created).toBe(0)
+    })
+  })
+
+  describe('deleteMany method', () => {
+    it('Should call deleteMany and return deleted count', async () => {
+      const { sut, insertMocksMethods } = makeSut()
+      await insertMocksMethods()
+      const result = await sut.deleteMany({ _id: '000001' })
+      expect(result).toBeTruthy()
+      expect(result.deletedCount).toBe(1)
     })
   })
 })
