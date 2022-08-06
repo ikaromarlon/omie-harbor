@@ -1,7 +1,7 @@
 require('dotenv').config({ path: `.env.${process.env.STAGE || 'dev'}` })
 const appConfig = require('../src/config')
 const batch = {
-  setupDb: require('./setupDb')
+  createIndexes: require('./createIndexes')
 }
 
 async function bin () {
@@ -33,7 +33,7 @@ async function bin () {
 
     const threads = args.length ? args : threadList
 
-    for (const thread of threads) await batch[thread.replace('--', '')](thread, config); console.log('')
+    for (const thread of threads) await batch[thread.replace('--', '')]({ config }); console.log('')
 
     console.log(config.bin.layout.dashRuler)
     console.log('Process completed successfully!')
