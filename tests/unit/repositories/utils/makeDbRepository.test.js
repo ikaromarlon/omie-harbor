@@ -35,8 +35,8 @@ describe('SetupRepository Util', () => {
     it('Should call find with a simple filter', async () => {
       const { sut, insertMocksMethods } = makeSut()
       await insertMocksMethods()
-      const filterMock = { _id: '000002' }
-      const result = await sut.find(filterMock)
+      const mockFilter = { _id: '000002' }
+      const result = await sut.find(mockFilter)
       expect(result).toBeTruthy()
       expect(result).toHaveLength(1)
       expect(result[0].name).toBe('test_2')
@@ -44,8 +44,8 @@ describe('SetupRepository Util', () => {
     it('Should call find with a complex filter: field with a list of single value (do not use $in)', async () => {
       const { sut, insertMocksMethods } = makeSut()
       await insertMocksMethods()
-      const filterMock = { _id: ['000002'] }
-      const result = await sut.find(filterMock)
+      const mockFilter = { _id: ['000002'] }
+      const result = await sut.find(mockFilter)
       expect(result).toBeTruthy()
       expect(result).toHaveLength(1)
       expect(result[0].name).toBe('test_2')
@@ -53,8 +53,8 @@ describe('SetupRepository Util', () => {
     it('Should call find with a complex filter: field with a list of values (use $in)', async () => {
       const { sut, insertMocksMethods } = makeSut()
       await insertMocksMethods()
-      const filterMock = { _id: ['000001', '000003'] }
-      const result = await sut.find(filterMock)
+      const mockFilter = { _id: ['000001', '000003'] }
+      const result = await sut.find(mockFilter)
       expect(result).toBeTruthy()
       expect(result).toHaveLength(2)
       expect(result[0].name).toBe('test_1')

@@ -1,49 +1,49 @@
 const makeUseCase = require('../../../../src/functions/ingestionDispatcher/useCase')
-const { omieCompaniesSavedMock } = require('../../../mocks')
+const { mockSavedOmieCompanies } = require('../../../mocks')
 
 const makeSut = () => {
-  const repositoriesMock = {
-    companies: { find: jest.fn(async () => Promise.resolve(omieCompaniesSavedMock)) }
+  const mockRepositories = {
+    companies: { find: jest.fn(async () => Promise.resolve(mockSavedOmieCompanies)) }
   }
 
-  const loggerMock = {
+  const mockLogger = {
     info: jest.fn(() => null)
   }
 
-  const queuerMock = {
+  const mockQueuer = {
     sendCompanyToIngestionQueue: jest.fn(async () => Promise.resolve('https://the-queuer-url/data.json'))
   }
 
   const useCase = makeUseCase({
-    repositories: repositoriesMock,
-    queuer: queuerMock,
-    logger: loggerMock
+    repositories: mockRepositories,
+    queuer: mockQueuer,
+    logger: mockLogger
   })
 
   return {
     sut: useCase,
-    repositoriesMock,
-    loggerMock,
-    queuerMock
+    mockRepositories,
+    mockLogger,
+    mockQueuer
   }
 }
 
 describe('ingestionDispatcher UseCase', () => {
   it('Should return success', async () => {
-    const { sut, repositoriesMock, queuerMock, loggerMock } = makeSut()
+    const { sut, mockRepositories, mockQueuer, mockLogger } = makeSut()
     const result = await sut()
-    expect(repositoriesMock.companies.find).toHaveBeenCalledWith({ isActive: true })
-    expect(queuerMock.sendCompanyToIngestionQueue).toHaveBeenCalledWith(omieCompaniesSavedMock[0]._id)
-    expect(loggerMock.info).toHaveBeenCalledTimes(1)
+    expect(mockRepositories.companies.find).toHaveBeenCalledWith({ isActive: true })
+    expect(mockQueuer.sendCompanyToIngestionQueue).toHaveBeenCalledWith(mockSavedOmieCompanies[0]._id)
+    expect(mockLogger.info).toHaveBeenCalledTimes(1)
     expect(result).toEqual({ success: true })
   })
 
   it('Should return success but not call queuer.sendCompanyToIngestionQueue', async () => {
-    const { sut, queuerMock, repositoriesMock, loggerMock } = makeSut()
-    repositoriesMock.companies.find.mockResolvedValueOnce([])
+    const { sut, mockQueuer, mockRepositories, mockLogger } = makeSut()
+    mockRepositories.companies.find.mockResolvedValueOnce([])
     const result = await sut()
-    expect(queuerMock.sendCompanyToIngestionQueue).toHaveBeenCalledTimes(0)
-    expect(loggerMock.info).toHaveBeenCalledTimes(1)
+    expect(mockQueuer.sendCompanyToIngestionQueue).toHaveBeenCalledTimes(0)
+    expect(mockLogger.info).toHaveBeenCalledTimes(1)
     expect(result).toEqual({ success: true })
   })
 })

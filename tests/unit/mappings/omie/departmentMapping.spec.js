@@ -1,34 +1,34 @@
 const { services: { omie: { providerName } } } = require('../../../../src/config')
 const makeDepartmentMapping = require('../../../../src/mappings/omie/departmentMapping')
 const {
-  omieDepartmentsResponseMock,
-  omieDepartmentParsedMock,
-  omieDepartmentParentParsedMock
+  mockOmieDepartmentsResponse,
+  mockParsedOmieDepartment,
+  mockParsedOmieParentDepartment
 } = require('../../../mocks')
 
 const makeSut = () => {
-  const omieDepartmentMock = omieDepartmentsResponseMock.departamentos[1]
-  const omieDepartmentParentMock = omieDepartmentsResponseMock.departamentos[2]
-  const companyIdMock = '25c176b6-b200-4575-9217-e23c6105163c'
+  const mockOmieDepartment = mockOmieDepartmentsResponse.departamentos[1]
+  const mockOmieDepartmentParent = mockOmieDepartmentsResponse.departamentos[2]
+  const mockCompanyId = '25c176b6-b200-4575-9217-e23c6105163c'
 
   return {
     sut: makeDepartmentMapping({ providerName }),
-    omieDepartmentMock,
-    omieDepartmentParentMock,
-    companyIdMock
+    mockOmieDepartment,
+    mockOmieDepartmentParent,
+    mockCompanyId
   }
 }
 
 describe('Department Mapping', () => {
   it('Should return mapped department successfully', () => {
-    const { sut, omieDepartmentMock, companyIdMock } = makeSut()
-    const result = sut({ omieDepartment: omieDepartmentMock, companyId: companyIdMock })
-    expect(result).toEqual(omieDepartmentParsedMock)
+    const { sut, mockOmieDepartment, mockCompanyId } = makeSut()
+    const result = sut({ omieDepartment: mockOmieDepartment, companyId: mockCompanyId })
+    expect(result).toEqual(mockParsedOmieDepartment)
   })
 
   it('Should return mapped parent department successfully', () => {
-    const { sut, omieDepartmentParentMock, companyIdMock } = makeSut()
-    const result = sut({ omieDepartment: omieDepartmentParentMock, companyId: companyIdMock })
-    expect(result).toEqual(omieDepartmentParentParsedMock)
+    const { sut, mockOmieDepartmentParent, mockCompanyId } = makeSut()
+    const result = sut({ omieDepartment: mockOmieDepartmentParent, companyId: mockCompanyId })
+    expect(result).toEqual(mockParsedOmieParentDepartment)
   })
 })

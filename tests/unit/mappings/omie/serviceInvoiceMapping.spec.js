@@ -2,33 +2,33 @@ const { services: { omie: { providerName } } } = require('../../../../src/config
 const helpers = require('../../../../src/utils/helpers')
 const makeServiceInvoiceMapping = require('../../../../src/mappings/omie/serviceInvoiceMapping')
 const {
-  emptyRecordsIdsMock,
-  omieServiceInvoicesResponseMock,
-  omieServiceInvoiceParsedMock
+  mockEmptyRecordsIds,
+  mockOmieServiceInvoicesResponse,
+  mockParsedOmieServiceInvoice
 } = require('../../../mocks')
 
 const makeSut = () => {
-  const omieServiceInvoiceMock = omieServiceInvoicesResponseMock.nfseEncontradas[0]
-  const orderMock = { _id: '854806eb-b46f-476d-9d3c-88e1bdf17c95', orderNumber: '15', type: 'OS' }
-  const companyIdMock = '25c176b6-b200-4575-9217-e23c6105163c'
-  const customerIdMock = '3a58bc83-dec0-436e-a98c-20fba8f58b56'
-  const projectIdMock = '3fbf0118-b5f9-48b0-8269-40cf0fd28d55'
-  const departmentIdMock = '5f008bd0-cc25-4433-9cff-a5d9fdd79642'
-  const productServiceIdMock = 'e46a6ab1-dd50-4579-b11d-d939fd35bcf3'
-  const categoryIdMock = '44d50267-4bc1-42bc-923a-00df2968a2be'
-  const contractIdMock = '9f9bdfdd-2851-471c-b9e9-a798a3090d93'
+  const mockOmieServiceInvoice = mockOmieServiceInvoicesResponse.nfseEncontradas[0]
+  const mockOrder = { _id: '854806eb-b46f-476d-9d3c-88e1bdf17c95', orderNumber: '15', type: 'OS' }
+  const mockCompanyId = '25c176b6-b200-4575-9217-e23c6105163c'
+  const mockCustomerId = '3a58bc83-dec0-436e-a98c-20fba8f58b56'
+  const mockProjectId = '3fbf0118-b5f9-48b0-8269-40cf0fd28d55'
+  const mockDepartmentId = '5f008bd0-cc25-4433-9cff-a5d9fdd79642'
+  const mockProductServiceId = 'e46a6ab1-dd50-4579-b11d-d939fd35bcf3'
+  const mockCategoryId = '44d50267-4bc1-42bc-923a-00df2968a2be'
+  const mockContractId = '9f9bdfdd-2851-471c-b9e9-a798a3090d93'
 
   return {
     sut: makeServiceInvoiceMapping({ providerName, helpers }),
-    omieServiceInvoiceMock,
-    orderMock,
-    companyIdMock,
-    customerIdMock,
-    projectIdMock,
-    departmentIdMock,
-    productServiceIdMock,
-    categoryIdMock,
-    contractIdMock
+    mockOmieServiceInvoice,
+    mockOrder,
+    mockCompanyId,
+    mockCustomerId,
+    mockProjectId,
+    mockDepartmentId,
+    mockProductServiceId,
+    mockCategoryId,
+    mockContractId
   }
 }
 
@@ -36,80 +36,80 @@ describe('Service Invoice Mapping', () => {
   it('Should return mapped service invoice successfully', () => {
     const {
       sut,
-      omieServiceInvoiceMock,
-      orderMock,
-      companyIdMock,
-      customerIdMock,
-      projectIdMock,
-      departmentIdMock,
-      productServiceIdMock,
-      categoryIdMock,
-      contractIdMock
+      mockOmieServiceInvoice,
+      mockOrder,
+      mockCompanyId,
+      mockCustomerId,
+      mockProjectId,
+      mockDepartmentId,
+      mockProductServiceId,
+      mockCategoryId,
+      mockContractId
     } = makeSut()
 
     const result = sut({
-      omieInvoice: omieServiceInvoiceMock,
-      omieInvoiceDepartment: omieServiceInvoiceMock.OrdemServico.Departamentos[0],
-      omieInvoiceItem: omieServiceInvoiceMock.ListaServicos[0],
-      emptyRecordsIds: emptyRecordsIdsMock,
-      order: orderMock,
-      companyId: companyIdMock,
-      customerId: customerIdMock,
-      projectId: projectIdMock,
-      departmentId: departmentIdMock,
-      productServiceId: productServiceIdMock,
-      categoryId: categoryIdMock,
-      contractId: contractIdMock
+      omieInvoice: mockOmieServiceInvoice,
+      omieInvoiceDepartment: mockOmieServiceInvoice.OrdemServico.Departamentos[0],
+      omieInvoiceItem: mockOmieServiceInvoice.ListaServicos[0],
+      emptyRecordsIds: mockEmptyRecordsIds,
+      order: mockOrder,
+      companyId: mockCompanyId,
+      customerId: mockCustomerId,
+      projectId: mockProjectId,
+      departmentId: mockDepartmentId,
+      productServiceId: mockProductServiceId,
+      categoryId: mockCategoryId,
+      contractId: mockContractId
     })
 
-    expect(result).toEqual(omieServiceInvoiceParsedMock)
+    expect(result).toEqual(mockParsedOmieServiceInvoice)
   })
 
   it('Should return mapped service invoice successfully without department: use emptyRecordsIds.department instead', () => {
     const {
       sut,
-      omieServiceInvoiceMock,
-      orderMock,
-      companyIdMock,
-      customerIdMock,
-      projectIdMock,
-      productServiceIdMock,
-      categoryIdMock,
-      contractIdMock
+      mockOmieServiceInvoice,
+      mockOrder,
+      mockCompanyId,
+      mockCustomerId,
+      mockProjectId,
+      mockProductServiceId,
+      mockCategoryId,
+      mockContractId
     } = makeSut()
 
     const result = sut({
-      omieInvoice: omieServiceInvoiceMock,
+      omieInvoice: mockOmieServiceInvoice,
       omieInvoiceDepartment: null,
-      omieInvoiceItem: omieServiceInvoiceMock.ListaServicos[0],
-      emptyRecordsIds: emptyRecordsIdsMock,
-      order: orderMock,
-      companyId: companyIdMock,
-      customerId: customerIdMock,
-      projectId: projectIdMock,
+      omieInvoiceItem: mockOmieServiceInvoice.ListaServicos[0],
+      emptyRecordsIds: mockEmptyRecordsIds,
+      order: mockOrder,
+      companyId: mockCompanyId,
+      customerId: mockCustomerId,
+      projectId: mockProjectId,
       departmentId: null,
-      productServiceId: productServiceIdMock,
-      categoryId: categoryIdMock,
-      contractId: contractIdMock
+      productServiceId: mockProductServiceId,
+      categoryId: mockCategoryId,
+      contractId: mockContractId
     })
 
-    expect(result).toEqual({ ...omieServiceInvoiceParsedMock, departmentId: emptyRecordsIdsMock.department })
+    expect(result).toEqual({ ...mockParsedOmieServiceInvoice, departmentId: mockEmptyRecordsIds.department })
   })
 
   it('Should return mapped service invoice successfully without relationships ids: use emptyRecordsIds instead', () => {
     const {
       sut,
-      omieServiceInvoiceMock,
-      companyIdMock
+      mockOmieServiceInvoice,
+      mockCompanyId
     } = makeSut()
 
     const result = sut({
-      omieInvoice: omieServiceInvoiceMock,
+      omieInvoice: mockOmieServiceInvoice,
       omieInvoiceDepartment: null,
-      omieInvoiceItem: omieServiceInvoiceMock.ListaServicos[0],
-      emptyRecordsIds: emptyRecordsIdsMock,
+      omieInvoiceItem: mockOmieServiceInvoice.ListaServicos[0],
+      emptyRecordsIds: mockEmptyRecordsIds,
       order: null,
-      companyId: companyIdMock,
+      companyId: mockCompanyId,
       customerId: null,
       projectId: null,
       departmentId: null,
@@ -119,14 +119,14 @@ describe('Service Invoice Mapping', () => {
     })
 
     expect(result).toEqual({
-      ...omieServiceInvoiceParsedMock,
-      categoryId: emptyRecordsIdsMock.category,
-      departmentId: emptyRecordsIdsMock.department,
-      projectId: emptyRecordsIdsMock.project,
-      customerId: emptyRecordsIdsMock.customer,
-      productServiceId: emptyRecordsIdsMock.productService,
-      contractId: emptyRecordsIdsMock.contract,
-      orderId: emptyRecordsIdsMock.order,
+      ...mockParsedOmieServiceInvoice,
+      categoryId: mockEmptyRecordsIds.category,
+      departmentId: mockEmptyRecordsIds.department,
+      projectId: mockEmptyRecordsIds.project,
+      customerId: mockEmptyRecordsIds.customer,
+      productServiceId: mockEmptyRecordsIds.productService,
+      contractId: mockEmptyRecordsIds.contract,
+      orderId: mockEmptyRecordsIds.order,
       orderNumber: null,
       origin: null
     })
@@ -135,64 +135,64 @@ describe('Service Invoice Mapping', () => {
   it('Should return mapped service invoice successfully without document data', () => {
     const {
       sut,
-      omieServiceInvoiceMock,
-      orderMock,
-      companyIdMock,
-      customerIdMock,
-      projectIdMock,
-      departmentIdMock,
-      productServiceIdMock,
-      categoryIdMock,
-      contractIdMock
+      mockOmieServiceInvoice,
+      mockOrder,
+      mockCompanyId,
+      mockCustomerId,
+      mockProjectId,
+      mockDepartmentId,
+      mockProductServiceId,
+      mockCategoryId,
+      mockContractId
     } = makeSut()
 
     const result = sut({
-      omieInvoice: { ...omieServiceInvoiceMock, Cabecalho: { ...omieServiceInvoiceMock.Cabecalho, nChaveNFe: undefined, nNumeroNFSe: undefined } },
-      omieInvoiceDepartment: omieServiceInvoiceMock.OrdemServico.Departamentos[0],
-      omieInvoiceItem: omieServiceInvoiceMock.ListaServicos[0],
-      emptyRecordsIds: emptyRecordsIdsMock,
-      order: orderMock,
-      companyId: companyIdMock,
-      customerId: customerIdMock,
-      projectId: projectIdMock,
-      departmentId: departmentIdMock,
-      productServiceId: productServiceIdMock,
-      categoryId: categoryIdMock,
-      contractId: contractIdMock
+      omieInvoice: { ...mockOmieServiceInvoice, Cabecalho: { ...mockOmieServiceInvoice.Cabecalho, nChaveNFe: undefined, nNumeroNFSe: undefined } },
+      omieInvoiceDepartment: mockOmieServiceInvoice.OrdemServico.Departamentos[0],
+      omieInvoiceItem: mockOmieServiceInvoice.ListaServicos[0],
+      emptyRecordsIds: mockEmptyRecordsIds,
+      order: mockOrder,
+      companyId: mockCompanyId,
+      customerId: mockCustomerId,
+      projectId: mockProjectId,
+      departmentId: mockDepartmentId,
+      productServiceId: mockProductServiceId,
+      categoryId: mockCategoryId,
+      contractId: mockContractId
     })
 
-    expect(result).toEqual({ ...omieServiceInvoiceParsedMock, documentKey: null, documentNumber: null })
+    expect(result).toEqual({ ...mockParsedOmieServiceInvoice, documentKey: null, documentNumber: null })
   })
 
   it('Should return mapped service invoice successfully without some taxes', () => {
     const {
       sut,
-      omieServiceInvoiceMock,
-      orderMock,
-      companyIdMock,
-      customerIdMock,
-      projectIdMock,
-      departmentIdMock,
-      productServiceIdMock,
-      categoryIdMock,
-      contractIdMock
+      mockOmieServiceInvoice,
+      mockOrder,
+      mockCompanyId,
+      mockCustomerId,
+      mockProjectId,
+      mockDepartmentId,
+      mockProductServiceId,
+      mockCategoryId,
+      mockContractId
     } = makeSut()
 
     const result = sut({
-      omieInvoice: omieServiceInvoiceMock,
-      omieInvoiceDepartment: omieServiceInvoiceMock.OrdemServico.Departamentos[0],
-      omieInvoiceItem: { ...omieServiceInvoiceMock.ListaServicos[0], nValorICMS: undefined, nValorISS: undefined },
-      emptyRecordsIds: emptyRecordsIdsMock,
-      order: orderMock,
-      companyId: companyIdMock,
-      customerId: customerIdMock,
-      projectId: projectIdMock,
-      departmentId: departmentIdMock,
-      productServiceId: productServiceIdMock,
-      categoryId: categoryIdMock,
-      contractId: contractIdMock
+      omieInvoice: mockOmieServiceInvoice,
+      omieInvoiceDepartment: mockOmieServiceInvoice.OrdemServico.Departamentos[0],
+      omieInvoiceItem: { ...mockOmieServiceInvoice.ListaServicos[0], nValorICMS: undefined, nValorISS: undefined },
+      emptyRecordsIds: mockEmptyRecordsIds,
+      order: mockOrder,
+      companyId: mockCompanyId,
+      customerId: mockCustomerId,
+      projectId: mockProjectId,
+      departmentId: mockDepartmentId,
+      productServiceId: mockProductServiceId,
+      categoryId: mockCategoryId,
+      contractId: mockContractId
     })
 
-    expect(result).toEqual(omieServiceInvoiceParsedMock)
+    expect(result).toEqual(mockParsedOmieServiceInvoice)
   })
 })

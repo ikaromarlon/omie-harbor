@@ -1,43 +1,43 @@
 const { services: { omie: { providerName } } } = require('../../../../src/config')
 const helpers = require('../../../../src/utils/helpers')
 const makeCompanyMapping = require('../../../../src/mappings/omie/companyMapping')
-const { omieCompaniesResponseMock, omieCompanyParsedMock, omieCnaeResponseMock } = require('../../../mocks')
+const { mockOmieCompaniesResponse, mockParsedOmieCompany, mockOmieCnaeResponse } = require('../../../mocks')
 
 const makeSut = () => {
-  const omieCompanyMock = omieCompaniesResponseMock.empresas_cadastro[0]
-  const credentialsMock = { appKey: 'the_app_key', appSecret: 'the_app_secret' }
-  const omieCnaeMock = omieCnaeResponseMock.cadastros
+  const mockOmieCompany = mockOmieCompaniesResponse.empresas_cadastro[0]
+  const mockCredentials = { appKey: 'the_app_key', appSecret: 'the_app_secret' }
+  const mockOmieCnae = mockOmieCnaeResponse.cadastros
 
   return {
     sut: makeCompanyMapping({ providerName, helpers }),
-    omieCompanyMock,
-    credentialsMock,
-    omieCnaeMock
+    mockOmieCompany,
+    mockCredentials,
+    mockOmieCnae
   }
 }
 
 describe('Company Mapping', () => {
   it('Should return mapped company successfully', () => {
-    const { sut, omieCompanyMock, credentialsMock, omieCnaeMock } = makeSut()
-    const result = sut({ omieCompany: omieCompanyMock, omieCnae: omieCnaeMock, credentials: credentialsMock })
-    expect(result).toEqual(omieCompanyParsedMock)
+    const { sut, mockOmieCompany, mockCredentials, mockOmieCnae } = makeSut()
+    const result = sut({ omieCompany: mockOmieCompany, omieCnae: mockOmieCnae, credentials: mockCredentials })
+    expect(result).toEqual(mockParsedOmieCompany)
   })
 
   it('Should return mapped without first phone', () => {
-    const { sut, omieCompanyMock, credentialsMock, omieCnaeMock } = makeSut()
-    const result = sut({ omieCompany: { ...omieCompanyMock, telefone1_ddd: '', telefone1_numero: '' }, omieCnae: omieCnaeMock, credentials: credentialsMock })
-    expect(result).toEqual({ ...omieCompanyParsedMock, phones: [{ ...omieCompanyParsedMock.phones[1] }] })
+    const { sut, mockOmieCompany, mockCredentials, mockOmieCnae } = makeSut()
+    const result = sut({ omieCompany: { ...mockOmieCompany, telefone1_ddd: '', telefone1_numero: '' }, omieCnae: mockOmieCnae, credentials: mockCredentials })
+    expect(result).toEqual({ ...mockParsedOmieCompany, phones: [{ ...mockParsedOmieCompany.phones[1] }] })
   })
 
   it('Should return mapped without second phone', () => {
-    const { sut, omieCompanyMock, credentialsMock, omieCnaeMock } = makeSut()
-    const result = sut({ omieCompany: { ...omieCompanyMock, telefone2_ddd: '', telefone2_numero: '' }, omieCnae: omieCnaeMock, credentials: credentialsMock })
-    expect(result).toEqual({ ...omieCompanyParsedMock, phones: [{ ...omieCompanyParsedMock.phones[0] }] })
+    const { sut, mockOmieCompany, mockCredentials, mockOmieCnae } = makeSut()
+    const result = sut({ omieCompany: { ...mockOmieCompany, telefone2_ddd: '', telefone2_numero: '' }, omieCnae: mockOmieCnae, credentials: mockCredentials })
+    expect(result).toEqual({ ...mockParsedOmieCompany, phones: [{ ...mockParsedOmieCompany.phones[0] }] })
   })
 
   it('Should return mapped company without cnae', () => {
-    const { sut, omieCompanyMock, credentialsMock, omieCnaeMock } = makeSut()
-    const result = sut({ omieCompany: { ...omieCompanyMock, cnae: null }, omieCnae: omieCnaeMock, credentials: credentialsMock })
-    expect(result).toEqual({ ...omieCompanyParsedMock, cnae: null })
+    const { sut, mockOmieCompany, mockCredentials, mockOmieCnae } = makeSut()
+    const result = sut({ omieCompany: { ...mockOmieCompany, cnae: null }, omieCnae: mockOmieCnae, credentials: mockCredentials })
+    expect(result).toEqual({ ...mockParsedOmieCompany, cnae: null })
   })
 })
