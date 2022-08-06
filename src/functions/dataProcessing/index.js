@@ -2,16 +2,20 @@ const makeController = require('./controller')
 const makeUseCase = require('./useCase')
 const schema = require('./utils/schema')
 const { dbRepositories } = require('../../repositories')
-const { logger, bucket: makeBucket, validatePayloadSchema } = require('../../utils')
+const { omieMappings } = require('../../mappings')
+const makeServices = require('../../services')
+const { logger, mailer, validatePayloadSchema } = require('../../utils')
 
 module.exports = async () => {
+  const { omieService } = makeServices()
   const repositories = await dbRepositories()
-  const bucket = makeBucket()
 
   const useCase = makeUseCase({
+    omieService,
     repositories,
+    omieMappings,
     logger,
-    bucket
+    mailer: mailer()
   })
 
   const controller = makeController({

@@ -1,68 +1,57 @@
+const { NotFoundError } = require('../../../utils/errors')
+const entityFlow = {
+  department: require('./department')
+}
+
 module.exports = ({
+  omieService,
   repositories,
+  omieMappings,
   logger,
-  bucket
-}) => async ({ payload }) => {
-  const { companyId } = payload
+  mailer
+}) => {
+  const getCompany = async (companyId) => {
+    const company = await repositories.companies.findOne({ _id: companyId })
+    if (!company) throw new NotFoundError('Company not found')
+    return company
+  }
 
-  const filter = {}
-  if (companyId) filter._id = companyId
+  const handler = async ({ userId, companyId, data, entity, batch, notificationAddress }) => {
+    const company = await getCompany(companyId)
 
-  const companies = await repositories.companies.find(filter)
+    const errors = []
+    const successes = []
 
-  await Promise.all(companies.map(async (company) => {
-    const { _id: companyId, name } = company
+    await entityFlow[entity]({ data, userId, company, omieService, repositories, omieMappings, errors, successes })
 
-    logger.info({ title: 'Data Export', message: `Getting data from database for company ${companyId} - ${name}` })
+    const report = {
+      status: 'SUCCESS',
+      batch,
+      batchSize: data.length,
+      companyId: company._id,
+      companyCnpj: company.cnpj,
+      companyName: company.name,
+      message: `${successes.length} record(s) were processed successfully`
+    }
 
-    const [
-      categories,
-      departments,
-      projects,
-      customers,
-      productsServices,
-      checkingAccounts,
-      contracts,
-      orders,
-      billing,
-      accountsPayable,
-      accountsReceivable,
-      financialMovements
-    ] = await Promise.all([
-      repositories.categories.find({ companyId }),
-      repositories.departments.find({ companyId }),
-      repositories.projects.find({ companyId }),
-      repositories.customers.find({ companyId }),
-      repositories.productsServices.find({ companyId }),
-      repositories.checkingAccounts.find({ companyId }),
-      repositories.contracts.find({ companyId }),
-      repositories.orders.find({ companyId }),
-      repositories.billing.find({ companyId }),
-      repositories.accountsPayable.find({ companyId }),
-      repositories.accountsReceivable.find({ companyId }),
-      repositories.financialMovements.find({ companyId })
-    ])
+    if (errors.length) {
+      report.status = 'FAIL'
+      report.message += ` and ${errors.length} record(s) has been failed.`
+      report.data = errors
+    }
 
-    logger.info({ title: 'Data Export', message: `Uploading data to bucket for company ${companyId} - ${name}` })
-
-    await bucket.storeCompanyData(companyId, {
-      companies: [company],
-      categories,
-      departments,
-      projects,
-      customers,
-      productsServices,
-      checkingAccounts,
-      contracts,
-      orders,
-      billing,
-      accountsPayable,
-      accountsReceivable,
-      financialMovements
+    logger.info({
+      title: `Data Processing: ${entity}`,
+      message: report.message,
+      data: report
     })
 
-    logger.info({ title: 'Data Export', message: `Data export completed for company ${companyId} - ${name}` })
-  }))
+    await mailer.sendDataProcessingStatus({
+      notificationAddress,
+      entity,
+      data: report
+    })
+  }
 
-  return { success: true }
+  return handler
 }

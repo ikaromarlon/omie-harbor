@@ -90,6 +90,27 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Invoke dataProcessing function",
+      "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
+      "cwd": "${workspaceFolder}",
+      "localRoot": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "invoke",
+        "local",
+        "-f", "dataProcessing",
+        "-p", "${workspaceFolder}/.vscode/payloads/dataProcessing.json"
+      ],
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "env": {
+        "SLS_DEBUG": "*"
+      },
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Run bin - DEV",
       "program": "${workspaceFolder}/bin/index.js",
       "cwd": "${workspaceFolder}",
