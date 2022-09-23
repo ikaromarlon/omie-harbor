@@ -37,10 +37,10 @@ functionsWarmUpScheduleEventEnabled:
   prd: false
 ingestionDispatcherSchedule1:
   dev:
-    rate: cron(0 2 ? * * *) # everyday at 02:00 UTC (23:00 BR)
+    rate: cron(0 8 ? * * *) # everyday at 08:00 UTC (05:00 BR)
     enabled: true
   prd:
-    rate: cron(0 3 ? * * *) # everyday at 03:00 UTC (00:00 BR)
+    rate: cron(0 9 ? * * *) # everyday at 09:00 UTC (06:00 BR)
     enabled: true
 ingestionDispatcherSchedule2:
   dev:
