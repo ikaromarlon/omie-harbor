@@ -1,7 +1,9 @@
 require('dotenv').config({ path: `.env.${process.env.STAGE || 'dev'}` })
 const appConfig = require('../src/config')
-const batch = {
-  createIndexes: require('./createIndexes')
+const scripts = {
+  help: null,
+  createIndexes: require('./createIndexes'),
+  deleteIndexes: require('./deleteIndexes')
 }
 
 async function bin () {
@@ -16,35 +18,55 @@ async function bin () {
     }
   }
 
-  const sliceIndex = process.argv[2]?.trim() === '--' ? 3 : 2
-  const args = [...new Set(process.argv.slice(sliceIndex).map(a => a.trim()))]
-
-  console.log(config.bin.layout.starRuler)
-  console.log(`* Executing ${config.app.name}/bin on "${config.app.stage}" stage with args "${args.join(' ')}"`)
-  console.log(config.bin.layout.starRuler)
-  console.log('')
-
   try {
-    const threadList = Object.keys(batch).map(t => `--${t}`)
-    const validArgs = [...threadList]
-    const invalidArgs = args.filter((a) => !a.match(/^--.*$/g) || !validArgs.includes(a))
+    const sliceIndex = process.argv[2]?.trim() === '--' ? 3 : 2
+    const args = [...new Set(process.argv.slice(sliceIndex).map(a => a.trim()))]
 
-    if (invalidArgs.length) throw new Error(`Invalid arguments: ${invalidArgs.join(' ')}`)
+    const scriptsAsArgs = Object.keys(scripts).map(t => `--${t}`)
 
-    const threads = args.length ? args : threadList
+    if (!args.length) {
+      throw new Error(`At least one of the possible arguments should be informed:\n\n${scriptsAsArgs.join('\n')}`)
+    }
 
-    for (const thread of threads) await batch[thread.replace('--', '')]({ config }); console.log('')
+    console.log(config.bin.layout.starRuler)
+    console.log(`* Executing ${config.app.name}/bin on "${config.app.stage}" stage with args "${args.join(' ')}"`)
+    console.log(config.bin.layout.starRuler)
+    console.log('')
+    const invalidArgs = args.filter((a) => !a.match(/^--.*$/g) || !scriptsAsArgs.includes(a))
+
+    if (invalidArgs.length) {
+      throw new Error(`Invalid arguments: ${invalidArgs.join(' ')}`)
+    }
+
+    if (args.includes('--help')) {
+      if (args.length > 1) {
+        throw new Error('--help is not allowed along with other arguments')
+      }
+      console.log(`Available arguments:\n\n${scriptsAsArgs.join('\n')}`)
+      console.log('')
+      console.log(config.bin.layout.dashRuler)
+      console.log('')
+      process.exit(0)
+    }
+
+    const threads = args.length ? args : scriptsAsArgs
+
+    for (const thread of threads) await scripts[thread.replace('--', '')]({ config }); console.log('')
 
     console.log(config.bin.layout.dashRuler)
     console.log('Process completed successfully!')
   } catch (error) {
-    console.log(config.bin.layout.dashRuler)
-    console.log('Process completed with errors...')
     console.log('')
+    console.log(config.bin.layout.dashRuler)
+    console.log('ERROR ON BIN SCRIPTS EXECUTION')
+    console.log(config.bin.layout.dashRuler)
     console.error(error.message)
+    console.log('')
+  } finally {
+    console.log(config.bin.layout.dashRuler)
+    console.log('')
+    process.exit(1)
   }
-  console.log(config.bin.layout.dashRuler)
-  console.log('')
 }
 
 bin()
