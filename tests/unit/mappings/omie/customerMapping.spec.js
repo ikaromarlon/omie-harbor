@@ -2,60 +2,60 @@ const { services: { omie: { providerName } } } = require('../../../../src/config
 const helpers = require('../../../../src/utils/helpers')
 const makeCustomerMapping = require('../../../../src/mappings/omie/customerMapping')
 const {
-  omieCustomersResponseMock,
-  omieCustomerParsedMock,
-  omieCnaeResponseMock,
-  omieActivitiesResponseMock,
-  omieBanksResponseMock
+  mockOmieCustomersResponse,
+  mockParsedOmieCustomer,
+  mockOmieCnaeResponse,
+  mockOmieActivitiesResponse,
+  mockOmieBanksResponse
 } = require('../../../mocks')
 
 const makeSut = () => {
-  const omieCustomerMock = omieCustomersResponseMock.clientes_cadastro[0]
-  const omieCnaeMock = omieCnaeResponseMock.cadastros
-  const omieActivitiesMock = omieActivitiesResponseMock.lista_tipos_atividade
-  const omieBanksMock = omieBanksResponseMock.fin_banco_cadastro
-  const companyIdMock = '25c176b6-b200-4575-9217-e23c6105163c'
+  const mockOmieCustomer = mockOmieCustomersResponse.clientes_cadastro[0]
+  const mockOmieCnae = mockOmieCnaeResponse.cadastros
+  const mockOmieActivities = mockOmieActivitiesResponse.lista_tipos_atividade
+  const mockOmieBanks = mockOmieBanksResponse.fin_banco_cadastro
+  const mockCompanyId = '25c176b6-b200-4575-9217-e23c6105163c'
 
   return {
     sut: makeCustomerMapping({ providerName, helpers }),
-    omieCustomerMock,
-    omieCnaeMock,
-    omieActivitiesMock,
-    omieBanksMock,
-    companyIdMock
+    mockOmieCustomer,
+    mockOmieCnae,
+    mockOmieActivities,
+    mockOmieBanks,
+    mockCompanyId
   }
 }
 
 describe('Customer Mapping', () => {
   it('Should return mapped customer successfully', () => {
-    const { sut, omieCustomerMock, omieCnaeMock, omieActivitiesMock, omieBanksMock, companyIdMock } = makeSut()
-    const result = sut({ omieCustomer: omieCustomerMock, omieCnae: omieCnaeMock, omieActivities: omieActivitiesMock, omieBanks: omieBanksMock, companyId: companyIdMock })
-    expect(result).toEqual(omieCustomerParsedMock)
+    const { sut, mockOmieCustomer, mockOmieCnae, mockOmieActivities, mockOmieBanks, mockCompanyId } = makeSut()
+    const result = sut({ omieCustomer: mockOmieCustomer, omieCnae: mockOmieCnae, omieActivities: mockOmieActivities, omieBanks: mockOmieBanks, companyId: mockCompanyId })
+    expect(result).toEqual(mockParsedOmieCustomer)
   })
 
   it('Should return mapped customer without first phone', () => {
-    const { sut, omieCustomerMock, omieCnaeMock, omieActivitiesMock, omieBanksMock, companyIdMock } = makeSut()
-    const result = sut({ omieCustomer: { ...omieCustomerMock, telefone1_ddd: '', telefone1_numero: '' }, omieCnae: omieCnaeMock, omieActivities: omieActivitiesMock, omieBanks: omieBanksMock, companyId: companyIdMock })
-    expect(result).toEqual({ ...omieCustomerParsedMock, phones: [{ ...omieCustomerParsedMock.phones[1] }] })
+    const { sut, mockOmieCustomer, mockOmieCnae, mockOmieActivities, mockOmieBanks, mockCompanyId } = makeSut()
+    const result = sut({ omieCustomer: { ...mockOmieCustomer, telefone1_ddd: '', telefone1_numero: '' }, omieCnae: mockOmieCnae, omieActivities: mockOmieActivities, omieBanks: mockOmieBanks, companyId: mockCompanyId })
+    expect(result).toEqual({ ...mockParsedOmieCustomer, phones: [{ ...mockParsedOmieCustomer.phones[1] }] })
   })
 
   it('Should return mapped customer without second phone', () => {
-    const { sut, omieCustomerMock, omieCnaeMock, omieActivitiesMock, omieBanksMock, companyIdMock } = makeSut()
-    const result = sut({ omieCustomer: { ...omieCustomerMock, telefone2_ddd: '', telefone2_numero: '' }, omieCnae: omieCnaeMock, omieActivities: omieActivitiesMock, omieBanks: omieBanksMock, companyId: companyIdMock })
-    expect(result).toEqual({ ...omieCustomerParsedMock, phones: [{ ...omieCustomerParsedMock.phones[0] }] })
+    const { sut, mockOmieCustomer, mockOmieCnae, mockOmieActivities, mockOmieBanks, mockCompanyId } = makeSut()
+    const result = sut({ omieCustomer: { ...mockOmieCustomer, telefone2_ddd: '', telefone2_numero: '' }, omieCnae: mockOmieCnae, omieActivities: mockOmieActivities, omieBanks: mockOmieBanks, companyId: mockCompanyId })
+    expect(result).toEqual({ ...mockParsedOmieCustomer, phones: [{ ...mockParsedOmieCustomer.phones[0] }] })
   })
 
   it('Should return mapped customer without cnae', () => {
-    const { sut, omieCustomerMock, omieCnaeMock, omieActivitiesMock, omieBanksMock, companyIdMock } = makeSut()
-    const result = sut({ omieCustomer: { ...omieCustomerMock, cnae: null }, omieCnae: omieCnaeMock, omieActivities: omieActivitiesMock, omieBanks: omieBanksMock, companyId: companyIdMock })
-    expect(result).toEqual({ ...omieCustomerParsedMock, cnae: { code: null, description: null } })
+    const { sut, mockOmieCustomer, mockOmieCnae, mockOmieActivities, mockOmieBanks, mockCompanyId } = makeSut()
+    const result = sut({ omieCustomer: { ...mockOmieCustomer, cnae: null }, omieCnae: mockOmieCnae, omieActivities: mockOmieActivities, omieBanks: mockOmieBanks, companyId: mockCompanyId })
+    expect(result).toEqual({ ...mockParsedOmieCustomer, cnae: { code: null, description: null } })
   })
 
   it('Should return mapped customer without checkingAccount', () => {
-    const { sut, omieCustomerMock, omieCnaeMock, omieActivitiesMock, omieBanksMock, companyIdMock } = makeSut()
-    const result = sut({ omieCustomer: { ...omieCustomerMock, dadosBancarios: {} }, omieCnae: omieCnaeMock, omieActivities: omieActivitiesMock, omieBanks: omieBanksMock, companyId: companyIdMock })
+    const { sut, mockOmieCustomer, mockOmieCnae, mockOmieActivities, mockOmieBanks, mockCompanyId } = makeSut()
+    const result = sut({ omieCustomer: { ...mockOmieCustomer, dadosBancarios: {} }, omieCnae: mockOmieCnae, omieActivities: mockOmieActivities, omieBanks: mockOmieBanks, companyId: mockCompanyId })
     expect(result).toEqual({
-      ...omieCustomerParsedMock,
+      ...mockParsedOmieCustomer,
       checkingAccount: {
         bank: {
           code: null,
@@ -72,26 +72,26 @@ describe('Customer Mapping', () => {
   })
 
   it('Should return mapped customer without activity', () => {
-    const { sut, omieCustomerMock, omieCnaeMock, omieActivitiesMock, omieBanksMock, companyIdMock } = makeSut()
-    const result = sut({ omieCustomer: { ...omieCustomerMock, tipo_atividade: null }, omieCnae: omieCnaeMock, omieActivities: omieActivitiesMock, omieBanks: omieBanksMock, companyId: companyIdMock })
-    expect(result).toEqual({ ...omieCustomerParsedMock, activity: null })
+    const { sut, mockOmieCustomer, mockOmieCnae, mockOmieActivities, mockOmieBanks, mockCompanyId } = makeSut()
+    const result = sut({ omieCustomer: { ...mockOmieCustomer, tipo_atividade: null }, omieCnae: mockOmieCnae, omieActivities: mockOmieActivities, omieBanks: mockOmieBanks, companyId: mockCompanyId })
+    expect(result).toEqual({ ...mockParsedOmieCustomer, activity: null })
   })
 
   it('Should return mapped customer without characteristics', () => {
-    const { sut, omieCustomerMock, omieCnaeMock, omieActivitiesMock, omieBanksMock, companyIdMock } = makeSut()
-    const result = sut({ omieCustomer: { ...omieCustomerMock, caracteristicas: null }, omieCnae: omieCnaeMock, omieActivities: omieActivitiesMock, omieBanks: omieBanksMock, companyId: companyIdMock })
-    expect(result).toEqual({ ...omieCustomerParsedMock, characteristics: [] })
+    const { sut, mockOmieCustomer, mockOmieCnae, mockOmieActivities, mockOmieBanks, mockCompanyId } = makeSut()
+    const result = sut({ omieCustomer: { ...mockOmieCustomer, caracteristicas: null }, omieCnae: mockOmieCnae, omieActivities: mockOmieActivities, omieBanks: mockOmieBanks, companyId: mockCompanyId })
+    expect(result).toEqual({ ...mockParsedOmieCustomer, characteristics: [] })
   })
 
   it('Should return mapped customer without tags', () => {
-    const { sut, omieCustomerMock, omieCnaeMock, omieActivitiesMock, omieBanksMock, companyIdMock } = makeSut()
-    const result = sut({ omieCustomer: { ...omieCustomerMock, tags: null }, omieCnae: omieCnaeMock, omieActivities: omieActivitiesMock, omieBanks: omieBanksMock, companyId: companyIdMock })
-    expect(result).toEqual({ ...omieCustomerParsedMock, tags: [] })
+    const { sut, mockOmieCustomer, mockOmieCnae, mockOmieActivities, mockOmieBanks, mockCompanyId } = makeSut()
+    const result = sut({ omieCustomer: { ...mockOmieCustomer, tags: null }, omieCnae: mockOmieCnae, omieActivities: mockOmieActivities, omieBanks: mockOmieBanks, companyId: mockCompanyId })
+    expect(result).toEqual({ ...mockParsedOmieCustomer, tags: [] })
   })
 
   it('Should return mapped customer for non legal people', () => {
-    const { sut, omieCustomerMock, omieCnaeMock, omieActivitiesMock, omieBanksMock, companyIdMock } = makeSut()
-    const result = sut({ omieCustomer: { ...omieCustomerMock, pessoa_fisica: 'S' }, omieCnae: omieCnaeMock, omieActivities: omieActivitiesMock, omieBanks: omieBanksMock, companyId: companyIdMock })
-    expect(result).toEqual({ ...omieCustomerParsedMock, personType: 'F' })
+    const { sut, mockOmieCustomer, mockOmieCnae, mockOmieActivities, mockOmieBanks, mockCompanyId } = makeSut()
+    const result = sut({ omieCustomer: { ...mockOmieCustomer, pessoa_fisica: 'S' }, omieCnae: mockOmieCnae, omieActivities: mockOmieActivities, omieBanks: mockOmieBanks, companyId: mockCompanyId })
+    expect(result).toEqual({ ...mockParsedOmieCustomer, personType: 'F' })
   })
 })

@@ -11,27 +11,32 @@ jest.mock('aws-sdk', () => ({
 }))
 
 jest.mock('../../../src/config', () => ({
-  SQS: { ingestionQueueUrl: 'https://the-ingestionQueueUrl', dataExportQueueUrl: 'https://the-dataExportQueueUrl' }
+  SQS: { ingestionQueueUrl: 'https://the-ingestionQueueUrl', dataExportQueueUrl: 'https://the-dataExportQueueUrl' },
+  services: {
+    omie: {
+      providerName: 'Omie'
+    }
+  }
 }))
 
 const makeSut = () => {
-  const companyIdMock = '25c176b6-b200-4575-9217-e23c6105163c'
+  const mockCompanyId = '25c176b6-b200-4575-9217-e23c6105163c'
 
   return {
     sut: makeRequester(),
-    companyIdMock
+    mockCompanyId
   }
 }
 
 describe('Queuer Adapter', () => {
   describe('sendCompanyToIngestionQueue method', () => {
     it('Should execute successfully', async () => {
-      const { sut, companyIdMock } = makeSut()
-      const result = await sut.sendCompanyToIngestionQueue(companyIdMock)
+      const { sut, mockCompanyId } = makeSut()
+      const result = await sut.sendCompanyToIngestionQueue(mockCompanyId)
       expect(mockSendMessage).toHaveBeenCalledWith({
         QueueUrl: 'https://the-ingestionQueueUrl',
-        MessageGroupId: companyIdMock,
-        MessageBody: JSON.stringify({ companyId: companyIdMock })
+        MessageGroupId: 'Omie-ingestion',
+        MessageBody: JSON.stringify({ companyId: mockCompanyId })
       })
       expect(result).toBe(true)
     })
@@ -39,12 +44,12 @@ describe('Queuer Adapter', () => {
 
   describe('sendCompanyToDataExportQueue method', () => {
     it('Should execute successfully', async () => {
-      const { sut, companyIdMock } = makeSut()
-      const result = await sut.sendCompanyToDataExportQueue(companyIdMock)
+      const { sut, mockCompanyId } = makeSut()
+      const result = await sut.sendCompanyToDataExportQueue(mockCompanyId)
       expect(mockSendMessage).toHaveBeenCalledWith({
         QueueUrl: 'https://the-dataExportQueueUrl',
-        MessageGroupId: companyIdMock,
-        MessageBody: JSON.stringify({ companyId: companyIdMock })
+        MessageGroupId: 'data-export',
+        MessageBody: JSON.stringify({ companyId: mockCompanyId })
       })
       expect(result).toBe(true)
     })

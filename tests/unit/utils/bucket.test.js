@@ -17,21 +17,21 @@ jest.mock('../../../src/config', () => ({
 }))
 
 const makeSut = () => {
-  const companyIdMock = '25c176b6-b200-4575-9217-e23c6105163c'
+  const mockCompanyId = '25c176b6-b200-4575-9217-e23c6105163c'
   return {
     sut: makeRequester(),
-    companyIdMock
+    mockCompanyId
   }
 }
 
 describe('Bucket Adapter', () => {
   describe('storeCompanyData method', () => {
     it('Should execute successfully', async () => {
-      const { sut, companyIdMock } = makeSut()
-      const result = await sut.storeCompanyData(companyIdMock, {})
+      const { sut, mockCompanyId } = makeSut()
+      const result = await sut.storeCompanyData(mockCompanyId, {})
       expect(mockPutObject).toHaveBeenCalledWith({
         Bucket: 'the-bucket',
-        Key: `${companyIdMock}.json`,
+        Key: `${mockCompanyId}.json`,
         Body: Buffer.from(JSON.stringify({})),
         ContentType: 'application/json'
       })

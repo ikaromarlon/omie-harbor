@@ -71,8 +71,8 @@ env:
     dev: ikaromarlon@gmail.com
     prd: pedro.magnago@fullbpo.com
   ERROR_NOTIFICATION_RECIPIENT_ADDRESS_COPY:
-    dev: ikaromarlon@gmail.com
-    prd: ''
+    dev: ''
+    prd: 'ikaromarlon@gmail.com'
   WAIT_SECONDS_BEFORE_NEXT_OMIE_PAGE_REQUEST:
     dev: 0
     prd: 0

@@ -1,25 +1,25 @@
 const { services: { omie: { providerName } } } = require('../../../../src/config')
 const makeProjectMapping = require('../../../../src/mappings/omie/projectMapping')
 const {
-  omieProjectsResponseMock,
-  omieProjectParsedMock
+  mockOmieProjectsResponse,
+  mockParsedOmieProject
 } = require('../../../mocks')
 
 const makeSut = () => {
-  const omieProjectMock = omieProjectsResponseMock.cadastro[0]
-  const companyIdMock = '25c176b6-b200-4575-9217-e23c6105163c'
+  const mockOmieProject = mockOmieProjectsResponse.cadastro[0]
+  const mockCompanyId = '25c176b6-b200-4575-9217-e23c6105163c'
 
   return {
     sut: makeProjectMapping({ providerName }),
-    omieProjectMock,
-    companyIdMock
+    mockOmieProject,
+    mockCompanyId
   }
 }
 
 describe('Project Mapping', () => {
   it('Should return mapped project successfully', () => {
-    const { sut, omieProjectMock, companyIdMock } = makeSut()
-    const result = sut({ omieProject: omieProjectMock, companyId: companyIdMock })
-    expect(result).toEqual(omieProjectParsedMock)
+    const { sut, mockOmieProject, mockCompanyId } = makeSut()
+    const result = sut({ omieProject: mockOmieProject, companyId: mockCompanyId })
+    expect(result).toEqual(mockParsedOmieProject)
   })
 })

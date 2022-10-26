@@ -7,7 +7,7 @@ jest.mock('axios', () => ({
 }))
 
 const makeSut = () => {
-  const errorMock = {
+  const mockError = {
     message: 'Internal server error',
     config: {
       method: 'post',
@@ -24,7 +24,7 @@ const makeSut = () => {
 
   return {
     sut: makeRequester(),
-    errorMock
+    mockError
   }
 }
 
@@ -46,9 +46,9 @@ describe('Services Requester Adapter', () => {
     })
 
     it('Should call get and throw an error', async () => {
-      const { sut, errorMock } = makeSut()
-      errorMock.config.method = 'get'
-      jest.spyOn(axios, 'get').mockRejectedValueOnce(errorMock)
+      const { sut, mockError } = makeSut()
+      mockError.config.method = 'get'
+      jest.spyOn(axios, 'get').mockRejectedValueOnce(mockError)
       try {
         await sut.get('url')
       } catch (error) {
@@ -59,7 +59,7 @@ describe('Services Requester Adapter', () => {
         expect(error.agent).toBeTruthy()
         expect(error.agent.name).toBe('axios')
         expect(error.agent.version).toBe('0.0.1')
-        expect(error.request).toEqual(errorMock.config)
+        expect(error.request).toEqual(mockError.config)
         expect(error.response).toEqual({ statusCode: 500, data: { message: 'Internal server error' }, headers: {} })
       }
     })
@@ -82,9 +82,9 @@ describe('Services Requester Adapter', () => {
     })
 
     it('Should call post and throw an error', async () => {
-      const { sut, errorMock } = makeSut()
-      errorMock.config.method = 'post'
-      jest.spyOn(axios, 'post').mockRejectedValueOnce(errorMock)
+      const { sut, mockError } = makeSut()
+      mockError.config.method = 'post'
+      jest.spyOn(axios, 'post').mockRejectedValueOnce(mockError)
       try {
         await sut.post('url')
       } catch (error) {
@@ -95,7 +95,7 @@ describe('Services Requester Adapter', () => {
         expect(error.agent).toBeTruthy()
         expect(error.agent.name).toBe('axios')
         expect(error.agent.version).toBe('0.0.1')
-        expect(error.request).toEqual(errorMock.config)
+        expect(error.request).toEqual(mockError.config)
         expect(error.response).toEqual({ statusCode: 500, data: { message: 'Internal server error' }, headers: {} })
       }
     })
