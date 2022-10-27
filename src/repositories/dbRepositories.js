@@ -5,6 +5,10 @@ const makeDbRepository = require('./utils/makeDbRepository')
 module.exports = async () => {
   const db = await mongodb.connect(config.mongodb.uri, config.mongodb.dbName)
   return {
+    users: makeDbRepository({
+      name: 'users',
+      db
+    }),
     companies: makeDbRepository({
       name: 'companies',
       db
