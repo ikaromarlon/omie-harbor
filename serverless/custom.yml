@@ -32,6 +32,10 @@ zones:
   prd:
     - ${self:custom.region.${self:provider.stage}}a
     - ${self:custom.region.${self:provider.stage}}b
+appApiKeys:
+  bff:
+    dev: 9f0ba6bf9cce44c3b8806c4429733c18
+    prd: 22167e1b8236417cb34f3c59d1108e91
 functionsWarmUpScheduleEventEnabled:
   dev: false
   prd: false

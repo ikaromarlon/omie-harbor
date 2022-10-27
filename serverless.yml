@@ -36,6 +36,13 @@ provider:
     FLAG_UPDATE_EMPTY_RECORDS: ${self:custom.env.FLAG_UPDATE_EMPTY_RECORDS.${self:provider.stage}}
     ERROR_NOTIFICATION_RECIPIENT_ADDRESS: ${self:custom.env.ERROR_NOTIFICATION_RECIPIENT_ADDRESS.${self:provider.stage}}
     ERROR_NOTIFICATION_RECIPIENT_ADDRESS_COPY: ${self:custom.env.ERROR_NOTIFICATION_RECIPIENT_ADDRESS_COPY.${self:provider.stage}}
+  endpointType: EDGE
+  apiGateway:
+    apiKeySourceType: HEADER
+    apiKeys:
+      - name: ${self:custom.basename}-bff
+        value: ${self:custom.appApiKeys.bff.${self:provider.stage}}
+        enabled: true
   stackTags:
     HOLDING: dois
     COMPANY: full-bpo
