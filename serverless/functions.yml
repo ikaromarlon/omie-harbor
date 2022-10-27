@@ -1,3 +1,17 @@
+registerOmieCompany:
+  handler: src/index.handler
+  iamRoleStatementsName: ${self:custom.basename}-registerOmieCompany-role
+  events:
+    - schedule: ${self:custom.functionsWarmUpScheduleEvent}
+    - http:
+        path: omie/companies
+        method: POST
+        cors: ${self:custom.httpCors}
+        private: ${self:custom.httpPrivate}
+  package:
+    patterns:
+      - 'src/functions/registerOmieCompany/**'
+
 ingestionDispatcher:
   handler: src/index.handler
   iamRoleStatementsName: ${self:custom.basename}-ingestionDispatcher-role
