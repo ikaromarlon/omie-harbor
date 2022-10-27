@@ -84,8 +84,8 @@ deleteDataByCompany:
   events:
     - schedule: ${self:custom.functionsWarmUpScheduleEvent}
     - http:
-        path: company/{id}/delete-data
-        method: POST
+        path: company/{id}/data
+        method: DELETE
         cors: ${self:custom.httpCors}
         private: ${self:custom.httpPrivate}
   package:
