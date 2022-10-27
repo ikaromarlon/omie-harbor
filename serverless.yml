@@ -40,8 +40,8 @@ provider:
   apiGateway:
     apiKeySourceType: HEADER
     apiKeys:
-      - name: ${self:custom.basename}-bff
-        value: ${self:custom.appApiKeys.bff.${self:provider.stage}}
+      - name: ${self:custom.basename}
+        value: ${self:custom.appApiKeys.${self:provider.stage}}
         enabled: true
   stackTags:
     HOLDING: dois

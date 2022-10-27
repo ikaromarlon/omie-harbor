@@ -39,6 +39,14 @@ Resources:
       BucketName: ${self:custom.basename}-data-export-bucket
 
 Outputs:
+  RestApiId:
+    Value: !Ref ApiGatewayRestApi
+    Export:
+      Name: ${self:custom.basename}:RestApiId
+  ApiKey:
+    Value: !GetAtt ApiGatewayApiKey1.Value
+    Export:
+      Name: ${self:custom.basename}:ApiKey
   IngestionQueueArn:
     Value: !GetAtt IngestionQueue.Arn
     Export:
