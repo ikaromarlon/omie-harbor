@@ -6,6 +6,12 @@ module.exports = async ({ config }) => {
     console.log(config.bin.layout.dashRuler)
     const db = await mongodb.connect(config.mongodb.uri, config.mongodb.dbName)
 
+    console.log('users...')
+    await db.collection('users').createIndexes([
+      { name: 'email', key: { email: 1 }, unique: true }
+    ])
+    console.log('done!\n')
+
     console.log('companies...')
     await db.collection('companies').createIndexes([
       { name: 'appkey_appSecret', key: { 'credentials.appKey': 1, 'credentials.appSecret': 1 }, unique: true }
