@@ -5,18 +5,18 @@ const makeSut = () => {
   const mockPayload = { companyId: '25c176b6-b200-4575-9217-e23c6105163c' }
 
   const mockRepositories = {
-    categories: { allowDeleteByCompany: true, deleteMany: jest.fn(async () => null) },
-    departments: { allowDeleteByCompany: true, deleteMany: jest.fn(async () => null) },
-    projects: { allowDeleteByCompany: true, deleteMany: jest.fn(async () => null) },
-    customers: { allowDeleteByCompany: true, deleteMany: jest.fn(async () => null) },
-    productsServices: { allowDeleteByCompany: true, deleteMany: jest.fn(async () => null) },
-    checkingAccounts: { allowDeleteByCompany: true, deleteMany: jest.fn(async () => null) },
-    contracts: { allowDeleteByCompany: true, deleteMany: jest.fn(async () => null) },
-    orders: { allowDeleteByCompany: true, deleteMany: jest.fn(async () => null) },
-    billing: { allowDeleteByCompany: true, deleteMany: jest.fn(async () => null) },
-    accountsPayable: { allowDeleteByCompany: true, deleteMany: jest.fn(async () => null) },
-    accountsReceivable: { allowDeleteByCompany: true, deleteMany: jest.fn(async () => null) },
-    financialMovements: { allowDeleteByCompany: true, deleteMany: jest.fn(async () => null) }
+    categories: { allowsDeleteAllData: true, deleteMany: jest.fn(async () => null) },
+    departments: { allowsDeleteAllData: true, deleteMany: jest.fn(async () => null) },
+    projects: { allowsDeleteAllData: true, deleteMany: jest.fn(async () => null) },
+    customers: { allowsDeleteAllData: true, deleteMany: jest.fn(async () => null) },
+    productsServices: { allowsDeleteAllData: true, deleteMany: jest.fn(async () => null) },
+    checkingAccounts: { allowsDeleteAllData: true, deleteMany: jest.fn(async () => null) },
+    contracts: { allowsDeleteAllData: true, deleteMany: jest.fn(async () => null) },
+    orders: { allowsDeleteAllData: true, deleteMany: jest.fn(async () => null) },
+    billing: { allowsDeleteAllData: true, deleteMany: jest.fn(async () => null) },
+    accountsPayable: { allowsDeleteAllData: true, deleteMany: jest.fn(async () => null) },
+    accountsReceivable: { allowsDeleteAllData: true, deleteMany: jest.fn(async () => null) },
+    financialMovements: { allowsDeleteAllData: true, deleteMany: jest.fn(async () => null) }
   }
 
   const useCase = makeUseCase({

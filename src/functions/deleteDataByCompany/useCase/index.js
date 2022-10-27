@@ -3,7 +3,7 @@ module.exports = ({
 }) => async ({ payload }) => {
   const { companyId } = payload
 
-  const deletableRepositories = Object.values(repositories).filter(repository => repository.allowDeleteByCompany)
+  const deletableRepositories = Object.values(repositories).filter(repository => repository.allowsDeleteAllData)
 
   await Promise.all(deletableRepositories.map(async repository => repository.deleteMany({ _id: companyId })))
 
