@@ -1,5 +1,4 @@
 const { services: { omie: { providerName } } } = require('../../../../src/config')
-const helpers = require('../../../../src/utils/helpers')
 const makeCustomerMapping = require('../../../../src/mappings/omie/customerMapping')
 const {
   mockOmieCustomersResponse,
@@ -17,7 +16,7 @@ const makeSut = () => {
   const mockCompanyId = '25c176b6-b200-4575-9217-e23c6105163c'
 
   return {
-    sut: makeCustomerMapping({ providerName, helpers }),
+    sut: makeCustomerMapping({ providerName }),
     mockOmieCustomer,
     mockOmieCnae,
     mockOmieActivities,

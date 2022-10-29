@@ -10,7 +10,7 @@ registerOmieCompany:
         private: ${self:custom.httpPrivate}
   package:
     patterns:
-      - 'src/functions/registerOmieCompany/**'
+      - 'src/v1/registerOmieCompany/**'
 
 ingestionDispatcher:
   handler: src/index.handler
@@ -36,7 +36,7 @@ ingestionDispatcher:
         enabled: ${self:custom.ingestionDispatcherSchedule3.${self:provider.stage}.enabled}
   package:
     patterns:
-      - 'src/functions/ingestionDispatcher/**'
+      - 'src/v1/ingestionDispatcher/**'
 
 ingestionPerformer:
   handler: src/index.handler
@@ -56,7 +56,7 @@ ingestionPerformer:
         batchSize: 1
   package:
     patterns:
-      - 'src/functions/ingestionPerformer/**'
+      - 'src/v1/ingestionPerformer/**'
 
 dataProcessing:
   handler: src/index.handler
@@ -70,7 +70,7 @@ dataProcessing:
         batchSize: 1
   package:
     patterns:
-      - 'src/functions/dataProcessing/**'
+      - 'src/v1/dataProcessing/**'
 
 dataExport:
   handler: src/index.handler
@@ -90,7 +90,7 @@ dataExport:
         batchSize: 1
   package:
     patterns:
-      - 'src/functions/dataExport/**'
+      - 'src/v1/dataExport/**'
 
 deleteDataByCompany:
   handler: src/index.handler
@@ -104,4 +104,4 @@ deleteDataByCompany:
         private: ${self:custom.httpPrivate}
   package:
     patterns:
-      - 'src/functions/deleteDataByCompany/**'
+      - 'src/v1/deleteDataByCompany/**'

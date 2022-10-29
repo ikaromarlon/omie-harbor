@@ -1,5 +1,5 @@
 const omieErrorHandler = require('../../../../src/services/utils/omieErrorHandler')
-const { ExternalServerError } = require('../../../../src/utils/errors')
+const { ExternalServerError } = require('../../../../src/common/errors')
 
 const makeSut = () => {
   const mockOmieError = new Error('Omie HTTP error response message')

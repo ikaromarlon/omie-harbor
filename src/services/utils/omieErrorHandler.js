@@ -1,4 +1,4 @@
-const { ExternalServerError } = require('../../utils/errors')
+const { ExternalServerError } = require('../../common/errors')
 
 /**
  * Receive an error from Omie API and check if it should be thrown or not

@@ -1,7 +1,7 @@
 const omieErrorHandler = require('./utils/omieErrorHandler')
 const makeOmieRequest = require('./utils/makeOmieRequest')
 const { services: { omie: { apiBaseUrl } } } = require('../config')
-const { isoDateToBR } = require('../utils/helpers')
+const { isoDateToBR } = require('../common/helpers')
 
 module.exports = ({ requester }) => {
   const defaultPagination = { pageNumber: 1, recordsPerPage: 500 }

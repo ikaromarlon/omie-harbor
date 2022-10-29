@@ -7,18 +7,18 @@
     "node": ">=16.0.0"
   },
   "scripts": {
+    "prepare": "husky install",
     "lint": "standard",
     "lint:fix": "npm run lint -- --fix",
     "lint:staged": "lint-staged",
-    "test": "jest --passWithNoTests --runInBand --silent",
-    "test:verbose": "jest --passWithNoTests --runInBand --verbose",
-    "test:staged": "npm test -- --findRelatedTests",
-    "test:unit": "npm test -- --watch ./tests/unit",
-    "test:integration": "npm test -- --watch ./tests/integration",
-    "test:coverage": "npm test -- --collectCoverage",
+    "_test": "jest --runInBand --silent",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:staged": "npm run _test -- --findRelatedTests --passWithNoTests",
+    "test:unit": "npm run _test -- --config jest.config.unit.js",
+    "test:integration": "npm run _test -- --config jest.config.integration.js",
     "bin:dev": "STAGE=dev node ./bin/index.js",
     "bin:prd": "STAGE=prd node ./bin/index.js",
-    "ci": "npm install && npm run test",
+    "ci": "npm ci && npm test",
     "ci:dev": "npm run ci && npm run bin:dev -- --createIndexes",
     "ci:prd": "npm run ci && npm run bin:prd -- --createIndexes",
     "predeploy:dev": "npm run ci:dev",
@@ -28,8 +28,7 @@
     "deploy:function:dev": "npm run deploy:dev -- function -f",
     "deploy:prd": "STAGE=prd && npm run deploy -- --stage prd",
     "deploy:function:prd": "npm run deploy:prd -- function -f",
-    "deploy:all": "npm run deploy:dev && npm run deploy:prd",
-    "prepare": "husky install"
+    "deploy:all": "npm run deploy:dev && npm run deploy:prd"
   },
   "repository": {
     "type": "git",

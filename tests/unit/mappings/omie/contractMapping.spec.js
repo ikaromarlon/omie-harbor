@@ -1,5 +1,4 @@
 const { services: { omie: { providerName } } } = require('../../../../src/config')
-const helpers = require('../../../../src/utils/helpers')
 const makeContractMapping = require('../../../../src/mappings/omie/contractMapping')
 const {
   mockEmptyRecordsIds,
@@ -21,7 +20,7 @@ const makeSut = () => {
   const mockCategoryId = '44d50267-4bc1-42bc-923a-00df2968a2be'
 
   return {
-    sut: makeContractMapping({ providerName, helpers }),
+    sut: makeContractMapping({ providerName }),
     mockOmieContract,
     mockOmieContractSteps,
     mockOmieContractBillingTypes,

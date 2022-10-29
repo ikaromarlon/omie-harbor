@@ -1,5 +1,4 @@
 const { services: { omie: { providerName } } } = require('../../config')
-const helpers = require('../../utils/helpers')
 const makeCompanyMapping = require('./companyMapping')
 const makeCustomerMapping = require('./customerMapping')
 const makeProjectMapping = require('./projectMapping')
@@ -17,19 +16,19 @@ const makeTitleMapping = require('./titleMapping')
 const makeFinancialMovementMapping = require('./financialMovementMapping')
 
 module.exports = {
-  company: makeCompanyMapping({ providerName, helpers }),
+  company: makeCompanyMapping({ providerName }),
   category: makeCategoryMapping({ providerName }),
   department: makeDepartmentMapping({ providerName }),
-  customer: makeCustomerMapping({ providerName, helpers }),
+  customer: makeCustomerMapping({ providerName }),
   project: makeProjectMapping({ providerName }),
   product: makeProductMapping({ providerName }),
   service: makeServiceMapping({ providerName }),
-  checkingAccount: makeCheckingAccountMapping({ providerName, helpers }),
-  productOrder: makeProductOrderMapping({ providerName, helpers }),
-  serviceOrder: makeServiceOrderMapping({ providerName, helpers }),
-  contract: makeContractMapping({ providerName, helpers }),
-  productInvoice: makeProductInvoiceMapping({ providerName, helpers }),
-  serviceInvoice: makeServiceInvoiceMapping({ providerName, helpers }),
-  title: makeTitleMapping({ providerName, helpers }),
-  financialMovement: makeFinancialMovementMapping({ providerName, helpers })
+  checkingAccount: makeCheckingAccountMapping({ providerName }),
+  productOrder: makeProductOrderMapping({ providerName }),
+  serviceOrder: makeServiceOrderMapping({ providerName }),
+  contract: makeContractMapping({ providerName }),
+  productInvoice: makeProductInvoiceMapping({ providerName }),
+  serviceInvoice: makeServiceInvoiceMapping({ providerName }),
+  title: makeTitleMapping({ providerName }),
+  financialMovement: makeFinancialMovementMapping({ providerName })
 }

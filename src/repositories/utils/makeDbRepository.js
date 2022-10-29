@@ -1,5 +1,5 @@
 const config = require('../../config')
-const { uuid } = require('../../utils/helpers')
+const { uuid } = require('../../common/helpers')
 
 module.exports = ({
   name,

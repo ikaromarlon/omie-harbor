@@ -1,7 +1,9 @@
-module.exports = ({ providerName, helpers }) => ({ omieCustomer, omieCnae, omieActivities, omieBanks, companyId }) => {
+const { getNumbers } = require('../../common/helpers')
+
+module.exports = ({ providerName }) => ({ omieCustomer, omieCnae, omieActivities, omieBanks, companyId }) => {
   const phones = []
-  if (omieCustomer.telefone1_numero) phones.push({ areaCode: helpers.getNumbers(omieCustomer.telefone1_ddd), number: helpers.getNumbers(omieCustomer.telefone1_numero) })
-  if (omieCustomer.telefone2_numero) phones.push({ areaCode: helpers.getNumbers(omieCustomer.telefone2_ddd), number: helpers.getNumbers(omieCustomer.telefone2_numero) })
+  if (omieCustomer.telefone1_numero) phones.push({ areaCode: getNumbers(omieCustomer.telefone1_ddd), number: getNumbers(omieCustomer.telefone1_numero) })
+  if (omieCustomer.telefone2_numero) phones.push({ areaCode: getNumbers(omieCustomer.telefone2_ddd), number: getNumbers(omieCustomer.telefone2_numero) })
   const cnae = omieCnae.find(e => e.nCodigo === omieCustomer.cnae)
   let omieBank
   if (omieCustomer.dadosBancarios.codigo_banco) omieBank = omieBanks.find(e => e.codigo === omieCustomer.dadosBancarios.codigo_banco)
@@ -9,7 +11,7 @@ module.exports = ({ providerName, helpers }) => ({ omieCustomer, omieCnae, omieA
     externalId: String(omieCustomer.codigo_cliente_omie),
     provider: providerName,
     companyId,
-    cpfcnpj: helpers.getNumbers(omieCustomer.cnpj_cpf),
+    cpfcnpj: getNumbers(omieCustomer.cnpj_cpf),
     personType: omieCustomer.pessoa_fisica === 'N' ? 'J' : 'F',
     name: omieCustomer.razao_social,
     nickName: omieCustomer.nome_fantasia,
@@ -18,7 +20,7 @@ module.exports = ({ providerName, helpers }) => ({ omieCustomer, omieCnae, omieA
     stateRegistration: omieCustomer.inscricao_estadual,
     municipalRegistration: omieCustomer.inscricao_municipal,
     address: {
-      zipCode: helpers.getNumbers(omieCustomer.cep),
+      zipCode: getNumbers(omieCustomer.cep),
       street: omieCustomer.endereco,
       number: omieCustomer.endereco_numero,
       neighborhood: omieCustomer.bairro,
@@ -37,7 +39,7 @@ module.exports = ({ providerName, helpers }) => ({ omieCustomer, omieCnae, omieA
       branch: omieCustomer.dadosBancarios.agencia ?? null,
       accountNumber: omieCustomer.dadosBancarios.conta_corrente ?? null,
       holder: {
-        cpfcnpj: omieCustomer.dadosBancarios.doc_titular ? helpers.getNumbers(omieCustomer.dadosBancarios.doc_titular) : null,
+        cpfcnpj: omieCustomer.dadosBancarios.doc_titular ? getNumbers(omieCustomer.dadosBancarios.doc_titular) : null,
         name: omieCustomer.dadosBancarios.nome_titular ?? null
       }
     },

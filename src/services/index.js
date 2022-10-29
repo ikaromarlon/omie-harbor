@@ -1,4 +1,4 @@
-const makeRequester = require('../utils/requester')
+const makeRequester = require('../common/adapters/requester')
 const makeOmieService = require('./omieService')
 
 module.exports = () => {

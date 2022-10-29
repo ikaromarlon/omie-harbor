@@ -67,7 +67,7 @@ package:
     - '!**'
     - 'node_modules/**'
     - 'src/**'
-    - '!src/functions/**'
+    - '!src/v1/**'
     - 'package.json'
 plugins:
   - serverless-iam-roles-per-function

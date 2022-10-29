@@ -15,7 +15,7 @@ const makeSut = () => {
 
 describe('Main Handler - Functions Loader', () => {
   beforeAll(() => {
-    functions = Object.values(fs.readdirSync('./src/functions')).filter(f => !['.DS_Store', 'desktop.ini'].includes(f))
+    functions = Object.values(fs.readdirSync('./src/v1')).filter(f => !['.DS_Store', 'desktop.ini'].includes(f))
     expect(functions.length).toBeGreaterThan(0)
   })
 
@@ -25,14 +25,15 @@ describe('Main Handler - Functions Loader', () => {
       'dataProcessing',
       'deleteDataByCompany',
       'ingestionDispatcher',
-      'ingestionPerformer'
+      'ingestionPerformer',
+      'registerOmieCompany'
     ])
   })
 
   it('Should load functions modules and return success response', async () => {
     const { sut, mockEvent, mockContext } = makeSut()
     await Promise.all(functions.map(async fn => {
-      jest.mock(`../../src/functions/${fn}`, () => async () => async () => Promise.resolve({ statusCode: 200, data: { success: true } }))
+      jest.mock(`../../src/v1/${fn}`, () => async () => async () => Promise.resolve({ statusCode: 200, data: { success: true } }))
       mockContext.functionName = fn
       const result = await sut(mockEvent, mockContext)
       expect(result).toBeTruthy()
@@ -53,7 +54,7 @@ describe('Main Handler - Functions Loader', () => {
     expect(result.headers).toBeTruthy()
     expect(result.headers['Content-Type']).toBeTruthy()
     expect(result.body).toBeTruthy()
-    expect(JSON.parse(result.body).message).toBe(`Cannot find module './functions/${mockContext.functionName}' from 'src/index.js'`)
+    expect(JSON.parse(result.body).message).toBe(`Cannot find module './v1/${mockContext.functionName}' from 'src/index.js'`)
   })
 
   it('Should return error response if any Error is thrown from any where', async () => {

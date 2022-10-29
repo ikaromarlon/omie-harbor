@@ -1,5 +1,4 @@
 const { services: { omie: { providerName } } } = require('../../../../src/config')
-const helpers = require('../../../../src/utils/helpers')
 const makeTitleMapping = require('../../../../src/mappings/omie/financialMovementMapping')
 const {
   mockEmptyRecordsIds,
@@ -26,7 +25,7 @@ const makeSut = () => {
   const mockAccountReceivableId = null
 
   return {
-    sut: makeTitleMapping({ providerName, helpers }),
+    sut: makeTitleMapping({ providerName }),
     mockOmieFinancialMovement,
     mockOmieDocumentTypes,
     mockOmieEntryOrigins,

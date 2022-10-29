@@ -1,5 +1,4 @@
 const { services: { omie: { providerName } } } = require('../../../../src/config')
-const helpers = require('../../../../src/utils/helpers')
 const makeCompanyMapping = require('../../../../src/mappings/omie/companyMapping')
 const { mockOmieCompaniesResponse, mockParsedOmieCompany, mockOmieCnaeResponse } = require('../../../mocks')
 
@@ -9,7 +8,7 @@ const makeSut = () => {
   const mockOmieCnae = mockOmieCnaeResponse.cadastros
 
   return {
-    sut: makeCompanyMapping({ providerName, helpers }),
+    sut: makeCompanyMapping({ providerName }),
     mockOmieCompany,
     mockCredentials,
     mockOmieCnae

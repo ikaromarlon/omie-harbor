@@ -1,4 +1,6 @@
-module.exports = ({ providerName, helpers: { brDateToISO } }) => ({ omieCheckingAccount, omieBanks, omieCheckingAccountTypes, companyId }) => {
+const { brDateToISO } = require('../../common/helpers')
+
+module.exports = ({ providerName }) => ({ omieCheckingAccount, omieBanks, omieCheckingAccountTypes, companyId }) => {
   const omieBank = omieBanks.find(e => e.codigo === omieCheckingAccount.codigo_banco)
   const omieCheckingAccountType = omieCheckingAccountTypes.find(e => e.cCodigo === omieCheckingAccount.tipo)
 
