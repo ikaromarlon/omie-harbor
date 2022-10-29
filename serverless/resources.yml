@@ -39,12 +39,12 @@ Resources:
       BucketName: ${self:custom.basename}-data-export-bucket
 
 Outputs:
-  RestApiId:
-    Value: !Ref ApiGatewayRestApi
+  RestApiUrl:
+    Value: { 'Fn::Join': [ '', [ 'https://', { 'Ref' : 'ApiGatewayRestApi' }, '.execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}' ] ] }
     Export:
-      Name: ${self:custom.basename}:RestApiId
+      Name: ${self:custom.basename}:RestApiUrl
   ApiKey:
-    Value: !GetAtt ApiGatewayApiKey1.Value
+    Value: ${self:custom.appApiKey.${self:provider.stage}}
     Export:
       Name: ${self:custom.basename}:ApiKey
   IngestionQueueArn:

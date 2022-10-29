@@ -41,7 +41,7 @@ provider:
     apiKeySourceType: HEADER
     apiKeys:
       - name: ${self:custom.basename}
-        value: ${self:custom.appApiKeys.${self:provider.stage}}
+        value: ${self:custom.appApiKey.${self:provider.stage}}
         enabled: true
   stackTags:
     HOLDING: dois
