@@ -4,13 +4,27 @@ registerOmieCompany:
   events:
     - schedule: ${self:custom.functionsWarmUpScheduleEvent}
     - http:
-        path: omie/companies
+        path: omie/register-company
         method: POST
         cors: ${self:custom.httpCors}
         private: ${self:custom.httpPrivate}
   package:
     patterns:
       - 'src/v1/registerOmieCompany/**'
+
+deleteDataByCompany:
+  handler: src/index.handler
+  iamRoleStatementsName: ${self:custom.basename}-deleteDataByCompany-role
+  events:
+    - schedule: ${self:custom.functionsWarmUpScheduleEvent}
+    - http:
+        path: company/{id}/data
+        method: DELETE
+        cors: ${self:custom.httpCors}
+        private: ${self:custom.httpPrivate}
+  package:
+    patterns:
+      - 'src/v1/deleteDataByCompany/**'
 
 ingestionDispatcher:
   handler: src/index.handler
@@ -91,17 +105,3 @@ dataExport:
   package:
     patterns:
       - 'src/v1/dataExport/**'
-
-deleteDataByCompany:
-  handler: src/index.handler
-  iamRoleStatementsName: ${self:custom.basename}-deleteDataByCompany-role
-  events:
-    - schedule: ${self:custom.functionsWarmUpScheduleEvent}
-    - http:
-        path: company/{id}/data
-        method: DELETE
-        cors: ${self:custom.httpCors}
-        private: ${self:custom.httpPrivate}
-  package:
-    patterns:
-      - 'src/v1/deleteDataByCompany/**'
