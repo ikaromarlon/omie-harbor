@@ -1,3 +1,4 @@
+const { NotFoundError } = require('../../../../src/common/errors')
 const makeUseCase = require('../../../../src/v1/deleteDataByCompany/useCase')
 const { mockSavedOmieCompanies } = require('../../../mocks')
 
@@ -83,10 +84,11 @@ const makeSut = () => {
 }
 
 describe('deleteDataByCompany UseCase', () => {
-  it('Should call repositories.companies.deleteMany successfully', async () => {
+  it('Should delete data by company successfully', async () => {
     const { sut, mockPayload, mockRepositories } = makeSut()
     const result = await sut({ payload: mockPayload })
     const { id } = mockPayload
+    expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ _id: id })
     expect(mockRepositories.categories.deleteMany).toHaveBeenCalledWith({ companyId: id })
     expect(mockRepositories.departments.deleteMany).toHaveBeenCalledWith({ companyId: id })
     expect(mockRepositories.projects.deleteMany).toHaveBeenCalledWith({ companyId: id })
@@ -99,7 +101,6 @@ describe('deleteDataByCompany UseCase', () => {
     expect(mockRepositories.accountsPayable.deleteMany).toHaveBeenCalledWith({ companyId: id })
     expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledWith({ companyId: id })
     expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledWith({ companyId: id })
-    expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ _id: id })
     expect(result).toEqual({
       success: true,
       company: {
@@ -122,5 +123,31 @@ describe('deleteDataByCompany UseCase', () => {
         financialMovements: 0
       }
     })
+  })
+
+  it('Should throw a NotFoundError due to not find company', async () => {
+    const { sut, mockPayload, mockRepositories } = makeSut()
+    mockPayload.id = 'any-invalid-company-id'
+    mockRepositories.companies.findOne.mockResolvedValueOnce(null)
+    try {
+      await sut({ payload: mockPayload })
+    } catch (error) {
+      const { id } = mockPayload
+      expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ _id: id })
+      expect(mockRepositories.categories.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockRepositories.departments.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockRepositories.projects.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockRepositories.customers.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockRepositories.productsServices.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockRepositories.checkingAccounts.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockRepositories.contracts.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockRepositories.orders.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockRepositories.billing.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockRepositories.accountsPayable.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
+      expect(error).toBeInstanceOf(NotFoundError)
+      expect(error.message).toBe('Company not found')
+    }
   })
 })

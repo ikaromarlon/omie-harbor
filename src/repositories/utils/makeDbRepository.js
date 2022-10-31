@@ -10,10 +10,11 @@ module.exports = ({
   const collection = db.collection(name)
 
   const parseFilter = (filter) => Object.entries(filter).reduce((acc, [k, v]) => {
-    acc[k] = v
-    if (k.indexOf('$') !== 0) { /** does not contains a special mongodb operator */
+    const key = k === 'id' ? '_id' : k
+    acc[key] = v
+    if (key.indexOf('$') !== 0) { /** does not contains a special mongodb operator */
       if (Array.isArray(v)) {
-        acc[k] = v.length > 1 ? { $in: v } : v[0]
+        acc[key] = v.length > 1 ? { $in: v } : v[0]
       }
     }
     return acc
@@ -25,7 +26,10 @@ module.exports = ({
       const parsedFilter = parseFilter(filter)
       return collection.find(parsedFilter).toArray()
     },
-    findOne: async (filter) => collection.findOne(filter),
+    findOne: async (filter) => {
+      const parsedFilter = parseFilter(filter)
+      return collection.findOne(parsedFilter)
+    },
     createOrUpdateOne: async (filter, { _id, createdAt, createdBy, updatedAt, updatedBy, ...data }) => {
       const id = uuid()
       const date = new Date()

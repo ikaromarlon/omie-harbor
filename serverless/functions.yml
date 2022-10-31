@@ -18,7 +18,7 @@ deleteDataByCompany:
   events:
     - schedule: ${self:custom.functionsWarmUpScheduleEvent}
     - http:
-        path: company/{id}/data
+        path: companies/{id}/data
         method: DELETE
         cors: ${self:custom.httpCors}
         private: ${self:custom.httpPrivate}
