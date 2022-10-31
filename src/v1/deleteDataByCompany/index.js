@@ -2,7 +2,7 @@ const makeController = require('./controller')
 const makeUseCase = require('./useCase')
 const schema = require('./schema')
 const { dbRepositories } = require('../../repositories')
-const { validateRequestSchema } = require('../../common/utils/validateRequestSchema')
+const validateRequestSchema = require('../../common/utils/validateRequestSchema')
 
 module.exports = async () => {
   const repositories = await dbRepositories()

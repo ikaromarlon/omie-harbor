@@ -179,7 +179,7 @@ describe('SetupRepository Util', () => {
       await insertMocksMethods()
       const result = await sut.deleteMany({ _id: '000001' })
       expect(result).toBeTruthy()
-      expect(result.deletedCount).toBe(1)
+      expect(result).toBe(1)
     })
   })
 })

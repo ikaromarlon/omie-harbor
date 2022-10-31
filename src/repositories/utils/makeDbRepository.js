@@ -116,7 +116,8 @@ module.exports = ({
     },
     deleteMany: async (filter) => {
       const parsedFilter = parseFilter(filter)
-      return collection.deleteMany(parsedFilter)
+      const result = await collection.deleteMany(parsedFilter)
+      return result.deletedCount
     },
     ...customOperations(collection),
     ...properties
