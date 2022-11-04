@@ -7,10 +7,25 @@ registerOmieCompany:
         path: omie/register-company
         method: POST
         cors: ${self:custom.httpCors}
-        private: ${self:custom.httpPrivate}
+        private: false
   package:
     patterns:
       - 'src/v1/registerOmieCompany/**'
+
+omieWebhook:
+  handler: src/index.handler
+  iamRoleStatementsName: ${self:custom.basename}-omieWebhook-role
+  events:
+    - schedule: ${self:custom.functionsWarmUpScheduleEvent}
+    - http:
+        path: omie/webhook
+        method: POST
+        cors: ${self:custom.httpCors}
+        private: false
+  package:
+    patterns:
+      - 'src/v1/omieWebhook/**'
+  logRetentionInDays: 90
 
 deleteDataByCompany:
   handler: src/index.handler
@@ -21,7 +36,7 @@ deleteDataByCompany:
         path: companies/{id}/data
         method: DELETE
         cors: ${self:custom.httpCors}
-        private: ${self:custom.httpPrivate}
+        private: false
   package:
     patterns:
       - 'src/v1/deleteDataByCompany/**'

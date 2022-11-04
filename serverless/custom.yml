@@ -15,7 +15,6 @@ httpCors:
     - Cache-Control
     - X-Api-Key
   allowCredentials: false
-httpPrivate: false
 functionsWarmUpScheduleEvent:
   description: Function warm up each five minutes
   rate: rate(5 minutes)
