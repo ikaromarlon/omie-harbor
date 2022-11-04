@@ -1,4 +1,9 @@
 # serverless plugins
+serverless-offline:
+  httpPort: 3001
+  noPrependStageInUrl: true
+  apiKey: d41d8cd98f00b204e9800998ecf8427e
+  disableScheduledEvents: true
 serverless-iam-roles-per-function:
   defaultInherit: true
 
