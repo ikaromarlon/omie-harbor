@@ -6,6 +6,11 @@ const USER_ROLE = {
   CUSTOMER_DEFAULT: 'CUSTOMER_DEFAULT'
 }
 
+const OMIE_WEBHOOK_EVENT_TYPES = [
+  'OrdemServico.Excluida'
+]
+
 module.exports = {
-  USER_ROLE
+  USER_ROLE,
+  OMIE_WEBHOOK_EVENT_TYPES
 }
