@@ -7,6 +7,25 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Start HTTP server",
+      "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
+      "cwd": "${workspaceFolder}",
+      "localRoot": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "offline",
+        "cloudside"
+      ],
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "env": {
+        "SLS_DEBUG": "*"
+      },
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Invoke ingestionDispatcher function",
       "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
       "cwd": "${workspaceFolder}",

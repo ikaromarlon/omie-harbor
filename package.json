@@ -8,6 +8,7 @@
   },
   "scripts": {
     "prepare": "husky install",
+    "start": "sls offline cloudside",
     "lint": "standard",
     "lint:fix": "npm run lint -- --fix",
     "lint:staged": "lint-staged",
@@ -58,6 +59,7 @@
     "serverless": "^3.21.0",
     "serverless-cloudside-plugin": "^1.0.6",
     "serverless-iam-roles-per-function": "^3.2.0",
+    "serverless-offline": "^11.2.3",
     "standard": "^16.0.4"
   },
   "standard": {

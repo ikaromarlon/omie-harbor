@@ -72,3 +72,4 @@ package:
 plugins:
   - serverless-iam-roles-per-function
   - serverless-cloudside-plugin
+  - serverless-offline
