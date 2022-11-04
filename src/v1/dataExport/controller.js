@@ -2,8 +2,8 @@ const { successHandler, errorHandler } = require('../../common/handlers')
 const { tryJsonParse } = require('../../common/helpers')
 
 module.exports = ({
-  validateRequestSchema,
   schema,
+  validateRequestSchema,
   useCase
 }) => async (request) => {
   try {

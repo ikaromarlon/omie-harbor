@@ -1,8 +1,8 @@
 const { successHandler, errorHandler } = require('../../common/handlers')
 
 module.exports = ({
-  validateRequestSchema,
   schema,
+  validateRequestSchema,
   useCase
 }) => async (request) => {
   try {

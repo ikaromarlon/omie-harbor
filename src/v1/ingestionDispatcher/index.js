@@ -15,7 +15,7 @@ module.exports = async () => {
   })
 
   const controller = makeController({
-    useCase: useCase
+    useCase
   })
 
   return controller

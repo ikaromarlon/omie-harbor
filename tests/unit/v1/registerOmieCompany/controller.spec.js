@@ -15,8 +15,8 @@ const makeSut = () => {
   const useCaseStub = jest.fn(async () => Promise.resolve(mockSavedOmieCompanies[0]))
 
   const controller = makeController({
-    validateRequestSchema: validateRequestSchemaStub,
     schema: mockSchema,
+    validateRequestSchema: validateRequestSchemaStub,
     useCase: useCaseStub
   })
 

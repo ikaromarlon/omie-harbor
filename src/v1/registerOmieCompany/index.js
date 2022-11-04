@@ -1,10 +1,10 @@
 const makeController = require('./controller')
-const makeUseCase = require('./useCase')
 const schema = require('./schema')
+const validateRequestSchema = require('../../common/utils/validateRequestSchema')
+const makeUseCase = require('./useCase')
 const { dbRepositories } = require('../../repositories')
 const { omieMappings } = require('../../mappings')
 const makeServices = require('../../services')
-const validateRequestSchema = require('../../common/utils/validateRequestSchema')
 
 module.exports = async () => {
   const { omieService } = makeServices()
@@ -16,9 +16,9 @@ module.exports = async () => {
   })
 
   const controller = makeController({
-    useCase: useCase,
     schema,
-    validateRequestSchema
+    validateRequestSchema,
+    useCase
   })
 
   return controller
