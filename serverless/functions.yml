@@ -25,7 +25,6 @@ omieWebhook:
   package:
     patterns:
       - 'src/v1/omieWebhook/**'
-  logRetentionInDays: 90
 
 deleteDataByCompany:
   handler: src/index.handler
