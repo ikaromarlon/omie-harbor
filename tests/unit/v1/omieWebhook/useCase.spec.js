@@ -1,6 +1,17 @@
+const { InternalServerError } = require('../../../../src/common/errors')
 const makeUseCase = require('../../../../src/v1/omieWebhook/useCase')
+const {
+  mockSavedOmieCompanies,
+  mockSavedOmieServiceOrders,
+  mockSavedOmieProductOrders,
+  mockSavedOmieContracts,
+  mockSavedOmieAccountsPayable,
+  mockSavedOmieAccountsReceivable
+} = require('../../../mocks')
 
 const makeSut = () => {
+  const mockCompany = mockSavedOmieCompanies[0]
+
   const mockPayload = {
     payload: {
       topic: 'Entity.event',
@@ -9,8 +20,29 @@ const makeSut = () => {
     }
   }
 
-  const mockFullbpoBfbService = {
-    omieWebHook: jest.fn(async () => ({}))
+  const mockRepositories = {
+    companies: {
+      findOne: jest.fn(async () => mockCompany)
+    },
+    contracts: {
+      find: jest.fn(async () => []),
+      deleteMany: jest.fn(async () => ({}))
+    },
+    orders: {
+      find: jest.fn(async () => []),
+      deleteMany: jest.fn(async () => ({}))
+    },
+    accountsPayable: {
+      find: jest.fn(async () => []),
+      deleteMany: jest.fn(async () => ({}))
+    },
+    accountsReceivable: {
+      find: jest.fn(async () => []),
+      deleteMany: jest.fn(async () => ({}))
+    },
+    financialMovements: {
+      deleteMany: jest.fn(async () => ({}))
+    }
   }
 
   const mockLogger = {
@@ -18,35 +50,445 @@ const makeSut = () => {
   }
 
   const useCase = makeUseCase({
-    fullbpoBfbService: mockFullbpoBfbService,
+    repositories: mockRepositories,
     logger: mockLogger
   })
 
   return {
     sut: useCase,
     mockPayload,
-    mockFullbpoBfbService,
-    mockLogger
+    mockRepositories,
+    mockLogger,
+    mockCompany
   }
 }
 
 describe('omieWebhook UseCase', () => {
-  it('Should receive a ping event and return a pong response successfully', async () => {
-    const { sut, mockPayload, mockLogger } = makeSut()
-    mockPayload.payload = { ping: 'omie' }
-    const result = await sut(mockPayload)
-    expect(mockLogger.info).toHaveBeenCalledWith({ data: mockPayload.payload })
-    expect(result).toEqual({
-      ping: 'omie',
-      pong: 'fullbpo'
+  it('Should not find company and throw an InternalServerError', async () => {
+    const { sut, mockPayload, mockRepositories, mockLogger } = makeSut()
+    mockRepositories.companies.findOne.mockResolvedValueOnce(null)
+    try {
+      await sut(mockPayload)
+      expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ 'credentials.appKey': mockPayload.payload.appKey })
+    } catch (error) {
+      expect(error).toBeInstanceOf(InternalServerError)
+      expect(error.statusCode).toBe(500)
+      expect(error.message).toBe(`Company related to appKey '${mockPayload.payload.appKey}' not found`)
+    }
+    expect(mockLogger.info).toHaveBeenCalledTimes(0)
+  })
+
+  describe('OrdemServico.Excluida action', () => {
+    it('Should follow deleteOrder flow due to OrdemServico.Excluida and does not find orders', async () => {
+      const { sut, mockPayload, mockRepositories, mockLogger, mockCompany } = makeSut()
+
+      mockPayload.payload.topic = 'OrdemServico.Excluida'
+      mockPayload.payload.event = { idOrdemServico: '00000000' }
+      mockRepositories.orders.find.mockResolvedValueOnce([])
+
+      const result = await sut(mockPayload)
+
+      expect(mockRepositories.orders.find).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        externalId: '00000000'
+      })
+      expect(mockRepositories.orders.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockLogger.info).toHaveBeenCalledWith({
+        title: 'omieWebhook',
+        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
+        data: {
+          result,
+          event: mockPayload.payload.event
+        }
+      })
+      expect(result).toEqual({
+        deleted: {
+          orders: 0,
+          accountsReceivable: 0,
+          financialMovements: 0
+        }
+      })
+    })
+
+    it('Should follow deleteOrder flow due to OrdemServico.Excluida action and delete records', async () => {
+      const { sut, mockPayload, mockRepositories, mockLogger, mockCompany } = makeSut()
+
+      mockPayload.payload.topic = 'OrdemServico.Excluida'
+      mockPayload.payload.event = { idOrdemServico: '618754178' }
+      mockRepositories.orders.find.mockResolvedValueOnce(mockSavedOmieServiceOrders)
+      mockRepositories.orders.deleteMany.mockResolvedValueOnce(1)
+      mockRepositories.accountsReceivable.deleteMany.mockResolvedValueOnce(1)
+      mockRepositories.financialMovements.deleteMany.mockResolvedValueOnce(1)
+
+      const result = await sut(mockPayload)
+
+      expect(mockRepositories.orders.find).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        externalId: '618754178'
+      })
+      expect(mockRepositories.orders.deleteMany).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        _id: [mockSavedOmieServiceOrders[0]._id]
+      })
+      expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        orderId: [mockSavedOmieServiceOrders[0]._id]
+      })
+      expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        orderId: [mockSavedOmieServiceOrders[0]._id]
+      })
+      expect(mockLogger.info).toHaveBeenCalledWith({
+        title: 'omieWebhook',
+        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
+        data: {
+          result: result,
+          event: mockPayload.payload.event
+        }
+      })
+      expect(result).toEqual({
+        deleted: {
+          orders: 1,
+          accountsReceivable: 1,
+          financialMovements: 1
+        }
+      })
     })
   })
 
-  it('Should receive a real event and call fullbpoBfbService successfully', async () => {
-    const { sut, mockPayload, mockFullbpoBfbService, mockLogger } = makeSut()
-    const result = await sut(mockPayload)
-    expect(mockLogger.info).toHaveBeenCalledWith({ data: mockPayload.payload })
-    expect(mockFullbpoBfbService.omieWebHook).toHaveBeenCalledWith(mockPayload.payload)
-    expect(result).toEqual({})
+  describe('VendaProduto.Excluida action', () => {
+    it('Should follow deleteOrder flow due to VendaProduto.Excluida and does not find orders', async () => {
+      const { sut, mockPayload, mockRepositories, mockLogger, mockCompany } = makeSut()
+
+      mockPayload.payload.topic = 'VendaProduto.Excluida'
+      mockPayload.payload.event = { idPedido: '00000000' }
+      mockRepositories.orders.find.mockResolvedValueOnce([])
+
+      const result = await sut(mockPayload)
+
+      expect(mockRepositories.orders.find).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        externalId: '00000000'
+      })
+      expect(mockRepositories.orders.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockLogger.info).toHaveBeenCalledWith({
+        title: 'omieWebhook',
+        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
+        data: {
+          result,
+          event: mockPayload.payload.event
+        }
+      })
+      expect(result).toEqual({
+        deleted: {
+          orders: 0,
+          accountsReceivable: 0,
+          financialMovements: 0
+        }
+      })
+    })
+
+    it('Should follow deleteOrder flow due to VendaProduto.Excluida action and delete records', async () => {
+      const { sut, mockPayload, mockRepositories, mockLogger, mockCompany } = makeSut()
+
+      mockPayload.payload.topic = 'VendaProduto.Excluida'
+      mockPayload.payload.event = { idPedido: '915642742' }
+      mockRepositories.orders.find.mockResolvedValueOnce(mockSavedOmieProductOrders)
+      mockRepositories.orders.deleteMany.mockResolvedValueOnce(1)
+      mockRepositories.accountsReceivable.deleteMany.mockResolvedValueOnce(1)
+      mockRepositories.financialMovements.deleteMany.mockResolvedValueOnce(1)
+
+      const result = await sut(mockPayload)
+
+      expect(mockRepositories.orders.find).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        externalId: '915642742'
+      })
+      expect(mockRepositories.orders.deleteMany).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        _id: [mockSavedOmieProductOrders[0]._id]
+      })
+      expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        orderId: [mockSavedOmieProductOrders[0]._id]
+      })
+      expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        orderId: [mockSavedOmieProductOrders[0]._id]
+      })
+      expect(mockLogger.info).toHaveBeenCalledWith({
+        title: 'omieWebhook',
+        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
+        data: {
+          result: result,
+          event: mockPayload.payload.event
+        }
+      })
+      expect(result).toEqual({
+        deleted: {
+          orders: 1,
+          accountsReceivable: 1,
+          financialMovements: 1
+        }
+      })
+    })
+  })
+
+  describe('ContratoServico.Excluido action', () => {
+    it('Should follow deleteContract flow due to ContratoServico.Excluido and does not find contracts', async () => {
+      const { sut, mockPayload, mockRepositories, mockLogger, mockCompany } = makeSut()
+
+      mockPayload.payload.topic = 'ContratoServico.Excluido'
+      mockPayload.payload.event = { nCodCtr: '00000000' }
+      mockRepositories.contracts.find.mockResolvedValueOnce([])
+
+      const result = await sut(mockPayload)
+
+      expect(mockRepositories.contracts.find).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        externalId: '00000000'
+      })
+      expect(mockRepositories.contracts.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockLogger.info).toHaveBeenCalledWith({
+        title: 'omieWebhook',
+        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
+        data: {
+          result,
+          event: mockPayload.payload.event
+        }
+      })
+      expect(result).toEqual({
+        deleted: {
+          contracts: 0,
+          accountsReceivable: 0,
+          financialMovements: 0
+        }
+      })
+    })
+
+    it('Should follow deleteContract flow due to ContratoServico.Excluido action and delete records', async () => {
+      const { sut, mockPayload, mockRepositories, mockLogger, mockCompany } = makeSut()
+
+      mockPayload.payload.topic = 'ContratoServico.Excluido'
+      mockPayload.payload.event = { nCodCtr: '617704532' }
+      mockRepositories.contracts.find.mockResolvedValueOnce(mockSavedOmieContracts)
+      mockRepositories.contracts.deleteMany.mockResolvedValueOnce(1)
+      mockRepositories.accountsReceivable.deleteMany.mockResolvedValueOnce(1)
+      mockRepositories.financialMovements.deleteMany.mockResolvedValueOnce(1)
+
+      const result = await sut(mockPayload)
+
+      expect(mockRepositories.contracts.find).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        externalId: '617704532'
+      })
+      expect(mockRepositories.contracts.deleteMany).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        _id: [mockSavedOmieContracts[0]._id]
+      })
+      expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        contractId: [mockSavedOmieContracts[0]._id]
+      })
+      expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        contractId: [mockSavedOmieContracts[0]._id]
+      })
+      expect(mockLogger.info).toHaveBeenCalledWith({
+        title: 'omieWebhook',
+        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
+        data: {
+          result: result,
+          event: mockPayload.payload.event
+        }
+      })
+      expect(result).toEqual({
+        deleted: {
+          contracts: 1,
+          accountsReceivable: 1,
+          financialMovements: 1
+        }
+      })
+    })
+  })
+
+  describe('Financas.ContaPagar.Excluido action', () => {
+    it('Should follow deleteAccountPayable flow due to Financas.ContaPagar.Excluido and does not find accountsPayable', async () => {
+      const { sut, mockPayload, mockRepositories, mockLogger, mockCompany } = makeSut()
+
+      mockPayload.payload.topic = 'Financas.ContaPagar.Excluido'
+      mockPayload.payload.event = { codigo_lancamento_omie: '00000000' }
+      mockRepositories.accountsPayable.find.mockResolvedValueOnce([])
+
+      const result = await sut(mockPayload)
+
+      expect(mockRepositories.accountsPayable.find).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        externalId: '00000000'
+      })
+      expect(mockRepositories.accountsPayable.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockLogger.info).toHaveBeenCalledWith({
+        title: 'omieWebhook',
+        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
+        data: {
+          result,
+          event: mockPayload.payload.event
+        }
+      })
+      expect(result).toEqual({
+        deleted: {
+          accountsPayable: 0,
+          financialMovements: 0
+        }
+      })
+    })
+
+    it('Should follow deleteAccountPayable flow due to Financas.ContaPagar.Excluido action and delete records', async () => {
+      const { sut, mockPayload, mockRepositories, mockLogger, mockCompany } = makeSut()
+
+      mockPayload.payload.topic = 'Financas.ContaPagar.Excluido'
+      mockPayload.payload.event = { codigo_lancamento_omie: '618738728' }
+      mockRepositories.accountsPayable.find.mockResolvedValueOnce(mockSavedOmieAccountsPayable)
+      mockRepositories.accountsPayable.deleteMany.mockResolvedValueOnce(1)
+      mockRepositories.financialMovements.deleteMany.mockResolvedValueOnce(1)
+
+      const result = await sut(mockPayload)
+
+      expect(mockRepositories.accountsPayable.find).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        externalId: '618738728'
+      })
+      expect(mockRepositories.accountsPayable.deleteMany).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        _id: [mockSavedOmieAccountsPayable[0]._id]
+      })
+      expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        accountPayableId: [mockSavedOmieAccountsPayable[0]._id]
+      })
+      expect(mockLogger.info).toHaveBeenCalledWith({
+        title: 'omieWebhook',
+        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
+        data: {
+          result: result,
+          event: mockPayload.payload.event
+        }
+      })
+      expect(result).toEqual({
+        deleted: {
+          accountsPayable: 1,
+          financialMovements: 1
+        }
+      })
+    })
+  })
+
+  describe('Financas.ContaReceber.Excluido action', () => {
+    it('Should follow deleteAccountReceivable flow due to Financas.ContaReceber.Excluido and does not find accountsReceivable', async () => {
+      const { sut, mockPayload, mockRepositories, mockLogger, mockCompany } = makeSut()
+
+      mockPayload.payload.topic = 'Financas.ContaReceber.Excluido'
+      mockPayload.payload.event = { codigo_lancamento_omie: '00000000' }
+      mockRepositories.accountsReceivable.find.mockResolvedValueOnce([])
+
+      const result = await sut(mockPayload)
+
+      expect(mockRepositories.accountsReceivable.find).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        externalId: '00000000'
+      })
+      expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
+      expect(mockLogger.info).toHaveBeenCalledWith({
+        title: 'omieWebhook',
+        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
+        data: {
+          result,
+          event: mockPayload.payload.event
+        }
+      })
+      expect(result).toEqual({
+        deleted: {
+          accountsReceivable: 0,
+          financialMovements: 0
+        }
+      })
+    })
+
+    it('Should follow deleteAccountReceivable flow due to Financas.ContaReceber.Excluido action and delete records', async () => {
+      const { sut, mockPayload, mockRepositories, mockLogger, mockCompany } = makeSut()
+
+      mockPayload.payload.topic = 'Financas.ContaReceber.Excluido'
+      mockPayload.payload.event = { codigo_lancamento_omie: '618738728' }
+      mockRepositories.accountsReceivable.find.mockResolvedValueOnce(mockSavedOmieAccountsReceivable)
+      mockRepositories.accountsReceivable.deleteMany.mockResolvedValueOnce(1)
+      mockRepositories.financialMovements.deleteMany.mockResolvedValueOnce(1)
+
+      const result = await sut(mockPayload)
+
+      expect(mockRepositories.accountsReceivable.find).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        externalId: '618738728'
+      })
+      expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        _id: [mockSavedOmieAccountsReceivable[0]._id]
+      })
+      expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        accountReceivableId: [mockSavedOmieAccountsReceivable[0]._id]
+      })
+      expect(mockLogger.info).toHaveBeenCalledWith({
+        title: 'omieWebhook',
+        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
+        data: {
+          result: result,
+          event: mockPayload.payload.event
+        }
+      })
+      expect(result).toEqual({
+        deleted: {
+          accountsReceivable: 1,
+          financialMovements: 1
+        }
+      })
+    })
+  })
+
+  describe('Financas.ContaCorrente.Lancamento.Excluido action', () => {
+    it('Should follow deleteFinancialMovement flow due to Financas.ContaCorrente.Lancamento.Excluido action and delete records', async () => {
+      const { sut, mockPayload, mockRepositories, mockLogger, mockCompany } = makeSut()
+
+      mockPayload.payload.topic = 'Financas.ContaCorrente.Lancamento.Excluido'
+      mockPayload.payload.event = { nCodLanc: '617704532' }
+      mockRepositories.financialMovements.deleteMany.mockResolvedValueOnce(1)
+
+      const result = await sut(mockPayload)
+
+      expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledWith({
+        companyId: mockCompany._id,
+        externalId: '617704532'
+      })
+      expect(mockLogger.info).toHaveBeenCalledWith({
+        title: 'omieWebhook',
+        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
+        data: {
+          result: result,
+          event: mockPayload.payload.event
+        }
+      })
+      expect(result).toEqual({
+        deleted: {
+          financialMovements: 1
+        }
+      })
+    })
   })
 })

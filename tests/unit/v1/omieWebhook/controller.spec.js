@@ -3,11 +3,12 @@ const { InternalServerError, ValidationError } = require('../../../../src/common
 
 const makeSut = () => {
   const mockRequest = {
-    headers: {},
-    payload: {}
+    original: {
+      detail: {}
+    }
   }
 
-  const validateRequestSchemaStub = jest.fn(() => mockRequest.payload)
+  const validateRequestSchemaStub = jest.fn(() => mockRequest.original.detail)
   const mockSchema = {}
   const useCaseStub = jest.fn(async () => null)
 
@@ -29,14 +30,14 @@ const makeSut = () => {
 describe('omieWebhook Controller', () => {
   it('Should throw an ValidationError if validateRequestSchema throws a ValidationError', async () => {
     const { sut, validateRequestSchemaStub, mockRequest } = makeSut()
-    validateRequestSchemaStub.mockImplementationOnce(() => { throw new ValidationError('Invalid field') })
-    mockRequest.payload.id = 'invalid_field'
+    validateRequestSchemaStub.mockImplementationOnce(() => { throw new ValidationError('Invalid value') })
+    mockRequest.original.detail.anyField = 'invalid_value'
     try {
       await sut(mockRequest)
     } catch (error) {
       expect(error).toBeInstanceOf(ValidationError)
       expect(error.statusCode).toBe(422)
-      expect(error.message).toBe('Invalid field')
+      expect(error.message).toBe('Invalid value')
     }
   })
 
@@ -55,7 +56,7 @@ describe('omieWebhook Controller', () => {
   it('Should return success with statusCode 200', async () => {
     const { sut, useCaseStub, mockRequest } = makeSut()
     const result = await sut(mockRequest)
-    expect(useCaseStub).toHaveBeenCalledWith({ payload: mockRequest.payload })
+    expect(useCaseStub).toHaveBeenCalledWith({ payload: mockRequest.original.detail })
     expect(result.statusCode).toBe(200)
     expect(result.data).toEqual(null)
   })
