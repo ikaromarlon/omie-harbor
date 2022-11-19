@@ -24,7 +24,7 @@ provider:
     SERVICE: ${self:service}
     STAGE: ${self:provider.stage}
     REGION: ${self:provider.region}
-    APP_DOMAIN: ${self:custom.appDomain}
+    DOMAIN: ${self:custom.domain}
     MONGODB_URI: ${self:custom.env.MONGODB_URI.${self:provider.stage}}
     MONGODB_DB_NAME: full-bpo-${self:provider.stage}
     SQS_INGESTION_QUEUE_URL: { 'Ref': 'IngestionQueue'}
@@ -55,7 +55,7 @@ provider:
           Action:
             - 'ses:SendEmail'
           Resource:
-            - arn:aws:ses:${self:custom.sesRegion}:${self:custom.accountId}:identity/${self:custom.appDomain}
+            - arn:aws:ses:${self:custom.sesRegion}:${self:custom.accountId}:identity/${self:custom.domain}
       name: ${self:custom.basename}-dafault-role
 functions: ${file(./serverless/functions.yml)}
 resources: ${file(./serverless/resources.yml)}

@@ -20,9 +20,9 @@ omieWebhook:
     - eventBridge:
         pattern:
           source:
-            - 'fullbpo.api'
+            - ${self:custom.fullbpoApiServiceName}
           detail-type:
-            - 'bfbOmieWebhook'
+            - ${self:service}.omieWebhook
   package:
     patterns:
       - 'src/v1/omieWebhook/**'
