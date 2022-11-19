@@ -55,49 +55,7 @@
         "invoke",
         "local",
         "-f", "ingestionPerformer",
-        "-p", "${workspaceFolder}/.vscode/payloads/ingestionPerformer.json"
-      ],
-      "runtimeArgs": [
-        "--nolazy"
-      ],
-      "env": {
-        "SLS_DEBUG": "*"
-      },
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Invoke dataExport function",
-      "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
-      "cwd": "${workspaceFolder}",
-      "localRoot": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "invoke",
-        "local",
-        "-f", "dataExport",
-        "-p", "${workspaceFolder}/.vscode/payloads/dataExport.json"
-      ],
-      "runtimeArgs": [
-        "--nolazy"
-      ],
-      "env": {
-        "SLS_DEBUG": "*"
-      },
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Invoke deleteDataByCompany function",
-      "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
-      "cwd": "${workspaceFolder}",
-      "localRoot": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "invoke",
-        "local",
-        "-f", "deleteDataByCompany",
-        "-p", "${workspaceFolder}/.vscode/payloads/deleteDataByCompany.json"
+        "-p", "${workspaceFolder}/.vscode/events/ingestionPerformer.json"
       ],
       "runtimeArgs": [
         "--nolazy"
@@ -118,7 +76,71 @@
         "invoke",
         "local",
         "-f", "dataProcessing",
-        "-p", "${workspaceFolder}/.vscode/payloads/dataProcessing.json"
+        "-p", "${workspaceFolder}/.vscode/events/dataProcessing.json"
+      ],
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "env": {
+        "SLS_DEBUG": "*"
+      },
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Invoke omieWebhook function",
+      "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
+      "cwd": "${workspaceFolder}",
+      "localRoot": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "invoke",
+        "local",
+        "-f", "omieWebhook",
+        "-s", "prd",
+        "-p", "${workspaceFolder}/.vscode/events/omieWebhook.json"
+      ],
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "env": {
+        "SLS_DEBUG": "*"
+      },
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Invoke deleteDataByCompany function",
+      "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
+      "cwd": "${workspaceFolder}",
+      "localRoot": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "invoke",
+        "local",
+        "-f", "deleteDataByCompany",
+        "-p", "${workspaceFolder}/.vscode/events/deleteDataByCompany.json"
+      ],
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "env": {
+        "SLS_DEBUG": "*"
+      },
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Invoke dataExport function",
+      "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
+      "cwd": "${workspaceFolder}",
+      "localRoot": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "invoke",
+        "local",
+        "-f", "dataExport",
+        "-p", "${workspaceFolder}/.vscode/events/dataExport.json"
       ],
       "runtimeArgs": [
         "--nolazy"
