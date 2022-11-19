@@ -9,7 +9,7 @@ module.exports = ({
   repositories,
   logger
 }) => {
-  const handler = async ({ payload }) => {
+  const handler = async (payload) => {
     const { appKey, topic, event } = payload
 
     const company = await repositories.companies.find({ 'credentials.appKey': appKey })
