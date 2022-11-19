@@ -8,33 +8,37 @@ const deleteContract = async (
     externalId: String(data.nCodCtr)
   })
 
+  const result = {
+    deleted: {
+      contracts: 0,
+      accountsReceivable: 0,
+      financialMovements: 0
+    }
+  }
+
   if (contracts.length) {
     const contractIds = [...contracts.reduce((acc, e) => {
       acc.add(e._id)
       return acc
     }, new Set())]
 
-    const contractsResult = await repositories.contracts.deleteMany({
+    result.deleted.contracts = await repositories.contracts.deleteMany({
       companyId,
       _id: contractIds
     })
 
-    const accountsReceivableResult = await repositories.accountsReceivable.deleteMany({
+    result.deleted.accountsReceivable = await repositories.accountsReceivable.deleteMany({
       companyId,
       contractId: contractIds
     })
 
-    const financialMovementsResult = await repositories.financialMovements.deleteMany({
+    result.deleted.financialMovements = await repositories.financialMovements.deleteMany({
       companyId,
       contractId: contractIds
     })
-
-    return {
-      contract: contractsResult,
-      accountsReceivable: accountsReceivableResult,
-      financialMovements: financialMovementsResult
-    }
   }
+
+  return result
 }
 
 module.exports = deleteContract

@@ -1,4 +1,3 @@
-const { ExternalServerError, ValidationError } = require('../../common/errors')
 const { errorHandler, successHandler } = require('../../common/handlers')
 
 module.exports = ({
@@ -13,7 +12,6 @@ module.exports = ({
 
     return successHandler({ data })
   } catch (error) {
-    if (error instanceof ValidationError) throw new ExternalServerError(error.message, request.original.detail)
     throw errorHandler(error)
   }
 }

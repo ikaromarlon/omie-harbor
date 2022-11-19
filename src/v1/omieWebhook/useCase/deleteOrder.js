@@ -8,33 +8,37 @@ const deleteOrder = async (
     externalId: String(data.idOrdemServico ?? data.idPedido)
   })
 
+  const result = {
+    deleted: {
+      orders: 0,
+      accountsReceivable: 0,
+      financialMovements: 0
+    }
+  }
+
   if (orders.length) {
     const orderIds = [...orders.reduce((acc, e) => {
       acc.add(e._id)
       return acc
     }, new Set())]
 
-    const ordersResult = await repositories.orders.deleteMany({
+    result.deleted.orders = await repositories.orders.deleteMany({
       companyId,
       _id: orderIds
     })
 
-    const accountsReceivableResult = await repositories.accountsReceivable.deleteMany({
+    result.deleted.accountsReceivable = await repositories.accountsReceivable.deleteMany({
       companyId,
       orderId: orderIds
     })
 
-    const financialMovementsResult = await repositories.financialMovements.deleteMany({
+    result.deleted.financialMovements = await repositories.financialMovements.deleteMany({
       companyId,
       orderId: orderIds
     })
-
-    return {
-      order: ordersResult,
-      accountsReceivable: accountsReceivableResult,
-      financialMovements: financialMovementsResult
-    }
   }
+
+  return result
 }
 
 module.exports = deleteOrder

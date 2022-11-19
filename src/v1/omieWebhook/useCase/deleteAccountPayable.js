@@ -8,27 +8,31 @@ const deleteAccountPayable = async (
     externalId: String(data.codigo_lancamento_omie)
   })
 
+  const result = {
+    deleted: {
+      accountsPayable: 0,
+      financialMovements: 0
+    }
+  }
+
   if (accountsPayable.length) {
     const titleIds = [...accountsPayable.reduce((acc, e) => {
       acc.add(e._id)
       return acc
     }, new Set())]
 
-    const accountsPayableResult = await repositories.accountsPayable.deleteMany({
+    result.deleted.accountsPayable = await repositories.accountsPayable.deleteMany({
       companyId,
       _id: titleIds
     })
 
-    const financialMovementsResult = await repositories.financialMovements.deleteMany({
+    result.deleted.financialMovements = await repositories.financialMovements.deleteMany({
       companyId,
       accountPayableId: titleIds
     })
-
-    return {
-      accountsPayable: accountsPayableResult,
-      financialMovements: financialMovementsResult
-    }
   }
+
+  return result
 }
 
 module.exports = deleteAccountPayable

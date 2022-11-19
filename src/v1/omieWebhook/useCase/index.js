@@ -9,10 +9,10 @@ module.exports = ({
   repositories,
   logger
 }) => {
-  const handler = async (payload) => {
+  const handler = async ({ payload }) => {
     const { appKey, topic, event } = payload
 
-    const company = await repositories.companies.find({ 'credentials.appKey': appKey })
+    const company = await repositories.companies.findOne({ 'credentials.appKey': appKey })
 
     if (!company) {
       throw new InternalServerError(`Company related to appKey '${appKey}' not found`)

@@ -3,14 +3,18 @@ const deleteFinancialMovement = async (
   data,
   repositories
 ) => {
-  const financialMovementsResult = await repositories.financialMovements.deleteMany({
+  const result = {
+    deleted: {
+      financialMovements: 0
+    }
+  }
+
+  result.deleted.financialMovements = await repositories.financialMovements.deleteMany({
     companyId,
     externalId: String(data.nCodLanc)
   })
 
-  return {
-    financialMovements: financialMovementsResult
-  }
+  return result
 }
 
 module.exports = deleteFinancialMovement

@@ -8,27 +8,31 @@ const deleteAccountReceivable = async (
     externalId: String(data.codigo_lancamento_omie)
   })
 
+  const result = {
+    deleted: {
+      accountsReceivable: 0,
+      financialMovements: 0
+    }
+  }
+
   if (accountsReceivable.length) {
     const titleIds = [...accountsReceivable.reduce((acc, e) => {
       acc.add(e._id)
       return acc
     }, new Set())]
 
-    const accountsReceivableResult = await repositories.accountsReceivable.deleteMany({
+    result.deleted.accountsReceivable = await repositories.accountsReceivable.deleteMany({
       companyId,
       _id: titleIds
     })
 
-    const financialMovementsResult = await repositories.financialMovements.deleteMany({
+    result.deleted.financialMovements = await repositories.financialMovements.deleteMany({
       companyId,
       accountReceivableId: titleIds
     })
-
-    return {
-      accountsReceivable: accountsReceivableResult,
-      financialMovements: financialMovementsResult
-    }
   }
+
+  return result
 }
 
 module.exports = deleteAccountReceivable
