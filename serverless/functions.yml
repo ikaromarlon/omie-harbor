@@ -2,7 +2,7 @@ registerOmieCompany:
   handler: src/index.handler
   iamRoleStatementsName: ${self:custom.basename}-registerOmieCompany-role
   events:
-    - schedule: ${self:custom.functionsWarmUpScheduleEvent}
+    # - schedule: ${self:custom.functionsWarmUpScheduledEvent}
     - http:
         path: omie/register-company
         method: POST
@@ -16,7 +16,7 @@ omieWebhook:
   handler: src/index.handler
   iamRoleStatementsName: ${self:custom.basename}-omieWebhook-role
   events:
-    - schedule: ${self:custom.functionsWarmUpScheduleEvent}
+    # - schedule: ${self:custom.functionsWarmUpScheduledEvent}
     - eventBridge:
         pattern:
           source:
@@ -31,7 +31,7 @@ deleteDataByCompany:
   handler: src/index.handler
   iamRoleStatementsName: ${self:custom.basename}-deleteDataByCompany-role
   events:
-    - schedule: ${self:custom.functionsWarmUpScheduleEvent}
+    # - schedule: ${self:custom.functionsWarmUpScheduledEvent}
     - http:
         path: companies/{id}/data
         method: DELETE
