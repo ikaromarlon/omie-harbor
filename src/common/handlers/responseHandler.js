@@ -1,7 +1,7 @@
 const config = require('../../config')
 const mailer = require('../adapters/mailer')
 const logger = require('../adapters/logger')
-const { isClientError } = require('../errors')
+// const { isClientError } = require('../errors')
 
 module.exports = (data, headers) => {
   const response = (statusCode, responseData) => ({
@@ -34,9 +34,9 @@ module.exports = (data, headers) => {
         stack
       }
 
-      if (isClientError(data)) {
-        return response(statusCode, simpleError)
-      }
+      // if (isClientError(data)) {
+      //   return response(statusCode, simpleError)
+      // }
 
       logger.error({ title: 'PROCESS ENDED WITH ERROR', message, data: fullError })
 
