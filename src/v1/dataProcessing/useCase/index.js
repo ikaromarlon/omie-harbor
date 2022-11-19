@@ -16,7 +16,9 @@ module.exports = ({
     return company
   }
 
-  const handler = async ({ userId, companyId, data, entity, batch, notificationAddress }) => {
+  const handler = async ({ payload }) => {
+    const { userId, companyId, data, entity, batch, notificationAddress } = payload
+
     const company = await getCompany(companyId)
 
     const errors = []

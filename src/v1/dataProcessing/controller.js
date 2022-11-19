@@ -7,11 +7,11 @@ module.exports = ({
   useCase
 }) => async (request) => {
   try {
-    const parsedPayload = tryJsonParse(request.payload.records[0].body)
+    const parsedData = tryJsonParse(request.original.Records[0].body)
 
-    const payload = validateRequestSchema(parsedPayload, schema)
+    const payload = validateRequestSchema(parsedData, schema)
 
-    const data = await useCase(payload)
+    const data = await useCase({ payload })
 
     return successHandler({ data })
   } catch (error) {

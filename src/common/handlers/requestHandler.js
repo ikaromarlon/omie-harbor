@@ -1,19 +1,17 @@
 const bodyParser = require('../utils/bodyParser')
 
-module.exports = (event) => {
+module.exports = (request) => {
   const {
     headers = {},
     params = {},
     pathParameters = {},
     query = {},
-    queryStringParameters = {},
-    eventParameters = {},
-    Records: records = []
-  } = event
+    queryStringParameters = {}
+  } = request
 
-  const body = bodyParser(event)
+  const body = bodyParser(request)
 
-  const parsedRequest = {
+  const parsed = {
     headers,
     body,
     params: {
@@ -23,10 +21,6 @@ module.exports = (event) => {
     query: {
       ...query,
       ...queryStringParameters
-    },
-    event: {
-      ...eventParameters,
-      ...(records.length ? { records } : {})
     }
   }
 
@@ -35,10 +29,8 @@ module.exports = (event) => {
     ...params,
     ...query,
     ...queryStringParameters,
-    ...eventParameters,
-    ...body,
-    ...(records.length ? { records } : {})
+    ...body
   }
 
-  return { ...parsedRequest, payload }
+  return { original: request, parsed, payload }
 }
