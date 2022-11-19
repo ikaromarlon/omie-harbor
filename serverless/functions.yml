@@ -17,11 +17,12 @@ omieWebhook:
   iamRoleStatementsName: ${self:custom.basename}-omieWebhook-role
   events:
     - schedule: ${self:custom.functionsWarmUpScheduleEvent}
-    - http:
-        path: omie/webhook
-        method: POST
-        cors: ${self:custom.httpCors}
-        private: false
+    - eventBridge:
+        pattern:
+          source:
+            - 'fullbpo.api'
+          detail-type:
+            - 'bfbOmieWebhook'
   package:
     patterns:
       - 'src/v1/omieWebhook/**'
