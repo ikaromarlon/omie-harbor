@@ -1,7 +1,8 @@
 const { NotFoundError } = require('../../../common/errors')
 
 module.exports = ({
-  repositories
+  repositories,
+  eventBridge
 }) => async ({ payload }) => {
   const { id } = payload
 
@@ -17,6 +18,8 @@ module.exports = ({
   for (const repository of deletableRepositories) {
     result[repository.name] = await repository.deleteMany({ companyId: id })
   }
+
+  await eventBridge.triggerBfbDataExport(id)
 
   return {
     success: true,

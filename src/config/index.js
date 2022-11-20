@@ -15,8 +15,7 @@ module.exports = Object.freeze({
     dbName: env.MONGODB_DB_NAME
   },
   SQS: {
-    ingestionQueueUrl: env.SQS_INGESTION_QUEUE_URL,
-    dataExportQueueUrl: env.SQS_DATA_EXPORT_QUEUE_URL
+    ingestionQueueUrl: env.SQS_INGESTION_QUEUE_URL
   },
   S3: {
     detaExport: {

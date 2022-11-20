@@ -8,7 +8,7 @@ module.exports = ({
   omieService,
   omieMappings,
   repositories,
-  queuer,
+  eventBridge,
   logger
 }) => {
   const makeEmptyRecord = async (id, { companyId, provider, isActive, ...data }) => {
@@ -170,9 +170,9 @@ module.exports = ({
 
     logger.info({ title: 'ingestionPerformer', message: `Ingestion completed for company ${companyId} - ${name}` })
 
-    await queuer.sendCompanyToDataExportQueue(companyId)
+    await eventBridge.triggerBfbDataExport(companyId)
 
-    logger.info({ title: 'ingestionPerformer', message: '1 record sent to dataExport queue', data: { companyId } })
+    logger.info({ title: 'ingestionPerformer', message: 'company sent to dataExport process', data: { companyId } })
 
     return { success: true }
   }

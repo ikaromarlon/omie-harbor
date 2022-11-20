@@ -75,9 +75,8 @@ ingestionPerformer:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - sqs:SendMessage
-      Resource:
-        - Fn::GetAtt: [ DataExportQueue, Arn ]
+        - events:PutEvents
+      Resource: '*'
   events:
     - sqs:
         arn:
@@ -117,10 +116,6 @@ dataExport:
         - events:PutEvents
       Resource: '*'
   events:
-    - sqs:
-        arn:
-          Fn::GetAtt: [ DataExportQueue, Arn ]
-        batchSize: 1
     - eventBridge:
         pattern:
           source:

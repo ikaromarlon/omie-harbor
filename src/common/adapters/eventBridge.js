@@ -2,14 +2,14 @@ const AWS = require('aws-sdk')
 const config = require('../../config')
 const { ExternalServerError } = require('../errors')
 
-module.exports = () => {
+module.exports = (sourceSufix = 'unknown') => {
   const source = config.app.name
 
   const eventBridge = new AWS.EventBridge()
 
   const parseResult = ({ result, target }) => {
     if (result.FailedEntryCount === result.Entries.length) {
-      throw new ExternalServerError(`Error triggering ${target} from source ${source}`, result)
+      throw new ExternalServerError(`Error triggering ${target} from source ${source}.${sourceSufix}`, result)
     }
 
     if (result.FailedEntryCount > 0) {
@@ -26,13 +26,13 @@ module.exports = () => {
   }
 
   return {
-    triggerBfbDataExport: async (data) => {
+    triggerBfbDataExport: async (companyId) => {
       const target = `${config.app.name}.dataExport`
       const Entries = [
         {
           Source: source,
           DetailType: target,
-          Detail: JSON.stringify(data)
+          Detail: JSON.stringify({ companyId })
         }
       ]
 

@@ -6,18 +6,18 @@ const { dbRepositories } = require('../../repositories')
 const { omieMappings } = require('../../mappings')
 const makeServices = require('../../services')
 const logger = require('../../common/adapters/logger')
-const makeQueuer = require('../../common/adapters/queuer')
+const makeEventBridge = require('../../common/adapters/eventBridge')
 
 module.exports = async () => {
   const { omieService } = makeServices()
   const repositories = await dbRepositories()
-  const queuer = makeQueuer()
+  const eventBridge = makeEventBridge('ingestionPerformer')
 
   const useCase = makeUseCase({
     omieService,
     omieMappings,
     repositories,
-    queuer,
+    eventBridge,
     logger
   })
 

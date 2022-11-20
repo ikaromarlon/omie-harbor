@@ -22,17 +22,6 @@ Resources:
       ReceiveMessageWaitTimeSeconds: 20
       VisibilityTimeout: ${self:functions.dataProcessing.timeout}
 
-  DataExportQueue:
-    Type: AWS::SQS::Queue
-    Properties:
-      QueueName: ${self:custom.basename}-dataExport-queue.fifo
-      FifoQueue: true
-      ContentBasedDeduplication: true
-      DeduplicationScope: queue
-      MessageRetentionPeriod: 60 # 1min
-      ReceiveMessageWaitTimeSeconds: 20
-      VisibilityTimeout: ${self:functions.dataExport.timeout}
-
   DataExportBucket:
     Type: AWS::S3::Bucket
     Properties:

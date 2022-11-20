@@ -1,5 +1,4 @@
 const { successHandler, errorHandler } = require('../../common/handlers')
-const { tryJsonParse } = require('../../common/helpers')
 
 module.exports = ({
   schema,
@@ -7,11 +6,7 @@ module.exports = ({
   useCase
 }) => async (request) => {
   try {
-    const parsedData = tryJsonParse(request.original.Records[0].body)
-
-    const payload = validateRequestSchema(parsedData, schema)
-
-    // const payload = validateRequestSchema(request.original.detail, schema)
+    const payload = validateRequestSchema(request.original.detail, schema)
 
     const data = await useCase({ payload })
 

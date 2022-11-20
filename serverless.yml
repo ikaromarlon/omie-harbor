@@ -28,7 +28,6 @@ provider:
     MONGODB_URI: ${self:custom.env.MONGODB_URI.${self:provider.stage}}
     MONGODB_DB_NAME: full-bpo-${self:provider.stage}
     SQS_INGESTION_QUEUE_URL: { 'Ref': 'IngestionQueue'}
-    SQS_DATA_EXPORT_QUEUE_URL: { 'Ref': 'DataExportQueue'}
     S3_DATA_EXPORT_BUCKET_NAME: { 'Ref': 'DataExportBucket'}
     SES_REGION: ${self:custom.sesRegion}
     WAIT_SECONDS_BEFORE_NEXT_OMIE_PAGE_REQUEST: ${self:custom.env.WAIT_SECONDS_BEFORE_NEXT_OMIE_PAGE_REQUEST.${self:provider.stage}}
