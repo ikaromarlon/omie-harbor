@@ -13,7 +13,7 @@ module.exports = ({
   await Promise.all(companies.map(async (company) => {
     const { _id: companyId, name } = company
 
-    logger.info({ title: 'Data Export', message: `Getting data from database for company ${companyId} - ${name}` })
+    logger.info({ title: 'dataExport', message: `Getting data from database for company ${companyId} - ${name}` })
 
     const [
       categories,
@@ -43,7 +43,7 @@ module.exports = ({
       repositories.financialMovements.find({ companyId })
     ])
 
-    logger.info({ title: 'Data Export', message: `Uploading data to bucket for company ${companyId} - ${name}` })
+    logger.info({ title: 'dataExport', message: `Uploading data to bucket for company ${companyId} - ${name}` })
 
     await bucket.storeCompanyData(companyId, {
       companies: [company],
@@ -61,7 +61,7 @@ module.exports = ({
       financialMovements
     })
 
-    logger.info({ title: 'Data Export', message: `Data export completed for company ${companyId} - ${name}` })
+    logger.info({ title: 'dataExport', message: `Data export completed for company ${companyId} - ${name}` })
   }))
 
   return { success: true }

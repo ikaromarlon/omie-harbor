@@ -1,4 +1,3 @@
-process.env.UUID = require('crypto').randomUUID() /** It must run before everything */
 const { requestHandler, responseHandler } = require('./common/handlers')
 
 exports.handler = async (event, context) => {

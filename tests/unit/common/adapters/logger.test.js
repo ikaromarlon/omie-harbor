@@ -1,7 +1,6 @@
 const logger = require('../../../../src/common/adapters/logger')
 
 const makeSut = () => {
-  process.env.UUID = '6e3a00e9-b85d-4df4-8992-7b7e262dad69'
   return {
     sut: logger
   }

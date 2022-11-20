@@ -43,7 +43,7 @@ module.exports = ({
     }
 
     logger.info({
-      title: `Data Processing: ${entity}`,
+      title: `dataProcessing: ${entity}`,
       message: report.message,
       data: report
     })

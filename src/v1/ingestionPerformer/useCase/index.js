@@ -123,7 +123,7 @@ module.exports = ({
       financialMovement: uuidFrom(`${companyId}-financialMovement`)
     }
 
-    logger.info({ title: 'Ingestion Performer', message: `Ingestion started for company ${companyId} - ${name}` })
+    logger.info({ title: 'ingestionPerformer', message: `Ingestion started for company ${companyId} - ${name}` })
 
     const {
       omieBanks,
@@ -168,11 +168,11 @@ module.exports = ({
       joinRecordsByCfopAndMunicipalServiceCode
     })
 
-    logger.info({ title: 'Ingestion Performer', message: `Ingestion completed for company ${companyId} - ${name}` })
+    logger.info({ title: 'ingestionPerformer', message: `Ingestion completed for company ${companyId} - ${name}` })
 
     await queuer.sendCompanyToDataExportQueue(companyId)
 
-    logger.info({ title: 'Ingestion Performer', message: '1 record sent to dataExport queue', data: { companyId } })
+    logger.info({ title: 'ingestionPerformer', message: '1 record sent to dataExport queue', data: { companyId } })
 
     return { success: true }
   }
