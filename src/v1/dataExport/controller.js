@@ -11,6 +11,8 @@ module.exports = ({
 
     const payload = validateRequestSchema(parsedData, schema)
 
+    // const payload = validateRequestSchema(request.original.detail, schema)
+
     const data = await useCase({ payload })
 
     return successHandler({ data })

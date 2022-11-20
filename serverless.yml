@@ -21,7 +21,7 @@ provider:
   deploymentPrefix: serverless
   versionFunctions: false
   environment:
-    SERVICE: ${self:service}
+    SERVICE_NAME: ${self:custom.basename}
     STAGE: ${self:provider.stage}
     REGION: ${self:provider.region}
     DOMAIN: ${self:custom.domain}

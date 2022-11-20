@@ -1,9 +1,9 @@
-const { name, version } = require('../../package.json')
+const { version } = require('../../package.json')
 const { env } = process
 
 module.exports = Object.freeze({
   app: {
-    name: env.SERVICE || name,
+    name: env.SERVICE_NAME,
     stage: env.STAGE || 'dev',
     version,
     user: 'SYSTEM',

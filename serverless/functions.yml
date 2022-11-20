@@ -22,7 +22,7 @@ omieWebhook:
           source:
             - ${self:custom.fullbpoApiServiceName}
           detail-type:
-            - ${self:service}.omieWebhook
+            - ${self:custom.basename}.omieWebhook
   package:
     patterns:
       - 'src/v1/omieWebhook/**'
@@ -112,11 +112,21 @@ dataExport:
         - s3:PutObject
       Resource:
         - Fn::Join: ['', [Fn::GetAtt: [ DataExportBucket, Arn ], '/*']]
+    - Effect: Allow
+      Action:
+        - events:PutEvents
+      Resource: '*'
   events:
     - sqs:
         arn:
           Fn::GetAtt: [ DataExportQueue, Arn ]
         batchSize: 1
+    - eventBridge:
+        pattern:
+          source:
+            - ${self:custom.basename}
+          detail-type:
+            - ${self:custom.basename}.dataExport
   package:
     patterns:
       - 'src/v1/dataExport/**'
