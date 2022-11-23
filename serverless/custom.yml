@@ -10,7 +10,7 @@ serverless-iam-roles-per-function:
 # serverless general config
 accountId: 820389075840
 basename: ${self:service}-${self:provider.stage}
-fullbpoApiServiceName: full-bpo-api-${self:provider.stage}
+fullbpoApiServiceName: fullbpo-api-${self:provider.stage}
 sesRegion: us-east-1
 domain: fullbpo.app
 

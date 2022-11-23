@@ -1,5 +1,5 @@
 {
-  "name": "full-bpo-bfb",
+  "name": "fullbpo-bfb",
   "version": "1.5.0",
   "description": "FullBPO BFB (Back-end For Back-end) service",
   "main": "src/index.js",
@@ -33,14 +33,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fullbpo/full-bpo-bfb.git"
+    "url": "git+https://github.com/fullbpo/fullbpo-bfb.git"
   },
   "author": "Icaro Silva",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fullbpo/full-bpo-bfb/issues"
+    "url": "https://github.com/fullbpo/fullbpo-bfb/issues"
   },
-  "homepage": "https://github.com/fullbpo/full-bpo-bfb#readme",
+  "homepage": "https://github.com/fullbpo/fullbpo-bfb#readme",
   "dependencies": {
     "axios": "^0.24.0",
     "joi": "^17.4.2",

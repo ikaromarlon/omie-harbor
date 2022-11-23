@@ -1,4 +1,4 @@
-service: full-bpo-bfb
+service: fullbpo-bfb
 frameworkVersion: '3'
 useDotenv: true
 configValidationMode: error
@@ -44,9 +44,9 @@ provider:
         enabled: true
   stackTags:
     HOLDING: dois
-    COMPANY: full-bpo
-    PROJECT: full-bpo
-    SERVICE: full-bpo-bfb
+    COMPANY: fullbpo
+    PROJECT: fullbpo
+    SERVICE: fullbpo-bfb
   iam:
     role:
       statements:
