@@ -96,20 +96,6 @@ ingestionPerformer:
     patterns:
       - 'src/v1/ingestionPerformer/**'
 
-dataProcessing:
-  handler: src/index.handler
-  memorySize: ${self:provider.memorySize}
-  timeout: 900
-  iamRoleStatementsName: ${self:custom.basename}-dataProcessing-role
-  events:
-    - sqs:
-        arn:
-          Fn::GetAtt: [ DataProcessingQueue, Arn ]
-        batchSize: 1
-  package:
-    patterns:
-      - 'src/v1/dataProcessing/**'
-
 dataExport:
   handler: src/index.handler
   memorySize: ${self:custom.dataExport.${self:provider.stage}.memorySize}

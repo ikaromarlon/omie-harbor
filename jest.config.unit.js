@@ -8,8 +8,7 @@ module.exports = {
     '<rootDir>/src/index.js',
     '<rootDir>/src/mappings/**/*.js',
     '<rootDir>/src/v*/**/*.js',
-    '!<rootDir>/src/v*/**/schema.js',
-    '!<rootDir>/src/v1/dataProcessing/**/*.js'
+    '!<rootDir>/src/v*/**/schema.js'
   ],
   coverageThreshold: {
     global: {
