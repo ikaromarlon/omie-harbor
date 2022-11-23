@@ -15,6 +15,11 @@ registerOmieCompany:
 omieWebhook:
   handler: src/index.handler
   iamRoleStatementsName: ${self:custom.basename}-omieWebhook-role
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - events:PutEvents
+      Resource: '*' # set permission to eventbus default or create new one
   events:
     # - schedule: ${self:custom.functionsWarmUpScheduledEvent}
     - eventBridge:
@@ -30,6 +35,11 @@ omieWebhook:
 deleteDataByCompany:
   handler: src/index.handler
   iamRoleStatementsName: ${self:custom.basename}-deleteDataByCompany-role
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - events:PutEvents
+      Resource: '*' # set permission to eventbus default or create new one
   events:
     # - schedule: ${self:custom.functionsWarmUpScheduledEvent}
     - http:
@@ -76,7 +86,7 @@ ingestionPerformer:
     - Effect: Allow
       Action:
         - events:PutEvents
-      Resource: '*'
+      Resource: '*' # set permission to eventbus default or create new one
   events:
     - sqs:
         arn:
@@ -111,10 +121,6 @@ dataExport:
         - s3:PutObject
       Resource:
         - Fn::Join: ['', [Fn::GetAtt: [ DataExportBucket, Arn ], '/*']]
-    - Effect: Allow
-      Action:
-        - events:PutEvents
-      Resource: '*'
   events:
     - eventBridge:
         pattern:

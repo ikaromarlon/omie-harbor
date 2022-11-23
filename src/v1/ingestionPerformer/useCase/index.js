@@ -172,7 +172,7 @@ module.exports = ({
 
     await eventBridge.triggerBfbDataExport(companyId)
 
-    logger.info({ title: 'ingestionPerformer', message: 'company sent to dataExport process', data: { companyId } })
+    logger.info({ title: 'ingestionPerformer', message: `Company ${companyId} - ${name} sent to dataExport process` })
 
     return { success: true }
   }

@@ -7,7 +7,8 @@ const deleteFinancialMovement = require('./deleteFinancialMovement')
 
 module.exports = ({
   repositories,
-  logger
+  logger,
+  eventBridge
 }) => {
   const handler = async ({ payload }) => {
     const { appKey, topic, event } = payload
@@ -22,20 +23,38 @@ module.exports = ({
       'OrdemServico.Excluida': deleteOrder,
       'VendaProduto.Excluida': deleteOrder,
       'ContratoServico.Excluido': deleteContract,
+      // 'NotaEntrada.Excluida': deleteAccountPayable,
       'Financas.ContaPagar.Excluido': deleteAccountPayable,
       'Financas.ContaReceber.Excluido': deleteAccountReceivable,
       'Financas.ContaCorrente.Lancamento.Excluido': deleteFinancialMovement,
       'Financas.ContaCorrente.Transferencia.Excluido': deleteFinancialMovement
     }
 
-    const result = await actions[topic](company._id, event, repositories)
+    const action = actions[topic]
+
+    let result = null
+
+    if (action) {
+      result = await action(company._id, event, repositories)
+
+      await eventBridge.triggerBfbDataExport(company._id)
+
+      logger.info({
+        title: 'omieWebhook',
+        message: `Company ${company._id} - ${company.name} sent to dataExport process`
+      })
+    } else {
+      result = {
+        message: `Unknown action: ${topic}`
+      }
+    }
 
     logger.info({
       title: 'omieWebhook',
       message: `Action for company ${company._id} - ${company.name}: ${topic}`,
       data: {
         result,
-        event
+        payload
       }
     })
 

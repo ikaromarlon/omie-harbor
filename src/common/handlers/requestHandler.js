@@ -32,5 +32,9 @@ module.exports = (request) => {
     ...body
   }
 
-  return { original: request, parsed, payload }
+  return {
+    original: request,
+    ...parsed,
+    payload
+  }
 }

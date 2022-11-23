@@ -17,8 +17,8 @@ module.exports = async () => {
     omieService,
     omieMappings,
     repositories,
-    eventBridge,
-    logger
+    logger,
+    eventBridge
   })
 
   const controller = makeController({
