@@ -129,8 +129,8 @@ const makeSut = () => {
     error: jest.fn(() => null)
   }
 
-  const mockEventBridge = {
-    triggerBfbDataExport: jest.fn(async () => null)
+  const mockQueuer = {
+    sendCompanyToDataExportQueue: jest.fn(async () => null)
   }
 
   const useCase = makeUseCase({
@@ -138,7 +138,7 @@ const makeSut = () => {
     omieMappings: mockOmieMappings,
     repositories: mockRepositories,
     logger: mockLogger,
-    eventBridge: mockEventBridge
+    queuer: mockQueuer
   })
 
   return {
@@ -150,7 +150,7 @@ const makeSut = () => {
     mockOmieMappings,
     mockRepositories,
     mockLogger,
-    mockEventBridge,
+    mockQueuer,
     mockCustomerId,
     mockProjectId,
     mockDepartmentId,
@@ -974,10 +974,10 @@ describe('ingestionPerformer UseCase', () => {
     expect(mockLogger.info).toHaveBeenCalledTimes(3)
   })
 
-  it('Should call eventBridge.triggerBfbDataExport successfully', async () => {
-    const { sut, mockPayload, mockEventBridge } = makeSut()
+  it('Should call queuer.sendCompanyToDataExportQueue successfully', async () => {
+    const { sut, mockPayload, mockQueuer } = makeSut()
     await sut({ payload: mockPayload })
-    expect(mockEventBridge.triggerBfbDataExport).toHaveBeenCalledWith(mockPayload.companyId)
+    expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockPayload.companyId)
   })
 
   it('Should return success', async () => {

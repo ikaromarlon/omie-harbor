@@ -8,7 +8,7 @@ module.exports = ({
   omieService,
   omieMappings,
   repositories,
-  eventBridge,
+  queuer,
   logger
 }) => {
   const makeEmptyRecord = async (id, { companyId, provider, isActive, ...data }) => {
@@ -123,7 +123,11 @@ module.exports = ({
       financialMovement: uuidFrom(`${companyId}-financialMovement`)
     }
 
-    logger.info({ title: 'ingestionPerformer', message: `Ingestion started for company ${companyId} - ${name}` })
+    logger.info({
+      title: 'ingestionPerformer',
+      message: `Ingestion started for company ${companyId} - ${name}`,
+      data: { companyId, startDate, endDate }
+    })
 
     const {
       omieBanks,
@@ -168,11 +172,17 @@ module.exports = ({
       joinRecordsByCfopAndMunicipalServiceCode
     })
 
-    logger.info({ title: 'ingestionPerformer', message: `Ingestion completed for company ${companyId} - ${name}` })
+    logger.info({
+      title: 'ingestionPerformer',
+      message: `Ingestion completed for company ${companyId} - ${name}`
+    })
 
-    await eventBridge.triggerBfbDataExport(companyId)
+    await queuer.sendCompanyToDataExportQueue(companyId)
 
-    logger.info({ title: 'ingestionPerformer', message: `Company ${companyId} - ${name} sent to dataExport process` })
+    logger.info({
+      title: 'ingestionPerformer',
+      message: `Company ${companyId} - ${name} sent to dataExport process`
+    })
 
     return { success: true }
   }

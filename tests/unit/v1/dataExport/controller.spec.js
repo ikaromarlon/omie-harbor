@@ -6,9 +6,9 @@ const companyId = '25c176b6-b200-4575-9217-e23c6105163c'
 const makeSut = () => {
   const mockRequest = {
     original: {
-      detail: {
-        companyId
-      }
+      Records: [{
+        body: `{"companyId":"${companyId}"}`
+      }]
     }
   }
 
@@ -47,7 +47,7 @@ describe('dataExport Controller', () => {
   it('Should throw an ValidationError if validateRequestSchema throws a ValidationError', async () => {
     const { sut, validateRequestSchemaStub, mockRequest } = makeSut()
     validateRequestSchemaStub.mockImplementationOnce(() => { throw new ValidationError('Invalid field') })
-    mockRequest.original.detail.companyId = 'invalid_companyId'
+    mockRequest.original.Records[0].body = '{"companyId":"invalid_companyId"}'
     try {
       await sut(mockRequest)
     } catch (error) {
@@ -69,8 +69,24 @@ describe('dataExport Controller', () => {
     }
   })
 
-  it('Should return success (queue request)', async () => {
+  it('Should return success for queue (SQS) request', async () => {
     const { sut, validateRequestSchemaStub, useCaseStub, mockRequest, mockSchema } = makeSut()
+    const result = await sut(mockRequest)
+    expect(validateRequestSchemaStub).toHaveBeenCalledWith({ companyId }, mockSchema)
+    expect(useCaseStub).toHaveBeenCalledWith({ payload: { companyId } })
+    expect(result.statusCode).toBe(200)
+    expect(result.data).toEqual({ success: true })
+  })
+
+  it('Should return success for event (eventBridge) request', async () => {
+    const { sut, validateRequestSchemaStub, useCaseStub, mockSchema } = makeSut()
+    const mockRequest = {
+      original: {
+        detail: {
+          companyId
+        }
+      }
+    }
     const result = await sut(mockRequest)
     expect(validateRequestSchemaStub).toHaveBeenCalledWith({ companyId }, mockSchema)
     expect(useCaseStub).toHaveBeenCalledWith({ payload: { companyId } })

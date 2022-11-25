@@ -29,7 +29,7 @@ async function bin () {
     }
 
     console.log(config.bin.layout.starRuler)
-    console.log(`* Executing ${config.app.name}/bin on "${config.app.stage}" stage with args "${args.join(' ')}"`)
+    console.log(`* Executing ${config.app.service}/bin on "${config.app.stage}" stage with args "${args.join(' ')}"`)
     console.log(config.bin.layout.starRuler)
     console.log('')
     const invalidArgs = args.filter((a) => !a.match(/^--.*$/g) || !scriptsAsArgs.includes(a))
@@ -55,14 +55,15 @@ async function bin () {
 
     console.log(config.bin.layout.dashRuler)
     console.log('Process completed successfully!')
+    console.log(config.bin.layout.dashRuler)
+    console.log('')
+    process.exit(0)
   } catch (error) {
     console.log('')
     console.log(config.bin.layout.dashRuler)
     console.log('ERROR ON BIN SCRIPTS EXECUTION')
     console.log(config.bin.layout.dashRuler)
     console.error(error.message)
-    console.log('')
-  } finally {
     console.log(config.bin.layout.dashRuler)
     console.log('')
     process.exit(1)

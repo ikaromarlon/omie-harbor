@@ -1,10 +1,16 @@
-const { version } = require('../../package.json')
+const { version, name } = require('../../package.json')
 const { env } = process
+
+const service = env.SERVICE ?? name
+const stage = env.STAGE ?? 'dev'
+const source = `${service}-${stage}`
 
 module.exports = Object.freeze({
   app: {
-    name: env.SERVICE_NAME,
-    stage: env.STAGE || 'dev',
+    name: 'FullBPO',
+    service,
+    stage,
+    source,
     version,
     user: 'SYSTEM',
     charset: 'UTF-8',
@@ -15,7 +21,8 @@ module.exports = Object.freeze({
     dbName: env.MONGODB_DB_NAME
   },
   SQS: {
-    ingestionQueueUrl: env.SQS_INGESTION_QUEUE_URL
+    ingestionQueueUrl: env.SQS_INGESTION_QUEUE_URL,
+    dataExportQueueUrl: env.SQS_DATA_EXPORT_QUEUE_URL
   },
   S3: {
     detaExport: {
@@ -28,12 +35,10 @@ module.exports = Object.freeze({
   services: {
     omie: {
       providerName: 'Omie',
-      /** days back */
-      ingestionPeriod: 2,
+      ingestionPeriod: 2, /** days back */
       apiBaseUrl: 'https://app.omie.com.br/api/v1',
-      maxRequestPerPeriod: 200,
-      /** in seconds */
-      requestPeriod: 60
+      maxRequestPerPeriod: 200, /** in seconds */
+      requestPeriod: 60 /** in seconds */
     },
     mailer: {
       defaultSender: `no-reply@${env.DOMAIN}`,

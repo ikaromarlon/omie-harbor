@@ -3,7 +3,7 @@ const config = require('../../config')
 const { ExternalServerError } = require('../errors')
 
 module.exports = (sourceSufix = 'unknown') => {
-  const source = config.app.name
+  const { app: { source } } = config
 
   const eventBridge = new AWS.EventBridge()
 
@@ -27,7 +27,7 @@ module.exports = (sourceSufix = 'unknown') => {
 
   return {
     triggerBfbDataExport: async (companyId) => {
-      const target = `${config.app.name}.dataExport`
+      const target = `${source}.dataExport`
       const Entries = [
         {
           Source: source,

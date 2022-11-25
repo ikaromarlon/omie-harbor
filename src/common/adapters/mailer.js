@@ -4,14 +4,37 @@ const { stripTags } = require('../helpers')
 const logger = require('./logger')
 
 const mailer = () => {
-  const SES = new AWS.SES({ region: config.SES.region })
-  const Charset = config.app.charset
+  const {
+    app: {
+      name,
+      service,
+      stage,
+      charset: Charset
+    },
+    SES: {
+      region
+    },
+    services: {
+      mailer: {
+        defaultSender,
+        errorNotificationRecipientAddress,
+        errorNotificationRecipientAddressCopy
+      }
+    }
+  } = config
+
+  const SES = new AWS.SES({ region })
 
   const sendErrorNotification = async (data) => {
+    const func = ''
+    const route = ''
     const template = `
-    <h3>FullBPO App - Something went wrong :(</h3>
+    <h3>${name} App [${stage}] - Something went wrong :(</h3>
     <p>
-      Message: <strong>${data.message}</strong><br>
+      Service: <strong>${service}</strong><br>
+      Stage: <strong>${stage}</strong><br>
+      ${func ? `Function: <strong>${func}</strong><br>` : ''}
+      ${route ? `Route: <strong>${route}</strong><br>` : ''}
       Error Type: <strong>${data.name ?? data.constructor.name}</strong><br>
       ${data?.data ? `Detail 1: <strong>${data.data.message}</strong><br>` : ''}
       ${data?.data?.response?.data?.faultstring ? `Detail 2: <strong>${data?.data?.response?.data?.faultstring}</strong><br>` : ''}
@@ -23,8 +46,7 @@ const mailer = () => {
 
     const params = {
       Destination: {
-        ToAddresses: config.services.mailer.errorNotificationRecipientAddress.split(',').map(e => e.trim()),
-        CcAddresses: config.services.mailer.errorNotificationRecipientAddressCopy.split(',').map(e => e.trim())
+        ToAddresses: errorNotificationRecipientAddress.split(',').map(e => e.trim())
       },
       Message: {
         Body: {
@@ -39,21 +61,21 @@ const mailer = () => {
         },
         Subject: {
           Charset,
-          Data: 'FullBPO App - Something went wrong :('
+          Data: `${name} App [${stage}] - Something went wrong :(`
         }
       },
-      Source: config.services.mailer.defaultSender
+      Source: defaultSender
+    }
+
+    if (errorNotificationRecipientAddressCopy) {
+      params.Destination.CcAddresses = errorNotificationRecipientAddressCopy.split(',').map(e => e.trim())
     }
 
     const logTitle = 'Mailer'
     const logMessage = 'sendErrorNotification'
 
     try {
-      const sent = await (SES.sendEmail(params).promise())
-
-      if (config.app.stage === 'dev') {
-        logger.info({ title: logTitle, message: logMessage, data: { sesMessageId: sent.MessageId } })
-      }
+      await (SES.sendEmail(params).promise())
     } catch (error) {
       logger.error({ title: logTitle, message: logMessage, data: { ...error, message: error.message, stack: error.stack } })
     }

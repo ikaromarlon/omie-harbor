@@ -21,13 +21,14 @@ provider:
   deploymentPrefix: serverless
   versionFunctions: false
   environment:
-    SERVICE_NAME: ${self:custom.basename}
+    SERVICE: ${self:service}
     STAGE: ${self:provider.stage}
     REGION: ${self:provider.region}
     DOMAIN: ${self:custom.domain}
     MONGODB_URI: ${self:custom.env.MONGODB_URI.${self:provider.stage}}
-    MONGODB_DB_NAME: full-bpo-${self:provider.stage}
+    MONGODB_DB_NAME: fullbpo-${self:provider.stage}
     SQS_INGESTION_QUEUE_URL: { 'Ref': 'IngestionQueue'}
+    SQS_DATA_EXPORT_QUEUE_URL: { 'Ref': 'DataExportQueue'}
     S3_DATA_EXPORT_BUCKET_NAME: { 'Ref': 'DataExportBucket'}
     SES_REGION: ${self:custom.sesRegion}
     WAIT_SECONDS_BEFORE_NEXT_OMIE_PAGE_REQUEST: ${self:custom.env.WAIT_SECONDS_BEFORE_NEXT_OMIE_PAGE_REQUEST.${self:provider.stage}}
@@ -43,10 +44,10 @@ provider:
         value: ${self:custom.appApiKey.${self:provider.stage}}
         enabled: true
   stackTags:
-    HOLDING: dois
-    COMPANY: fullbpo
-    PROJECT: fullbpo
-    SERVICE: fullbpo-bfb
+    COMPANY: FullBPO
+    PROJECT: FullBPO
+    APP: FullBPO
+    SERVICE: ${self:service}
   iam:
     role:
       statements:
