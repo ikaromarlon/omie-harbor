@@ -72,18 +72,12 @@ dataExport:
 
 # application environment variables
 env:
-  MONGODB_URI:
-    dev: mongodb+srv://fullbpo:5EexHwwb7XcTxcTB@full-bpo-dev.vkvc7.mongodb.net/?retryWrites=true&w=majority
-    prd: mongodb+srv://fullbpo:5EexHwwb7XcTxcTB@full-bpo-prd.5cxohkn.mongodb.net/?retryWrites=true&w=majority
   ERROR_NOTIFICATION_RECIPIENT_ADDRESS:
     dev: ikaromarlon@gmail.com
     prd: ikaromarlon@gmail.com
   ERROR_NOTIFICATION_RECIPIENT_ADDRESS_COPY:
     dev: ''
     prd: ''
-  WAIT_SECONDS_BEFORE_NEXT_OMIE_PAGE_REQUEST:
-    dev: 0
-    prd: 0
   FLAG_UPDATE_EMPTY_RECORDS:
     dev: false
     prd: false

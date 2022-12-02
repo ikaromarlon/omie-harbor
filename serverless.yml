@@ -6,7 +6,7 @@ deprecationNotificationMode: error
 provider:
   name: aws
   runtime: nodejs16.x
-  stage: ${opt:stage, 'dev'}
+  stage: ${opt:stage, 'prd'}
   region: ${self:custom.region.${self:provider.stage}}
   profile: fullbpo
   stackName: ${self:custom.basename}
@@ -25,13 +25,11 @@ provider:
     STAGE: ${self:provider.stage}
     REGION: ${self:provider.region}
     DOMAIN: ${self:custom.domain}
-    MONGODB_URI: ${self:custom.env.MONGODB_URI.${self:provider.stage}}
-    MONGODB_DB_NAME: fullbpo-${self:provider.stage}
+    MONGODB_URI: ${env:MONGODB_URI}
     SQS_INGESTION_QUEUE_URL: { 'Ref': 'IngestionQueue'}
     SQS_DATA_EXPORT_QUEUE_URL: { 'Ref': 'DataExportQueue'}
     S3_DATA_EXPORT_BUCKET_NAME: { 'Ref': 'DataExportBucket'}
     SES_REGION: ${self:custom.sesRegion}
-    WAIT_SECONDS_BEFORE_NEXT_OMIE_PAGE_REQUEST: ${self:custom.env.WAIT_SECONDS_BEFORE_NEXT_OMIE_PAGE_REQUEST.${self:provider.stage}}
     FLAG_LOG_EACH_OMIE_ERROR: ${self:custom.env.FLAG_LOG_EACH_OMIE_ERROR.${self:provider.stage}}
     FLAG_UPDATE_EMPTY_RECORDS: ${self:custom.env.FLAG_UPDATE_EMPTY_RECORDS.${self:provider.stage}}
     ERROR_NOTIFICATION_RECIPIENT_ADDRESS: ${self:custom.env.ERROR_NOTIFICATION_RECIPIENT_ADDRESS.${self:provider.stage}}

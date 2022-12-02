@@ -18,7 +18,7 @@ module.exports = Object.freeze({
   },
   mongodb: {
     uri: env.MONGODB_URI,
-    dbName: env.MONGODB_DB_NAME
+    dbName: `fullbpo-${stage}`
   },
   SQS: {
     ingestionQueueUrl: env.SQS_INGESTION_QUEUE_URL,
