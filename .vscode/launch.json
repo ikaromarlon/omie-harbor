@@ -173,6 +173,27 @@
       "env": {
         "STAGE": "prd"
       }
-    }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Invoke dataProcessing function",
+      "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
+      "cwd": "${workspaceFolder}",
+      "localRoot": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "invoke",
+        "local",
+        "-f", "dataProcessing",
+        "-p", "${workspaceFolder}/.vscode/events/dataProcessing.json"
+      ],
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "env": {
+        "SLS_DEBUG": "*"
+      },
+    },
   ]
 }

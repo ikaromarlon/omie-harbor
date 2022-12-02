@@ -74,10 +74,10 @@ dataExport:
 env:
   ERROR_NOTIFICATION_RECIPIENT_ADDRESS:
     dev: ikaromarlon@gmail.com
-    prd: ikaromarlon@gmail.com
+    prd: pedro.magnago@fullbpo.com
   ERROR_NOTIFICATION_RECIPIENT_ADDRESS_COPY:
     dev: ''
-    prd: ''
+    prd: 'ikaromarlon@gmail.com'
   FLAG_UPDATE_EMPTY_RECORDS:
     dev: false
     prd: false

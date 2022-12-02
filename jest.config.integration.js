@@ -5,7 +5,8 @@ module.exports = {
   collectCoverage: true,
   coverageDirectory: '<rootDir>/coverage/integration',
   collectCoverageFrom: [
-    '<rootDir>/src/**/*.js'
+    '<rootDir>/src/**/*.js',
+    '!<rootDir>/src/v1/dataProcessing/**'
   ],
   coverageThreshold: {
     global: {
