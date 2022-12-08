@@ -11,17 +11,13 @@ module.exports = async ({
   makeEmptyRecord,
   joinRecordsByCfopAndMunicipalServiceCode
 }) => {
-  const updateBilling = async ({ credentials, companyId, startDate, endDate, emptyRecordsIds, productInvoiceMapping, serviceInvoiceMapping, productTaxCouponMapping, repositories }) => {
+  const updateBilling = async ({ credentials, companyId, startDate, endDate, emptyRecordsIds, productInvoiceMapping, serviceInvoiceMapping, repositories }) => {
     const [
       omieProductInvoices,
       omieServiceInvoices
-      // omieTaxCoupons,
-      // omieTaxCouponsItems
     ] = await Promise.all([
       omieService.getProductInvoices(credentials, { startDate, endDate }),
       omieService.getServiceInvoices(credentials, { startDate, endDate })
-      // omieService.getTaxCoupons(credentials, { startDate, endDate }),
-      // omieService.getTaxCouponsItems(credentials, { startDate, endDate })
     ])
 
     if (omieProductInvoices.length || omieServiceInvoices.length) {
@@ -153,7 +149,19 @@ module.exports = async ({
   }
 
   const updateAccountsPayable = async ({ credentials, companyId, startDate, endDate, emptyRecordsIds, titleMapping, repositories }) => {
-    const omieAccountsPayable = await omieService.getAccountsPayable(credentials, { startDate, endDate })
+    const [
+      omieAccountsPayableCreated,
+      omieAccountsPayableUpdated
+    ] = await Promise.all([
+      omieService.getAccountsPayable(credentials, { createdFrom: startDate, createdTo: endDate }),
+      omieService.getAccountsPayable(credentials, { updatedFrom: startDate, updatedTo: endDate })
+    ])
+
+    const omieAccountsPayable = Array.from(
+      [...omieAccountsPayableCreated, ...omieAccountsPayableUpdated]
+        .reduce((acc, el) => { acc.set(el.cabecTitulo.nCodTitulo, el); return acc }, new Map())
+        .values()
+    )
 
     if (omieAccountsPayable.length) {
       const customersSet = new Set()
@@ -243,7 +251,19 @@ module.exports = async ({
   }
 
   const updateAccountsReceivable = async ({ credentials, companyId, startDate, endDate, emptyRecordsIds, titleMapping, repositories }) => {
-    const omieAccountsReceivable = await omieService.getAccountsReceivable(credentials, { startDate, endDate })
+    const [
+      omieAccountsReceivableCreated,
+      omieAccountsReceivableUpdated
+    ] = await Promise.all([
+      omieService.getAccountsReceivable(credentials, { createdFrom: startDate, createdTo: endDate }),
+      omieService.getAccountsReceivable(credentials, { updatedFrom: startDate, updatedTo: endDate })
+    ])
+
+    const omieAccountsReceivable = Array.from(
+      [...omieAccountsReceivableCreated, ...omieAccountsReceivableUpdated]
+        .reduce((acc, el) => { acc.set(el.cabecTitulo.nCodTitulo, el); return acc }, new Map())
+        .values()
+    )
 
     if (omieAccountsReceivable.length) {
       const customersSet = new Set()
@@ -332,8 +352,10 @@ module.exports = async ({
     }
   }
 
-  const updateFinancialMovements = async ({ credentials, companyId, startDate, endDate, emptyRecordsIds, financialMovementMapping, repositories }) => {
-    const omieFinancialMovementsResult = await omieService.getFinancialMovements(credentials, { startDate, endDate })
+  const updateFinancialMovements = async ({ credentials, companyId, createdFrom, createdTo, updatedFrom, updatedTo, emptyRecordsIds, financialMovementMapping, repositories }) => {
+    let params = { createdFrom, createdTo }
+    if (updatedFrom || updatedTo) params = { updatedFrom, updatedTo }
+    const omieFinancialMovementsResult = await omieService.getFinancialMovements(credentials, params)
     const omieFinancialMovements = omieFinancialMovementsResult.filter(e => e.detalhes.cStatus !== 'PREVISAO')
 
     if (omieFinancialMovements.length) {
@@ -449,7 +471,6 @@ module.exports = async ({
     endDate,
     productInvoiceMapping: omieMappings.productInvoice,
     serviceInvoiceMapping: omieMappings.serviceInvoice,
-    productTaxCouponMapping: omieMappings.productTaxCoupon,
     repositories
   })
 
@@ -477,8 +498,18 @@ module.exports = async ({
     credentials,
     companyId,
     emptyRecordsIds,
-    startDate,
-    endDate,
+    createdFrom: startDate,
+    createdTo: endDate,
+    financialMovementMapping: omieMappings.financialMovement,
+    repositories
+  })
+
+  await updateFinancialMovements({
+    credentials,
+    companyId,
+    emptyRecordsIds,
+    updatedFrom: startDate,
+    updatedTo: endDate,
     financialMovementMapping: omieMappings.financialMovement,
     repositories
   })

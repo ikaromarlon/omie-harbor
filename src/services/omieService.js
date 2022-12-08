@@ -360,13 +360,17 @@ module.exports = ({ requester }) => {
         nRegPorPagina: defaultPagination.recordsPerPage
       }]
     }
-    if (params.startDate) {
-      body.param[0].dInclusaoInicial = isoDateToBR(params.startDate)[0]
-      body.param[0].dAlteracaoInicial = isoDateToBR(params.startDate)[0]
+    if (params.createdFrom) {
+      body.param[0].dInclusaoInicial = isoDateToBR(params.createdFrom)[0]
     }
-    if (params.endDate) {
-      body.param[0].dInclusaoFinal = isoDateToBR(params.endDate)[0]
-      body.param[0].dAlteracaoFinal = isoDateToBR(params.endDate)[0]
+    if (params.createdTo) {
+      body.param[0].dInclusaoFinal = isoDateToBR(params.createdTo)[0]
+    }
+    if (params.updatedFrom) {
+      body.param[0].dAlteracaoInicial = isoDateToBR(params.updatedFrom)[0]
+    }
+    if (params.updatedTo) {
+      body.param[0].dAlteracaoFinal = isoDateToBR(params.updatedTo)[0]
     }
 
     const propertiesMapping = { data: 'cadastros', pagination: { currentPage: 'nPagina', totalPages: 'nTotPaginas' } }
@@ -601,13 +605,17 @@ module.exports = ({ requester }) => {
         nRegPorPagina: defaultPagination.recordsPerPage
       }]
     }
-    if (params.startDate) {
-      body.param[0].dDtIncDe = isoDateToBR(params.startDate)[0]
-      body.param[0].dDtAltDe = isoDateToBR(params.startDate)[0]
+    if (params.createdFrom) {
+      body.param[0].dDtIncDe = isoDateToBR(params.createdFrom)[0]
     }
-    if (params.endDate) {
-      body.param[0].dDtIncAte = isoDateToBR(params.endDate)[0]
-      body.param[0].dDtAltAte = isoDateToBR(params.endDate)[0]
+    if (params.createdTo) {
+      body.param[0].dDtIncAte = isoDateToBR(params.createdTo)[0]
+    }
+    if (params.updatedFrom) {
+      body.param[0].dDtAltDe = isoDateToBR(params.updatedFrom)[0]
+    }
+    if (params.updatedTo) {
+      body.param[0].dDtAltAte = isoDateToBR(params.updatedTo)[0]
     }
 
     const propertiesMapping = { data: 'pagamentos', pagination: { currentPage: 'nPagina', totalPages: 'nTotPaginas' } }
@@ -632,13 +640,17 @@ module.exports = ({ requester }) => {
         nRegPorPagina: defaultPagination.recordsPerPage
       }]
     }
-    if (params.startDate) {
-      body.param[0].dDtIncDe = isoDateToBR(params.startDate)[0]
-      body.param[0].dDtAltDe = isoDateToBR(params.startDate)[0]
+    if (params.createdFrom) {
+      body.param[0].dDtIncDe = isoDateToBR(params.createdFrom)[0]
     }
-    if (params.endDate) {
-      body.param[0].dDtIncAte = isoDateToBR(params.endDate)[0]
-      body.param[0].dDtAltAte = isoDateToBR(params.endDate)[0]
+    if (params.createdTo) {
+      body.param[0].dDtIncAte = isoDateToBR(params.createdTo)[0]
+    }
+    if (params.updatedFrom) {
+      body.param[0].dDtAltDe = isoDateToBR(params.updatedFrom)[0]
+    }
+    if (params.updatedTo) {
+      body.param[0].dDtAltAte = isoDateToBR(params.updatedTo)[0]
     }
 
     const propertiesMapping = { data: 'itens', pagination: { currentPage: 'nPagina', totalPages: 'nTotPaginas' } }
@@ -707,13 +719,17 @@ module.exports = ({ requester }) => {
         nRegPorPagina: defaultPagination.recordsPerPage
       }]
     }
-    if (params.startDate) {
-      body.param[0].dDtIncDe = isoDateToBR(params.startDate)[0]
-      body.param[0].dDtAltDe = isoDateToBR(params.startDate)[0]
+    if (params.createdFrom) {
+      body.param[0].dDtIncDe = isoDateToBR(params.createdFrom)[0]
     }
-    if (params.endDate) {
-      body.param[0].dDtIncAte = isoDateToBR(params.endDate)[0]
-      body.param[0].dDtAltAte = isoDateToBR(params.endDate)[0]
+    if (params.createdTo) {
+      body.param[0].dDtIncAte = isoDateToBR(params.createdTo)[0]
+    }
+    if (params.updatedFrom) {
+      body.param[0].dDtAltDe = isoDateToBR(params.updatedFrom)[0]
+    }
+    if (params.updatedTo) {
+      body.param[0].dDtAltAte = isoDateToBR(params.updatedTo)[0]
     }
     if (params.type) {
       body.param[0].cNatureza = params.type
@@ -747,13 +763,17 @@ module.exports = ({ requester }) => {
         cExibirDepartamentos: 'S'
       }]
     }
-    if (params.startDate) {
-      body.param[0].dDtIncDe = isoDateToBR(params.startDate)[0]
-      body.param[0].dDtAltDe = isoDateToBR(params.startDate)[0]
+    if (params.createdFrom) {
+      body.param[0].dDtIncDe = isoDateToBR(params.createdFrom)[0]
     }
-    if (params.endDate) {
-      body.param[0].dDtIncAte = isoDateToBR(params.endDate)[0]
-      body.param[0].dDtAltAte = isoDateToBR(params.endDate)[0]
+    if (params.createdTo) {
+      body.param[0].dDtIncAte = isoDateToBR(params.createdTo)[0]
+    }
+    if (params.updatedFrom) {
+      body.param[0].dDtAltDe = isoDateToBR(params.updatedFrom)[0]
+    }
+    if (params.updatedTo) {
+      body.param[0].dDtAltAte = isoDateToBR(params.updatedTo)[0]
     }
 
     const propertiesMapping = { data: 'movimentos', pagination: { currentPage: 'nPagina', totalPages: 'nTotPaginas' } }

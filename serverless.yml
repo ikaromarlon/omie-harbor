@@ -6,7 +6,7 @@ deprecationNotificationMode: error
 provider:
   name: aws
   runtime: nodejs16.x
-  stage: ${opt:stage, 'prd'}
+  stage: ${opt:stage, 'dev'}
   region: ${self:custom.region.${self:provider.stage}}
   profile: fullbpo
   stackName: ${self:custom.basename}
