@@ -1,3 +1,5 @@
+const { PRODUCT_TYPES } = require('../../common/enums')
+
 module.exports = ({ providerName }) => ({ omieProduct, companyId }) => ({
   externalId: String(omieProduct.codigo_produto),
   provider: providerName,
@@ -10,7 +12,7 @@ module.exports = ({ providerName }) => ({ omieProduct, companyId }) => ({
   characteristics: (omieProduct.caracteristicas ?? []).map(e => ({ name: e.cNomeCaract, content: e.cConteudo })),
   unity: omieProduct.unidade,
   value: omieProduct.valor_unitario,
-  type: 'PRODUTO',
+  type: PRODUCT_TYPES.PRODUCT,
   notes: omieProduct.obs_internas,
   isActive: omieProduct.inativo === 'N'
 })

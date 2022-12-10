@@ -1,3 +1,5 @@
+const { PRODUCT_TYPES } = require('../../common/enums')
+
 module.exports = ({ providerName }) => ({ omieService, companyId }) => ({
   externalId: String(omieService.intListar.nCodServ),
   provider: providerName,
@@ -10,7 +12,7 @@ module.exports = ({ providerName }) => ({ omieService, companyId }) => ({
   characteristics: [],
   unity: 'UN',
   value: omieService.cabecalho.nPrecoUnit,
-  type: 'SERVICO',
+  type: PRODUCT_TYPES.SERVICE,
   notes: null,
   isActive: omieService.info.inativo === 'N'
 })

@@ -1,4 +1,5 @@
 const { InternalServerError } = require('../../../common/errors')
+const { OMIE_WEBHOOK_EVENTS } = require('../../../common/enums')
 const deleteOrder = require('./deleteOrder')
 const deleteContract = require('./deleteContract')
 const deleteAccountPayable = require('./deleteAccountPayable')
@@ -20,14 +21,14 @@ module.exports = ({
     }
 
     const actions = {
-      'OrdemServico.Excluida': deleteOrder,
-      'VendaProduto.Excluida': deleteOrder,
-      'ContratoServico.Excluido': deleteContract,
-      // 'NotaEntrada.Excluida': deleteAccountPayable,
-      'Financas.ContaPagar.Excluido': deleteAccountPayable,
-      'Financas.ContaReceber.Excluido': deleteAccountReceivable,
-      'Financas.ContaCorrente.Lancamento.Excluido': deleteFinancialMovement,
-      'Financas.ContaCorrente.Transferencia.Excluido': deleteFinancialMovement
+      [OMIE_WEBHOOK_EVENTS.SERVICE_ORDER.DELETED]: deleteOrder,
+      [OMIE_WEBHOOK_EVENTS.SALES_ORDER.DELETED]: deleteOrder,
+      [OMIE_WEBHOOK_EVENTS.CONTRACT.DELETED]: deleteContract,
+      // [OMIE_WEBHOOK_EVENTS.ENTRY_INVOICE.DELETED]: deleteAccountPayable,
+      [OMIE_WEBHOOK_EVENTS.ACCOUNT_PAYABLE.DELETED]: deleteAccountPayable,
+      [OMIE_WEBHOOK_EVENTS.ACCOUNT_RECEIVABLE.DELETED]: deleteAccountReceivable,
+      [OMIE_WEBHOOK_EVENTS.CHECKING_ACCOUNT_ENTRY.DELETED]: deleteFinancialMovement,
+      [OMIE_WEBHOOK_EVENTS.CHECKING_ACCOUNT_TRANSFER.DELETED]: deleteFinancialMovement
     }
 
     const action = actions[topic]

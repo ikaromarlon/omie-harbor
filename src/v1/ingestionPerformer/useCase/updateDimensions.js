@@ -1,3 +1,5 @@
+const { PRODUCT_TYPES } = require('../../../common/enums')
+
 module.exports = async ({
   omieService,
   credentials,
@@ -146,7 +148,7 @@ module.exports = async ({
         return (omieContract.departamentos?.length ? omieContract.departamentos : [{}]).map(omieContractDepartment => {
           const department = departments.find(e => e.externalId === String(omieContractDepartment.cCodDep))
           return omieContract.itensContrato.map(omieContractItem => {
-            const productService = productsServices.find(e => e.externalId === String(omieContractItem.itemCabecalho.codServico) && e.type === 'SERVICO')
+            const productService = productsServices.find(e => e.externalId === String(omieContractItem.itemCabecalho.codServico) && e.type === PRODUCT_TYPES.SERVICE)
             const category = categories.find(e => e.externalId === String(omieContractItem.itemCabecalho.cCodCategItem))
             return contractMapping({
               omieContract,
@@ -246,7 +248,7 @@ module.exports = async ({
         return (omieOrder.departamentos?.length ? omieOrder.departamentos : [{}]).map(omieOrderDepartment => {
           const department = departments.find(e => e.externalId === String(omieOrderDepartment.cCodDepto))
           return omieOrder.det.map(omieOrderItem => {
-            const productService = productsServices.find(e => e.externalId === String(omieOrderItem.produto.codigo_produto) && e.type === 'PRODUTO')
+            const productService = productsServices.find(e => e.externalId === String(omieOrderItem.produto.codigo_produto) && e.type === PRODUCT_TYPES.PRODUCT)
             const category = categories.find(e => e.externalId === String(omieOrderItem.inf_adic.codigo_categoria_item))
             return productOrderMapping({
               omieOrder,
@@ -273,7 +275,7 @@ module.exports = async ({
         return (omieOrder.Departamentos?.length ? omieOrder.Departamentos : [{}]).map(omieOrderDepartment => {
           const department = departments.find(e => e.externalId === String(omieOrderDepartment.cCodDepto))
           return omieOrder.ServicosPrestados.map(omieOrderItem => {
-            const productService = productsServices.find(e => e.externalId === String(omieOrderItem.nCodServico) && e.type === 'SERVICO')
+            const productService = productsServices.find(e => e.externalId === String(omieOrderItem.nCodServico) && e.type === PRODUCT_TYPES.SERVICE)
             const category = categories.find(e => e.externalId === String(omieOrderItem.cCodCategItem))
             return serviceOrderMapping({
               omieOrder,

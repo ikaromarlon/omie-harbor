@@ -1,3 +1,4 @@
+const { ORDER_TYPES } = require('../../common/enums')
 const { brDateToISO, multiply } = require('../../common/helpers')
 
 module.exports = ({ providerName }) => ({
@@ -37,7 +38,7 @@ module.exports = ({ providerName }) => ({
     cfop: omieOrderItem.produto.cfop || null,
     municipalServiceCode: null, /** only for OS */
     contractId: emptyRecordsIds.contract, /** only for OS */
-    type: 'PEDIDO',
+    type: ORDER_TYPES.SALES_ORDER,
     registerDate: brDateToISO(omieOrder.infoCadastro.dInc, omieOrder.infoCadastro.hInc),
     expectedPaymentDate: brDateToISO(omieOrder.cabecalho.data_previsao),
     grossValue: multiply(omieOrderItem.produto.valor_mercadoria, perc),

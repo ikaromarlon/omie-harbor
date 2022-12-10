@@ -1,3 +1,5 @@
+const { PRODUCT_TYPES, ORDER_TYPES, MOVEMENT_STATUSES } = require('../../../common/enums')
+
 module.exports = async ({
   omieService,
   credentials,
@@ -73,15 +75,15 @@ module.exports = async ({
         customersFilter.length ? repositories.customers.find({ companyId, externalId: customersFilter }) : [],
         projectsFilter.length ? repositories.projects.find({ companyId, externalId: projectsFilter }) : [],
         departmentsFilter.length ? repositories.departments.find({ companyId, externalId: departmentsFilter }) : [],
-        productsFilter.length ? repositories.productsServices.find({ companyId, externalId: productsFilter, type: 'PRODUTO' }) : [],
-        servicesFilter.length ? repositories.productsServices.find({ companyId, municipalServiceCode: servicesFilter, type: 'SERVICO' }) : [], /** Omie returns CodigoServico as municipalServiceCode in NFS-e API */
+        productsFilter.length ? repositories.productsServices.find({ companyId, externalId: productsFilter, type: PRODUCT_TYPES.PRODUCT }) : [],
+        servicesFilter.length ? repositories.productsServices.find({ companyId, municipalServiceCode: servicesFilter, type: PRODUCT_TYPES.SERVICE }) : [], /** Omie returns CodigoServico as municipalServiceCode in NFS-e API */
         contractsFilter.length ? repositories.contracts.find({ companyId, externalId: contractsFilter }) : [],
         ordersFilter.length ? repositories.orders.find({ companyId, externalId: ordersFilter }) : []
       ])
 
       const productInvoices = omieProductInvoices.map(omieInvoice => {
         const customer = customers.find(e => e.externalId === String(omieInvoice.nfDestInt.nCodCli))
-        const salesOrders = orders.filter(e => e.customerId === customer?._id && e.externalId === String(omieInvoice.compl.nIdPedido) && e.type === 'PEDIDO')
+        const salesOrders = orders.filter(e => e.customerId === customer?._id && e.externalId === String(omieInvoice.compl.nIdPedido) && e.type === ORDER_TYPES.SALES_ORDER)
         if (salesOrders.length || (!omieInvoice.compl.nIdPedido || omieInvoice.compl.nIdPedido === '0')) {
           return (omieInvoice.pedido.Departamentos?.length ? omieInvoice.pedido.Departamentos : [{}]).map(omieInvoiceDepartment => {
             const department = departments.find(e => e.externalId === String(omieInvoiceDepartment.cCodigoDepartamento))
@@ -113,7 +115,7 @@ module.exports = async ({
         const customer = customers.find(e => e.externalId === String(omieInvoice.Cabecalho.nCodigoCliente))
         const project = projects.find(e => e.externalId === String(omieInvoice.Adicionais.nCodigoProjeto))
         const contract = contracts.find(e => e.externalId === String(omieInvoice.OrdemServico.nCodigoContrato))
-        const serviceOrders = orders.filter(e => e.customerId === customer?._id && e.externalId === String(omieInvoice.OrdemServico.nCodigoOS) && e.type === 'OS')
+        const serviceOrders = orders.filter(e => e.customerId === customer?._id && e.externalId === String(omieInvoice.OrdemServico.nCodigoOS) && e.type === ORDER_TYPES.SERVICE_ORDER)
         return (omieInvoice.OrdemServico.Departamentos?.length ? omieInvoice.OrdemServico.Departamentos : [{}]).map(omieInvoiceDepartment => {
           const department = departments.find(e => e.externalId === String(omieInvoiceDepartment.cCodigoDepartamento))
           return omieInvoice.ListaServicos.map(omieInvoiceItem => {
