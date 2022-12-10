@@ -28,8 +28,7 @@
     "deploy:dev": "STAGE=dev npm run deploy -- --stage dev",
     "deploy:function:dev": "npm run deploy:dev -- function -f",
     "deploy:prd": "STAGE=prd && npm run deploy -- --stage prd",
-    "deploy:function:prd": "npm run deploy:prd -- function -f",
-    "deploy:all": "npm run deploy:dev && npm run deploy:prd"
+    "deploy:function:prd": "npm run deploy:prd -- function -f"
   },
   "repository": {
     "type": "git",
