@@ -1,6 +1,6 @@
 {
   "name": "fullbpo-bfb",
-  "version": "1.5.0",
+  "version": "1.7.0",
   "description": "FullBPO BFB (Back-end For Back-end) service",
   "main": "src/index.js",
   "engines": {
@@ -48,8 +48,8 @@
     "uuid-by-string": "^3.0.6"
   },
   "devDependencies": {
-    "@shelf/jest-mongodb": "^4.1.3",
-    "@types/jest": "^29.2.3",
+    "@shelf/jest-mongodb": "^4.1.4",
+    "@types/jest": "^29.2.4",
     "aws-sdk": "^2.1053.0",
     "dotenv": "^10.0.0",
     "git-commit-msg-linter": "^3.2.8",
