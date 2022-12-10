@@ -1,8 +1,6 @@
 const config = require('../../../config')
 const { NotFoundError, ValidationError } = require('../../../common/errors')
 const { daysToMilliseconds, uuidFrom } = require('../../../common/helpers')
-const joinRecordsByCfopAndMunicipalServiceCode = require('../utils/joinRecordsByCfopAndMunicipalServiceCode')
-const makeEmptyRecord = require('../utils/makeEmptyRecord')
 const updateDimensions = require('./updateDimensions')
 const updateFacts = require('./updateFacts')
 
@@ -106,9 +104,7 @@ module.exports = ({
       repositories,
       omieBanks,
       omieCnae,
-      emptyRecordsIds,
-      makeEmptyRecord,
-      joinRecordsByCfopAndMunicipalServiceCode
+      emptyRecordsIds
     })
 
     await updateFacts({
@@ -120,9 +116,7 @@ module.exports = ({
       omieMappings,
       repositories,
       omieDocumentTypes,
-      emptyRecordsIds,
-      makeEmptyRecord,
-      joinRecordsByCfopAndMunicipalServiceCode
+      emptyRecordsIds
     })
 
     logger.info({

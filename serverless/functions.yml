@@ -125,7 +125,6 @@ dataExport:
 
 dataProcessing:
   handler: src/index.handler
-  memorySize: ${self:provider.memorySize}
   timeout: 900
   iamRoleStatementsName: ${self:custom.basename}-dataProcessing-role
   events:

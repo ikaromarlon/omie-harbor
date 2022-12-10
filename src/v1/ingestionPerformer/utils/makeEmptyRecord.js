@@ -1,6 +1,6 @@
 const { emptyProperties } = require('../../../common/helpers')
 
-const makeEmptyRecord = async (id, { companyId, provider, isActive, ...data }) => {
+const makeEmptyRecord = (id, { companyId, provider, isActive, ...data }) => {
   const emptyRecord = {
     _id: id,
     companyId,

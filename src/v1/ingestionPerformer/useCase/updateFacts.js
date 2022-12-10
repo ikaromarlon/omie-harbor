@@ -1,4 +1,7 @@
 const { PRODUCT_TYPES, ORDER_TYPES, MOVEMENT_STATUSES } = require('../../../common/enums')
+const getValidCodes = require('../utils/getValidCodes')
+const joinRecordsByCfopAndMunicipalServiceCode = require('../utils/joinRecordsByCfopAndMunicipalServiceCode')
+const makeEmptyRecord = require('../utils/makeEmptyRecord')
 
 module.exports = async ({
   omieService,
@@ -9,9 +12,7 @@ module.exports = async ({
   omieMappings,
   repositories,
   omieDocumentTypes,
-  emptyRecordsIds,
-  makeEmptyRecord,
-  joinRecordsByCfopAndMunicipalServiceCode
+  emptyRecordsIds
 }) => {
   const updateBilling = async ({ credentials, companyId, startDate, endDate, emptyRecordsIds, productInvoiceMapping, serviceInvoiceMapping, repositories }) => {
     const [
@@ -32,36 +33,36 @@ module.exports = async ({
       const ordersSet = new Set()
 
       omieProductInvoices.forEach(omieInvoice => {
-        customersSet.add(String(omieInvoice.nfDestInt.nCodCli || ''))
-        ordersSet.add(String(omieInvoice.compl.nIdPedido || ''));
+        customersSet.add(String(omieInvoice.nfDestInt.nCodCli))
+        ordersSet.add(String(omieInvoice.compl.nIdPedido));
         (omieInvoice.pedido.Departamentos?.length ? omieInvoice.pedido.Departamentos : []).forEach(omieInvoiceDepartment => {
-          departmentsSet.add(String(omieInvoiceDepartment.cCodigoDepartamento || ''))
+          departmentsSet.add(String(omieInvoiceDepartment.cCodigoDepartamento))
         })
         omieInvoice.det.forEach(omieInvoiceItem => {
-          productsSet.add(String(omieInvoiceItem.nfProdInt.nCodProd || ''))
+          productsSet.add(String(omieInvoiceItem.nfProdInt.nCodProd))
         })
       })
 
       omieServiceInvoices.forEach(omieInvoice => {
-        customersSet.add(String(omieInvoice.Cabecalho.nCodigoCliente || ''))
-        projectsSet.add(String(omieInvoice.Adicionais.nCodigoProjeto || ''))
-        contractsSet.add(String(omieInvoice.OrdemServico.nCodigoContrato || ''))
-        ordersSet.add(String(omieInvoice.OrdemServico.nCodigoOS || ''));
+        customersSet.add(String(omieInvoice.Cabecalho.nCodigoCliente))
+        projectsSet.add(String(omieInvoice.Adicionais.nCodigoProjeto))
+        contractsSet.add(String(omieInvoice.OrdemServico.nCodigoContrato))
+        ordersSet.add(String(omieInvoice.OrdemServico.nCodigoOS));
         (omieInvoice.OrdemServico.Departamentos?.length ? omieInvoice.OrdemServico.Departamentos : []).forEach(omieInvoiceDepartment => {
-          departmentsSet.add(String(omieInvoiceDepartment.cCodigoDepartamento || ''))
+          departmentsSet.add(String(omieInvoiceDepartment.cCodigoDepartamento))
         })
         omieInvoice.ListaServicos.forEach(omieInvoiceItem => {
-          servicesSet.add(String(omieInvoiceItem.CodigoServico || ''))
+          servicesSet.add(String(omieInvoiceItem.CodigoServico))
         })
       })
 
-      const customersFilter = [...customersSet].filter(Boolean)
-      const projectsFilter = [...projectsSet].filter(Boolean)
-      const departmentsFilter = [...departmentsSet].filter(Boolean)
-      const productsFilter = [...productsSet].filter(Boolean)
-      const servicesFilter = [...servicesSet].filter(Boolean)
-      const contractsFilter = [...contractsSet].filter(Boolean)
-      const ordersFilter = [...ordersSet].filter(Boolean)
+      const customersFilter = [...customersSet].filter(getValidCodes)
+      const projectsFilter = [...projectsSet].filter(getValidCodes)
+      const departmentsFilter = [...departmentsSet].filter(getValidCodes)
+      const productsFilter = [...productsSet].filter(getValidCodes)
+      const servicesFilter = [...servicesSet].filter(getValidCodes)
+      const contractsFilter = [...contractsSet].filter(getValidCodes)
+      const ordersFilter = [...ordersSet].filter(getValidCodes)
 
       const [
         customers,
@@ -143,7 +144,7 @@ module.exports = async ({
       const invoices = [...productInvoices, ...serviceInvoices]
 
       if (invoices.length) {
-        const emptyRecord = await makeEmptyRecord(emptyRecordsIds.billing, invoices[0])
+        const emptyRecord = makeEmptyRecord(emptyRecordsIds.billing, invoices[0])
         invoices.push(emptyRecord)
       }
       await repositories.billing.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'type'], invoices)
@@ -175,26 +176,26 @@ module.exports = async ({
       const billingSet = new Set()
 
       omieAccountsPayable.forEach(omieAccountPayable => {
-        customersSet.add(String(omieAccountPayable.cabecTitulo.nCodCliente || ''))
-        projectsSet.add(String(omieAccountPayable.cabecTitulo.cCodProjeto || ''))
-        contractsSet.add(String(omieAccountPayable.cabecTitulo.nCodCtr || ''))
-        ordersSet.add(String(omieAccountPayable.cabecTitulo.nCodOS || ''))
-        billingSet.add(String(omieAccountPayable.cabecTitulo.nCodNF || ''));
+        customersSet.add(String(omieAccountPayable.cabecTitulo.nCodCliente))
+        projectsSet.add(String(omieAccountPayable.cabecTitulo.cCodProjeto))
+        contractsSet.add(String(omieAccountPayable.cabecTitulo.nCodCtr))
+        ordersSet.add(String(omieAccountPayable.cabecTitulo.nCodOS))
+        billingSet.add(String(omieAccountPayable.cabecTitulo.nCodNF));
         (omieAccountPayable.departamentos?.length ? omieAccountPayable.departamentos : []).forEach(omieAccountPayableDepartment => {
-          departmentsSet.add(String(omieAccountPayableDepartment.cCodDepartamento || ''))
+          departmentsSet.add(String(omieAccountPayableDepartment.cCodDepartamento))
         });
         (omieAccountPayable.cabecTitulo.aCodCateg?.length ? omieAccountPayable.cabecTitulo.aCodCateg : [{ cCodCateg: omieAccountPayable.cabecTitulo.cCodCateg }]).forEach(omieAccountPayableCategory => {
-          categoriesSet.add(String(omieAccountPayableCategory.cCodCateg || ''))
+          categoriesSet.add(String(omieAccountPayableCategory.cCodCateg))
         })
       })
 
-      const customersFilter = [...customersSet].filter(Boolean)
-      const projectsFilter = [...projectsSet].filter(Boolean)
-      const categoriesFilter = [...categoriesSet].filter(Boolean)
-      const departmentsFilter = [...departmentsSet].filter(Boolean)
-      const contractsFilter = [...contractsSet].filter(Boolean)
-      const ordersFilter = [...ordersSet].filter(Boolean)
-      const billingFilter = [...billingSet].filter(Boolean)
+      const customersFilter = [...customersSet].filter(getValidCodes)
+      const projectsFilter = [...projectsSet].filter(getValidCodes)
+      const categoriesFilter = [...categoriesSet].filter(getValidCodes)
+      const departmentsFilter = [...departmentsSet].filter(getValidCodes)
+      const contractsFilter = [...contractsSet].filter(getValidCodes)
+      const ordersFilter = [...ordersSet].filter(getValidCodes)
+      const billingFilter = [...billingSet].filter(getValidCodes)
 
       const [
         customers,
@@ -245,7 +246,7 @@ module.exports = async ({
       }).flatMap(x => x.flatMap(y => y.flatMap(z => z)))
 
       if (accountsPayable.length) {
-        const emptyRecord = await makeEmptyRecord(emptyRecordsIds.accountPayable, accountsPayable[0])
+        const emptyRecord = makeEmptyRecord(emptyRecordsIds.accountPayable, accountsPayable[0])
         accountsPayable.push(emptyRecord)
       }
       await repositories.accountsPayable.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'titleId'], accountsPayable)
@@ -277,26 +278,26 @@ module.exports = async ({
       const billingSet = new Set()
 
       omieAccountsReceivable.forEach(omieAccountReceivable => {
-        customersSet.add(String(omieAccountReceivable.cabecTitulo.nCodCliente || ''))
-        projectsSet.add(String(omieAccountReceivable.cabecTitulo.cCodProjeto || ''))
-        contractsSet.add(String(omieAccountReceivable.cabecTitulo.nCodCtr || ''))
-        ordersSet.add(String(omieAccountReceivable.cabecTitulo.nCodOS || ''))
-        billingSet.add(String(omieAccountReceivable.cabecTitulo.nCodNF || ''));
+        customersSet.add(String(omieAccountReceivable.cabecTitulo.nCodCliente))
+        projectsSet.add(String(omieAccountReceivable.cabecTitulo.cCodProjeto))
+        contractsSet.add(String(omieAccountReceivable.cabecTitulo.nCodCtr))
+        ordersSet.add(String(omieAccountReceivable.cabecTitulo.nCodOS))
+        billingSet.add(String(omieAccountReceivable.cabecTitulo.nCodNF));
         (omieAccountReceivable.departamentos?.length ? omieAccountReceivable.departamentos : []).forEach(omieAccountReceivableDepartment => {
-          departmentsSet.add(String(omieAccountReceivableDepartment.cCodDepartamento || ''))
+          departmentsSet.add(String(omieAccountReceivableDepartment.cCodDepartamento))
         });
         (omieAccountReceivable.cabecTitulo.aCodCateg?.length ? omieAccountReceivable.cabecTitulo.aCodCateg : [{ cCodCateg: omieAccountReceivable.cabecTitulo.cCodCateg }]).forEach(omieAccountReceivableCategory => {
-          categoriesSet.add(String(omieAccountReceivableCategory.cCodCateg || ''))
+          categoriesSet.add(String(omieAccountReceivableCategory.cCodCateg))
         })
       })
 
-      const customersFilter = [...customersSet].filter(Boolean)
-      const projectsFilter = [...projectsSet].filter(Boolean)
-      const categoriesFilter = [...categoriesSet].filter(Boolean)
-      const departmentsFilter = [...departmentsSet].filter(Boolean)
-      const contractsFilter = [...contractsSet].filter(Boolean)
-      const ordersFilter = [...ordersSet].filter(Boolean)
-      const billingFilter = [...billingSet].filter(Boolean)
+      const customersFilter = [...customersSet].filter(getValidCodes)
+      const projectsFilter = [...projectsSet].filter(getValidCodes)
+      const categoriesFilter = [...categoriesSet].filter(getValidCodes)
+      const departmentsFilter = [...departmentsSet].filter(getValidCodes)
+      const contractsFilter = [...contractsSet].filter(getValidCodes)
+      const ordersFilter = [...ordersSet].filter(getValidCodes)
+      const billingFilter = [...billingSet].filter(getValidCodes)
 
       const [
         customers,
@@ -347,18 +348,32 @@ module.exports = async ({
       }).flatMap(x => x.flatMap(y => y.flatMap(z => z)))
 
       if (accountsReceivable.length) {
-        const emptyRecord = await makeEmptyRecord(emptyRecordsIds.accountReceivable, accountsReceivable[0])
+        const emptyRecord = makeEmptyRecord(emptyRecordsIds.accountReceivable, accountsReceivable[0])
         accountsReceivable.push(emptyRecord)
       }
       await repositories.accountsReceivable.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'titleId'], accountsReceivable)
     }
   }
 
-  const updateFinancialMovements = async ({ credentials, companyId, createdFrom, createdTo, updatedFrom, updatedTo, emptyRecordsIds, financialMovementMapping, repositories }) => {
-    let params = { createdFrom, createdTo }
-    if (updatedFrom || updatedTo) params = { updatedFrom, updatedTo }
-    const omieFinancialMovementsResult = await omieService.getFinancialMovements(credentials, params)
-    const omieFinancialMovements = omieFinancialMovementsResult.filter(e => e.detalhes.cStatus !== 'PREVISAO')
+  const updateFinancialMovements = async ({ credentials, companyId, startDate, endDate, emptyRecordsIds, financialMovementMapping, repositories }) => {
+    const [
+      omieFinancialMovementsCreatedResult,
+      omieFinancialMovementsUpdatedResult
+    ] = await Promise.all([
+      omieService.getFinancialMovements(credentials, { createdFrom: startDate, createdTo: endDate }),
+      omieService.getFinancialMovements(credentials, { updatedFrom: startDate, updatedTo: endDate })
+    ])
+
+    const isConsolidatedMovement = (omieMovement) => omieMovement.detalhes.cStatus !== MOVEMENT_STATUSES.FORECAST
+
+    const omieFinancialMovementsCreated = omieFinancialMovementsCreatedResult.filter(isConsolidatedMovement)
+    const omieFinancialMovementsUpdated = omieFinancialMovementsUpdatedResult.filter(isConsolidatedMovement)
+
+    const omieFinancialMovements = Array.from(
+      [...omieFinancialMovementsCreated, ...omieFinancialMovementsUpdated]
+        .reduce((acc, el) => { acc.set(`${el.detalhes.nCodMovCCRepet}-${el.detalhes.nCodMovCC}-${el.detalhes.nCodTitRepet}-${el.detalhes.nCodTitulo}`, el); return acc }, new Map())
+        .values()
+    )
 
     if (omieFinancialMovements.length) {
       const omieEntryOrigins = await omieService.getEntryOrigins(credentials)
@@ -374,30 +389,30 @@ module.exports = async ({
       const titlesSet = new Set()
 
       omieFinancialMovements.forEach(omieFinancialMovement => {
-        customersSet.add(String(omieFinancialMovement.detalhes.nCodCliente || ''))
-        projectsSet.add(String(omieFinancialMovement.detalhes.cCodProjeto || ''))
-        checkingAccountsSet.add(String(omieFinancialMovement.detalhes.nCodCC || ''))
-        contractsSet.add(String(omieFinancialMovement.detalhes.nCodCtr || ''))
-        ordersSet.add(String(omieFinancialMovement.detalhes.nCodOS || ''))
-        billingSet.add(String(omieFinancialMovement.detalhes.nCodNF || ''))
-        titlesSet.add(String(omieFinancialMovement.detalhes.nCodTitulo || ''));
+        customersSet.add(String(omieFinancialMovement.detalhes.nCodCliente))
+        projectsSet.add(String(omieFinancialMovement.detalhes.cCodProjeto))
+        checkingAccountsSet.add(String(omieFinancialMovement.detalhes.nCodCC))
+        contractsSet.add(String(omieFinancialMovement.detalhes.nCodCtr))
+        ordersSet.add(String(omieFinancialMovement.detalhes.nCodOS))
+        billingSet.add(String(omieFinancialMovement.detalhes.nCodNF))
+        titlesSet.add(String(omieFinancialMovement.detalhes.nCodTitulo));
         (omieFinancialMovement.departamentos?.length ? omieFinancialMovement.departamentos : []).forEach(omieFinancialMovementDepartment => {
-          departmentsSet.add(String(omieFinancialMovementDepartment.cCodDepartamento || ''))
+          departmentsSet.add(String(omieFinancialMovementDepartment.cCodDepartamento))
         });
         (omieFinancialMovement.categorias?.length ? omieFinancialMovement.categorias : [{ cCodCateg: omieFinancialMovement.detalhes.cCodCateg }]).forEach(omieFinancialMovementCategory => {
-          categoriesSet.add(String(omieFinancialMovementCategory.cCodCateg || ''))
+          categoriesSet.add(String(omieFinancialMovementCategory.cCodCateg))
         })
       })
 
-      const customersFilter = [...customersSet].filter(Boolean)
-      const projectsFilter = [...projectsSet].filter(Boolean)
-      const categoriesFilter = [...categoriesSet].filter(Boolean)
-      const departmentsFilter = [...departmentsSet].filter(Boolean)
-      const checkingAccountsFilter = [...checkingAccountsSet].filter(Boolean)
-      const contractsFilter = [...contractsSet].filter(Boolean)
-      const ordersFilter = [...ordersSet].filter(Boolean)
-      const billingFilter = [...billingSet].filter(Boolean)
-      const titlesFilter = [...titlesSet].filter(Boolean)
+      const customersFilter = [...customersSet].filter(getValidCodes)
+      const projectsFilter = [...projectsSet].filter(getValidCodes)
+      const categoriesFilter = [...categoriesSet].filter(getValidCodes)
+      const departmentsFilter = [...departmentsSet].filter(getValidCodes)
+      const checkingAccountsFilter = [...checkingAccountsSet].filter(getValidCodes)
+      const contractsFilter = [...contractsSet].filter(getValidCodes)
+      const ordersFilter = [...ordersSet].filter(getValidCodes)
+      const billingFilter = [...billingSet].filter(getValidCodes)
+      const titlesFilter = [...titlesSet].filter(getValidCodes)
 
       const [
         customers,
@@ -459,7 +474,7 @@ module.exports = async ({
         })
       }).flatMap(x => x.flatMap(y => y))
 
-      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.financialMovement, financialMovements[0])
+      const emptyRecord = makeEmptyRecord(emptyRecordsIds.financialMovement, financialMovements[0])
       financialMovements.push(emptyRecord)
       await repositories.financialMovements.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'movementId'], financialMovements)
     }
@@ -500,18 +515,8 @@ module.exports = async ({
     credentials,
     companyId,
     emptyRecordsIds,
-    createdFrom: startDate,
-    createdTo: endDate,
-    financialMovementMapping: omieMappings.financialMovement,
-    repositories
-  })
-
-  await updateFinancialMovements({
-    credentials,
-    companyId,
-    emptyRecordsIds,
-    updatedFrom: startDate,
-    updatedTo: endDate,
+    startDate,
+    endDate,
     financialMovementMapping: omieMappings.financialMovement,
     repositories
   })

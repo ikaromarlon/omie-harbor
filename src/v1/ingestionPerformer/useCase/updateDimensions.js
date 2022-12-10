@@ -1,4 +1,7 @@
 const { PRODUCT_TYPES } = require('../../../common/enums')
+const getValidCodes = require('../utils/getValidCodes')
+const joinRecordsByCfopAndMunicipalServiceCode = require('../utils/joinRecordsByCfopAndMunicipalServiceCode')
+const makeEmptyRecord = require('../utils/makeEmptyRecord')
 
 module.exports = async ({
   omieService,
@@ -10,15 +13,13 @@ module.exports = async ({
   repositories,
   omieBanks,
   omieCnae,
-  emptyRecordsIds,
-  makeEmptyRecord,
-  joinRecordsByCfopAndMunicipalServiceCode
+  emptyRecordsIds
 }) => {
   const updateCategories = async ({ credentials, companyId, categoryMapping, categoriesRepository }) => {
     const omieCategories = await omieService.getCategories(credentials)
     const categories = omieCategories.map(omieCategory => categoryMapping({ omieCategory, companyId }))
     if (categories.length) {
-      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.category, categories[0])
+      const emptyRecord = makeEmptyRecord(emptyRecordsIds.category, categories[0])
       categories.push(emptyRecord)
       await categoriesRepository.createOrUpdateMany(['companyId', 'externalId'], categories)
     }
@@ -28,7 +29,7 @@ module.exports = async ({
     const omieDepartments = await omieService.getDepartments(credentials, { startDate, endDate })
     const departments = omieDepartments.map(omieDepartment => departmentMapping({ omieDepartment, companyId }))
     if (departments.length) {
-      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.department, departments[0])
+      const emptyRecord = makeEmptyRecord(emptyRecordsIds.department, departments[0])
       departments.push(emptyRecord)
       await departmentsRepository.createOrUpdateMany(['companyId', 'externalId'], departments)
     }
@@ -38,7 +39,7 @@ module.exports = async ({
     const omieProjects = await omieService.getProjects(credentials, { startDate, endDate })
     const projects = omieProjects.map(omieProject => projectMapping({ omieProject, companyId }))
     if (projects.length) {
-      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.project, projects[0])
+      const emptyRecord = makeEmptyRecord(emptyRecordsIds.project, projects[0])
       projects.push(emptyRecord)
       await projectsRepository.createOrUpdateMany(['companyId', 'externalId'], projects)
     }
@@ -50,7 +51,7 @@ module.exports = async ({
       const omieActivities = await omieService.getActivities(credentials)
       const customers = omieCustomers.map(omieCustomer => customerMapping({ omieCustomer, omieActivities, omieCnae, omieBanks, companyId }))
       if (customers.length) {
-        const emptyRecord = await makeEmptyRecord(emptyRecordsIds.customer, customers[0])
+        const emptyRecord = makeEmptyRecord(emptyRecordsIds.customer, customers[0])
         customers.push(emptyRecord)
         await customersRepository.createOrUpdateMany(['companyId', 'externalId'], customers)
       }
@@ -76,11 +77,11 @@ module.exports = async ({
     )
 
     const services = omieServices.map(omieService => serviceMapping({ omieService, companyId }))
-    
+
     const productsServices = [...products, ...services]
-    
+
     if (productsServices.length) {
-      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.productService, productsServices[0])
+      const emptyRecord = makeEmptyRecord(emptyRecordsIds.productService, productsServices[0])
       productsServices.push(emptyRecord)
       await productsServicesRepository.createOrUpdateMany(['companyId', 'externalId'], productsServices)
     }
@@ -91,7 +92,7 @@ module.exports = async ({
     if (omieCheckingAccounts.length) {
       const omieCheckingAccountTypes = await omieService.getCheckingAccountTypes(credentials)
       const checkingAccounts = omieCheckingAccounts.map(omieCheckingAccount => checkingAccountMapping({ omieCheckingAccount, omieBanks, omieCheckingAccountTypes, companyId }))
-      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.checkingAccount, checkingAccounts[0])
+      const emptyRecord = makeEmptyRecord(emptyRecordsIds.checkingAccount, checkingAccounts[0])
       checkingAccounts.push(emptyRecord)
       await checkingAccountsRepository.createOrUpdateMany(['companyId', 'externalId'], checkingAccounts)
     }
@@ -111,22 +112,22 @@ module.exports = async ({
       const productsServicesSet = new Set()
 
       omieContracts.forEach(omieContract => {
-        customersSet.add(String(omieContract.cabecalho.nCodCli || ''))
-        projectsSet.add(String(omieContract.infAdic.nCodProj || ''));
+        customersSet.add(String(omieContract.cabecalho.nCodCli))
+        projectsSet.add(String(omieContract.infAdic.nCodProj));
         (omieContract.departamentos?.length ? omieContract.departamentos : []).forEach(omieContractDepartment => {
-          departmentsSet.add(String(omieContractDepartment.cCodDep || ''))
+          departmentsSet.add(String(omieContractDepartment.cCodDep))
         })
         omieContract.itensContrato.forEach(omieContractItem => {
-          productsServicesSet.add(String(omieContractItem.itemCabecalho.codServico || ''))
-          categoriesSet.add(String(omieContractItem.itemCabecalho.cCodCategItem || ''))
+          productsServicesSet.add(String(omieContractItem.itemCabecalho.codServico))
+          categoriesSet.add(String(omieContractItem.itemCabecalho.cCodCategItem))
         })
       })
 
-      const customersFilter = [...customersSet].filter(Boolean)
-      const projectsFilter = [...projectsSet].filter(Boolean)
-      const categoriesFilter = [...categoriesSet].filter(Boolean)
-      const departmentsFilter = [...departmentsSet].filter(Boolean)
-      const productsServicesFilter = [...productsServicesSet].filter(Boolean)
+      const customersFilter = [...customersSet].filter(getValidCodes)
+      const projectsFilter = [...projectsSet].filter(getValidCodes)
+      const categoriesFilter = [...categoriesSet].filter(getValidCodes)
+      const departmentsFilter = [...departmentsSet].filter(getValidCodes)
+      const productsServicesFilter = [...productsServicesSet].filter(getValidCodes)
 
       const [
         customers,
@@ -169,7 +170,7 @@ module.exports = async ({
       }).flatMap(x => x.flatMap(y => y))
         .reduce(joinRecordsByCfopAndMunicipalServiceCode, [])
 
-      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.contract, contracts[0])
+      const emptyRecord = makeEmptyRecord(emptyRecordsIds.contract, contracts[0])
       contracts.push(emptyRecord)
       await repositories.contracts.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'type'], contracts)
     }
@@ -195,36 +196,36 @@ module.exports = async ({
       const contractsSet = new Set()
 
       omieProductOrders.forEach(omieOrder => {
-        customersSet.add(String(omieOrder.cabecalho.codigo_cliente || ''))
-        projectsSet.add(String(omieOrder.informacoes_adicionais.codProj || ''));
+        customersSet.add(String(omieOrder.cabecalho.codigo_cliente))
+        projectsSet.add(String(omieOrder.informacoes_adicionais.codProj));
         (omieOrder.departamentos?.length ? omieOrder.departamentos : []).forEach(omieOrderDepartment => {
-          departmentsSet.add(String(omieOrderDepartment.cCodDepto || ''))
+          departmentsSet.add(String(omieOrderDepartment.cCodDepto))
         })
         omieOrder.det.forEach(omieOrderItem => {
-          productsServicesSet.add(String(omieOrderItem.produto.codigo_produto || ''))
-          categoriesSet.add(String(omieOrderItem.inf_adic.codigo_categoria_item || ''))
+          productsServicesSet.add(String(omieOrderItem.produto.codigo_produto))
+          categoriesSet.add(String(omieOrderItem.inf_adic.codigo_categoria_item))
         })
       })
 
       omieServiceOrders.forEach(omieOrder => {
-        customersSet.add(String(omieOrder.Cabecalho.nCodCli || ''))
-        projectsSet.add(String(omieOrder.InformacoesAdicionais.nCodProj || ''))
-        contractsSet.add(String(omieOrder.InformacoesAdicionais.cNumContrato || ''));
+        customersSet.add(String(omieOrder.Cabecalho.nCodCli))
+        projectsSet.add(String(omieOrder.InformacoesAdicionais.nCodProj))
+        contractsSet.add(String(omieOrder.InformacoesAdicionais.cNumContrato));
         (omieOrder.Departamentos?.length ? omieOrder.Departamentos : []).forEach(omieOrderDepartment => {
-          departmentsSet.add(String(omieOrderDepartment.cCodDepto || ''))
+          departmentsSet.add(String(omieOrderDepartment.cCodDepto))
         })
         omieOrder.ServicosPrestados.forEach(omieOrderItem => {
-          productsServicesSet.add(String(omieOrderItem.nCodServico || ''))
-          categoriesSet.add(String(omieOrderItem.cCodCategItem || ''))
+          productsServicesSet.add(String(omieOrderItem.nCodServico))
+          categoriesSet.add(String(omieOrderItem.cCodCategItem))
         })
       })
 
-      const customersFilter = [...customersSet].filter(Boolean)
-      const projectsFilter = [...projectsSet].filter(Boolean)
-      const categoriesFilter = [...categoriesSet].filter(Boolean)
-      const departmentsFilter = [...departmentsSet].filter(Boolean)
-      const productsServicesFilter = [...productsServicesSet].filter(Boolean)
-      const contractsFilter = [...contractsSet].filter(Boolean)
+      const customersFilter = [...customersSet].filter(getValidCodes)
+      const projectsFilter = [...projectsSet].filter(getValidCodes)
+      const categoriesFilter = [...categoriesSet].filter(getValidCodes)
+      const departmentsFilter = [...departmentsSet].filter(getValidCodes)
+      const productsServicesFilter = [...productsServicesSet].filter(getValidCodes)
+      const contractsFilter = [...contractsSet].filter(getValidCodes)
 
       const [
         customers,
@@ -298,7 +299,7 @@ module.exports = async ({
 
       const orders = [...productOrders, ...serviceOrders]
 
-      const emptyRecord = await makeEmptyRecord(emptyRecordsIds.order, orders[0])
+      const emptyRecord = makeEmptyRecord(emptyRecordsIds.order, orders[0])
       orders.push(emptyRecord)
       await repositories.orders.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'type'], orders)
     }
