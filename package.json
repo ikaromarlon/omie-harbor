@@ -1,10 +1,10 @@
 {
   "name": "fullbpo-bfb",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "FullBPO BFB (Back-end For Back-end) service",
   "main": "src/index.js",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "scripts": {
     "prepare": "husky install",
@@ -12,7 +12,7 @@
     "lint": "standard",
     "lint:fix": "npm run lint -- --fix",
     "lint:staged": "lint-staged",
-    "_test": "jest --runInBand --silent --passWithNoTests",
+    "_test": "jest --runInBand --silent --passWithNoTests --coverageProvider=v8",
     "test": "npm run test:unit && npm run test:integration",
     "test:staged": "npm run _test -- --findRelatedTests",
     "test:unit": "npm run _test -- --config jest.config.unit.js",
@@ -48,18 +48,21 @@
     "uuid-by-string": "^3.0.6"
   },
   "devDependencies": {
+    "@aws-sdk/client-eventbridge": "^3.222.0",
+    "@aws-sdk/client-s3": "^3.222.0",
+    "@aws-sdk/client-ses": "^3.222.0",
+    "@aws-sdk/client-sqs": "^3.222.0",
     "@shelf/jest-mongodb": "^4.1.4",
     "@types/jest": "^29.2.4",
-    "aws-sdk": "^2.1053.0",
     "dotenv": "^10.0.0",
     "git-commit-msg-linter": "^3.2.8",
     "husky": "^8.0.1",
     "jest": "^29.3.1",
     "lint-staged": "^11.2.3",
-    "serverless": "^3.25.0",
+    "serverless": "^3.25.1",
     "serverless-cloudside-plugin": "^1.0.6",
     "serverless-iam-roles-per-function": "^3.2.0",
-    "serverless-offline": "^11.6.0",
+    "serverless-offline": "^12.0.1",
     "standard": "^16.0.4"
   },
   "standard": {

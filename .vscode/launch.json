@@ -14,6 +14,8 @@
       "console": "integratedTerminal",
       "args": [
         "offline",
+        "--noTimeout",
+        "--noAuth",
         "cloudside"
       ],
       "runtimeArgs": [

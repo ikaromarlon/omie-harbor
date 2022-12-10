@@ -1,11 +1,11 @@
-const AWS = require('aws-sdk')
+const { EventBridgeClient, PutEventsCommand } = require('@aws-sdk/client-eventbridge')
 const config = require('../../config')
 const { ExternalServerError } = require('../errors')
 
 module.exports = (sourceSufix = 'unknown') => {
   const { app: { source } } = config
 
-  const eventBridge = new AWS.EventBridge()
+  const eventBridge = new EventBridgeClient()
 
   const parseResult = ({ result, target }) => {
     if (result.FailedEntryCount === result.Entries.length) {
@@ -28,15 +28,18 @@ module.exports = (sourceSufix = 'unknown') => {
   return {
     triggerBfbDataExport: async (companyId) => {
       const target = `${source}.dataExport`
-      const Entries = [
-        {
-          Source: source,
-          DetailType: target,
-          Detail: JSON.stringify({ companyId })
-        }
-      ]
 
-      const result = await eventBridge.putEvents({ Entries }).promise()
+      const command = new PutEventsCommand({
+        Entries: [
+          {
+            Source: source,
+            DetailType: target,
+            Detail: JSON.stringify({ companyId })
+          }
+        ]
+      })
+
+      const result = await eventBridge.send(command)
 
       return parseResult({ result, target })
     }

@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk')
+const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses')
 const config = require('../../config')
 const ExternalServerError = require('../errors/ExternalServerError')
 const { stripTags } = require('../helpers')
@@ -24,7 +24,7 @@ const mailer = () => {
     }
   } = config
 
-  const SES = new AWS.SES({ region })
+  const SES = new SESClient({ region })
 
   const sendErrorNotification = async (data) => {
     const func = ''
@@ -73,7 +73,9 @@ const mailer = () => {
     }
 
     try {
-      await (SES.sendEmail(params).promise())
+      const command = new SendEmailCommand(params)
+      const result = await SES.send(command)
+      return result
     } catch (error) {
       logger.error({ title: 'Mailer', message: 'sendErrorNotification', data: { ...error, message: error.message, stack: error.stack } })
     }
@@ -132,7 +134,9 @@ const mailer = () => {
     }
 
     try {
-      await (SES.sendEmail(params).promise())
+      const command = new SendEmailCommand(params)
+      const result = await SES.send(command)
+      return result
     } catch (error) {
       throw new ExternalServerError(error.message, error)
     }
