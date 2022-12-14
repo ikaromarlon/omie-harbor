@@ -323,7 +323,7 @@ describe('ingestionPerformer UseCase', () => {
           emptyRecordsIds: mocks.mockEmptyRecordsIds
         })
         expect(mockOmieMappings.contract).toHaveReturnedWith(mocks.mockParsedOmieContract)
-        expect(mockRepositories.contracts.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'customerId', 'externalId', 'type'], [mocks.mockParsedOmieContract, mocks.mockEmptyContract])
+        expect(mockRepositories.contracts.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'externalId', 'type'], [mocks.mockParsedOmieContract, mocks.mockEmptyContract])
       })
 
       it('Should receive contracts from Omie with departments array but missing department id', async () => {
@@ -391,7 +391,7 @@ describe('ingestionPerformer UseCase', () => {
           contractId: mockContractId
         })
         expect(mockOmieMappings.serviceOrder).toHaveReturnedWith(mocks.mockParsedOmieServiceOrder)
-        expect(mockRepositories.orders.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'customerId', 'externalId', 'type'], [mocks.mockParsedOmieProductOrder, mocks.mockParsedOmieServiceOrder, mocks.mockEmptyOrder])
+        expect(mockRepositories.orders.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'externalId', 'type'], [mocks.mockParsedOmieProductOrder, mocks.mockParsedOmieServiceOrder, mocks.mockEmptyOrder])
       })
 
       it('Should receive orders from Omie with departments array but missing department id', async () => {
@@ -488,7 +488,7 @@ describe('ingestionPerformer UseCase', () => {
           contractId: mockContractId
         })
         expect(mockOmieMappings.serviceInvoice).toHaveReturnedWith(mocks.mockParsedOmieServiceInvoice)
-        expect(mockRepositories.billing.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'customerId', 'externalId', 'type'], [mocks.mockParsedOmieProductInvoice, mocks.mockParsedOmieServiceInvoice, mocks.mockEmptyBilling])
+        expect(mockRepositories.billing.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'externalId', 'type'], [mocks.mockParsedOmieProductInvoice, mocks.mockParsedOmieServiceInvoice, mocks.mockEmptyBilling])
       })
 
       it('Should receive billing from Omie with departments array but missing department id', async () => {
@@ -621,7 +621,7 @@ describe('ingestionPerformer UseCase', () => {
           contractId: mockContractId
         })
         expect(mockOmieMappings.title).toHaveNthReturnedWith(1, mocks.mockParsedOmieAccountPayable)
-        expect(mockRepositories.accountsPayable.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'customerId', 'externalId', 'titleId'], [mocks.mockParsedOmieAccountPayable, mocks.mockEmptyAccountPayable])
+        expect(mockRepositories.accountsPayable.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'externalId', 'titleId'], [mocks.mockParsedOmieAccountPayable, mocks.mockEmptyAccountPayable])
       })
 
       it('Should receive accountsPayable from Omie with departments array but missing department id', async () => {
@@ -653,7 +653,7 @@ describe('ingestionPerformer UseCase', () => {
           contractId: mockContractId
         })
         expect(mockOmieMappings.title).toHaveNthReturnedWith(1, mocks.mockParsedOmieAccountPayable)
-        expect(mockRepositories.accountsPayable.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'customerId', 'externalId', 'titleId'], [mocks.mockParsedOmieAccountPayable, mocks.mockEmptyAccountPayable])
+        expect(mockRepositories.accountsPayable.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'externalId', 'titleId'], [mocks.mockParsedOmieAccountPayable, mocks.mockEmptyAccountPayable])
       })
 
       it('Should call omieMappings.title without categories list: use fixed category in title details', async () => {
@@ -727,7 +727,7 @@ describe('ingestionPerformer UseCase', () => {
           contractId: mockContractId
         })
         expect(mockOmieMappings.title).toHaveNthReturnedWith(2, mocks.mockParsedOmieAccountReceivable)
-        expect(mockRepositories.accountsReceivable.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'customerId', 'externalId', 'titleId'], [mocks.mockParsedOmieAccountReceivable, mocks.mockEmptyAccountReceivable])
+        expect(mockRepositories.accountsReceivable.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'externalId', 'titleId'], [mocks.mockParsedOmieAccountReceivable, mocks.mockEmptyAccountReceivable])
       })
 
       it('Should call omieMappings.title without title entries', async () => {
@@ -753,7 +753,7 @@ describe('ingestionPerformer UseCase', () => {
           contractId: mockContractId
         })
         expect(mockOmieMappings.title).toHaveNthReturnedWith(2, mocks.mockParsedOmieAccountReceivable)
-        expect(mockRepositories.accountsReceivable.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'customerId', 'externalId', 'titleId'], [mocks.mockParsedOmieAccountReceivable, mocks.mockEmptyAccountReceivable])
+        expect(mockRepositories.accountsReceivable.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'externalId', 'titleId'], [mocks.mockParsedOmieAccountReceivable, mocks.mockEmptyAccountReceivable])
       })
 
       it('Should receive accountsReceivable from Omie with departments array but missing department id', async () => {
@@ -837,7 +837,7 @@ describe('ingestionPerformer UseCase', () => {
           accountReceivableId: undefined
         })
         expect(mockOmieMappings.financialMovement).toHaveReturnedWith(mocks.mockParsedOmieFinancialMovement)
-        expect(mockRepositories.financialMovements.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'customerId', 'externalId', 'movementId'], [mocks.mockParsedOmieFinancialMovement, mocks.mockEmptyFinancialMovement])
+        expect(mockRepositories.financialMovements.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'externalId', 'movementId'], [mocks.mockParsedOmieFinancialMovement, mocks.mockEmptyFinancialMovement])
       })
 
       it('Should receive financialMovements from Omie with departments array but missing department id', async () => {

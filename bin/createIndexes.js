@@ -56,37 +56,37 @@ module.exports = async ({ config }) => {
 
     console.log('contracts...')
     await db.collection('contracts').createIndexes([
-      { name: 'companyId_customerId_externalId_departmentId_productServiceId_municipalServiceCode', key: { companyId: 1, customerId: 1, externalId: 1, departmentId: 1, productServiceId: 1, municipalServiceCode: 1 }, unique: true }
+      { name: 'companyId_externalId_departmentId_productServiceId_municipalServiceCode', key: { companyId: 1, externalId: 1, departmentId: 1, productServiceId: 1, municipalServiceCode: 1 }, unique: true }
     ])
     console.log('done!\n')
 
     console.log('orders...')
     await db.collection('orders').createIndexes([
-      { name: 'companyId_customerId_externalId_type_departmentId_productServiceId_cfop_municipalServiceCode', key: { companyId: 1, customerId: 1, externalId: 1, type: 1, departmentId: 1, productServiceId: 1, cfop: 1, municipalServiceCode: 1 }, unique: true }
+      { name: 'companyId_externalId_type_departmentId_productServiceId_cfop_municipalServiceCode', key: { companyId: 1, externalId: 1, type: 1, departmentId: 1, productServiceId: 1, cfop: 1, municipalServiceCode: 1 }, unique: true }
     ])
     console.log('done!\n')
 
     console.log('billing...')
     await db.collection('billing').createIndexes([
-      { name: 'companyId_customerId_externalId_type_departmentId_productServiceId_cfop_municipalServiceCode', key: { companyId: 1, customerId: 1, externalId: 1, type: 1, departmentId: 1, productServiceId: 1, cfop: 1, municipalServiceCode: 1 }, unique: true }
+      { name: 'companyId_externalId_type_departmentId_productServiceId_cfop_municipalServiceCode', key: { companyId: 1, externalId: 1, type: 1, departmentId: 1, productServiceId: 1, cfop: 1, municipalServiceCode: 1 }, unique: true }
     ])
     console.log('done!\n')
 
     console.log('accounts-payable...')
     await db.collection('accounts-payable').createIndexes([
-      { name: 'companyId_customerId_titleId_externalId_departmentId_categoryId', key: { companyId: 1, customerId: 1, titleId: 1, externalId: 1, departmentId: 1, categoryId: 1 }, unique: true }
+      { name: 'companyId_titleId_externalId_departmentId_categoryId', key: { companyId: 1, titleId: 1, externalId: 1, departmentId: 1, categoryId: 1 }, unique: true }
     ])
     console.log('done!\n')
 
     console.log('accounts-receivable...')
     await db.collection('accounts-receivable').createIndexes([
-      { name: 'companyId_customerId_titleId_externalId_departmentId_categoryId', key: { companyId: 1, customerId: 1, titleId: 1, externalId: 1, departmentId: 1, categoryId: 1 }, unique: true }
+      { name: 'companyId_titleId_externalId_departmentId_categoryId', key: { companyId: 1, titleId: 1, externalId: 1, departmentId: 1, categoryId: 1 }, unique: true }
     ])
     console.log('done!\n')
 
     console.log('financial-movements...')
     await db.collection('financial-movements').createIndexes([
-      { name: 'companyId_customerId_movementId_externalId_departmentId_categoryId', key: { companyId: 1, customerId: 1, movementId: 1, externalId: 1, departmentId: 1, categoryId: 1 }, unique: true }
+      { name: 'companyId_movementId_externalId_departmentId_categoryId', key: { companyId: 1, movementId: 1, externalId: 1, departmentId: 1, categoryId: 1 }, unique: true }
     ])
     console.log('done!\n')
   } finally {

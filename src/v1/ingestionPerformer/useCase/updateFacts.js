@@ -84,7 +84,7 @@ module.exports = async ({
 
       const productInvoices = omieProductInvoices.map(omieInvoice => {
         const customer = customers.find(e => e.externalId === String(omieInvoice.nfDestInt.nCodCli))
-        const salesOrders = orders.filter(e => e.customerId === customer?._id && e.externalId === String(omieInvoice.compl.nIdPedido) && e.type === ORDER_TYPES.SALES_ORDER)
+        const salesOrders = orders.filter(e => e.externalId === String(omieInvoice.compl.nIdPedido) && e.type === ORDER_TYPES.SALES_ORDER)
         if (salesOrders.length || (!omieInvoice.compl.nIdPedido || omieInvoice.compl.nIdPedido === '0')) {
           return (omieInvoice.pedido.Departamentos?.length ? omieInvoice.pedido.Departamentos : [{}]).map(omieInvoiceDepartment => {
             const department = departments.find(e => e.externalId === String(omieInvoiceDepartment.cCodigoDepartamento))
@@ -116,7 +116,7 @@ module.exports = async ({
         const customer = customers.find(e => e.externalId === String(omieInvoice.Cabecalho.nCodigoCliente))
         const project = projects.find(e => e.externalId === String(omieInvoice.Adicionais.nCodigoProjeto))
         const contract = contracts.find(e => e.externalId === String(omieInvoice.OrdemServico.nCodigoContrato))
-        const serviceOrders = orders.filter(e => e.customerId === customer?._id && e.externalId === String(omieInvoice.OrdemServico.nCodigoOS) && e.type === ORDER_TYPES.SERVICE_ORDER)
+        const serviceOrders = orders.filter(e => e.externalId === String(omieInvoice.OrdemServico.nCodigoOS) && e.type === ORDER_TYPES.SERVICE_ORDER)
         return (omieInvoice.OrdemServico.Departamentos?.length ? omieInvoice.OrdemServico.Departamentos : [{}]).map(omieInvoiceDepartment => {
           const department = departments.find(e => e.externalId === String(omieInvoiceDepartment.cCodigoDepartamento))
           return omieInvoice.ListaServicos.map(omieInvoiceItem => {
@@ -147,7 +147,7 @@ module.exports = async ({
         const emptyRecord = makeEmptyRecord(emptyRecordsIds.billing, invoices[0])
         invoices.push(emptyRecord)
       }
-      await repositories.billing.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'type'], invoices)
+      await repositories.billing.deleteOldAndCreateNew(['companyId', 'externalId', 'type'], invoices)
     }
   }
 
@@ -219,8 +219,8 @@ module.exports = async ({
         const customer = customers.find(e => e.externalId === String(omieAccountPayable.cabecTitulo.nCodCliente))
         const project = projects.find(e => e.externalId === String(omieAccountPayable.cabecTitulo.cCodProjeto))
         const contract = contracts.find(e => e.externalId === String(omieAccountPayable.cabecTitulo.nCodCtr))
-        const order = orders.find(e => e.customerId === customer?._id && e.externalId === String(omieAccountPayable.cabecTitulo.nCodOS))
-        const invoice = billing.find(e => e.customerId === customer?._id && e.externalId === String(omieAccountPayable.cabecTitulo.nCodNF))
+        const order = orders.find(e => e.externalId === String(omieAccountPayable.cabecTitulo.nCodOS))
+        const invoice = billing.find(e => e.externalId === String(omieAccountPayable.cabecTitulo.nCodNF))
         return (omieAccountPayable.departamentos?.length ? omieAccountPayable.departamentos : [{}]).map(omieAccountPayableDepartment => {
           const department = departments.find(e => e.externalId === String(omieAccountPayableDepartment.cCodDepartamento))
           return (omieAccountPayable.cabecTitulo.aCodCateg?.length ? omieAccountPayable.cabecTitulo.aCodCateg : [{ cCodCateg: omieAccountPayable.cabecTitulo.cCodCateg }]).map(omieAccountPayableCategory => {
@@ -249,7 +249,7 @@ module.exports = async ({
         const emptyRecord = makeEmptyRecord(emptyRecordsIds.accountPayable, accountsPayable[0])
         accountsPayable.push(emptyRecord)
       }
-      await repositories.accountsPayable.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'titleId'], accountsPayable)
+      await repositories.accountsPayable.deleteOldAndCreateNew(['companyId', 'externalId', 'titleId'], accountsPayable)
     }
   }
 
@@ -321,8 +321,8 @@ module.exports = async ({
         const customer = customers.find(e => e.externalId === String(omieAccountReceivable.cabecTitulo.nCodCliente))
         const project = projects.find(e => e.externalId === String(omieAccountReceivable.cabecTitulo.cCodProjeto))
         const contract = contracts.find(e => e.externalId === String(omieAccountReceivable.cabecTitulo.nCodCtr))
-        const order = orders.find(e => e.customerId === customer?._id && e.externalId === String(omieAccountReceivable.cabecTitulo.nCodOS))
-        const invoice = billing.find(e => e.customerId === customer?._id && e.externalId === String(omieAccountReceivable.cabecTitulo.nCodNF))
+        const order = orders.find(e => e.externalId === String(omieAccountReceivable.cabecTitulo.nCodOS))
+        const invoice = billing.find(e => e.externalId === String(omieAccountReceivable.cabecTitulo.nCodNF))
         return (omieAccountReceivable.departamentos?.length ? omieAccountReceivable.departamentos : [{}]).map(omieAccountReceivableDepartment => {
           const department = departments.find(e => e.externalId === String(omieAccountReceivableDepartment.cCodDepartamento))
           return (omieAccountReceivable.cabecTitulo.aCodCateg?.length ? omieAccountReceivable.cabecTitulo.aCodCateg : [{ cCodCateg: omieAccountReceivable.cabecTitulo.cCodCateg }]).map(omieAccountReceivableCategory => {
@@ -351,7 +351,7 @@ module.exports = async ({
         const emptyRecord = makeEmptyRecord(emptyRecordsIds.accountReceivable, accountsReceivable[0])
         accountsReceivable.push(emptyRecord)
       }
-      await repositories.accountsReceivable.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'titleId'], accountsReceivable)
+      await repositories.accountsReceivable.deleteOldAndCreateNew(['companyId', 'externalId', 'titleId'], accountsReceivable)
     }
   }
 
@@ -443,10 +443,10 @@ module.exports = async ({
         const project = projects.find(e => e.externalId === String(omieFinancialMovement.detalhes.cCodProjeto))
         const checkingAccount = checkingAccounts.find(e => e.externalId === String(omieFinancialMovement.detalhes.nCodCC))
         const contract = contracts.find(e => e.externalId === String(omieFinancialMovement.detalhes.nCodCtr))
-        const order = orders.find(e => e.customerId === customer?._id && e.externalId === String(omieFinancialMovement.detalhes.nCodOS))
-        const invoice = billing.find(e => e.customerId === customer?._id && e.externalId === String(omieFinancialMovement.detalhes.nCodNF))
-        const accountPayable = accountsPayable.find(e => e.customerId === customer?._id && e.externalId === String(omieFinancialMovement.detalhes.nCodTitulo))
-        const accountReceivable = accountsReceivable.find(e => e.customerId === customer?._id && e.externalId === String(omieFinancialMovement.detalhes.nCodTitulo))
+        const order = orders.find(e => e.externalId === String(omieFinancialMovement.detalhes.nCodOS))
+        const invoice = billing.find(e => e.externalId === String(omieFinancialMovement.detalhes.nCodNF))
+        const accountPayable = accountsPayable.find(e => e.externalId === String(omieFinancialMovement.detalhes.nCodTitulo))
+        const accountReceivable = accountsReceivable.find(e => e.externalId === String(omieFinancialMovement.detalhes.nCodTitulo))
         return (omieFinancialMovement.departamentos?.length ? omieFinancialMovement.departamentos : [{}]).map(omieFinancialMovementDepartment => {
           const department = departments.find(e => e.externalId === String(omieFinancialMovementDepartment.cCodDepartamento))
           return (omieFinancialMovement.categorias?.length ? omieFinancialMovement.categorias : [{ cCodCateg: omieFinancialMovement.detalhes.cCodCateg }]).map(omieFinancialMovementCategory => {
@@ -476,7 +476,7 @@ module.exports = async ({
 
       const emptyRecord = makeEmptyRecord(emptyRecordsIds.financialMovement, financialMovements[0])
       financialMovements.push(emptyRecord)
-      await repositories.financialMovements.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'movementId'], financialMovements)
+      await repositories.financialMovements.deleteOldAndCreateNew(['companyId', 'externalId', 'movementId'], financialMovements)
     }
   }
 

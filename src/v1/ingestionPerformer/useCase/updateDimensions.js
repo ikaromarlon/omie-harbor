@@ -172,7 +172,7 @@ module.exports = async ({
 
       const emptyRecord = makeEmptyRecord(emptyRecordsIds.contract, contracts[0])
       contracts.push(emptyRecord)
-      await repositories.contracts.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'type'], contracts)
+      await repositories.contracts.deleteOldAndCreateNew(['companyId', 'externalId', 'type'], contracts)
     }
   }
 
@@ -272,7 +272,7 @@ module.exports = async ({
       const serviceOrders = omieServiceOrders.map(omieOrder => {
         const customer = customers.find(e => e.externalId === String(omieOrder.Cabecalho.nCodCli))
         const project = projects.find(e => e.externalId === String(omieOrder.InformacoesAdicionais.nCodProj))
-        const contract = contracts.find(e => e.customerId === customer?._id && e.contractNumber === String(omieOrder.InformacoesAdicionais.cNumContrato))
+        const contract = contracts.find(e => e.contractNumber === String(omieOrder.InformacoesAdicionais.cNumContrato))
         return (omieOrder.Departamentos?.length ? omieOrder.Departamentos : [{}]).map(omieOrderDepartment => {
           const department = departments.find(e => e.externalId === String(omieOrderDepartment.cCodDepto))
           return omieOrder.ServicosPrestados.map(omieOrderItem => {
@@ -301,7 +301,7 @@ module.exports = async ({
 
       const emptyRecord = makeEmptyRecord(emptyRecordsIds.order, orders[0])
       orders.push(emptyRecord)
-      await repositories.orders.deleteOldAndCreateNew(['companyId', 'customerId', 'externalId', 'type'], orders)
+      await repositories.orders.deleteOldAndCreateNew(['companyId', 'externalId', 'type'], orders)
     }
   }
 

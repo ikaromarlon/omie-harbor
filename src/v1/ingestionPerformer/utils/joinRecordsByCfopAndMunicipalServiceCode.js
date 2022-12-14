@@ -1,6 +1,6 @@
 const joinRecordsByCfopAndMunicipalServiceCode = (acc, record, i, records) => {
-  const stored = acc.some(e => e.customerId === record.customerId && e.externalId === record.externalId && e.type === record.type && e.departmentId === record.departmentId && e.productServiceId === record.productServiceId && e.cfop === record.cfop && e.municipalServiceCode === record.municipalServiceCode)
-  const pending = records.filter(e => e.customerId === record.customerId && e.externalId === record.externalId && e.type === record.type && e.departmentId === record.departmentId && e.productServiceId === record.productServiceId && e.cfop === record.cfop && e.municipalServiceCode === record.municipalServiceCode)
+  const stored = acc.some(e => e.externalId === record.externalId && e.type === record.type && e.departmentId === record.departmentId && e.productServiceId === record.productServiceId && e.cfop === record.cfop && e.municipalServiceCode === record.municipalServiceCode)
+  const pending = records.filter(e => e.externalId === record.externalId && e.type === record.type && e.departmentId === record.departmentId && e.productServiceId === record.productServiceId && e.cfop === record.cfop && e.municipalServiceCode === record.municipalServiceCode)
   if (!stored) {
     acc.push({
       ...record,
