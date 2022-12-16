@@ -46,21 +46,21 @@ functionsWarmUpScheduledEventEnabled:
 ingestionDispatcherSchedule1:
   dev:
     rate: cron(0 8 ? * * *) # everyday at 08:00 UTC (05:00 BR)
-    enabled: true
+    enabled: false
   prd:
     rate: cron(0 9 ? * * *) # everyday at 09:00 UTC (06:00 BR)
     enabled: true
 ingestionDispatcherSchedule2:
   dev:
     rate: cron(0 14 ? * * *) # everyday at 14:00 UTC (11:00 BR)
-    enabled: true
+    enabled: false
   prd:
     rate: cron(0 15 ? * * *) # everyday at 15:00 UTC (12:00 BR)
     enabled: true
 ingestionDispatcherSchedule3:
   dev:
     rate: cron(0 20 ? * * *) # everyday at 20:00 UTC (17:00 BR)
-    enabled: true
+    enabled: false
   prd:
     rate: cron(0 21 ? * * *) # everyday at 21:00 UTC (18:00 BR)
     enabled: true
