@@ -35,6 +35,7 @@ module.exports = (request, context) => {
   return {
     original: request,
     ...parsed,
-    payload
+    payload,
+    httpMethod: request.httpMethod
   }
 }

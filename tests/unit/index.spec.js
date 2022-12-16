@@ -24,6 +24,7 @@ describe('Main Handler - Functions Loader', () => {
       'dataExport',
       'dataProcessing',
       'deleteDataByCompany',
+      'ingestionDispatcher',
       'ingestionPerformer',
       'omieWebhook',
       'registerOmieCompany'

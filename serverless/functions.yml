@@ -51,6 +51,32 @@ deleteDataByCompany:
     patterns:
       - 'src/v1/deleteDataByCompany/**'
 
+ingestionDispatcher:
+  handler: src/index.handler
+  iamRoleStatementsName: ${self:custom.basename}-ingestionDispatcher-role
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sqs:SendMessage
+      Resource:
+        - Fn::GetAtt: [ IngestionQueue, Arn ]
+  events:
+    - schedule:
+        name: ${self:custom.basename}-ingestionDispatcher-eventRule-1
+        rate: ${self:custom.ingestionDispatcherSchedule1.${self:provider.stage}.rate}
+        enabled: ${self:custom.ingestionDispatcherSchedule1.${self:provider.stage}.enabled}
+    - schedule:
+        name: ${self:custom.basename}-ingestionDispatcher-eventRule-2
+        rate: ${self:custom.ingestionDispatcherSchedule2.${self:provider.stage}.rate}
+        enabled: ${self:custom.ingestionDispatcherSchedule2.${self:provider.stage}.enabled}
+    - schedule:
+        name: ${self:custom.basename}-ingestionDispatcher-eventRule-3
+        rate: ${self:custom.ingestionDispatcherSchedule3.${self:provider.stage}.rate}
+        enabled: ${self:custom.ingestionDispatcherSchedule3.${self:provider.stage}.enabled}
+  package:
+    patterns:
+      - 'src/v1/ingestionDispatcher/**'
+
 ingestionPerformer:
   handler: src/index.handler
   memorySize: 1024

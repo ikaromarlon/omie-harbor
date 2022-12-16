@@ -28,6 +28,26 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Invoke ingestionDispatcher",
+      "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
+      "cwd": "${workspaceFolder}",
+      "localRoot": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "invoke",
+        "local",
+        "-f", "ingestionDispatcher"
+      ],
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "env": {
+        "SLS_DEBUG": "*"
+      },
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Invoke ingestionPerformer",
       "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
       "cwd": "${workspaceFolder}",
