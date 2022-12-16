@@ -6,7 +6,7 @@ exports.handler = async (event, context) => {
     const fnName = context.functionName.split('-').pop()
     const fn = require(`./v1/${fnName}`)
     const controller = await fn()
-    const request = requestHandler(event)
+    const request = requestHandler(event, context)
     const { data, statusCode, headers } = await controller(request)
     return responseHandler(data, headers).success(statusCode)
   } catch (error) {

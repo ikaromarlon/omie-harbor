@@ -1,6 +1,6 @@
 const bodyParser = require('../utils/bodyParser')
 
-module.exports = (request) => {
+module.exports = (request, context) => {
   const {
     headers = {},
     params = {},
