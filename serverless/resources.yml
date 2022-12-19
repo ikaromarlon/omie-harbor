@@ -7,7 +7,7 @@ Resources:
       FifoQueue: true
       ContentBasedDeduplication: true
       DeduplicationScope: queue
-      MessageRetentionPeriod: 60 # 1min
+      MessageRetentionPeriod: 1209600 # 14 days in minutes (max)
       ReceiveMessageWaitTimeSeconds: 0
       VisibilityTimeout: ${self:functions.ingestionPerformer.timeout}
   
@@ -18,7 +18,7 @@ Resources:
       FifoQueue: true
       ContentBasedDeduplication: true
       DeduplicationScope: queue
-      MessageRetentionPeriod: 60 # 1min
+      MessageRetentionPeriod: 345600 # 4 days in minutes (default)
       ReceiveMessageWaitTimeSeconds: 0
       VisibilityTimeout: ${self:functions.dataExport.timeout}
 
@@ -34,8 +34,8 @@ Resources:
       FifoQueue: true
       ContentBasedDeduplication: true
       DeduplicationScope: queue
-      MessageRetentionPeriod: 60 # 1min
-      ReceiveMessageWaitTimeSeconds: 20
+      MessageRetentionPeriod: 345600 # 4 days in minutes (default)
+      ReceiveMessageWaitTimeSeconds: 0
       VisibilityTimeout: ${self:functions.dataProcessing.timeout}
 
 Outputs:

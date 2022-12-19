@@ -5,18 +5,19 @@ module.exports = ({
 }) => async () => {
   const companies = await repositories.companies.find({ isActive: true })
 
-  for (const company of companies) {
+  const companiesSent = await Promise.all(companies.map(async (company) => {
     await queuer.sendCompanyToIngestionQueue(company._id)
-  }
+    return {
+      id: company._id,
+      name: company.name
+    }
+  }))
 
   logger.info({
     title: 'ingestionDispatcher',
-    message: `${companies.length} record(s) sent to ingestion queue`,
+    message: `${companiesSent.length} record(s) sent to ingestion queue`,
     data: {
-      companies: companies.map(company => ({
-        id: company._id,
-        name: company.name
-      }))
+      companies: companiesSent
     }
   })
 
