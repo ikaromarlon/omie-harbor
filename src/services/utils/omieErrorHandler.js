@@ -12,14 +12,14 @@ module.exports = (error, response = null, forceThrow = false) => {
   const { faultcode, faultstring, error_code, error_message } = error.response?.data || {} // eslint-disable-line
 
   const errorMapping = {
-    'SOAP-ENV:Server': { throw: true, sampleMessage: 'SOAP-ERROR: Broken response from Application Server (4)' },
-    'SOAP-ENV:Client-4': { throw: false, sampleMessage: 'ERROR: Não é possivel excluir Departamento Inativo ou Totalizador!' },
-    'SOAP-ENV:Client-71': { throw: true, sampleMessage: '' },
-    'SOAP-ENV:Client-101': { throw: false, sampleMessage: 'ERROR: Nenhuma [?] foi encontrada!' },
-    'SOAP-ENV:Client-115': { throw: true, sampleMessage: 'ERROR: O produto [?] está inativo !(Id: [?] / Integração: [?])' },
-    'SOAP-ENV:Client-5001': { throw: true, sampleMessage: 'ERROR: Tag [?] não faz parte da estrutura do tipo complexo [?]!' },
-    'SOAP-ENV:Client-5113': { throw: false, sampleMessage: 'ERROR: Não existem registros para a página [?]!' },
-    'SOAP-ENV:Client-8020': { throw: false, sampleMessage: 'ERROR: Esta requisição já foi processada ou está sendo processada e você pode tentar novamente às [?]. (1)' }
+    'SOAP-ENV:Server': { throw: true }, // i.e.: 'SOAP-ERROR: Broken response from Application Server (4)'
+    'SOAP-ENV:Client-4': { throw: false }, // i.e.: 'ERROR: Não é possivel excluir Departamento Inativo ou Totalizador!'
+    'SOAP-ENV:Client-71': { throw: true }, // i.e.: ''
+    'SOAP-ENV:Client-101': { throw: false }, // i.e.: 'ERROR: Nenhuma [?] foi encontrada!'
+    'SOAP-ENV:Client-115': { throw: true }, // i.e.: 'ERROR: O produto [?] está inativo !(Id: [?] / Integração: [?])'
+    'SOAP-ENV:Client-5001': { throw: true }, // i.e.: 'ERROR: Tag [?] não faz parte da estrutura do tipo complexo [?]!'
+    'SOAP-ENV:Client-5113': { throw: false }, // i.e.: 'ERROR: Não existem registros para a página [?]!'
+    'SOAP-ENV:Client-8020': { throw: false } // i.e.: 'ERROR: Esta requisição já foi processada ou está sendo processada e você pode tentar novamente às [?]. (1)'
   }
 
   const errorFound = errorMapping[faultcode]
