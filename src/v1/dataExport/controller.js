@@ -7,10 +7,12 @@ module.exports = ({
   useCase
 }) => async (request) => {
   try {
-    let parsedData = request.original.detail /* AWS EventBridge event */
+    /* AWS EventBridge event */
+    let parsedData = request.original.detail
 
+    /* AWS SQS event */
     if (request.original.Records) {
-      parsedData = tryJsonParse(request.original.Records[0].body) /* AWS SQS event */
+      parsedData = tryJsonParse(request.original.Records[0].body)
     }
 
     const payload = validateRequestSchema(parsedData, schema)

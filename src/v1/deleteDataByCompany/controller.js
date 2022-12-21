@@ -6,6 +6,7 @@ module.exports = ({
   useCase
 }) => async (request) => {
   try {
+    /* AWS API Gateway HTTP event */
     const payload = validateRequestSchema(request.payload, schema)
 
     const data = await useCase({ payload })

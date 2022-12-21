@@ -4,6 +4,8 @@ module.exports = ({
   useCase
 }) => async () => {
   try {
+    /* AWS EventBridge Cron event */
+
     const data = await useCase()
 
     return successHandler({ data })

@@ -7,6 +7,7 @@ module.exports = ({
   useCase
 }) => async (request) => {
   try {
+    /* AWS SQS event */
     const parsedData = tryJsonParse(request.original.Records[0].body)
 
     const payload = validateRequestSchema(parsedData, schema)
