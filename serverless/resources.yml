@@ -10,11 +10,14 @@ Resources:
       MessageRetentionPeriod: 1209600 # 14 days in minutes (max)
       ReceiveMessageWaitTimeSeconds: 0
       VisibilityTimeout: ${self:functions.ingestionPerformer.timeout}
-
-  OmieWebhookDLQ:
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt: [ IngestionQueueDLQ, Arn ]
+        maxReceiveCount: 1
+  IngestionQueueDLQ:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: ${self:custom.basename}-omieWebhook-dlq.fifo
+      QueueName: ${self:custom.basename}-ingestion-dlq.fifo
       FifoQueue: true
       ContentBasedDeduplication: true
       DeduplicationScope: queue
@@ -34,6 +37,14 @@ Resources:
         deadLetterTargetArn:
           Fn::GetAtt: [ OmieWebhookDLQ, Arn ]
         maxReceiveCount: 1
+  OmieWebhookDLQ:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: ${self:custom.basename}-omieWebhook-dlq.fifo
+      FifoQueue: true
+      ContentBasedDeduplication: true
+      DeduplicationScope: queue
+      MessageRetentionPeriod: 1209600 # 14 days in minutes (max)
   
   DataExportQueue:
     Type: AWS::SQS::Queue
@@ -79,6 +90,14 @@ Outputs:
     Value: !Ref IngestionQueue
     Export:
       Name: ${self:custom.basename}:IngestionQueueUrl
+  OmieWebhookQueueArn:
+    Value: !GetAtt OmieWebhookQueue.Arn
+    Export:
+      Name: ${self:custom.basename}:OmieWebhookQueueArn
+  OmieWebhookQueueUrl:
+    Value: !Ref OmieWebhookQueue
+    Export:
+      Name: ${self:custom.basename}:OmieWebhookQueueUrl
   DataExportBucketArn:
     Value: !GetAtt DataExportBucket.Arn
     Export:
