@@ -120,7 +120,7 @@
         "invoke",
         "local",
         "-f", "dataExport",
-        "-p", "${workspaceFolder}/.vscode/events/dataExport-eventBridge-event.json"
+        "-p", "${workspaceFolder}/.vscode/events/dataExport-eventBridge.json"
       ],
       "runtimeArgs": [
         "--nolazy"
@@ -141,7 +141,7 @@
         "invoke",
         "local",
         "-f", "dataExport",
-        "-p", "${workspaceFolder}/.vscode/events/dataExport-sqs-event.json.json"
+        "-p", "${workspaceFolder}/.vscode/events/dataExport-sqs.json.json"
       ],
       "runtimeArgs": [
         "--nolazy"
