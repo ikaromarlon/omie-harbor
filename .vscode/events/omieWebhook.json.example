@@ -1,0 +1,7 @@
+{
+  "Records": [
+    {
+      "body": "{\"messageId\":\"925e4d98-037c-5d4a-8baa-1668372182a6\",\"topic\":\"Financas.ContaPagar.Excluido\",\"event\":{\"baixa_bloqueada\":\"\",\"bloqueado\":\"\",\"boleto_gerado\":\"\",\"chave_nfe\":\"\",\"codigo_categoria\":\"\",\"codigo_cliente_fornecedor\":0,\"codigo_cmc7_cheque\":\"\",\"codigo_lancamento_integracao\":\"\",\"codigo_lancamento_omie\":2792258299,\"codigo_projeto\":0,\"codigo_tipo_documento\":\"\",\"codigo_vendedor\":0,\"data_emissao\":\"\",\"data_previsao\":\"2022-11-15T00:00:00-03:00\",\"data_registro\":\"\",\"data_vencimento\":\"2022-10-20T00:00:00-03:00\",\"id_conta_corrente\":2298773396,\"id_origem\":\"\",\"nsu\":\"\",\"numero_documento\":\"\",\"numero_documento_fiscal\":\"\",\"numero_parcela\":\"002/002\",\"numero_pedido\":\"\",\"observacao\":\"\",\"operacao\":\"\",\"pix_gerado\":\"\",\"retem_cofins\":\"\",\"retem_csll\":\"\",\"retem_inss\":\"\",\"retem_ir\":\"\",\"retem_iss\":\"\",\"retem_pis\":\"\",\"situacao\":\"[SR]Atrasado\",\"valor_cofins\":0,\"valor_csll\":0,\"valor_documento\":2000,\"valor_inss\":0,\"valor_ir\":0,\"valor_iss\":0,\"valor_pis\":0},\"author\":{\"email\":\"sanderson.barbosa@fullbpo.com\",\"name\":\"Sanderson Baborsa\",\"userId\":435876},\"appKey\":\"1600514732817\",\"appHash\":\"fullbpo-nqriit5\",\"origin\":\"omie-connect-1.6\"}"
+    }
+  ]
+}
