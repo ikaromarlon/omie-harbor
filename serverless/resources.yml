@@ -12,9 +12,9 @@ Resources:
       VisibilityTimeout: ${self:functions.ingestionPerformer.timeout}
       RedrivePolicy:
         deadLetterTargetArn:
-          Fn::GetAtt: [ IngestionQueueDLQ, Arn ]
+          Fn::GetAtt: [ IngestionDLQ, Arn ]
         maxReceiveCount: 1
-  IngestionQueueDLQ:
+  IngestionDLQ:
     Type: AWS::SQS::Queue
     Properties:
       QueueName: ${self:custom.basename}-ingestion-dlq.fifo
