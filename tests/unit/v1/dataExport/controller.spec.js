@@ -69,7 +69,7 @@ describe('dataExport Controller', () => {
     }
   })
 
-  it('Should return success for queue (SQS) request', async () => {
+  it('Should return success for SQS request', async () => {
     const { sut, validateRequestSchemaStub, useCaseStub, mockRequest, mockSchema } = makeSut()
     const result = await sut(mockRequest)
     expect(validateRequestSchemaStub).toHaveBeenCalledWith({ companyId }, mockSchema)
@@ -78,7 +78,7 @@ describe('dataExport Controller', () => {
     expect(result.data).toEqual({ success: true })
   })
 
-  it('Should return success for event (eventBridge) request', async () => {
+  it('Should return success for eventBridge request', async () => {
     const { sut, validateRequestSchemaStub, useCaseStub, mockSchema } = makeSut()
     const mockRequest = {
       original: {

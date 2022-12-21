@@ -53,10 +53,25 @@ describe('omieWebhook Controller', () => {
     }
   })
 
-  it('Should return success with statusCode 200', async () => {
+  it('Should return success for EventBridge request', async () => {
     const { sut, useCaseStub, mockRequest } = makeSut()
     const result = await sut(mockRequest)
     expect(useCaseStub).toHaveBeenCalledWith({ payload: mockRequest.original.detail })
+    expect(result.statusCode).toBe(200)
+    expect(result.data).toEqual(null)
+  })
+
+  it('Should return success for SQS request', async () => {
+    const { sut, useCaseStub } = makeSut()
+    const mockRequest = {
+      original: {
+        Records: [{
+          body: '{}'
+        }]
+      }
+    }
+    const result = await sut(mockRequest)
+    expect(useCaseStub).toHaveBeenCalledWith({ payload: {} })
     expect(result.statusCode).toBe(200)
     expect(result.data).toEqual(null)
   })
