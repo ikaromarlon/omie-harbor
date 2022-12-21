@@ -12,7 +12,7 @@ provider:
   stackName: ${self:custom.basename}
   apiName: ${self:custom.basename}
   memorySize: 128
-  timeout: 30
+  timeout: 60
   logRetentionInDays: 7
   deploymentBucket:
     name: ${self:custom.accountId}-deployment-artifacts-${self:provider.region}

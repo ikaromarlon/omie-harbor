@@ -1,5 +1,6 @@
 registerOmieCompany:
   handler: src/index.handler
+  timeout: 30
   iamRoleStatementsName: ${self:custom.basename}-registerOmieCompany-role
   events:
     # - schedule: ${self:custom.functionsWarmUpScheduledEvent}
@@ -34,6 +35,7 @@ omieWebhook:
 
 deleteDataByCompany:
   handler: src/index.handler
+  timeout: 30
   iamRoleStatementsName: ${self:custom.basename}-deleteDataByCompany-role
   iamRoleStatements:
     - Effect: Allow
