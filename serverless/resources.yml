@@ -10,6 +10,30 @@ Resources:
       MessageRetentionPeriod: 1209600 # 14 days in minutes (max)
       ReceiveMessageWaitTimeSeconds: 0
       VisibilityTimeout: ${self:functions.ingestionPerformer.timeout}
+
+  OmieWebhookDLQ:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: ${self:custom.basename}-omieWebhook-dlq.fifo
+      FifoQueue: true
+      ContentBasedDeduplication: true
+      DeduplicationScope: queue
+      MessageRetentionPeriod: 1209600 # 14 days in minutes (max)
+
+  OmieWebhookQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: ${self:custom.basename}-omieWebhook-queue.fifo
+      FifoQueue: true
+      ContentBasedDeduplication: true
+      DeduplicationScope: queue
+      MessageRetentionPeriod: 1209600 # 14 days in minutes (max)
+      ReceiveMessageWaitTimeSeconds: 0
+      VisibilityTimeout: ${self:functions.omieWebhook.timeout}
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt: [ OmieWebhookDLQ, Arn ]
+        maxReceiveCount: 1
   
   DataExportQueue:
     Type: AWS::SQS::Queue

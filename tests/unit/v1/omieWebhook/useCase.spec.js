@@ -120,13 +120,9 @@ describe('omieWebhook UseCase', () => {
       expect(mockRepositories.orders.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
-      expect(mockEventBridge.triggerBfbDataExport).toHaveBeenCalledWith(mockCompany._id)
-      expect(mockLogger.info).toHaveBeenCalledTimes(2)
+      expect(mockEventBridge.triggerBfbDataExport).toHaveBeenCalledTimes(0)
+      expect(mockLogger.info).toHaveBeenCalledTimes(1)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'omieWebhook',
-        message: `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
-      })
-      expect(mockLogger.info).toHaveBeenNthCalledWith(2, {
         title: 'omieWebhook',
         message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
         data: {
@@ -212,13 +208,9 @@ describe('omieWebhook UseCase', () => {
       expect(mockRepositories.orders.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
-      expect(mockEventBridge.triggerBfbDataExport).toHaveBeenCalledWith(mockCompany._id)
-      expect(mockLogger.info).toHaveBeenCalledTimes(2)
+      expect(mockEventBridge.triggerBfbDataExport).toHaveBeenCalledTimes(0)
+      expect(mockLogger.info).toHaveBeenCalledTimes(1)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'omieWebhook',
-        message: `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
-      })
-      expect(mockLogger.info).toHaveBeenNthCalledWith(2, {
         title: 'omieWebhook',
         message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
         data: {
@@ -304,13 +296,9 @@ describe('omieWebhook UseCase', () => {
       expect(mockRepositories.contracts.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
-      expect(mockEventBridge.triggerBfbDataExport).toHaveBeenCalledWith(mockCompany._id)
-      expect(mockLogger.info).toHaveBeenCalledTimes(2)
+      expect(mockEventBridge.triggerBfbDataExport).toHaveBeenCalledTimes(0)
+      expect(mockLogger.info).toHaveBeenCalledTimes(1)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'omieWebhook',
-        message: `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
-      })
-      expect(mockLogger.info).toHaveBeenNthCalledWith(2, {
         title: 'omieWebhook',
         message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
         data: {
@@ -395,13 +383,9 @@ describe('omieWebhook UseCase', () => {
       })
       expect(mockRepositories.accountsPayable.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
-      expect(mockEventBridge.triggerBfbDataExport).toHaveBeenCalledWith(mockCompany._id)
-      expect(mockLogger.info).toHaveBeenCalledTimes(2)
+      expect(mockEventBridge.triggerBfbDataExport).toHaveBeenCalledTimes(0)
+      expect(mockLogger.info).toHaveBeenCalledTimes(1)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'omieWebhook',
-        message: `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
-      })
-      expect(mockLogger.info).toHaveBeenNthCalledWith(2, {
         title: 'omieWebhook',
         message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
         data: {
@@ -479,13 +463,9 @@ describe('omieWebhook UseCase', () => {
       })
       expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
-      expect(mockEventBridge.triggerBfbDataExport).toHaveBeenCalledWith(mockCompany._id)
-      expect(mockLogger.info).toHaveBeenCalledTimes(2)
+      expect(mockEventBridge.triggerBfbDataExport).toHaveBeenCalledTimes(0)
+      expect(mockLogger.info).toHaveBeenCalledTimes(1)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'omieWebhook',
-        message: `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
-      })
-      expect(mockLogger.info).toHaveBeenNthCalledWith(2, {
         title: 'omieWebhook',
         message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
         data: {

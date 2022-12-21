@@ -1,4 +1,5 @@
 const { errorHandler, successHandler } = require('../../common/handlers')
+const { tryJsonParse } = require('../../common/helpers')
 
 module.exports = ({
   schema,
@@ -6,7 +7,15 @@ module.exports = ({
   useCase
 }) => async (request) => {
   try {
-    const payload = validateRequestSchema(request.original.detail, schema)
+    /* AWS EventBridge event */
+    let parsedData = request.original.detail
+
+    /* AWS SQS event */
+    if (request.original.Records) {
+      parsedData = tryJsonParse(request.original.Records[0].body)
+    }
+
+    const payload = validateRequestSchema(parsedData, schema)
 
     const data = await useCase({ payload })
 
