@@ -20,8 +20,9 @@ omieWebhook:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - events:PutEvents
-      Resource: '*' # set permission to eventbus default or create new one
+        - sqs:SendMessage
+      Resource:
+        - Fn::GetAtt: [ DataExportQueue, Arn ]
   events:
     - eventBridge:
         pattern:

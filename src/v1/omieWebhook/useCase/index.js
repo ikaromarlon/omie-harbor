@@ -9,7 +9,7 @@ const deleteFinancialMovement = require('./deleteFinancialMovement')
 module.exports = ({
   repositories,
   logger,
-  eventBridge
+  queuer
 }) => {
   const handler = async ({ payload }) => {
     const actions = {
@@ -37,19 +37,12 @@ module.exports = ({
       message: `Unknown action: ${topic}`
     }
 
+    let hasAffected = false
+
     if (action) {
       result = await action(company._id, event, repositories)
 
-      const hasAffected = Object.values(result.deleted).some(e => e)
-
-      if (hasAffected) {
-        await eventBridge.triggerBfbDataExport(company._id)
-
-        logger.info({
-          title: 'omieWebhook',
-          message: `Company ${company._id} - ${company.name} sent to dataExport process`
-        })
-      }
+      hasAffected = Object.values(result.deleted).some(e => e)
     }
 
     logger.info({
@@ -60,6 +53,15 @@ module.exports = ({
         payload
       }
     })
+
+    if (hasAffected) {
+      await queuer.sendCompanyToDataExportQueue(company._id)
+
+      logger.info({
+        title: 'omieWebhook',
+        message: `Company ${company._id} - ${company.name} sent to dataExport process`
+      })
+    }
 
     return result
   }
