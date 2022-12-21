@@ -8,7 +8,7 @@ module.exports = ({
   omieService,
   omieMappings,
   repositories,
-  queuer,
+  eventBridge,
   logger
 }) => {
   const getAuxiliaryRecords = async (credentials) => {
@@ -126,7 +126,7 @@ module.exports = ({
       message: `Ingestion completed for company ${companyId} - ${name}`
     })
 
-    await queuer.sendCompanyToDataExportQueue(companyId)
+    await eventBridge.triggerBfbDataExport(companyId)
 
     logger.info({
       title: 'ingestionPerformer',

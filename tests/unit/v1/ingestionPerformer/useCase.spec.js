@@ -129,8 +129,8 @@ const makeSut = () => {
     error: jest.fn(() => null)
   }
 
-  const mockQueuer = {
-    sendCompanyToDataExportQueue: jest.fn(async () => null)
+  const mockEventBridge = {
+    triggerBfbDataExport: jest.fn(async () => null)
   }
 
   const useCase = makeUseCase({
@@ -138,7 +138,7 @@ const makeSut = () => {
     omieMappings: mockOmieMappings,
     repositories: mockRepositories,
     logger: mockLogger,
-    queuer: mockQueuer
+    eventBridge: mockEventBridge
   })
 
   return {
@@ -150,7 +150,7 @@ const makeSut = () => {
     mockOmieMappings,
     mockRepositories,
     mockLogger,
-    mockQueuer,
+    mockEventBridge,
     mockCustomerId,
     mockProjectId,
     mockDepartmentId,
@@ -959,7 +959,7 @@ describe('ingestionPerformer UseCase', () => {
   })
 
   it('Should return success with custom parameters', async () => {
-    const { sut, mockPayload, mockLogger, mockOmieService, mockQueuer } = makeSut()
+    const { sut, mockPayload, mockLogger, mockOmieService, mockEventBridge } = makeSut()
     mockPayload.startDate = '2022-01-01'
     mockPayload.endDate = '2022-01-31'
     const result = await sut({ payload: mockPayload })
@@ -967,18 +967,18 @@ describe('ingestionPerformer UseCase', () => {
     expect(mockOmieService.getBanks).toHaveBeenCalledTimes(1)
     expect(mockOmieService.getCnae).toHaveBeenCalledTimes(1)
     expect(mockOmieService.getDocumentTypes).toHaveBeenCalledTimes(1)
-    expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockPayload.companyId)
+    expect(mockEventBridge.triggerBfbDataExport).toHaveBeenCalledWith(mockPayload.companyId)
     expect(result).toEqual({ success: true })
   })
 
   it('Should return success without custom parameters', async () => {
-    const { sut, mockPayload, mockLogger, mockOmieService, mockQueuer } = makeSut()
+    const { sut, mockPayload, mockLogger, mockOmieService, mockEventBridge } = makeSut()
     const result = await sut({ payload: mockPayload })
     expect(mockLogger.info).toHaveBeenCalledTimes(3)
     expect(mockOmieService.getBanks).toHaveBeenCalledTimes(1)
     expect(mockOmieService.getCnae).toHaveBeenCalledTimes(1)
     expect(mockOmieService.getDocumentTypes).toHaveBeenCalledTimes(1)
-    expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockPayload.companyId)
+    expect(mockEventBridge.triggerBfbDataExport).toHaveBeenCalledWith(mockPayload.companyId)
     expect(result).toEqual({ success: true })
   })
 })

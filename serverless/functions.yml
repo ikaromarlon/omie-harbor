@@ -24,12 +24,6 @@ omieWebhook:
       Resource:
         - Fn::GetAtt: [ DataExportQueue, Arn ]
   events:
-    - eventBridge:
-        pattern:
-          source:
-            - ${self:custom.fullbpoApiSourceName}
-          detail-type:
-            - ${self:custom.basename}.omieWebhook
     - sqs:
         arn:
           Fn::GetAtt: [ OmieWebhookQueue, Arn ]
@@ -92,9 +86,8 @@ ingestionPerformer:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - sqs:SendMessage
-      Resource:
-        - Fn::GetAtt: [ DataExportQueue, Arn ]
+        - events:PutEvents
+      Resource: '*' # set permission to eventbus default or create new one
   events:
     - sqs:
         arn:
