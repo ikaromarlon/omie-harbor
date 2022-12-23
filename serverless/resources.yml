@@ -80,18 +80,6 @@ Outputs:
     Value: !Ref IngestionQueue
     Export:
       Name: ${self:custom.basename}:IngestionQueueUrl
-  OmieWebhookQueueArn:
-    Value: !GetAtt OmieWebhookQueue.Arn
-    Export:
-      Name: ${self:custom.basename}:OmieWebhookQueueArn
-  OmieWebhookQueueName:
-    Value: !GetAtt OmieWebhookQueue.QueueName
-    Export:
-      Name: ${self:custom.basename}:OmieWebhookQueueName
-  OmieWebhookQueueUrl:
-    Value: !Ref OmieWebhookQueue
-    Export:
-      Name: ${self:custom.basename}:OmieWebhookQueueUrl
   DataExportBucketArn:
     Value: !GetAtt DataExportBucket.Arn
     Export:

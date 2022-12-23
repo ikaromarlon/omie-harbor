@@ -23,7 +23,14 @@ module.exports = ({
       [OMIE_WEBHOOK_EVENTS.CHECKING_ACCOUNT_TRANSFER.DELETED]: deleteFinancialMovement
     }
 
-    const { appKey, topic, event } = payload
+    const { ping, appKey, topic, event } = payload
+
+    if (ping) {
+      return {
+        ping: ping,
+        pong: 'fullbpo'
+      }
+    }
 
     const company = await repositories.companies.findOne({ 'credentials.appKey': appKey })
 

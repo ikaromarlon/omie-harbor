@@ -70,6 +70,19 @@ const makeSut = () => {
 }
 
 describe('omieWebhook UseCase', () => {
+  it('Should receive a ping payload and finish process early', async () => {
+    const { sut, mockRepositories, mockLogger, mockQueuer } = makeSut()
+    const mockPayload = { payload: { ping: 'Omie' } }
+    const result = await sut(mockPayload)
+    expect(mockRepositories.companies.findOne).toHaveBeenCalledTimes(0)
+    expect(mockLogger.info).toHaveBeenCalledTimes(0)
+    expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
+    expect(result).toEqual({
+      ping: 'Omie',
+      pong: 'fullbpo'
+    })
+  })
+
   it('Should not find company and throw an InternalServerError', async () => {
     const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer } = makeSut()
     mockRepositories.companies.findOne.mockResolvedValueOnce(null)
@@ -86,7 +99,7 @@ describe('omieWebhook UseCase', () => {
   })
 
   it('Should not find action', async () => {
-    const { sut, mockPayload, mockRepositories, mockLogger, mockCompany } = makeSut()
+    const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
     const result = await sut(mockPayload)
     expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ 'credentials.appKey': mockPayload.payload.appKey })
     expect(mockLogger.info).toHaveBeenCalledTimes(1)
@@ -98,6 +111,7 @@ describe('omieWebhook UseCase', () => {
         payload: mockPayload.payload
       }
     })
+    expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
     expect(result).toEqual({
       message: 'Unknown action: Entity.event'
     })
