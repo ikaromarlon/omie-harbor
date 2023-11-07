@@ -8,7 +8,6 @@ serverless-iam-roles-per-function:
   defaultInherit: true
 
 # serverless general config
-accountId: 820389075840
 basename: ${self:service}-${self:provider.stage}
 fullbpoApiSourceName: fullbpo-api-${self:provider.stage}
 sesRegion: us-east-1
@@ -72,12 +71,6 @@ dataExport:
 
 # application environment variables
 env:
-  ERROR_NOTIFICATION_RECIPIENT_ADDRESS:
-    dev: ''
-    prd: pedro.magnago@fullbpo.com
-  ERROR_NOTIFICATION_RECIPIENT_ADDRESS_COPY:
-    dev: ''
-    prd: ''
   FLAG_UPDATE_EMPTY_RECORDS:
     dev: false
     prd: false

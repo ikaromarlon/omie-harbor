@@ -15,7 +15,7 @@ provider:
   timeout: 60
   logRetentionInDays: 7
   deploymentBucket:
-    name: ${self:custom.accountId}-deployment-artifacts-${self:provider.region}
+    name: ${env:AWS_ACCOUNT_ID}-deployment-artifacts-${self:provider.region}
     blockPublicAccess: true
     maxPreviousDeploymentArtifacts: 5
   deploymentPrefix: serverless
@@ -32,8 +32,8 @@ provider:
     SES_REGION: ${self:custom.sesRegion}
     FLAG_LOG_EACH_OMIE_ERROR: ${self:custom.env.FLAG_LOG_EACH_OMIE_ERROR.${self:provider.stage}}
     FLAG_UPDATE_EMPTY_RECORDS: ${self:custom.env.FLAG_UPDATE_EMPTY_RECORDS.${self:provider.stage}}
-    ERROR_NOTIFICATION_RECIPIENT_ADDRESS: ${self:custom.env.ERROR_NOTIFICATION_RECIPIENT_ADDRESS.${self:provider.stage}}
-    ERROR_NOTIFICATION_RECIPIENT_ADDRESS_COPY: ${self:custom.env.ERROR_NOTIFICATION_RECIPIENT_ADDRESS_COPY.${self:provider.stage}}
+    ERROR_NOTIFICATION_RECIPIENT_ADDRESS: ${env:ERROR_NOTIFICATION_RECIPIENT_ADDRESS}
+    ERROR_NOTIFICATION_RECIPIENT_ADDRESS_COPY: ${env:ERROR_NOTIFICATION_RECIPIENT_ADDRESS_COPY}
   endpointType: EDGE
   apiGateway:
     apiKeySourceType: HEADER
@@ -53,7 +53,7 @@ provider:
           Action:
             - 'ses:SendEmail'
           Resource:
-            - arn:aws:ses:${self:custom.sesRegion}:${self:custom.accountId}:identity/${self:custom.domain}
+            - arn:aws:ses:${self:custom.sesRegion}:${env:AWS_ACCOUNT_ID}:identity/${self:custom.domain}
       name: ${self:custom.basename}-dafault-role
 functions: ${file(./serverless/functions.yml)}
 resources: ${file(./serverless/resources.yml)}
