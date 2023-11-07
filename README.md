@@ -8,7 +8,7 @@ FullBPO BFB is a microservice for ingestion and processing data consumed from [O
 
 ### Main Services:
 - **registerOmieCompany**
-  Register into database an existing company on Omie ERP using it's credentials. This function is called from [FullBPO API](https://github.com/fullbpo/fullbpo-api).registerOmieCompany BFF service.
+  Register into database an existing company on Omie ERP using it's credentials. This function is called from [FullBPO API](https://github.com/ikaromarlon/fullbpo-api).registerOmieCompany BFF service.
 - **ingestionDispatcher**
   A cron job triggered service that runs automatically to import data from Omie ERP every day and send to a queue to be processed by ```ingestionPerformer``` service.
 - **ingestionPerformer**
@@ -20,7 +20,7 @@ FullBPO BFB is a microservice for ingestion and processing data consumed from [O
 - **omieWebhook**
   Receive deletion events from Omie ERP and make updates on database
 - **deleteDataByCompany**
-  Delete all data for a company on the database. This function is called from [FullBPO API](https://github.com/fullbpo/fullbpo-api).deleteDataByCompany BFF service.
+  Delete all data for a company on the database. This function is called from [FullBPO API](https://github.com/ikaromarlon/fullbpo-api).deleteDataByCompany BFF service.
 - **dataProcessing**
   A service created for solving AMBIENTARE's problem.
 

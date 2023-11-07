@@ -30,16 +30,12 @@
     "deploy:prd": "STAGE=prd && npm run deploy -- --stage prd",
     "deploy:function:prd": "npm run deploy:prd -- function -f"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/fullbpo/fullbpo-bfb.git"
+  "author": {
+    "name": "Icaro Silva",
+    "email": "ikaromarlon@gmail.com",
+    "url": "https://www.linkedin.com/in/ikaromarlon/"
   },
-  "author": "Icaro Silva",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/fullbpo/fullbpo-bfb/issues"
-  },
-  "homepage": "https://github.com/fullbpo/fullbpo-bfb#readme",
   "dependencies": {
     "axios": "^0.24.0",
     "joi": "^17.4.2",
