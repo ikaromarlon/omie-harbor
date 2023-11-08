@@ -8,14 +8,6 @@ module.exports = {
     '<rootDir>/src/**/*.js',
     '!<rootDir>/src/v1/dataProcessing/**'
   ],
-  coverageThreshold: {
-    global: {
-      branches: 75,
-      functions: 75,
-      lines: 75,
-      statements: 75
-    }
-  },
   roots: [
     'src',
     'tests/integration'

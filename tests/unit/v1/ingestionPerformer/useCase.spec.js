@@ -3,8 +3,6 @@ const makeUseCase = require('../../../../src/v1/ingestionPerformer/useCase')
 const { NotFoundError, ValidationError } = require('../../../../src/common/errors')
 const mocks = require('../../../mocks')
 
-jest.useFakeTimers('modern').setSystemTime(new Date())
-
 const makeSut = () => {
   const mockCompanyId = '25c176b6-b200-4575-9217-e23c6105163c'
   const mockPayload = { companyId: mockCompanyId }
@@ -163,6 +161,15 @@ const makeSut = () => {
     mockAccountReceivableId
   }
 }
+
+beforeEach(() => {
+  jest.useFakeTimers('modern').setSystemTime(new Date())
+})
+
+afterEach(() => {
+  jest.runOnlyPendingTimers()
+  jest.useRealTimers()
+})
 
 describe('ingestionPerformer UseCase', () => {
   it('Should not find company and throws a NotFoundError', async () => {
