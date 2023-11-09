@@ -38,7 +38,7 @@ provider:
     apiKeySourceType: HEADER
     apiKeys:
       - name: ${self:custom.basename}
-        value: ${self:custom.appApiKey.${self:provider.stage}}
+        value: ${env:API_KEY}
         enabled: true
   stackTags:
     COMPANY: FullBPO

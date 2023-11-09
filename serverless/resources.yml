@@ -69,7 +69,7 @@ Outputs:
     Export:
       Name: ${self:custom.basename}:RestApiUrl
   ApiKey:
-    Value: ${self:custom.appApiKey.${self:provider.stage}}
+    Value: ${env:API_KEY}
     Export:
       Name: ${self:custom.basename}:ApiKey
   IngestionQueueArn:
