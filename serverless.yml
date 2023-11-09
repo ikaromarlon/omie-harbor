@@ -8,7 +8,6 @@ provider:
   runtime: nodejs18.x
   stage: ${opt:stage, 'dev'}
   region: ${self:custom.region.${self:provider.stage}}
-  profile: fullbpo
   stackName: ${self:custom.basename}
   apiName: ${self:custom.basename}
   memorySize: 128
@@ -32,8 +31,8 @@ provider:
     SES_REGION: ${self:custom.sesRegion}
     FLAG_LOG_EACH_OMIE_ERROR: ${self:custom.env.FLAG_LOG_EACH_OMIE_ERROR.${self:provider.stage}}
     FLAG_UPDATE_EMPTY_RECORDS: ${self:custom.env.FLAG_UPDATE_EMPTY_RECORDS.${self:provider.stage}}
-    ERROR_NOTIFICATION_RECIPIENT_ADDRESS: ${env:ERROR_NOTIFICATION_RECIPIENT_ADDRESS}
-    ERROR_NOTIFICATION_RECIPIENT_ADDRESS_COPY: ${env:ERROR_NOTIFICATION_RECIPIENT_ADDRESS_COPY}
+    ERROR_NOTIFICATION_RECIPIENT_ADDRESS: ${env:ERROR_NOTIFICATION_RECIPIENT_ADDRESS, ''}
+    ERROR_NOTIFICATION_RECIPIENT_ADDRESS_COPY: ${env:ERROR_NOTIFICATION_RECIPIENT_ADDRESS_COPY, ''}
   endpointType: EDGE
   apiGateway:
     apiKeySourceType: HEADER
