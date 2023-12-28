@@ -1,6 +1,9 @@
 # fullbpo-bfb
 FullBPO BFB (Back-end For Back-end) service.
 
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![CI](https://github.com/ikaromarlon/fullbpo-bfb/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/ikaromarlon/fullbpo-bfb/actions/workflows/main.yml)
+
 FullBPO BFB is a microservice for ingestion and processing data consumed from [Omie ERP](https://developer.omie.com.br/). It processes data from Omie, map and stores into a new database an then exports data to a JSON file stored in AWS S3 Bucket. 
 
 <!-- Put your application diagram bellow -->
