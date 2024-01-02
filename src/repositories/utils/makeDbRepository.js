@@ -49,7 +49,7 @@ module.exports = ({
         },
         { upsert: true, returnDocument: 'after' }
       )
-      return result.value
+      return result
     },
     createOrUpdateMany: async (fieldsToBuildFilter, batch) => {
       const response = {
