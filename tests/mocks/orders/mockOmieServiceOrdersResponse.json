@@ -28,7 +28,7 @@
         "cEnvBoleto": "N",
         "cEnvLink": "S",
         "cEnvRecibo": "N",
-        "cEnviarPara": "financeiro@ambientare-sa.com.br"
+        "cEnviarPara": "financeiro@empresa.com.br"
       },
       "InfoCadastro": {
         "cAmbiente": "P",
@@ -43,9 +43,9 @@
         "dDtInc": "03/05/2019"
       },
       "InformacoesAdicionais": {
-        "cCidPrestServ": "BRASILIA (DF)",
+        "cCidPrestServ": "SAO PAULO",
         "cCodCateg": "1.01.01",
-        "cContato": "Diana Luz",
+        "cContato": "Fulano",
         "cDadosAdicNF": "Contrato N. 2018/2019 - Ref. Abr/2019 - Vencto. 10/05/2019",
         "cNumContrato": "2018/2019",
         "nCodCC": 630881258,

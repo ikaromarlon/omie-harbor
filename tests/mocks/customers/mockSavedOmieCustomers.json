@@ -4,31 +4,31 @@
     "externalId": "617700984",
     "provider": "Omie",
     "companyId": "25c176b6-b200-4575-9217-e23c6105163c",
-    "cpfcnpj": "08336849000142",
+    "cpfcnpj": "99999999999999",
     "personType": "J",
-    "name": "AMBIENTARE SOLUCOES AMBIENTAIS LTDA",
-    "nickName": "AMBIENTARE SOLUCOES AMBIENTAIS LTDA",
-    "stateRegistration": "0756191300187",
+    "name": "EMPRESA FICTICIA LTDA",
+    "nickName": "EMPRESA FICTICIA LTDA",
+    "stateRegistration": "2222222222222",
     "municipalRegistration": "ISENTO",
     "address": {
-      "zipCode": "70307901",
+      "zipCode": "00000000",
       "street": "ST SCS QUADRA 7 BLOCO A",
       "number": "100",
       "neighborhood": "ASA SUL",
-      "city": "BRASILIA (DF)",
+      "city": "SAO PAULO",
       "state": "DF",
-      "additionalInfo": "SALA: 1017/1019/1021/1023; SALA: 1024 A 1028;"
+      "additionalInfo": ""
     },
-    "contact": "Diana Luz",
-    "email": "contato@camargoscontadores.com.br",
+    "contact": "Fulano",
+    "email": "contato@empresa.com.br",
     "phones": [
       {
-        "areaCode": "61",
-        "number": "33220886"
+        "areaCode": "00",
+        "number": "00000000"
       },
       {
-        "areaCode": "61",
-        "number": "33220886"
+        "areaCode": "00",
+        "number": "00000000"
       }
     ],
     "checkingAccount": {
@@ -39,7 +39,7 @@
       "branch": "0001-9",
       "accountNumber": "3286745-0",
       "holder": {
-        "cpfcnpj": "12412412412",
+        "cpfcnpj": "11111111111",
         "name": "Pedrinho"
       }
     },

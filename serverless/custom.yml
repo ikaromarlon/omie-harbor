@@ -9,9 +9,8 @@ serverless-iam-roles-per-function:
 
 # serverless general config
 basename: ${self:service}-${self:provider.stage}
-fullbpoApiSourceName: fullbpo-api-${self:provider.stage}
 sesRegion: us-east-1
-domain: fullbpo.app
+domain: omie-harbor.app
 
 httpCors:
   origin: '*'

@@ -79,7 +79,7 @@ describe('omieWebhook UseCase', () => {
     expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
     expect(result).toEqual({
       ping: 'Omie',
-      pong: 'fullbpo'
+      pong: 'omie-harbor'
     })
   })
 

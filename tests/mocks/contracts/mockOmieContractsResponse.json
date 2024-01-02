@@ -20,7 +20,7 @@
       "departamentos": [
         {
           "cCodDep": "617693138",
-          "cDesDep": "Dois Soluções Gerenciais Ltda",
+          "cDesDep": "Empresa Ficticia Ltda",
           "nPerDep": 100,
           "nValDep": 13215
         }
@@ -32,11 +32,11 @@
         "cUtilizarEmails": ""
       },
       "infAdic": {
-        "cCidPrestServ": "BRASILIA (DF)",
+        "cCidPrestServ": "SAO PAULO",
         "cCodART": "",
         "cCodCateg": "1.01.01",
         "cCodObra": "",
-        "cContato": "Diana Luz",
+        "cContato": "Fulano",
         "cDadosAdicNF": "",
         "nCodCC": 630881258,
         "nCodProj": 617693956,

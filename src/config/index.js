@@ -7,7 +7,7 @@ const source = `${service}-${stage}`
 
 module.exports = Object.freeze({
   app: {
-    name: 'FullBPO',
+    name: 'Omie Harbor',
     service,
     stage,
     source,
@@ -18,7 +18,7 @@ module.exports = Object.freeze({
   },
   mongodb: {
     uri: env.MONGODB_URI,
-    dbName: `fullbpo-${stage}`
+    dbName: `omie-harbor-${stage}`
   },
   SQS: {
     ingestionQueueUrl: env.SQS_INGESTION_QUEUE_URL,

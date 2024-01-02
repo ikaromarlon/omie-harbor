@@ -27,8 +27,8 @@ module.exports = ({
 
     if (ping) {
       return {
-        ping: ping,
-        pong: 'fullbpo'
+        ping,
+        pong: 'omie-harbor'
       }
     }
 

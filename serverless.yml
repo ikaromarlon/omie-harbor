@@ -1,4 +1,4 @@
-service: fullbpo-bfb
+service: omie-harbor
 frameworkVersion: '3'
 useDotenv: true
 configValidationMode: error
@@ -41,9 +41,9 @@ provider:
         value: ${env:API_KEY}
         enabled: true
   stackTags:
-    COMPANY: FullBPO
-    PROJECT: FullBPO
-    APP: FullBPO
+    COMPANY: "Omie Harbor"
+    PROJECT: "Omie Harbor"
+    APP: "Omie Harbor"
     SERVICE: ${self:service}
   iam:
     role:

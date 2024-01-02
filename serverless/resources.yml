@@ -51,17 +51,6 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: ${self:custom.basename}-data-export
-  
-  DataProcessingQueue:
-    Type: AWS::SQS::Queue
-    Properties:
-      QueueName: ${self:custom.basename}-dataProcessing-queue.fifo
-      FifoQueue: true
-      ContentBasedDeduplication: true
-      DeduplicationScope: queue
-      MessageRetentionPeriod: 345600 # 4 days in minutes (default)
-      ReceiveMessageWaitTimeSeconds: 0
-      VisibilityTimeout: ${self:functions.dataProcessing.timeout}
 
 Outputs:
   RestApiUrl:
@@ -88,12 +77,3 @@ Outputs:
     Value: !Ref DataExportBucket
     Export:
       Name: ${self:custom.basename}:DataExportBucketName
-
-  DataProcessingQueueArn:
-    Value: !GetAtt DataProcessingQueue.Arn
-    Export:
-      Name: ${self:custom.basename}:DataProcessingQueueArn
-  DataProcessingQueueUrl:
-    Value: !Ref DataProcessingQueue
-    Export:
-      Name: ${self:custom.basename}:DataProcessingQueueUrl

@@ -7,8 +7,7 @@ module.exports = {
     '<rootDir>/src/index.js',
     '<rootDir>/src/mappings/**/*.js',
     '<rootDir>/src/v*/**/*.js',
-    '!<rootDir>/src/v*/**/schema.js',
-    '!<rootDir>/src/v1/dataProcessing/**'
+    '!<rootDir>/src/v*/**/schema.js'
   ],
   roots: [
     'src',

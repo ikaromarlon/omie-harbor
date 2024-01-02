@@ -22,7 +22,6 @@ describe('Main Handler - Functions Loader', () => {
   it('Should find all functions', async () => {
     expect(functions).toEqual([
       'dataExport',
-      'dataProcessing',
       'deleteDataByCompany',
       'ingestionDispatcher',
       'ingestionPerformer',

@@ -1,7 +1,7 @@
 {
-  "name": "fullbpo-bfb",
+  "name": "omie-harbor",
   "version": "1.8.1",
-  "description": "FullBPO BFB (Back-end For Back-end) service",
+  "description": "A serveless application for ingestion and parsing data from Omie ERP and deliver it through a REST API",
   "main": "src/index.js",
   "engines": {
     "node": ">=18.0.0"
