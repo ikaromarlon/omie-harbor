@@ -1,0 +1,9 @@
+SERVICE: ${self:custom.service.name}
+STAGE: ${sls:stage}
+VERSION: ${file(./package.json):version}
+SQS_INGESTION_QUEUE_URL: { 'Ref': 'IngestionQueue'}
+SQS_DATA_EXPORT_QUEUE_URL: { 'Ref': 'DataExportQueue'}
+S3_DATA_EXPORT_BUCKET_NAME: { 'Ref': 'DataExportBucket'}
+MONGODB_URI: ${param:MONGODB_URI, env:MONGODB_URI}
+FLAG_LOG_EACH_OMIE_ERROR: ${param:FLAG_LOG_EACH_OMIE_ERROR, env:FLAG_LOG_EACH_OMIE_ERROR, false}
+FLAG_UPDATE_EMPTY_RECORDS: ${param:FLAG_UPDATE_EMPTY_RECORDS, env:FLAG_UPDATE_EMPTY_RECORDS, false}

@@ -3,7 +3,7 @@ Resources:
   IngestionQueue:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: ${self:custom.basename}-ingestion-queue.fifo
+      QueueName: ${self:custom.service.name}-ingestion-queue.fifo
       FifoQueue: true
       ContentBasedDeduplication: true
       DeduplicationScope: queue
@@ -14,7 +14,7 @@ Resources:
   OmieWebhookQueue:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: ${self:custom.basename}-omieWebhook-queue.fifo
+      QueueName: ${self:custom.service.name}-omieWebhook-queue.fifo
       FifoQueue: true
       ContentBasedDeduplication: true
       DeduplicationScope: queue
@@ -23,12 +23,13 @@ Resources:
       VisibilityTimeout: ${self:functions.omieWebhook.timeout}
       RedrivePolicy:
         deadLetterTargetArn:
-          Fn::GetAtt: [ OmieWebhookDLQ, Arn ]
+          Fn::GetAtt: [ omieWebhookDLQ, Arn ]
         maxReceiveCount: 1
+  
   OmieWebhookDLQ:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: ${self:custom.basename}-omieWebhook-dlq.fifo
+      QueueName: ${self:custom.service.name}-omieWebhook-dlq.fifo
       FifoQueue: true
       ContentBasedDeduplication: true
       DeduplicationScope: queue
@@ -39,7 +40,7 @@ Resources:
   DataExportQueue:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: ${self:custom.basename}-dataExport-queue.fifo
+      QueueName: ${self:custom.service.name}-dataExport-queue.fifo
       FifoQueue: true
       ContentBasedDeduplication: true
       DeduplicationScope: queue
@@ -50,30 +51,10 @@ Resources:
   DataExportBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: ${self:custom.basename}-data-export
+      BucketName: ${self:custom.service.name}-data-export
 
 Outputs:
   RestApiUrl:
-    Value: { 'Fn::Join': [ '', [ 'https://', { 'Ref' : 'ApiGatewayRestApi' }, '.execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}' ] ] }
+    Value: { 'Fn::Join': [ '', [ 'https://', { 'Ref' : 'ApiGatewayRestApi' }, '.execute-api.${self:provider.region}.amazonaws.com/${sls:stage}' ] ] }
     Export:
-      Name: ${self:custom.basename}:RestApiUrl
-  ApiKey:
-    Value: ${env:API_KEY}
-    Export:
-      Name: ${self:custom.basename}:ApiKey
-  IngestionQueueArn:
-    Value: !GetAtt IngestionQueue.Arn
-    Export:
-      Name: ${self:custom.basename}:IngestionQueueArn
-  IngestionQueueUrl:
-    Value: !Ref IngestionQueue
-    Export:
-      Name: ${self:custom.basename}:IngestionQueueUrl
-  DataExportBucketArn:
-    Value: !GetAtt DataExportBucket.Arn
-    Export:
-      Name: ${self:custom.basename}:DataExportBucketArn
-  DataExportBucketName:
-    Value: !Ref DataExportBucket
-    Export:
-      Name: ${self:custom.basename}:DataExportBucketName
+      Name: ${self:custom.service.name}:RestApiUrl

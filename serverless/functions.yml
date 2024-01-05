@@ -1,13 +1,13 @@
 registerOmieCompany:
   handler: src/index.handler
   timeout: 30
-  iamRoleStatementsName: ${self:custom.basename}-registerOmieCompany-role
+  iamRoleStatementsName: ${self:custom.service.name}-registerOmieCompany-role
   events:
     # - schedule: ${self:custom.functionsWarmUpScheduledEvent}
     - http:
         path: omie/register-company
         method: POST
-        cors: ${self:custom.httpCors}
+        cors: true
         private: false
   package:
     patterns:
@@ -16,7 +16,7 @@ registerOmieCompany:
 omieWebhook:
   handler: src/index.handler
   timeout: ${self:provider.timeout}
-  iamRoleStatementsName: ${self:custom.basename}-omieWebhook-role
+  iamRoleStatementsName: ${self:custom.service.name}-omieWebhook-role
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -35,7 +35,7 @@ omieWebhook:
 deleteDataByCompany:
   handler: src/index.handler
   timeout: 30
-  iamRoleStatementsName: ${self:custom.basename}-deleteDataByCompany-role
+  iamRoleStatementsName: ${self:custom.service.name}-deleteDataByCompany-role
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -46,7 +46,7 @@ deleteDataByCompany:
     - http:
         path: companies/{id}/data
         method: DELETE
-        cors: ${self:custom.httpCors}
+        cors: true
         private: false
   package:
     patterns:
@@ -54,7 +54,7 @@ deleteDataByCompany:
 
 ingestionDispatcher:
   handler: src/index.handler
-  iamRoleStatementsName: ${self:custom.basename}-ingestionDispatcher-role
+  iamRoleStatementsName: ${self:custom.service.name}-ingestionDispatcher-role
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -63,17 +63,9 @@ ingestionDispatcher:
         - Fn::GetAtt: [ IngestionQueue, Arn ]
   events:
     - schedule:
-        name: ${self:custom.basename}-ingestionDispatcher-eventRule-1
-        rate: ${self:custom.ingestionDispatcherSchedule1.${self:provider.stage}.rate}
-        enabled: ${self:custom.ingestionDispatcherSchedule1.${self:provider.stage}.enabled}
-    - schedule:
-        name: ${self:custom.basename}-ingestionDispatcher-eventRule-2
-        rate: ${self:custom.ingestionDispatcherSchedule2.${self:provider.stage}.rate}
-        enabled: ${self:custom.ingestionDispatcherSchedule2.${self:provider.stage}.enabled}
-    - schedule:
-        name: ${self:custom.basename}-ingestionDispatcher-eventRule-3
-        rate: ${self:custom.ingestionDispatcherSchedule3.${self:provider.stage}.rate}
-        enabled: ${self:custom.ingestionDispatcherSchedule3.${self:provider.stage}.enabled}
+        name: ${self:custom.service.name}-ingestionDispatcher-rule1
+        rate: ${self:custom.service.ingestionDispatcherScheduleRate.${sls:stage}}
+        enabled: true
   package:
     patterns:
       - 'src/v1/ingestionDispatcher/**'
@@ -82,7 +74,7 @@ ingestionPerformer:
   handler: src/index.handler
   memorySize: 1024
   timeout: 900
-  iamRoleStatementsName: ${self:custom.basename}-ingestionPerformer-role
+  iamRoleStatementsName: ${self:custom.service.name}-ingestionPerformer-role
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -99,9 +91,9 @@ ingestionPerformer:
 
 dataExport:
   handler: src/index.handler
-  memorySize: ${self:custom.dataExport.${self:provider.stage}.memorySize}
+  memorySize: ${self:custom.service.dataExportMemorySize.${sls:stage}}
   timeout: 900
-  iamRoleStatementsName: ${self:custom.basename}-dataExport-role
+  iamRoleStatementsName: ${self:custom.service.name}-dataExport-role
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -116,9 +108,9 @@ dataExport:
     - eventBridge:
         pattern:
           source:
-            - ${self:custom.basename}
+            - ${self:custom.service.name}
           detail-type:
-            - ${self:custom.basename}.dataExport
+            - ${self:custom.service.name}.dataExport
   package:
     patterns:
       - 'src/v1/dataExport/**'

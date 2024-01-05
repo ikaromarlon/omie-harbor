@@ -3,70 +3,57 @@ frameworkVersion: '3'
 useDotenv: true
 configValidationMode: error
 deprecationNotificationMode: error
+
 provider:
   name: aws
+  profile: ${opt:aws-profile, "${param:profile, 'default'}"}
   runtime: nodejs20.x
   stage: ${opt:stage, 'dev'}
-  region: ${self:custom.region.${self:provider.stage}}
-  stackName: ${self:custom.basename}
-  apiName: ${self:custom.basename}
+  region: ${self:custom.service.region.${sls:stage}}
+  stackName: ${self:custom.service.name}
+  apiName: ${self:custom.service.name}
   memorySize: 128
-  timeout: 60
+  timeout: 30
   logRetentionInDays: 7
+  deploymentPrefix: ''
   deploymentBucket:
-    name: ${env:AWS_ACCOUNT_ID}-deployment-artifacts-${self:provider.region}
-    blockPublicAccess: true
+    name: ${aws:accountId}-serverless
     maxPreviousDeploymentArtifacts: 5
-  deploymentPrefix: serverless
   versionFunctions: false
-  environment:
-    SERVICE: ${self:service}
-    STAGE: ${self:provider.stage}
-    REGION: ${self:provider.region}
-    DOMAIN: ${self:custom.domain}
-    MONGODB_URI: ${env:MONGODB_URI}
-    SQS_INGESTION_QUEUE_URL: { 'Ref': 'IngestionQueue'}
-    SQS_DATA_EXPORT_QUEUE_URL: { 'Ref': 'DataExportQueue'}
-    S3_DATA_EXPORT_BUCKET_NAME: { 'Ref': 'DataExportBucket'}
-    SES_REGION: ${self:custom.sesRegion}
-    FLAG_LOG_EACH_OMIE_ERROR: ${self:custom.env.FLAG_LOG_EACH_OMIE_ERROR.${self:provider.stage}}
-    FLAG_UPDATE_EMPTY_RECORDS: ${self:custom.env.FLAG_UPDATE_EMPTY_RECORDS.${self:provider.stage}}
-    ERROR_NOTIFICATION_RECIPIENT_ADDRESS: ${env:ERROR_NOTIFICATION_RECIPIENT_ADDRESS, ''}
-    ERROR_NOTIFICATION_RECIPIENT_ADDRESS_COPY: ${env:ERROR_NOTIFICATION_RECIPIENT_ADDRESS_COPY, ''}
+  environment: ${file(./serverless/environment.yml)}
   endpointType: EDGE
   apiGateway:
     apiKeySourceType: HEADER
     apiKeys:
-      - name: ${self:custom.basename}
-        value: ${env:API_KEY}
+      - name: ${self:custom.service.name}
+        value: ${self:custom.service.apiKey.${sls:stage}}
         enabled: true
   stackTags:
-    COMPANY: "Omie Harbor"
-    PROJECT: "Omie Harbor"
-    APP: "Omie Harbor"
-    SERVICE: ${self:service}
-  iam:
-    role:
-      statements:
-        - Effect: Allow
-          Action:
-            - 'ses:SendEmail'
-          Resource:
-            - arn:aws:ses:${self:custom.sesRegion}:${env:AWS_ACCOUNT_ID}:identity/${self:custom.domain}
-      name: ${self:custom.basename}-dafault-role
-functions: ${file(./serverless/functions.yml)}
-resources: ${file(./serverless/resources.yml)}
-custom: ${file(./serverless/custom.yml)}
+    service: ${self:service}
+    stage: ${sls:stage}
+  tags:
+    service: ${self:service}
+    stage: ${sls:stage}
+
 package:
   excludeDevDependencies: true
   individually: true
   patterns:
     - '!**'
+    - 'package.json'
     - 'node_modules/**'
     - 'src/**'
-    - '!src/v1/**'
-    - 'package.json'
+    - '!src/functions/**'
+
 plugins:
+  - serverless-domain-manager
   - serverless-iam-roles-per-function
+  - serverless-apigateway-service-proxy
   - serverless-cloudside-plugin
   - serverless-offline
+
+custom: ${file(./serverless/custom.yml)}
+
+functions: ${file(./serverless/functions.yml)}
+
+resources: ${file(./serverless/resources.yml)}
