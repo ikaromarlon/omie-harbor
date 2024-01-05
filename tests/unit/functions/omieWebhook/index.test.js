@@ -1,9 +1,9 @@
-const factory = require('../../../../src/v1/deleteDataByCompany')
+const factory = require('../../../../src/functions/omieWebhook')
 const mongodb = require('../../../../src/repositories/utils/mongodb')
 
 const makeSut = () => ({ sut: factory })
 
-describe('deleteDataByCompany Factory', () => {
+describe('omieWebhook Factory', () => {
   beforeAll(async () => mongodb.connect(process.env.MONGODB_URI, 'test'))
 
   afterAll(async () => mongodb.disconnect())

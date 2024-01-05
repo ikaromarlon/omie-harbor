@@ -1,4 +1,4 @@
-const makeUseCase = require('../../../../src/v1/ingestionDispatcher/useCase')
+const makeUseCase = require('../../../../src/functions/ingestionDispatcher/useCase')
 const { mockSavedOmieCompanies } = require('../../../mocks')
 
 const makeSut = () => {

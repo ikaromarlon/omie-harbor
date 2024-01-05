@@ -1,16 +1,18 @@
-const makeController = require('../../../../src/v1/ingestionPerformer/controller')
+const makeController = require('../../../../src/functions/registerOmieCompany/controller')
 const { ValidationError, InternalServerError } = require('../../../../src/common/errors')
-
-const companyId = '25c176b6-b200-4575-9217-e23c6105163c'
+const { mockSavedOmieCompanies } = require('../../../mocks')
 
 const makeSut = () => {
+  const mockUserId = '5429ae58-b264-4f3b-ba63-3dd304b272a1'
+
   const mockRequest = {
-    original: { Records: [{ body: `{"companyId":["${companyId}"]}` }] }
+    headers: { 'X-User-Id': mockUserId },
+    payload: { appKey: 'the_app_key', appSecret: 'the_app_secret' }
   }
 
-  const validateRequestSchemaStub = jest.fn(() => ({ companyId }))
+  const validateRequestSchemaStub = jest.fn(() => mockRequest.payload)
   const mockSchema = {}
-  const useCaseStub = jest.fn(async () => Promise.resolve({ success: true }))
+  const useCaseStub = jest.fn(async () => Promise.resolve(mockSavedOmieCompanies[0]))
 
   const controller = makeController({
     schema: mockSchema,
@@ -23,11 +25,12 @@ const makeSut = () => {
     validateRequestSchemaStub,
     useCaseStub,
     mockRequest,
-    mockSchema
+    mockSchema,
+    mockUserId
   }
 }
 
-describe('IngestionPerformer Controller', () => {
+describe('RegisterOmieCompany Controller', () => {
   it('Should throw an InternalServerError if validateRequestSchema throws an Error', async () => {
     const { sut, validateRequestSchemaStub, mockRequest } = makeSut()
     validateRequestSchemaStub.mockImplementationOnce(() => { throw new Error('Generic error') })
@@ -42,14 +45,14 @@ describe('IngestionPerformer Controller', () => {
 
   it('Should throw an ValidationError if validateRequestSchema throws a ValidationError', async () => {
     const { sut, validateRequestSchemaStub, mockRequest } = makeSut()
-    validateRequestSchemaStub.mockImplementationOnce(() => { throw new ValidationError('Invalid field') })
-    mockRequest.original.Records[0].body = '{"companyId":"invalid_companyId"}'
+    validateRequestSchemaStub.mockImplementationOnce(() => { throw new ValidationError('appSecret is required') })
+    mockRequest.payload = { appKey: 'the_app_key' }
     try {
       await sut(mockRequest)
     } catch (error) {
       expect(error).toBeInstanceOf(ValidationError)
       expect(error.statusCode).toBe(422)
-      expect(error.message).toBe('Invalid field')
+      expect(error.message).toBe('appSecret is required')
     }
   })
 
@@ -65,12 +68,12 @@ describe('IngestionPerformer Controller', () => {
     }
   })
 
-  it('Should return success: queue request (default)', async () => {
-    const { sut, validateRequestSchemaStub, useCaseStub, mockRequest, mockSchema } = makeSut()
+  it('Should call validateRequestSchema successfully', async () => {
+    const { sut, validateRequestSchemaStub, useCaseStub, mockRequest, mockSchema, mockUserId } = makeSut()
     const result = await sut(mockRequest)
-    expect(validateRequestSchemaStub).toHaveBeenCalledWith({ companyId: [companyId] }, mockSchema)
-    expect(useCaseStub).toHaveBeenCalledWith({ payload: { companyId } })
+    expect(validateRequestSchemaStub).toHaveBeenCalledWith(mockRequest.payload, mockSchema)
+    expect(useCaseStub).toHaveBeenCalledWith({ userId: mockUserId, payload: mockRequest.payload })
     expect(result.statusCode).toBe(200)
-    expect(result.data).toEqual({ success: true })
+    expect(result.data).toEqual(mockSavedOmieCompanies[0])
   })
 })

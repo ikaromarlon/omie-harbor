@@ -1,5 +1,5 @@
 const config = require('../../../../src/config')
-const makeUseCase = require('../../../../src/v1/ingestionPerformer/useCase')
+const makeUseCase = require('../../../../src/functions/ingestionPerformer/useCase')
 const { NotFoundError, ValidationError } = require('../../../../src/common/errors')
 const mocks = require('../../../mocks')
 

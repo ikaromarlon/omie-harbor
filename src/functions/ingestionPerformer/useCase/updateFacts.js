@@ -452,9 +452,9 @@ module.exports = async ({
           return (omieFinancialMovement.categorias?.length ? omieFinancialMovement.categorias : [{ cCodCateg: omieFinancialMovement.detalhes.cCodCateg }]).map(omieFinancialMovementCategory => {
             const category = categories.find(e => e.externalId === String(omieFinancialMovementCategory.cCodCateg))
             return financialMovementMapping({
-              omieFinancialMovement: omieFinancialMovement,
-              omieFinancialMovementDepartment: omieFinancialMovementDepartment,
-              omieFinancialMovementCategory: omieFinancialMovementCategory,
+              omieFinancialMovement,
+              omieFinancialMovementDepartment,
+              omieFinancialMovementCategory,
               omieEntryOrigins,
               omieDocumentTypes,
               companyId,

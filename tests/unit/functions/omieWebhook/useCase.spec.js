@@ -1,5 +1,5 @@
 const { InternalServerError } = require('../../../../src/common/errors')
-const makeUseCase = require('../../../../src/v1/omieWebhook/useCase')
+const makeUseCase = require('../../../../src/functions/omieWebhook/useCase')
 const {
   mockSavedOmieCompanies,
   mockSavedOmieServiceOrders,
@@ -107,7 +107,7 @@ describe('omieWebhook UseCase', () => {
       title: 'omieWebhook',
       message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
       data: {
-        result: result,
+        result,
         payload: mockPayload.payload
       }
     })

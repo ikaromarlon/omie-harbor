@@ -1,4 +1,4 @@
-const factory = require('../../../../src/v1/dataExport')
+const factory = require('../../../../src/functions/dataExport')
 const mongodb = require('../../../../src/repositories/utils/mongodb')
 
 const makeSut = () => ({ sut: factory })

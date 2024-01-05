@@ -46,9 +46,7 @@ package:
     - '!src/functions/**'
 
 plugins:
-  - serverless-domain-manager
   - serverless-iam-roles-per-function
-  - serverless-apigateway-service-proxy
   - serverless-cloudside-plugin
   - serverless-offline
 

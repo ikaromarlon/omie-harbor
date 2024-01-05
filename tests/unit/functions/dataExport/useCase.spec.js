@@ -1,4 +1,4 @@
-const makeUseCase = require('../../../../src/v1/dataExport/useCase')
+const makeUseCase = require('../../../../src/functions/dataExport/useCase')
 const {
   mockSavedOmieCompanies,
   mockSavedOmieCategories,

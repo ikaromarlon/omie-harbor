@@ -1,4 +1,4 @@
-const makeController = require('../../../../src/v1/omieWebhook/controller')
+const makeController = require('../../../../src/functions/omieWebhook/controller')
 const { InternalServerError, ValidationError } = require('../../../../src/common/errors')
 
 const makeSut = () => {

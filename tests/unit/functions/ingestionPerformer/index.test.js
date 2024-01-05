@@ -1,4 +1,4 @@
-const factory = require('../../../../src/v1/ingestionPerformer')
+const factory = require('../../../../src/functions/ingestionPerformer')
 const mongodb = require('../../../../src/repositories/utils/mongodb')
 
 const makeSut = () => ({ sut: factory })

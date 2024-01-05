@@ -1,6 +1,5 @@
 registerOmieCompany:
   handler: src/index.handler
-  timeout: 30
   iamRoleStatementsName: ${self:custom.service.name}-registerOmieCompany-role
   events:
     # - schedule: ${self:custom.functionsWarmUpScheduledEvent}
@@ -11,7 +10,7 @@ registerOmieCompany:
         private: false
   package:
     patterns:
-      - 'src/v1/registerOmieCompany/**'
+      - 'src/functions/registerOmieCompany/**'
 
 omieWebhook:
   handler: src/index.handler
@@ -50,7 +49,7 @@ deleteDataByCompany:
         private: false
   package:
     patterns:
-      - 'src/v1/deleteDataByCompany/**'
+      - 'src/functions/deleteDataByCompany/**'
 
 ingestionDispatcher:
   handler: src/index.handler
@@ -68,7 +67,7 @@ ingestionDispatcher:
         enabled: true
   package:
     patterns:
-      - 'src/v1/ingestionDispatcher/**'
+      - 'src/functions/ingestionDispatcher/**'
 
 ingestionPerformer:
   handler: src/index.handler
@@ -87,7 +86,7 @@ ingestionPerformer:
         batchSize: 1
   package:
     patterns:
-      - 'src/v1/ingestionPerformer/**'
+      - 'src/functions/ingestionPerformer/**'
 
 dataExport:
   handler: src/index.handler
@@ -113,4 +112,4 @@ dataExport:
             - ${self:custom.service.name}.dataExport
   package:
     patterns:
-      - 'src/v1/dataExport/**'
+      - 'src/functions/dataExport/**'

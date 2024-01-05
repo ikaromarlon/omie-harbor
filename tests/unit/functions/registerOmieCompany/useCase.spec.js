@@ -1,4 +1,4 @@
-const makeUseCase = require('../../../../src/v1/registerOmieCompany/useCase')
+const makeUseCase = require('../../../../src/functions/registerOmieCompany/useCase')
 const { NotFoundError } = require('../../../../src/common/errors')
 const { mockOmieCompaniesResponse, mockOmieCnaeResponse, mockParsedOmieCompany, mockSavedOmieCompanies } = require('../../../mocks')
 

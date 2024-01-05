@@ -1,5 +1,5 @@
 const { NotFoundError } = require('../../../../src/common/errors')
-const makeUseCase = require('../../../../src/v1/deleteDataByCompany/useCase')
+const makeUseCase = require('../../../../src/functions/deleteDataByCompany/useCase')
 const { mockSavedOmieCompanies } = require('../../../mocks')
 
 const makeSut = () => {

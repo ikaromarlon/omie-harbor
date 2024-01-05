@@ -1,4 +1,4 @@
-const makeController = require('../../../../src/v1/ingestionDispatcher/controller')
+const makeController = require('../../../../src/functions/ingestionDispatcher/controller')
 const { InternalServerError } = require('../../../../src/common/errors')
 
 const makeSut = () => {
