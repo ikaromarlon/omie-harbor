@@ -1,5 +1,5 @@
-const { InternalServerError } = require('../../../../src/common/errors')
-const makeUseCase = require('../../../../src/functions/omieWebhook/useCase')
+const { NotFoundError } = require('../../../../src/common/errors')
+const makeUseCase = require('../../../../src/functions/webhook/useCase')
 const {
   mockSavedOmieCompanies,
   mockSavedOmieServiceOrders,
@@ -69,7 +69,7 @@ const makeSut = () => {
   }
 }
 
-describe('omieWebhook UseCase', () => {
+describe('webhook UseCase', () => {
   it('Should receive a ping payload and finish process early', async () => {
     const { sut, mockRepositories, mockLogger, mockQueuer } = makeSut()
     const mockPayload = { payload: { ping: 'Omie' } }
@@ -79,19 +79,19 @@ describe('omieWebhook UseCase', () => {
     expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
     expect(result).toEqual({
       ping: 'Omie',
-      pong: 'omie-harbor'
+      pong: 'Omie Harbor'
     })
   })
 
-  it('Should not find company and throw an InternalServerError', async () => {
+  it('Should not find company and throw an NotFoundError', async () => {
     const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer } = makeSut()
     mockRepositories.companies.findOne.mockResolvedValueOnce(null)
     try {
       await sut(mockPayload)
       expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ 'credentials.appKey': mockPayload.payload.appKey })
     } catch (error) {
-      expect(error).toBeInstanceOf(InternalServerError)
-      expect(error.statusCode).toBe(500)
+      expect(error).toBeInstanceOf(NotFoundError)
+      expect(error.statusCode).toBe(404)
       expect(error.message).toBe(`Company related to appKey '${mockPayload.payload.appKey}' not found`)
     }
     expect(mockLogger.info).toHaveBeenCalledTimes(0)
@@ -104,7 +104,7 @@ describe('omieWebhook UseCase', () => {
     expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ 'credentials.appKey': mockPayload.payload.appKey })
     expect(mockLogger.info).toHaveBeenCalledTimes(1)
     expect(mockLogger.info).toHaveBeenCalledWith({
-      title: 'omieWebhook',
+      title: 'webhook',
       message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
       data: {
         result,
@@ -137,7 +137,7 @@ describe('omieWebhook UseCase', () => {
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
       expect(mockLogger.info).toHaveBeenCalledTimes(1)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'omieWebhook',
+        title: 'webhook',
         message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
         data: {
           result,
@@ -184,7 +184,7 @@ describe('omieWebhook UseCase', () => {
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany._id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'omieWebhook',
+        title: 'webhook',
         message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
         data: {
           result,
@@ -192,7 +192,7 @@ describe('omieWebhook UseCase', () => {
         }
       })
       expect(mockLogger.info).toHaveBeenNthCalledWith(2, {
-        title: 'omieWebhook',
+        title: 'webhook',
         message: `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
       })
       expect(result).toEqual({
@@ -225,7 +225,7 @@ describe('omieWebhook UseCase', () => {
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
       expect(mockLogger.info).toHaveBeenCalledTimes(1)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'omieWebhook',
+        title: 'webhook',
         message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
         data: {
           result,
@@ -272,7 +272,7 @@ describe('omieWebhook UseCase', () => {
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany._id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'omieWebhook',
+        title: 'webhook',
         message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
         data: {
           result,
@@ -280,7 +280,7 @@ describe('omieWebhook UseCase', () => {
         }
       })
       expect(mockLogger.info).toHaveBeenNthCalledWith(2, {
-        title: 'omieWebhook',
+        title: 'webhook',
         message: `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
       })
       expect(result).toEqual({
@@ -313,7 +313,7 @@ describe('omieWebhook UseCase', () => {
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
       expect(mockLogger.info).toHaveBeenCalledTimes(1)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'omieWebhook',
+        title: 'webhook',
         message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
         data: {
           result,
@@ -360,7 +360,7 @@ describe('omieWebhook UseCase', () => {
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany._id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'omieWebhook',
+        title: 'webhook',
         message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
         data: {
           result,
@@ -368,7 +368,7 @@ describe('omieWebhook UseCase', () => {
         }
       })
       expect(mockLogger.info).toHaveBeenNthCalledWith(2, {
-        title: 'omieWebhook',
+        title: 'webhook',
         message: `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
       })
       expect(result).toEqual({
@@ -400,7 +400,7 @@ describe('omieWebhook UseCase', () => {
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
       expect(mockLogger.info).toHaveBeenCalledTimes(1)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'omieWebhook',
+        title: 'webhook',
         message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
         data: {
           result,
@@ -441,7 +441,7 @@ describe('omieWebhook UseCase', () => {
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany._id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'omieWebhook',
+        title: 'webhook',
         message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
         data: {
           result,
@@ -449,7 +449,7 @@ describe('omieWebhook UseCase', () => {
         }
       })
       expect(mockLogger.info).toHaveBeenNthCalledWith(2, {
-        title: 'omieWebhook',
+        title: 'webhook',
         message: `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
       })
       expect(result).toEqual({
@@ -480,7 +480,7 @@ describe('omieWebhook UseCase', () => {
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
       expect(mockLogger.info).toHaveBeenCalledTimes(1)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'omieWebhook',
+        title: 'webhook',
         message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
         data: {
           result,
@@ -521,7 +521,7 @@ describe('omieWebhook UseCase', () => {
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany._id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'omieWebhook',
+        title: 'webhook',
         message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
         data: {
           result,
@@ -529,7 +529,7 @@ describe('omieWebhook UseCase', () => {
         }
       })
       expect(mockLogger.info).toHaveBeenNthCalledWith(2, {
-        title: 'omieWebhook',
+        title: 'webhook',
         message: `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
       })
       expect(result).toEqual({
@@ -558,7 +558,7 @@ describe('omieWebhook UseCase', () => {
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany._id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'omieWebhook',
+        title: 'webhook',
         message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
         data: {
           result,
@@ -566,7 +566,7 @@ describe('omieWebhook UseCase', () => {
         }
       })
       expect(mockLogger.info).toHaveBeenNthCalledWith(2, {
-        title: 'omieWebhook',
+        title: 'webhook',
         message: `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
       })
       expect(result).toEqual({

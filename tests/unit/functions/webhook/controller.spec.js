@@ -1,4 +1,4 @@
-const makeController = require('../../../../src/functions/omieWebhook/controller')
+const makeController = require('../../../../src/functions/webhook/controller')
 const { InternalServerError, ValidationError } = require('../../../../src/common/errors')
 
 const makeSut = () => {
@@ -29,7 +29,7 @@ const makeSut = () => {
   }
 }
 
-describe('omieWebhook Controller', () => {
+describe('webhook Controller', () => {
   it('Should throw an ValidationError if validateRequestSchema throws a ValidationError', async () => {
     const { sut, validateRequestSchemaStub, mockRequest } = makeSut()
     validateRequestSchemaStub.mockImplementationOnce(() => { throw new ValidationError('Invalid value') })

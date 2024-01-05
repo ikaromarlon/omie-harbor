@@ -4,7 +4,7 @@ registerCompany:
   events:
     - schedule: ${self:custom.service.warmup}
     - http:
-        path: companies/register
+        path: /companies/register
         method: POST
         cors: true
         private: true
@@ -12,10 +12,9 @@ registerCompany:
     patterns:
       - 'src/functions/registerCompany/**'
 
-omieWebhook:
+deleteDataByCompany:
   handler: src/index.handler
-  timeout: ${self:provider.timeout}
-  iamRoleStatementsName: ${self:custom.service.name}-omieWebhook-role
+  iamRoleStatementsName: ${self:custom.service.name}-deleteDataByCompany-role
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -23,30 +22,12 @@ omieWebhook:
       Resource:
         - Fn::GetAtt: [ DataExportQueue, Arn ]
   events:
-    - sqs:
-        arn:
-          Fn::GetAtt: [ OmieWebhookQueue, Arn ]
-        batchSize: 1
-  package:
-    patterns:
-      - 'src/functions/omieWebhook/**'
-
-deleteDataByCompany:
-  handler: src/index.handler
-  timeout: 30
-  iamRoleStatementsName: ${self:custom.service.name}-deleteDataByCompany-role
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - events:PutEvents
-      Resource: '*' # set permission to eventbus default or create new one
-  events:
-    # - schedule: ${self:custom.functionsWarmUpScheduledEvent}
+    - schedule: ${self:custom.service.warmup}
     - http:
-        path: companies/{id}/data
+        path: /companies/{id}/data
         method: DELETE
         cors: true
-        private: false
+        private: true
   package:
     patterns:
       - 'src/functions/deleteDataByCompany/**'
@@ -64,7 +45,7 @@ ingestionDispatcher:
     - schedule:
         name: ${self:custom.service.name}-ingestionDispatcher-rule1
         rate: ${self:custom.service.ingestionDispatcherScheduleRate.${sls:stage}}
-        enabled: true
+        enabled: false
   package:
     patterns:
       - 'src/functions/ingestionDispatcher/**'
@@ -113,3 +94,22 @@ dataExport:
   package:
     patterns:
       - 'src/functions/dataExport/**'
+
+webhook:
+  handler: src/index.handler
+  timeout: ${self:provider.timeout}
+  iamRoleStatementsName: ${self:custom.service.name}-webhook-role
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sqs:SendMessage
+      Resource:
+        - Fn::GetAtt: [ DataExportQueue, Arn ]
+  events:
+    - sqs:
+        arn:
+          Fn::GetAtt: [ WebhookQueue, Arn ]
+        batchSize: 1
+  package:
+    patterns:
+      - 'src/functions/webhook/**'

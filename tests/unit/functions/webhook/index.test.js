@@ -1,9 +1,9 @@
-const factory = require('../../../../src/functions/omieWebhook')
+const factory = require('../../../../src/functions/webhook')
 const mongodb = require('../../../../src/repositories/utils/mongodb')
 
 const makeSut = () => ({ sut: factory })
 
-describe('omieWebhook Factory', () => {
+describe('webhook Factory', () => {
   beforeAll(async () => mongodb.connect(process.env.MONGODB_URI, 'test'))
 
   afterAll(async () => mongodb.disconnect())

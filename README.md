@@ -20,7 +20,7 @@ Omie Harbor is a service for ingestion and processing data consumed from [Omie E
   Exports data from database to a JSON file stored into S3.
 
 ### Other Services
-- **omieWebhook**
+- **webhook**
   Receive deletion events from Omie ERP and make updates on database
 - **deleteDataByCompany**
   Delete all data for a company on the database.

@@ -1,4 +1,5 @@
-const { InternalServerError } = require('../../../common/errors')
+const config = require('../../../config')
+const { NotFoundError } = require('../../../common/errors')
 const { OMIE_WEBHOOK_EVENTS } = require('../../../common/enums')
 const deleteOrder = require('./deleteOrder')
 const deleteContract = require('./deleteContract')
@@ -16,7 +17,7 @@ module.exports = ({
       [OMIE_WEBHOOK_EVENTS.SERVICE_ORDER.DELETED]: deleteOrder,
       [OMIE_WEBHOOK_EVENTS.SALES_ORDER.DELETED]: deleteOrder,
       [OMIE_WEBHOOK_EVENTS.CONTRACT.DELETED]: deleteContract,
-      // [OMIE_WEBHOOK_EVENTS.ENTRY_INVOICE.DELETED]: deleteAccountPayable,
+      [OMIE_WEBHOOK_EVENTS.ENTRY_INVOICE.DELETED]: deleteAccountPayable,
       [OMIE_WEBHOOK_EVENTS.ACCOUNT_PAYABLE.DELETED]: deleteAccountPayable,
       [OMIE_WEBHOOK_EVENTS.ACCOUNT_RECEIVABLE.DELETED]: deleteAccountReceivable,
       [OMIE_WEBHOOK_EVENTS.CHECKING_ACCOUNT_ENTRY.DELETED]: deleteFinancialMovement,
@@ -28,14 +29,14 @@ module.exports = ({
     if (ping) {
       return {
         ping,
-        pong: 'omie-harbor'
+        pong: config.app.name
       }
     }
 
     const company = await repositories.companies.findOne({ 'credentials.appKey': appKey })
 
     if (!company) {
-      throw new InternalServerError(`Company related to appKey '${appKey}' not found`)
+      throw new NotFoundError(`Company related to appKey '${appKey}' not found`)
     }
 
     const action = actions[topic]
@@ -53,7 +54,7 @@ module.exports = ({
     }
 
     logger.info({
-      title: 'omieWebhook',
+      title: 'webhook',
       message: `Action for company ${company._id} - ${company.name}: ${topic}`,
       data: {
         result,
@@ -65,7 +66,7 @@ module.exports = ({
       await queuer.sendCompanyToDataExportQueue(company._id)
 
       logger.info({
-        title: 'omieWebhook',
+        title: 'webhook',
         message: `Company ${company._id} - ${company.name} sent to dataExport process`
       })
     }
