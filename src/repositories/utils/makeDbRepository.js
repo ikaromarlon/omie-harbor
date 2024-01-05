@@ -1,4 +1,3 @@
-const config = require('../../config')
 const { uuid } = require('../../common/helpers')
 
 module.exports = ({
@@ -39,12 +38,12 @@ module.exports = ({
           $setOnInsert: {
             _id: _id ?? id,
             createdAt: createdAt ?? date,
-            createdBy: createdBy ?? config.app.user
+            createdBy: createdBy ?? null
           },
           $set: {
             ...data,
             updatedAt: updatedAt ?? date,
-            updatedBy: updatedBy ?? config.app.user
+            updatedBy: updatedBy ?? null
           }
         },
         { upsert: true, returnDocument: 'after' }
@@ -66,12 +65,12 @@ module.exports = ({
               $setOnInsert: {
                 _id: _id ?? uuid(),
                 createdAt: createdAt ?? date,
-                createdBy: createdBy ?? config.app.user
+                createdBy: createdBy ?? null
               },
               $set: {
                 ...data,
                 updatedAt: updatedAt ?? date,
-                updatedBy: updatedBy ?? config.app.user
+                updatedBy: updatedBy ?? null
               }
             },
             upsert: true
@@ -104,9 +103,9 @@ module.exports = ({
             document: {
               _id: _id ?? uuid(),
               createdAt: createdAt ?? date,
-              createdBy: createdBy ?? config.app.user,
+              createdBy: createdBy ?? null,
               updatedAt: updatedAt ?? date,
-              updatedBy: updatedBy ?? config.app.user,
+              updatedBy: updatedBy ?? null,
               ...data
             }
           }
