@@ -3,6 +3,7 @@ A serveless application for ingestion and parsing data from Omie ERP and deliver
 
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![CI](https://github.com/ikaromarlon/omie-harbor/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/ikaromarlon/omie-harbor/actions/workflows/main.yml)
+[![Coverage Status](https://coveralls.io/repos/github/ikaromarlon/omie-harbor/badge.svg?branch=main)](https://coveralls.io/github/ikaromarlon/omie-harbor?branch=main)
 
 Omie Harbor is a service for ingestion and processing data consumed from [Omie ERP](https://developer.omie.com.br/). It processes data from Omie, map and stores into a new database an then exports data to a JSON file stored in AWS S3 Bucket. 
 

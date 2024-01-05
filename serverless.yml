@@ -6,7 +6,6 @@ deprecationNotificationMode: error
 
 provider:
   name: aws
-  profile: ${opt:aws-profile, "${param:profile, 'default'}"}
   runtime: nodejs20.x
   stage: ${opt:stage, 'dev'}
   region: ${self:custom.service.region.${sls:stage}}
