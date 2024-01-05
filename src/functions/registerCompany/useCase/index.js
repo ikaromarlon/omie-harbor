@@ -4,7 +4,7 @@ module.exports = ({
   omieService,
   companyMapping,
   companiesRepository
-}) => async ({ userId, payload }) => {
+}) => async ({ payload }) => {
   const credentials = {
     appKey: payload.appKey.trim(),
     appSecret: payload.appSecret.trim()
@@ -22,11 +22,6 @@ module.exports = ({
   const omieCnae = await omieService.getCnae(credentials)
 
   const companyData = companyMapping({ omieCompany, omieCnae, credentials })
-
-  companyData.statusAt = null
-  companyData.statusBy = null
-  companyData.createdBy = userId
-  companyData.updatedBy = userId
 
   return companiesRepository.createOrUpdateOne({ credentials }, companyData)
 }

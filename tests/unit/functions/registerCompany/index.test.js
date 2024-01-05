@@ -1,9 +1,9 @@
-const factory = require('../../../../src/functions/registerOmieCompany')
+const factory = require('../../../../src/functions/registerCompany')
 const mongodb = require('../../../../src/repositories/utils/mongodb')
 
 const makeSut = () => ({ sut: factory })
 
-describe('RegisterOmieCompany Factory', () => {
+describe('registerCompany Factory', () => {
   beforeAll(async () => mongodb.connect(process.env.MONGODB_URI, 'test'))
 
   afterAll(async () => mongodb.disconnect())

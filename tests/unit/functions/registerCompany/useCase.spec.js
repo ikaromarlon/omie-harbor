@@ -1,4 +1,4 @@
-const makeUseCase = require('../../../../src/functions/registerOmieCompany/useCase')
+const makeUseCase = require('../../../../src/functions/registerCompany/useCase')
 const { NotFoundError } = require('../../../../src/common/errors')
 const { mockOmieCompaniesResponse, mockOmieCnaeResponse, mockParsedOmieCompany, mockSavedOmieCompanies } = require('../../../mocks')
 
@@ -34,7 +34,7 @@ const makeSut = () => {
   }
 }
 
-describe('RegisterOmieCompany UseCase', () => {
+describe('registerCompany UseCase', () => {
   it('Should return error if company not found at Omie', async () => {
     const sutPackage = makeSut()
     const { sut, mockPayload, mockUserId, mockCredentials, omieServiceStub, companyMappingStub, companiesRepositoryStub } = sutPackage
@@ -73,11 +73,7 @@ describe('RegisterOmieCompany UseCase', () => {
     expect(omieServiceStub.getCnae).toHaveBeenCalledWith(mockCredentials)
     expect(companyMappingStub).toHaveBeenCalledWith({ omieCompany: mockOmieCompaniesResponse.empresas_cadastro[0], omieCnae: mockOmieCnaeResponse.cadastros, credentials: mockCredentials })
     expect(companiesRepositoryStub.createOrUpdateOne).toHaveBeenCalledWith({ credentials: mockCredentials }, {
-      ...mockParsedOmieCompany,
-      statusAt: null,
-      statusBy: null,
-      createdBy: mockUserId,
-      updatedBy: mockUserId
+      ...mockParsedOmieCompany
     })
     expect(result).toEqual(mockSavedOmieCompanies[0])
   })

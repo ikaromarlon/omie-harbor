@@ -32,11 +32,6 @@ module.exports = ({
   const updateCompany = async ({ credentials, company, omieCnae, companyMapping, companiesRepository }) => {
     const omieCompany = await omieService.getCompany(credentials)
     const companyData = companyMapping({ omieCompany, omieCnae, credentials })
-    if (companyData.isActive !== company.isActive) {
-      const date = new Date()
-      companyData.statusAt = date
-      companyData.statusBy = config.app.user
-    }
     await companiesRepository.createOrUpdateOne({ _id: company._id }, companyData)
   }
 

@@ -1,16 +1,16 @@
-registerOmieCompany:
+registerCompany:
   handler: src/index.handler
-  iamRoleStatementsName: ${self:custom.service.name}-registerOmieCompany-role
+  iamRoleStatementsName: ${self:custom.service.name}-registerCompany-role
   events:
-    # - schedule: ${self:custom.functionsWarmUpScheduledEvent}
+    - schedule: ${self:custom.service.warmup}
     - http:
-        path: omie/register-company
+        path: companies/register
         method: POST
         cors: true
-        private: false
+        private: true
   package:
     patterns:
-      - 'src/functions/registerOmieCompany/**'
+      - 'src/functions/registerCompany/**'
 
 omieWebhook:
   handler: src/index.handler
@@ -29,7 +29,7 @@ omieWebhook:
         batchSize: 1
   package:
     patterns:
-      - 'src/v1/omieWebhook/**'
+      - 'src/functions/omieWebhook/**'
 
 deleteDataByCompany:
   handler: src/index.handler

@@ -26,7 +26,7 @@ describe('Main Handler - Functions Loader', () => {
       'ingestionDispatcher',
       'ingestionPerformer',
       'omieWebhook',
-      'registerOmieCompany'
+      'registerCompany'
     ])
   })
 

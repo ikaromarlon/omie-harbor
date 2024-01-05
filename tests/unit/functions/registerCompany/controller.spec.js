@@ -1,12 +1,9 @@
-const makeController = require('../../../../src/functions/registerOmieCompany/controller')
+const makeController = require('../../../../src/functions/registerCompany/controller')
 const { ValidationError, InternalServerError } = require('../../../../src/common/errors')
 const { mockSavedOmieCompanies } = require('../../../mocks')
 
 const makeSut = () => {
-  const mockUserId = '5429ae58-b264-4f3b-ba63-3dd304b272a1'
-
   const mockRequest = {
-    headers: { 'X-User-Id': mockUserId },
     payload: { appKey: 'the_app_key', appSecret: 'the_app_secret' }
   }
 
@@ -25,12 +22,11 @@ const makeSut = () => {
     validateRequestSchemaStub,
     useCaseStub,
     mockRequest,
-    mockSchema,
-    mockUserId
+    mockSchema
   }
 }
 
-describe('RegisterOmieCompany Controller', () => {
+describe('registerCompany Controller', () => {
   it('Should throw an InternalServerError if validateRequestSchema throws an Error', async () => {
     const { sut, validateRequestSchemaStub, mockRequest } = makeSut()
     validateRequestSchemaStub.mockImplementationOnce(() => { throw new Error('Generic error') })
@@ -69,10 +65,10 @@ describe('RegisterOmieCompany Controller', () => {
   })
 
   it('Should call validateRequestSchema successfully', async () => {
-    const { sut, validateRequestSchemaStub, useCaseStub, mockRequest, mockSchema, mockUserId } = makeSut()
+    const { sut, validateRequestSchemaStub, useCaseStub, mockRequest, mockSchema } = makeSut()
     const result = await sut(mockRequest)
     expect(validateRequestSchemaStub).toHaveBeenCalledWith(mockRequest.payload, mockSchema)
-    expect(useCaseStub).toHaveBeenCalledWith({ userId: mockUserId, payload: mockRequest.payload })
+    expect(useCaseStub).toHaveBeenCalledWith({ payload: mockRequest.payload })
     expect(result.statusCode).toBe(200)
     expect(result.data).toEqual(mockSavedOmieCompanies[0])
   })

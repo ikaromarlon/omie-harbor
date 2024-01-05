@@ -10,7 +10,7 @@ Omie Harbor is a service for ingestion and processing data consumed from [Omie E
 <!-- ![](docs/image.png) -->
 
 ### Main Services:
-- **registerOmieCompany**
+- **registerCompany**
   Register into database an existing company on Omie ERP using it's credentials.
 - **ingestionDispatcher**
   A cron job triggered service that runs automatically to import data from Omie ERP every day and send to a queue to be processed by ```ingestionPerformer``` service.

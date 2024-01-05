@@ -9,9 +9,7 @@ module.exports = ({
     /* AWS API Gateway HTTP event */
     const payload = validateRequestSchema(request.payload, schema)
 
-    const { 'X-User-Id': userId } = request.headers
-
-    const data = await useCase({ userId, payload })
+    const data = await useCase({ payload })
 
     return successHandler({ data })
   } catch (error) {

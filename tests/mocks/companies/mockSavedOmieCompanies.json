@@ -37,11 +37,9 @@
     "nickName": "EMPRESA FICTICIA",
     "stateRegistration": "2222222222222",
     "isActive": true,
-    "statusAt": null,
-    "statusBy": null,
     "createdAt": "2021-11-05T15:05:38.233Z",
-    "createdBy": "5429ae58-b264-4f3b-ba63-3dd304b272a1",
+    "createdBy": null,
     "updatedAt": "2021-11-05T15:29:58.455Z",
-    "updatedBy": "5429ae58-b264-4f3b-ba63-3dd304b272a1"
+    "updatedBy": null
   }
 ]

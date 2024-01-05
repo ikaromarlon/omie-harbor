@@ -1,4 +1,3 @@
-const config = require('../../../../src/config')
 const makeUseCase = require('../../../../src/functions/ingestionPerformer/useCase')
 const { NotFoundError, ValidationError } = require('../../../../src/common/errors')
 const mocks = require('../../../mocks')
@@ -229,9 +228,7 @@ describe('ingestionPerformer UseCase', () => {
       expect(mockOmieMappings.company).toHaveBeenCalledWith({ omieCompany: mockOmieCompanyResponse, omieCnae: mocks.mockOmieCnaeResponse.cadastros, credentials: mockCredentials })
       expect(mockRepositories.companies.createOrUpdateOne).toHaveBeenCalledWith({ _id: mockCompanyId }, {
         ...mocks.mockParsedOmieCompany,
-        isActive: false,
-        statusAt: new Date(),
-        statusBy: config.app.user
+        isActive: false
       })
     })
   })
