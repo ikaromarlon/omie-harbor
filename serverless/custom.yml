@@ -7,6 +7,25 @@ serverless-offline:
 serverless-iam-roles-per-function:
   defaultInherit: true
 
+apiGatewayServiceProxies:
+  - sqs:
+      path: /webhook
+      method: POST
+      cors: true
+      private: false
+      queueName: ${self:resources.Resources.WebhookQueue.Properties.QueueName}
+      request:
+        template:
+          application/json: |-
+            #set ($body = $util.parseJson($input.body))
+            Action=SendMessage##
+            &MessageGroupId=$util.urlEncode("webhook-$body.appKey")##
+            &MessageBody=$util.urlEncode($input.body)
+      response:
+          template:
+            success: |-
+              { "message": "accepted" }
+
 service:
   name: ${self:service}-${sls:stage}
   warmup:
