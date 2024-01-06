@@ -1,4 +1,4 @@
-const { PRODUCT_TYPES, ORDER_TYPES, MOVEMENT_STATUSES } = require('../../../common/enums')
+const { PRODUCT_TYPES, ORDER_TYPES, MOVEMENT_STATUS } = require('../enums')
 const getValidCodes = require('../utils/getValidCodes')
 const joinRecordsByCfopAndMunicipalServiceCode = require('../utils/joinRecordsByCfopAndMunicipalServiceCode')
 const makeEmptyRecord = require('../utils/makeEmptyRecord')
@@ -364,7 +364,7 @@ module.exports = async ({
       omieService.getFinancialMovements(credentials, { updatedFrom: startDate, updatedTo: endDate })
     ])
 
-    const isConsolidatedMovement = (omieMovement) => omieMovement.detalhes.cStatus !== MOVEMENT_STATUSES.FORECAST
+    const isConsolidatedMovement = (omieMovement) => omieMovement.detalhes.cStatus !== MOVEMENT_STATUS.FORECAST
 
     const omieFinancialMovementsCreated = omieFinancialMovementsCreatedResult.filter(isConsolidatedMovement)
     const omieFinancialMovementsUpdated = omieFinancialMovementsUpdatedResult.filter(isConsolidatedMovement)

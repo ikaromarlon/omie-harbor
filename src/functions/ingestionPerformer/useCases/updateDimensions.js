@@ -1,4 +1,4 @@
-const { PRODUCT_TYPES } = require('../../../common/enums')
+const { PRODUCT_TYPES } = require('../enums')
 const getValidCodes = require('../utils/getValidCodes')
 const joinRecordsByCfopAndMunicipalServiceCode = require('../utils/joinRecordsByCfopAndMunicipalServiceCode')
 const makeEmptyRecord = require('../utils/makeEmptyRecord')

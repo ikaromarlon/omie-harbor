@@ -1,17 +1,3 @@
-const PRODUCT_TYPES = {
-  PRODUCT: 'PRODUTO',
-  SERVICE: 'SERVICO'
-}
-
-const ORDER_TYPES = {
-  SALES_ORDER: 'PEDIDO',
-  SERVICE_ORDER: 'OS'
-}
-
-const MOVEMENT_STATUSES = {
-  FORECAST: 'PREVISAO'
-}
-
 const OMIE_WEBHOOK_EVENTS = {
   SERVICE_ORDER: {
     DELETED: 'OrdemServico.Excluida'
@@ -40,8 +26,5 @@ const OMIE_WEBHOOK_EVENTS = {
 }
 
 module.exports = {
-  PRODUCT_TYPES,
-  ORDER_TYPES,
-  MOVEMENT_STATUSES,
   OMIE_WEBHOOK_EVENTS
 }

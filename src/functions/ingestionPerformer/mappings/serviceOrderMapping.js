@@ -1,4 +1,4 @@
-const { ORDER_TYPES } = require('../../../common/enums')
+const { ORDER_TYPES } = require('../enums')
 const { brDateToISO, multiply } = require('../../../common/helpers')
 
 module.exports = ({

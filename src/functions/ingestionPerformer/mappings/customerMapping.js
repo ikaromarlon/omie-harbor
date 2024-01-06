@@ -10,9 +10,12 @@ module.exports = ({
   const phones = []
   if (omieCustomer.telefone1_numero) phones.push({ areaCode: getNumbers(omieCustomer.telefone1_ddd), number: getNumbers(omieCustomer.telefone1_numero) })
   if (omieCustomer.telefone2_numero) phones.push({ areaCode: getNumbers(omieCustomer.telefone2_ddd), number: getNumbers(omieCustomer.telefone2_numero) })
+
   const cnae = omieCnae.find(e => e.nCodigo === omieCustomer.cnae)
+
   let omieBank
   if (omieCustomer.dadosBancarios.codigo_banco) omieBank = omieBanks.find(e => e.codigo === omieCustomer.dadosBancarios.codigo_banco)
+
   return {
     companyId,
     externalId: String(omieCustomer.codigo_cliente_omie),

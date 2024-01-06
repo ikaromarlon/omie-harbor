@@ -1,4 +1,4 @@
-const { PRODUCT_TYPES } = require('../../../common/enums')
+const { PRODUCT_TYPES, CONTRACT_STATUS } = require('../enums')
 const { brDateToISO, multiply } = require('../../../common/helpers')
 
 module.exports = ({
@@ -15,13 +15,6 @@ module.exports = ({
   productServiceId,
   categoryId
 }) => {
-  const STATUS = {
-    '00': 'EM ELABORAÇÃO',
-    10: 'ATIVO',
-    90: 'SUSPENSO',
-    99: 'CANCELADO'
-  }
-
   const step = omieContractSteps.find(x => x.contratos.some(y => String(y.nCodCtr) === String(omieContract.cabecalho.nCodCtr)))?.descricao || null
 
   const departmentPercentage = omieContractDepartment?.nPerDep ?? 100
@@ -55,7 +48,7 @@ module.exports = ({
       icms: multiply(omieContractItem.itemImpostos.valorICMS ?? 0, perc),
       iss: multiply(omieContractItem.itemImpostos.valorISS ?? 0, perc)
     },
-    status: STATUS[omieContract.cabecalho.cCodSit],
+    status: CONTRACT_STATUS[omieContract.cabecalho.cCodSit],
     billed: null,
     billingType: omieContractBillingTypes.find(e => e.cCodigo === omieContract.cabecalho.cTipoFat).cDescricao,
     step,

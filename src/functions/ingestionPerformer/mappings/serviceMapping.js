@@ -1,4 +1,4 @@
-const { PRODUCT_TYPES } = require('../../../common/enums')
+const { PRODUCT_TYPES } = require('../enums')
 
 module.exports = ({
   companyId,

@@ -1,6 +1,6 @@
 const config = require('../../config')
 const { NotFoundException } = require('../../common/errors')
-const { OMIE_WEBHOOK_EVENTS } = require('../../common/enums')
+const { OMIE_WEBHOOK_EVENTS } = require('./enums')
 const deleteOrder = require('./useCases/deleteOrder')
 const deleteContract = require('./useCases/deleteContract')
 const deleteAccountPayable = require('./useCases/deleteAccountPayable')
