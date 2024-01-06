@@ -10,6 +10,5 @@
   "initialBalanceDate" : null,
   "isActive" : true,
   "accountNumber" : null,
-  "provider" : "Omie",
   "type" : {}
 }

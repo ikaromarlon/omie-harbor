@@ -6,7 +6,7 @@ const updateFacts = require('./useCases/updateFacts')
 
 module.exports = ({
   omieService,
-  omieMappings,
+  mappings,
   repositories,
   queuer,
   logger
@@ -87,7 +87,7 @@ module.exports = ({
       credentials,
       company,
       omieCnae,
-      companyMapping: omieMappings.company,
+      companyMapping: mappings.companyMapping,
       companiesRepository: repositories.companies
     })
 
@@ -97,7 +97,7 @@ module.exports = ({
       startDate,
       endDate,
       companyId,
-      omieMappings,
+      mappings,
       repositories,
       omieBanks,
       omieCnae,
@@ -110,7 +110,7 @@ module.exports = ({
       startDate,
       endDate,
       companyId,
-      omieMappings,
+      mappings,
       repositories,
       omieDocumentTypes,
       emptyRecordsIds

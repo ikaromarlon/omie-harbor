@@ -9,7 +9,7 @@ module.exports = async ({
   startDate,
   endDate,
   companyId,
-  omieMappings,
+  mappings,
   repositories,
   omieBanks,
   omieCnae,
@@ -308,7 +308,7 @@ module.exports = async ({
   await updateCategories({
     credentials,
     companyId,
-    categoryMapping: omieMappings.category,
+    categoryMapping: mappings.categoryMapping,
     categoriesRepository: repositories.categories
   })
 
@@ -317,7 +317,7 @@ module.exports = async ({
     companyId,
     startDate,
     endDate,
-    departmentMapping: omieMappings.department,
+    departmentMapping: mappings.departmentMapping,
     departmentsRepository: repositories.departments
   })
 
@@ -326,7 +326,7 @@ module.exports = async ({
     companyId,
     startDate,
     endDate,
-    projectMapping: omieMappings.project,
+    projectMapping: mappings.projectMapping,
     projectsRepository: repositories.projects
   })
 
@@ -337,7 +337,7 @@ module.exports = async ({
     endDate,
     omieCnae,
     omieBanks,
-    customerMapping: omieMappings.customer,
+    customerMapping: mappings.customerMapping,
     customersRepository: repositories.customers
   })
 
@@ -346,8 +346,8 @@ module.exports = async ({
     companyId,
     startDate,
     endDate,
-    productMapping: omieMappings.product,
-    serviceMapping: omieMappings.service,
+    productMapping: mappings.productMapping,
+    serviceMapping: mappings.serviceMapping,
     productsServicesRepository: repositories.productsServices
   })
 
@@ -357,7 +357,7 @@ module.exports = async ({
     startDate,
     endDate,
     omieBanks,
-    checkingAccountMapping: omieMappings.checkingAccount,
+    checkingAccountMapping: mappings.checkingAccountMapping,
     checkingAccountsRepository: repositories.checkingAccounts
   })
 
@@ -367,7 +367,7 @@ module.exports = async ({
     startDate,
     endDate,
     emptyRecordsIds,
-    contractMapping: omieMappings.contract,
+    contractMapping: mappings.contractMapping,
     repositories
   })
 
@@ -377,8 +377,8 @@ module.exports = async ({
     startDate,
     endDate,
     emptyRecordsIds,
-    productOrderMapping: omieMappings.productOrder,
-    serviceOrderMapping: omieMappings.serviceOrder,
+    productOrderMapping: mappings.productOrderMapping,
+    serviceOrderMapping: mappings.serviceOrderMapping,
     repositories
   })
 }

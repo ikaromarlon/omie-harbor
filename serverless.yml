@@ -43,6 +43,7 @@ package:
     - 'node_modules/**'
     - 'src/**'
     - '!src/functions/**'
+    - '!src/shared/**'
 
 plugins:
   - serverless-iam-roles-per-function

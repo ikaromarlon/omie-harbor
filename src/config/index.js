@@ -34,7 +34,6 @@ module.exports = Object.freeze({
   },
   services: {
     omie: {
-      providerName: 'Omie',
       ingestionPeriod: 3, /** days back */
       apiBaseUrl: 'https://app.omie.com.br/api/v1',
       maxRequestPerPeriod: 200, /** in seconds */

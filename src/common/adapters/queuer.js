@@ -7,7 +7,7 @@ module.exports = () => {
     sendCompanyToIngestionQueue: async (companyId) => {
       const command = new SendMessageCommand({
         QueueUrl: config.SQS.ingestionQueueUrl,
-        MessageGroupId: `${config.services.omie.providerName}-ingestion`,
+        MessageGroupId: 'ingestion',
         MessageBody: JSON.stringify({ companyId })
       })
       const result = await SQS.send(command)

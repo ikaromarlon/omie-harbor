@@ -9,7 +9,7 @@ module.exports = async ({
   startDate,
   endDate,
   companyId,
-  omieMappings,
+  mappings,
   repositories,
   omieDocumentTypes,
   emptyRecordsIds
@@ -486,8 +486,8 @@ module.exports = async ({
     emptyRecordsIds,
     startDate,
     endDate,
-    productInvoiceMapping: omieMappings.productInvoice,
-    serviceInvoiceMapping: omieMappings.serviceInvoice,
+    productInvoiceMapping: mappings.productInvoiceMapping,
+    serviceInvoiceMapping: mappings.serviceInvoiceMapping,
     repositories
   })
 
@@ -497,7 +497,7 @@ module.exports = async ({
     emptyRecordsIds,
     startDate,
     endDate,
-    titleMapping: omieMappings.title,
+    titleMapping: mappings.titleMapping,
     repositories
   })
 
@@ -507,7 +507,7 @@ module.exports = async ({
     emptyRecordsIds,
     startDate,
     endDate,
-    titleMapping: omieMappings.title,
+    titleMapping: mappings.titleMapping,
     repositories
   })
 
@@ -517,7 +517,7 @@ module.exports = async ({
     emptyRecordsIds,
     startDate,
     endDate,
-    financialMovementMapping: omieMappings.financialMovement,
+    financialMovementMapping: mappings.financialMovementMapping,
     repositories
   })
 }
