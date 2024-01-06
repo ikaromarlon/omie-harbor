@@ -1,8 +1,8 @@
-const config = require('../../../config')
-const { NotFoundException, UnprocessableEntityException } = require('../../../common/errors')
-const { daysToMilliseconds, uuidFrom } = require('../../../common/helpers')
-const updateDimensions = require('./updateDimensions')
-const updateFacts = require('./updateFacts')
+const config = require('../../config')
+const { NotFoundException, UnprocessableEntityException } = require('../../common/errors')
+const { daysToMilliseconds, uuidFrom } = require('../../common/helpers')
+const updateDimensions = require('./useCases/updateDimensions')
+const updateFacts = require('./useCases/updateFacts')
 
 module.exports = ({
   omieService,

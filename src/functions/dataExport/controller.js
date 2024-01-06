@@ -4,7 +4,7 @@ const { tryJsonParse } = require('../../common/helpers')
 module.exports = ({
   schema,
   validateRequestSchema,
-  useCase
+  service
 }) => async (request) => {
   try {
     /* AWS SQS event */
@@ -12,7 +12,7 @@ module.exports = ({
 
     const payload = validateRequestSchema(parsedData, schema)
 
-    const data = await useCase({ payload })
+    const data = await service({ payload })
 
     return successHandler({ data })
   } catch (error) {

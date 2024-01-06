@@ -1,5 +1,5 @@
 const { NotFoundException } = require('../../../../src/common/errors')
-const makeUseCase = require('../../../../src/functions/deleteDataByCompany/useCase')
+const makeService = require('../../../../src/functions/deleteDataByCompany/service')
 const { mockSavedOmieCompanies } = require('../../../mocks')
 
 const makeSut = () => {
@@ -80,14 +80,14 @@ const makeSut = () => {
     sendCompanyToDataExportQueue: jest.fn(async () => null)
   }
 
-  const useCase = makeUseCase({
+  const service = makeService({
     repositories: mockRepositories,
     queuer: mockQueuer,
     logger: mockLogger
   })
 
   return {
-    sut: useCase,
+    sut: service,
     mockPayload,
     mockRepositories,
     mockLogger,
@@ -95,7 +95,7 @@ const makeSut = () => {
   }
 }
 
-describe('deleteDataByCompany UseCase', () => {
+describe('deleteDataByCompany service', () => {
   it('Should delete data by company successfully', async () => {
     const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer } = makeSut()
     const result = await sut({ payload: mockPayload })

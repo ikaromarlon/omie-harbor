@@ -1,4 +1,4 @@
-const makeUseCase = require('../../../../src/functions/dataExport/useCase')
+const makeService = require('../../../../src/functions/dataExport/service')
 const {
   mockSavedOmieCompanies,
   mockSavedOmieCategories,
@@ -49,14 +49,14 @@ const makeSut = () => {
     storeCompanyData: jest.fn(async () => Promise.resolve(null))
   }
 
-  const useCase = makeUseCase({
+  const service = makeService({
     repositories: mockRepositories,
     logger: mockLogger,
     bucket: mockBucket
   })
 
   return {
-    sut: useCase,
+    sut: service,
     mockPayload,
     mockRepositories,
     mockLogger,
@@ -67,7 +67,7 @@ const makeSut = () => {
   }
 }
 
-describe('dataExport UseCase', () => {
+describe('dataExport service', () => {
   it('Should call repositories.companies.find successfully', async () => {
     const { sut, mockPayload, mockRepositories, mockLogger, mockBucket, mockSavedOmieProductsServices, mockSavedOmieOrders, mockSavedOmieBillingSaved } = makeSut()
     const result = await sut({ payload: mockPayload })

@@ -1,9 +1,9 @@
 const makeController = require('./controller')
 const schema = require('./schema')
 const validateRequestSchema = require('../../common/utils/validateRequestSchema')
-const makeUseCase = require('./useCase')
+const makeService = require('./service')
 const { dbRepositories } = require('../../repositories')
-const { omieMappings } = require('../../mappings')
+const mappings = require('../../mappings')
 const makeServices = require('../../services')
 const logger = require('../../common/adapters/logger')
 const makeQueuer = require('../../common/adapters/queuer')
@@ -13,9 +13,9 @@ module.exports = async () => {
   const repositories = await dbRepositories()
   const queuer = makeQueuer()
 
-  const useCase = makeUseCase({
+  const service = makeService({
     omieService,
-    omieMappings,
+    mappings,
     repositories,
     logger,
     queuer
@@ -24,7 +24,7 @@ module.exports = async () => {
   const controller = makeController({
     schema,
     validateRequestSchema,
-    useCase
+    service
   })
 
   return controller

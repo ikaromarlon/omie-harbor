@@ -1,4 +1,4 @@
-const makeUseCase = require('../../../../src/functions/ingestionDispatcher/useCase')
+const makeService = require('../../../../src/functions/ingestionDispatcher/service')
 const { mockSavedOmieCompanies } = require('../../../mocks')
 
 const makeSut = () => {
@@ -14,21 +14,21 @@ const makeSut = () => {
     sendCompanyToIngestionQueue: jest.fn(async () => Promise.resolve('https://the-queuer-url/data.json'))
   }
 
-  const useCase = makeUseCase({
+  const service = makeService({
     repositories: mockRepositories,
     queuer: mockQueuer,
     logger: mockLogger
   })
 
   return {
-    sut: useCase,
+    sut: service,
     mockRepositories,
     mockLogger,
     mockQueuer
   }
 }
 
-describe('ingestionDispatcher UseCase', () => {
+describe('ingestionDispatcher service', () => {
   it('Should return success', async () => {
     const { sut, mockRepositories, mockQueuer, mockLogger } = makeSut()
     const result = await sut()

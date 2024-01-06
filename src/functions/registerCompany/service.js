@@ -1,4 +1,4 @@
-const { NotFoundException } = require('../../../common/errors')
+const { NotFoundException } = require('../../common/errors')
 
 module.exports = ({
   omieService,

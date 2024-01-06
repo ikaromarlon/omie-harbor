@@ -1,24 +1,24 @@
 const makeController = require('./controller')
 const schema = require('./schema')
 const validateRequestSchema = require('../../common/utils/validateRequestSchema')
-const makeUseCase = require('./useCase')
+const makeService = require('./service')
 const { dbRepositories } = require('../../repositories')
-const { omieMappings } = require('../../mappings')
+const companyMapping = require('../../shared/mappings/companyMapping')
 const makeServices = require('../../services')
 
 module.exports = async () => {
   const { omieService } = makeServices()
 
-  const useCase = makeUseCase({
+  const service = makeService({
     omieService,
-    companyMapping: omieMappings.company,
+    companyMapping,
     companiesRepository: (await dbRepositories()).companies
   })
 
   const controller = makeController({
     schema,
     validateRequestSchema,
-    useCase
+    service
   })
 
   return controller

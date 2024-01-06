@@ -1,5 +1,5 @@
 const makeController = require('./controller')
-const makeUseCase = require('./useCase')
+const makeService = require('./service')
 const { dbRepositories } = require('../../repositories')
 const logger = require('../../common/adapters/logger')
 const makeQueuer = require('../../common/adapters/queuer')
@@ -8,14 +8,14 @@ module.exports = async () => {
   const repositories = await dbRepositories()
   const queuer = makeQueuer()
 
-  const useCase = makeUseCase({
+  const service = makeService({
     repositories,
     queuer,
     logger
   })
 
   const controller = makeController({
-    useCase
+    service
   })
 
   return controller

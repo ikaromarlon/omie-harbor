@@ -1,4 +1,4 @@
-const makeUseCase = require('../../../../src/functions/registerCompany/useCase')
+const makeService = require('../../../../src/functions/registerCompany/service')
 const { NotFoundException } = require('../../../../src/common/errors')
 const { mockOmieCompaniesResponse, mockOmieCnaeResponse, mockParsedOmieCompany, mockSavedOmieCompanies } = require('../../../mocks')
 
@@ -13,7 +13,7 @@ const makeSut = () => {
     createOrUpdateOne: jest.fn(async () => mockSavedOmieCompanies[0])
   }
 
-  const useCase = makeUseCase({
+  const service = makeService({
     omieService: omieServiceStub,
     companyMapping: companyMappingStub,
     companiesRepository: companiesRepositoryStub
@@ -24,7 +24,7 @@ const makeSut = () => {
   const mockCredentials = { appKey: mockPayload.appKey, appSecret: mockPayload.appSecret }
 
   return {
-    sut: useCase,
+    sut: service,
     mockUserId,
     mockPayload,
     mockCredentials,
@@ -34,7 +34,7 @@ const makeSut = () => {
   }
 }
 
-describe('registerCompany UseCase', () => {
+describe('registerCompany service', () => {
   it('Should return error if company not found at Omie', async () => {
     const sutPackage = makeSut()
     const { sut, mockPayload, mockUserId, mockCredentials, omieServiceStub, companyMappingStub, companiesRepositoryStub } = sutPackage

@@ -14,18 +14,18 @@ const makeSut = () => {
 
   const validateRequestSchemaStub = jest.fn(() => ({ companyId }))
   const mockSchema = {}
-  const useCaseStub = jest.fn(async () => Promise.resolve({ success: true }))
+  const serviceStub = jest.fn(async () => Promise.resolve({ success: true }))
 
   const controller = makeController({
     schema: mockSchema,
     validateRequestSchema: validateRequestSchemaStub,
-    useCase: useCaseStub
+    service: serviceStub
   })
 
   return {
     sut: controller,
     validateRequestSchemaStub,
-    useCaseStub,
+    serviceStub,
     mockRequest,
     mockSchema
   }
@@ -57,9 +57,9 @@ describe('dataExport Controller', () => {
     }
   })
 
-  it('Should throw an InternalServerErrorException if useCase throws an Error', async () => {
-    const { sut, useCaseStub, mockRequest } = makeSut()
-    useCaseStub.mockRejectedValueOnce(new Error('Generic error'))
+  it('Should throw an InternalServerErrorException if service throws an Error', async () => {
+    const { sut, serviceStub, mockRequest } = makeSut()
+    serviceStub.mockRejectedValueOnce(new Error('Generic error'))
     try {
       await sut(mockRequest)
     } catch (error) {
@@ -70,10 +70,10 @@ describe('dataExport Controller', () => {
   })
 
   it('Should return success for SQS request', async () => {
-    const { sut, validateRequestSchemaStub, useCaseStub, mockRequest, mockSchema } = makeSut()
+    const { sut, validateRequestSchemaStub, serviceStub, mockRequest, mockSchema } = makeSut()
     const result = await sut(mockRequest)
     expect(validateRequestSchemaStub).toHaveBeenCalledWith({ companyId }, mockSchema)
-    expect(useCaseStub).toHaveBeenCalledWith({ payload: { companyId } })
+    expect(serviceStub).toHaveBeenCalledWith({ payload: { companyId } })
     expect(result.statusCode).toBe(200)
     expect(result.data).toEqual({ success: true })
   })

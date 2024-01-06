@@ -1,4 +1,4 @@
-const makeUseCase = require('../../../../src/functions/ingestionPerformer/useCase')
+const makeService = require('../../../../src/functions/ingestionPerformer/service')
 const { NotFoundException, UnprocessableEntityException } = require('../../../../src/common/errors')
 const mocks = require('../../../mocks')
 
@@ -130,7 +130,7 @@ const makeSut = () => {
     sendCompanyToDataExportQueue: jest.fn(async () => null)
   }
 
-  const useCase = makeUseCase({
+  const service = makeService({
     omieService: mockOmieService,
     omieMappings: mockOmieMappings,
     repositories: mockRepositories,
@@ -139,7 +139,7 @@ const makeSut = () => {
   })
 
   return {
-    sut: useCase,
+    sut: service,
     mockPayload,
     mockCompanyId,
     mockCredentials,
@@ -170,7 +170,7 @@ afterEach(() => {
   jest.useRealTimers()
 })
 
-describe('ingestionPerformer UseCase', () => {
+describe('ingestionPerformer service', () => {
   it('Should not find company and throws a NotFoundException', async () => {
     const sutPackage = makeSut()
     const { sut, mockPayload, mockRepositories } = sutPackage

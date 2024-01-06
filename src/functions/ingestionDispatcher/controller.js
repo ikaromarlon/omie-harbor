@@ -1,12 +1,12 @@
 const { successHandler, errorHandler } = require('../../common/handlers')
 
 module.exports = ({
-  useCase
+  service
 }) => async () => {
   try {
     /* AWS EventBridge scheduled event */
 
-    const data = await useCase()
+    const data = await service()
 
     return successHandler({ data })
   } catch (error) {

@@ -1,5 +1,5 @@
 const { NotFoundException } = require('../../../../src/common/errors')
-const makeUseCase = require('../../../../src/functions/webhook/useCase')
+const makeService = require('../../../../src/functions/webhook/service')
 const {
   mockSavedOmieCompanies,
   mockSavedOmieServiceOrders,
@@ -53,14 +53,14 @@ const makeSut = () => {
     sendCompanyToDataExportQueue: jest.fn(async () => null)
   }
 
-  const useCase = makeUseCase({
+  const service = makeService({
     repositories: mockRepositories,
     logger: mockLogger,
     queuer: mockQueuer
   })
 
   return {
-    sut: useCase,
+    sut: service,
     mockPayload,
     mockRepositories,
     mockLogger,
@@ -69,7 +69,7 @@ const makeSut = () => {
   }
 }
 
-describe('webhook UseCase', () => {
+describe('webhook service', () => {
   it('Should receive a ping payload and finish process early', async () => {
     const { sut, mockRepositories, mockLogger, mockQueuer } = makeSut()
     const mockPayload = { payload: { ping: 'Omie' } }

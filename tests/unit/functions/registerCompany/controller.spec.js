@@ -9,18 +9,18 @@ const makeSut = () => {
 
   const validateRequestSchemaStub = jest.fn(() => mockRequest.payload)
   const mockSchema = {}
-  const useCaseStub = jest.fn(async () => Promise.resolve(mockSavedOmieCompanies[0]))
+  const serviceStub = jest.fn(async () => Promise.resolve(mockSavedOmieCompanies[0]))
 
   const controller = makeController({
     schema: mockSchema,
     validateRequestSchema: validateRequestSchemaStub,
-    useCase: useCaseStub
+    service: serviceStub
   })
 
   return {
     sut: controller,
     validateRequestSchemaStub,
-    useCaseStub,
+    serviceStub,
     mockRequest,
     mockSchema
   }
@@ -52,9 +52,9 @@ describe('registerCompany Controller', () => {
     }
   })
 
-  it('Should throw an InternalServerErrorException if useCase throws an Error', async () => {
-    const { sut, useCaseStub, mockRequest } = makeSut()
-    useCaseStub.mockRejectedValueOnce(new Error('Generic error'))
+  it('Should throw an InternalServerErrorException if service throws an Error', async () => {
+    const { sut, serviceStub, mockRequest } = makeSut()
+    serviceStub.mockRejectedValueOnce(new Error('Generic error'))
     try {
       await sut(mockRequest)
     } catch (error) {
@@ -65,10 +65,10 @@ describe('registerCompany Controller', () => {
   })
 
   it('Should call validateRequestSchema successfully', async () => {
-    const { sut, validateRequestSchemaStub, useCaseStub, mockRequest, mockSchema } = makeSut()
+    const { sut, validateRequestSchemaStub, serviceStub, mockRequest, mockSchema } = makeSut()
     const result = await sut(mockRequest)
     expect(validateRequestSchemaStub).toHaveBeenCalledWith(mockRequest.payload, mockSchema)
-    expect(useCaseStub).toHaveBeenCalledWith({ payload: mockRequest.payload })
+    expect(serviceStub).toHaveBeenCalledWith({ payload: mockRequest.payload })
     expect(result.statusCode).toBe(200)
     expect(result.data).toEqual(mockSavedOmieCompanies[0])
   })

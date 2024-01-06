@@ -2,22 +2,22 @@ const makeController = require('../../../../src/functions/ingestionDispatcher/co
 const { InternalServerErrorException } = require('../../../../src/common/errors')
 
 const makeSut = () => {
-  const useCaseStub = jest.fn(async () => Promise.resolve({}))
+  const serviceStub = jest.fn(async () => Promise.resolve({}))
 
   const controller = makeController({
-    useCase: useCaseStub
+    service: serviceStub
   })
 
   return {
     sut: controller,
-    useCaseStub
+    serviceStub
   }
 }
 
 describe('IngestionDispatcher Controller', () => {
-  it('Should throw an InternalServerErrorException if useCase throws an Error', async () => {
-    const { sut, useCaseStub } = makeSut()
-    useCaseStub.mockRejectedValueOnce(new Error('Generic error'))
+  it('Should throw an InternalServerErrorException if service throws an Error', async () => {
+    const { sut, serviceStub } = makeSut()
+    serviceStub.mockRejectedValueOnce(new Error('Generic error'))
     try {
       await sut()
     } catch (error) {
@@ -28,9 +28,9 @@ describe('IngestionDispatcher Controller', () => {
   })
 
   it('Should return success with statusCode 200', async () => {
-    const { sut, useCaseStub } = makeSut()
+    const { sut, serviceStub } = makeSut()
     const result = await sut()
-    expect(useCaseStub).toHaveBeenCalled()
+    expect(serviceStub).toHaveBeenCalled()
     expect(result.statusCode).toBe(200)
     expect(result.data).toEqual({})
   })

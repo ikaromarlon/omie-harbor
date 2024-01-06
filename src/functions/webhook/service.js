@@ -1,11 +1,11 @@
-const config = require('../../../config')
-const { NotFoundException } = require('../../../common/errors')
-const { OMIE_WEBHOOK_EVENTS } = require('../../../common/enums')
-const deleteOrder = require('./deleteOrder')
-const deleteContract = require('./deleteContract')
-const deleteAccountPayable = require('./deleteAccountPayable')
-const deleteAccountReceivable = require('./deleteAccountReceivable')
-const deleteFinancialMovement = require('./deleteFinancialMovement')
+const config = require('../../config')
+const { NotFoundException } = require('../../common/errors')
+const { OMIE_WEBHOOK_EVENTS } = require('../../common/enums')
+const deleteOrder = require('./useCases/deleteOrder')
+const deleteContract = require('./useCases/deleteContract')
+const deleteAccountPayable = require('./useCases/deleteAccountPayable')
+const deleteAccountReceivable = require('./useCases/deleteAccountReceivable')
+const deleteFinancialMovement = require('./useCases/deleteFinancialMovement')
 
 module.exports = ({
   repositories,

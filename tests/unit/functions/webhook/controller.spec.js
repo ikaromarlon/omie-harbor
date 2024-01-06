@@ -12,18 +12,18 @@ const makeSut = () => {
 
   const validateRequestSchemaStub = jest.fn(() => ({}))
   const mockSchema = {}
-  const useCaseStub = jest.fn(async () => null)
+  const serviceStub = jest.fn(async () => null)
 
   const controller = makeController({
     schema: mockSchema,
     validateRequestSchema: validateRequestSchemaStub,
-    useCase: useCaseStub
+    service: serviceStub
   })
 
   return {
     sut: controller,
     validateRequestSchemaStub,
-    useCaseStub,
+    serviceStub,
     mockRequest,
     mockSchema
   }
@@ -43,9 +43,9 @@ describe('webhook Controller', () => {
     }
   })
 
-  it('Should throw an InternalServerErrorException if useCase throws an Error', async () => {
-    const { sut, useCaseStub, mockRequest } = makeSut()
-    useCaseStub.mockRejectedValueOnce(new Error('Generic error'))
+  it('Should throw an InternalServerErrorException if service throws an Error', async () => {
+    const { sut, serviceStub, mockRequest } = makeSut()
+    serviceStub.mockRejectedValueOnce(new Error('Generic error'))
     try {
       await sut(mockRequest)
     } catch (error) {
@@ -56,9 +56,9 @@ describe('webhook Controller', () => {
   })
 
   it('Should return success', async () => {
-    const { sut, useCaseStub, mockRequest } = makeSut()
+    const { sut, serviceStub, mockRequest } = makeSut()
     const result = await sut(mockRequest)
-    expect(useCaseStub).toHaveBeenCalledWith({ payload: {} })
+    expect(serviceStub).toHaveBeenCalledWith({ payload: {} })
     expect(result.statusCode).toBe(200)
     expect(result.data).toEqual(null)
   })
