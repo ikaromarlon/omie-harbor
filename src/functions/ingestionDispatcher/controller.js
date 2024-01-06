@@ -4,7 +4,7 @@ module.exports = ({
   useCase
 }) => async () => {
   try {
-    /* AWS EventBridge Cron event */
+    /* AWS EventBridge scheduled event */
 
     const data = await useCase()
 

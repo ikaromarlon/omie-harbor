@@ -72,26 +72,32 @@ const makeSut = () => {
     }
   }
 
-  const mockEventBridge = {
-    triggerBfbDataExport: jest.fn(async () => null)
+  const mockLogger = {
+    info: jest.fn(() => null)
+  }
+
+  const mockQueuer = {
+    sendCompanyToDataExportQueue: jest.fn(async () => null)
   }
 
   const useCase = makeUseCase({
     repositories: mockRepositories,
-    eventBridge: mockEventBridge
+    queuer: mockQueuer,
+    logger: mockLogger
   })
 
   return {
     sut: useCase,
     mockPayload,
     mockRepositories,
-    mockEventBridge
+    mockLogger,
+    mockQueuer
   }
 }
 
 describe('deleteDataByCompany UseCase', () => {
   it('Should delete data by company successfully', async () => {
-    const { sut, mockPayload, mockRepositories, mockEventBridge } = makeSut()
+    const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer } = makeSut()
     const result = await sut({ payload: mockPayload })
     const { id } = mockPayload
     expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ _id: id })
@@ -107,7 +113,8 @@ describe('deleteDataByCompany UseCase', () => {
     expect(mockRepositories.accountsPayable.deleteMany).toHaveBeenCalledWith({ companyId: id })
     expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledWith({ companyId: id })
     expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledWith({ companyId: id })
-    expect(mockEventBridge.triggerBfbDataExport).toHaveBeenCalledWith(id)
+    expect(mockLogger.info).toHaveBeenCalledTimes(1)
+    expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(id)
     expect(result).toEqual({
       success: true,
       company: {
@@ -133,7 +140,7 @@ describe('deleteDataByCompany UseCase', () => {
   })
 
   it('Should throw a NotFoundError due to not find company', async () => {
-    const { sut, mockPayload, mockRepositories, mockEventBridge } = makeSut()
+    const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer } = makeSut()
     mockPayload.id = 'any-invalid-company-id'
     mockRepositories.companies.findOne.mockResolvedValueOnce(null)
     try {
@@ -153,7 +160,8 @@ describe('deleteDataByCompany UseCase', () => {
       expect(mockRepositories.accountsPayable.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
-      expect(mockEventBridge.triggerBfbDataExport).toHaveBeenCalledTimes(0)
+      expect(mockLogger.info).toHaveBeenCalledTimes(0)
+      expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
       expect(error).toBeInstanceOf(NotFoundError)
       expect(error.message).toBe('Company not found')
     }

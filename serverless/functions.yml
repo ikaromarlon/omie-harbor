@@ -58,8 +58,9 @@ ingestionPerformer:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - events:PutEvents
-      Resource: '*' # set permission to eventbus default or create new one
+        - sqs:SendMessage
+      Resource:
+        - Fn::GetAtt: [ DataExportQueue, Arn ]
   events:
     - sqs:
         arn:
@@ -85,12 +86,6 @@ dataExport:
         arn:
           Fn::GetAtt: [ DataExportQueue, Arn ]
         batchSize: 1
-    - eventBridge:
-        pattern:
-          source:
-            - ${self:custom.service.name}
-          detail-type:
-            - ${self:custom.service.name}.dataExport
   package:
     patterns:
       - 'src/functions/dataExport/**'

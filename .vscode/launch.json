@@ -57,7 +57,7 @@
         "invoke",
         "local",
         "-f", "ingestionPerformer",
-        "-p", "${workspaceFolder}/.vscode/events/ingestionPerformer.json"
+        "-p", "${workspaceFolder}/.vscode/events/ingestionPerformer-sqs.json"
       ],
       "runtimeArgs": [
         "--nolazy"
@@ -99,7 +99,7 @@
         "invoke",
         "local",
         "-f", "deleteDataByCompany",
-        "-p", "${workspaceFolder}/.vscode/events/deleteDataByCompany.json"
+        "-p", "${workspaceFolder}/.vscode/events/deleteDataByCompany-http.json"
       ],
       "runtimeArgs": [
         "--nolazy"
@@ -111,7 +111,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Invoke dataExport - EventBridge",
+      "name": "Invoke dataExport",
       "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
       "cwd": "${workspaceFolder}",
       "localRoot": "${workspaceFolder}",
@@ -120,28 +120,7 @@
         "invoke",
         "local",
         "-f", "dataExport",
-        "-p", "${workspaceFolder}/.vscode/events/dataExport-eventBridge.json"
-      ],
-      "runtimeArgs": [
-        "--nolazy"
-      ],
-      "env": {
-        "SLS_DEBUG": "*"
-      },
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Invoke dataExport - SQS",
-      "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
-      "cwd": "${workspaceFolder}",
-      "localRoot": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "invoke",
-        "local",
-        "-f", "dataExport",
-        "-p", "${workspaceFolder}/.vscode/events/dataExport-sqs.json.json"
+        "-p", "${workspaceFolder}/.vscode/events/dataExport-sqs.json"
       ],
       "runtimeArgs": [
         "--nolazy"

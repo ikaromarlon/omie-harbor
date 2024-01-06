@@ -3,15 +3,17 @@ const schema = require('./schema')
 const validateRequestSchema = require('../../common/utils/validateRequestSchema')
 const makeUseCase = require('./useCase')
 const { dbRepositories } = require('../../repositories')
-const makeEventBridge = require('../../common/adapters/eventBridge')
+const logger = require('../../common/adapters/logger')
+const makeQueuer = require('../../common/adapters/queuer')
 
 module.exports = async () => {
   const repositories = await dbRepositories()
-  const eventBridge = makeEventBridge('deleteDataByCompany')
+  const queuer = makeQueuer()
 
   const useCase = makeUseCase({
     repositories,
-    eventBridge
+    logger,
+    queuer
   })
 
   const controller = makeController({

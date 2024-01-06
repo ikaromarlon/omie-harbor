@@ -77,20 +77,4 @@ describe('dataExport Controller', () => {
     expect(result.statusCode).toBe(200)
     expect(result.data).toEqual({ success: true })
   })
-
-  it('Should return success for eventBridge request', async () => {
-    const { sut, validateRequestSchemaStub, useCaseStub, mockSchema } = makeSut()
-    const mockRequest = {
-      original: {
-        detail: {
-          companyId
-        }
-      }
-    }
-    const result = await sut(mockRequest)
-    expect(validateRequestSchemaStub).toHaveBeenCalledWith({ companyId }, mockSchema)
-    expect(useCaseStub).toHaveBeenCalledWith({ payload: { companyId } })
-    expect(result.statusCode).toBe(200)
-    expect(result.data).toEqual({ success: true })
-  })
 })
