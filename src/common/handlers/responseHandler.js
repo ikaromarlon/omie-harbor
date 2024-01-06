@@ -1,5 +1,4 @@
 const config = require('../../config')
-const mailer = require('../adapters/mailer')
 const logger = require('../adapters/logger')
 // const { isClientError } = require('../errors')
 
@@ -39,10 +38,6 @@ module.exports = (data, headers) => {
       // }
 
       logger.error({ title: 'PROCESS ENDED WITH ERROR', message, data: fullError })
-
-      if (config.services.mailer.errorNotificationRecipientAddress) {
-        await mailer().sendErrorNotification(fullError)
-      }
 
       if (config.app.stage === 'prd') {
         return response(statusCode, simpleError)

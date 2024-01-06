@@ -1,52 +1,33 @@
-const { version, name } = require('../../package.json')
-const { env } = process
-
-const service = env.SERVICE ?? name
-const stage = env.STAGE ?? 'dev'
-const source = `${service}-${stage}`
-
 module.exports = Object.freeze({
   app: {
-    name: 'Omie Harbor',
-    service,
-    stage,
-    source,
-    version,
-    user: 'SYSTEM',
-    charset: 'UTF-8',
-    region: env.REGION
+    name: process.env.APP_NAME,
+    service: process.env.SERVICE,
+    stage: process.env.STAGE,
+    version: process.env.VERSION,
+    region: process.env.REGION,
+    brazilianOffSetTimeZone: -3
   },
-  mongodb: {
-    uri: env.MONGODB_URI,
-    dbName: `omie-harbor-${stage}`
-  },
-  SQS: {
-    ingestionQueueUrl: env.SQS_INGESTION_QUEUE_URL,
-    dataExportQueueUrl: env.SQS_DATA_EXPORT_QUEUE_URL
-  },
-  S3: {
-    detaExport: {
-      bucketName: env.S3_DATA_EXPORT_BUCKET_NAME
+  db: {
+    mongodb: {
+      uri: process.env.MONGODB_URI,
+      dbName: `omie-harbor-${process.env.STAGE}`
     }
-  },
-  SES: {
-    region: env.SES_REGION
   },
   services: {
     omie: {
-      ingestionPeriod: 3, /** days back */
       apiBaseUrl: 'https://app.omie.com.br/api/v1',
-      maxRequestPerPeriod: 200, /** in seconds */
-      requestPeriod: 60 /** in seconds */
+      ingestionPeriod: 3, /** days back */
+      requestPeriod: 60, /** in seconds */
+      maxRequestPerPeriod: 200 /** in seconds */
     },
-    mailer: {
-      defaultSender: `no-reply@${env.DOMAIN}`,
-      errorNotificationRecipientAddress: env.ERROR_NOTIFICATION_RECIPIENT_ADDRESS || '',
-      errorNotificationRecipientAddressCopy: env.ERROR_NOTIFICATION_RECIPIENT_ADDRESS_COPY || ''
+    SQS: {
+      ingestionQueueUrl: process.env.SQS_INGESTION_QUEUE_URL,
+      dataExportQueueUrl: process.env.SQS_DATA_EXPORT_QUEUE_URL
+    },
+    S3: {
+      detaExportBucket: {
+        name: process.env.S3_DATA_EXPORT_BUCKET_NAME
+      }
     }
-  },
-  flags: {
-    logEachOmieError: env.FLAG_LOG_EACH_OMIE_ERROR === 'true',
-    updateEmptyRecords: env.FLAG_UPDATE_EMPTY_RECORDS === 'true'
   }
 })

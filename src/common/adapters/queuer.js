@@ -6,7 +6,7 @@ module.exports = () => {
   return {
     sendCompanyToIngestionQueue: async (companyId) => {
       const command = new SendMessageCommand({
-        QueueUrl: config.SQS.ingestionQueueUrl,
+        QueueUrl: config.services.SQS.ingestionQueueUrl,
         MessageGroupId: 'ingestion',
         MessageBody: JSON.stringify({ companyId })
       })
@@ -15,7 +15,7 @@ module.exports = () => {
     },
     sendCompanyToDataExportQueue: async (companyId) => {
       const command = new SendMessageCommand({
-        QueueUrl: config.SQS.dataExportQueueUrl,
+        QueueUrl: config.services.SQS.dataExportQueueUrl,
         MessageGroupId: 'data-export',
         MessageBody: JSON.stringify({ companyId })
       })

@@ -1,5 +1,6 @@
-const { randomUUID: uuid } = require('crypto')
+const { randomUUID: uuid } = require('node:crypto')
 const uuidFrom = require('uuid-by-string')
+const config = require('../../config')
 
 const getNumbers = (value) => String(value).replace(/[^0-9]/gi, '')
 
@@ -11,10 +12,9 @@ const isoDateToBR = (value) => {
 const brDateToISO = (date, time = '') => {
   const d = date.split('/').reverse().join('-')
   if (!time) return d
-  const BR_OFFSET_TIME = -3 // Refactor: put this const in config.js
   const [h = 0, m = 0, s = 0, ms = 0] = time.split(/\D/).map(Number)
   const di = new Date(d)
-  di.setUTCHours(h - BR_OFFSET_TIME, m, s, ms)
+  di.setUTCHours(h - config.app.brazilianOffSetTimeZone, m, s, ms)
   return di.toISOString()
 }
 

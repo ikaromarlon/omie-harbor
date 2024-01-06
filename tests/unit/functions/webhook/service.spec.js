@@ -1,3 +1,9 @@
+jest.mock('../../../../src/config', () => ({
+  app: {
+    name: 'Omie Harbor'
+  }
+}))
+
 const { NotFoundException } = require('../../../../src/common/errors')
 const makeService = require('../../../../src/functions/webhook/service')
 const {

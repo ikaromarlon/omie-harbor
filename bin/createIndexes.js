@@ -4,7 +4,7 @@ module.exports = async ({ config }) => {
   try {
     console.log('Creating MongoDB Indexes:')
     console.log(config.bin.layout.dashRuler)
-    const db = await mongodb.connect(config.mongodb.uri, config.mongodb.dbName)
+    const db = await mongodb.connect(config.db.mongodb.uri, config.db.mongodb.dbName)
 
     console.log('users...')
     await db.collection('users').createIndexes([
