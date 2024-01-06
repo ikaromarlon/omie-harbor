@@ -1,4 +1,4 @@
-const { NotFoundError } = require('../../../../src/common/errors')
+const { NotFoundException } = require('../../../../src/common/errors')
 const makeUseCase = require('../../../../src/functions/deleteDataByCompany/useCase')
 const { mockSavedOmieCompanies } = require('../../../mocks')
 
@@ -139,7 +139,7 @@ describe('deleteDataByCompany UseCase', () => {
     })
   })
 
-  it('Should throw a NotFoundError due to not find company', async () => {
+  it('Should throw a NotFoundException due to not find company', async () => {
     const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer } = makeSut()
     mockPayload.id = 'any-invalid-company-id'
     mockRepositories.companies.findOne.mockResolvedValueOnce(null)
@@ -162,7 +162,7 @@ describe('deleteDataByCompany UseCase', () => {
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockLogger.info).toHaveBeenCalledTimes(0)
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
-      expect(error).toBeInstanceOf(NotFoundError)
+      expect(error).toBeInstanceOf(NotFoundException)
       expect(error.message).toBe('Company not found')
     }
   })

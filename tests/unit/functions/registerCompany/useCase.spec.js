@@ -1,5 +1,5 @@
 const makeUseCase = require('../../../../src/functions/registerCompany/useCase')
-const { NotFoundError } = require('../../../../src/common/errors')
+const { NotFoundException } = require('../../../../src/common/errors')
 const { mockOmieCompaniesResponse, mockOmieCnaeResponse, mockParsedOmieCompany, mockSavedOmieCompanies } = require('../../../mocks')
 
 const makeSut = () => {
@@ -43,7 +43,7 @@ describe('registerCompany UseCase', () => {
     try {
       await sut({ userId: mockUserId, payload: mockPayload })
     } catch (error) {
-      expect(error).toBeInstanceOf(NotFoundError)
+      expect(error).toBeInstanceOf(NotFoundException)
       expect(error.message).toBe('Company not found in Omie service. Check the AppKey and AppSecret and try again.')
     }
     expect(companiesRepositoryStub.findOne).toHaveBeenCalledWith({ credentials: mockCredentials })

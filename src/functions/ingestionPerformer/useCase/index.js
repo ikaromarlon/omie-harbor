@@ -1,5 +1,5 @@
 const config = require('../../../config')
-const { NotFoundError, ValidationError } = require('../../../common/errors')
+const { NotFoundException, UnprocessableEntityException } = require('../../../common/errors')
 const { daysToMilliseconds, uuidFrom } = require('../../../common/helpers')
 const updateDimensions = require('./updateDimensions')
 const updateFacts = require('./updateFacts')
@@ -41,10 +41,10 @@ module.exports = ({
     const company = await repositories.companies.findOne({ _id: companyId })
 
     if (!company) {
-      throw new NotFoundError(`Company ${companyId} not found`)
+      throw new NotFoundException(`Company ${companyId} not found`)
     }
     if (company.isActive !== true) {
-      throw new ValidationError(`Company ${companyId} is not active`)
+      throw new UnprocessableEntityException(`Company ${companyId} is not active`)
     }
 
     let { startDate, endDate } = payload

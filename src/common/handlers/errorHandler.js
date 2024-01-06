@@ -1,6 +1,6 @@
-const { ApplicationError, InternalServerError } = require('../errors')
+const { ApplicationError, InternalServerErrorException } = require('../errors')
 
 module.exports = (error) => {
   if (error instanceof ApplicationError) return error
-  return new InternalServerError(error.message, error.stack)
+  return new InternalServerErrorException(error.message, error.stack)
 }

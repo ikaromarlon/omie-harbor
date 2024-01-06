@@ -1,4 +1,4 @@
-const { NotFoundError } = require('../../../../src/common/errors')
+const { NotFoundException } = require('../../../../src/common/errors')
 const makeUseCase = require('../../../../src/functions/webhook/useCase')
 const {
   mockSavedOmieCompanies,
@@ -83,14 +83,14 @@ describe('webhook UseCase', () => {
     })
   })
 
-  it('Should not find company and throw an NotFoundError', async () => {
+  it('Should not find company and throw an NotFoundException', async () => {
     const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer } = makeSut()
     mockRepositories.companies.findOne.mockResolvedValueOnce(null)
     try {
       await sut(mockPayload)
       expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ 'credentials.appKey': mockPayload.payload.appKey })
     } catch (error) {
-      expect(error).toBeInstanceOf(NotFoundError)
+      expect(error).toBeInstanceOf(NotFoundException)
       expect(error.statusCode).toBe(404)
       expect(error.message).toBe(`Company related to appKey '${mockPayload.payload.appKey}' not found`)
     }

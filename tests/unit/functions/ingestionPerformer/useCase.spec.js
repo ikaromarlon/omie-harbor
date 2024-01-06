@@ -1,5 +1,5 @@
 const makeUseCase = require('../../../../src/functions/ingestionPerformer/useCase')
-const { NotFoundError, ValidationError } = require('../../../../src/common/errors')
+const { NotFoundException, UnprocessableEntityException } = require('../../../../src/common/errors')
 const mocks = require('../../../mocks')
 
 const makeSut = () => {
@@ -171,7 +171,7 @@ afterEach(() => {
 })
 
 describe('ingestionPerformer UseCase', () => {
-  it('Should not find company and throws a NotFoundError', async () => {
+  it('Should not find company and throws a NotFoundException', async () => {
     const sutPackage = makeSut()
     const { sut, mockPayload, mockRepositories } = sutPackage
     const spySut = jest.spyOn(sutPackage, 'sut')
@@ -180,7 +180,7 @@ describe('ingestionPerformer UseCase', () => {
     try {
       await sut({ payload: mockPayload })
     } catch (error) {
-      expect(error).toBeInstanceOf(NotFoundError)
+      expect(error).toBeInstanceOf(NotFoundException)
       expect(error.statusCode).toBe(404)
       expect(error.message).toBe(`Company ${mockPayload.companyId} not found`)
     }
@@ -188,7 +188,7 @@ describe('ingestionPerformer UseCase', () => {
     expect(spySut).toReturnTimes(0)
   })
 
-  it('Should find company but throws a ValidationError', async () => {
+  it('Should find company but throws a UnprocessableEntityException', async () => {
     const sutPackage = makeSut()
     const { sut, mockPayload, mockRepositories } = sutPackage
     const spySut = jest.spyOn(sutPackage, 'sut')
@@ -196,7 +196,7 @@ describe('ingestionPerformer UseCase', () => {
     try {
       await sut({ payload: mockPayload })
     } catch (error) {
-      expect(error).toBeInstanceOf(ValidationError)
+      expect(error).toBeInstanceOf(UnprocessableEntityException)
       expect(error.statusCode).toBe(422)
       expect(error.message).toBe(`Company ${mockPayload.companyId} is not active`)
     }

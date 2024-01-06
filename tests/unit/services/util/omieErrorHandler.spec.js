@@ -1,5 +1,5 @@
 const omieErrorHandler = require('../../../../src/services/utils/omieErrorHandler')
-const { ExternalServerError } = require('../../../../src/common/errors')
+const { BadGatewayException } = require('../../../../src/common/errors')
 
 const makeSut = () => {
   const mockOmieError = new Error('Omie HTTP error response message')
@@ -18,12 +18,12 @@ const makeSut = () => {
 }
 
 describe('Services Omie Error Handler Adapter', () => {
-  it('Should throw an ExternalServerError if omieError should not be ignored', async () => {
+  it('Should throw an BadGatewayException if omieError should not be ignored', async () => {
     const { sut, mockOmieError } = makeSut()
     try {
       await sut(mockOmieError, 'any value of any type could be informed here')
     } catch (error) {
-      expect(error).toBeInstanceOf(ExternalServerError)
+      expect(error).toBeInstanceOf(BadGatewayException)
       expect(error.statusCode).toBe(502)
       expect(error.message).toBe('Omie Service Request Error: [SOAP-ENV:Server] The server error message')
       expect(error.data).toBeTruthy()
@@ -39,14 +39,14 @@ describe('Services Omie Error Handler Adapter', () => {
     expect(result).toBe('any value of any type could be informed here')
   })
 
-  it('Should force throw an ExternalServerError if omieError should not be ignored', async () => {
+  it('Should force throw an BadGatewayException if omieError should not be ignored', async () => {
     const { sut, mockOmieError } = makeSut()
     try {
       mockOmieError.response.data.faultcode = 'SOAP-ENV:Client-8020'
       const forceThrow = true
       await sut(mockOmieError, 'any value of any type could be informed here', forceThrow)
     } catch (error) {
-      expect(error).toBeInstanceOf(ExternalServerError)
+      expect(error).toBeInstanceOf(BadGatewayException)
       expect(error.statusCode).toBe(502)
       expect(error.message).toBe('Omie Service Request Error: [SOAP-ENV:Client-8020] The server error message')
       expect(error.data).toBeTruthy()

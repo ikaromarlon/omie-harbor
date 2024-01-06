@@ -1,5 +1,5 @@
 const makeController = require('../../../../src/functions/ingestionDispatcher/controller')
-const { InternalServerError } = require('../../../../src/common/errors')
+const { InternalServerErrorException } = require('../../../../src/common/errors')
 
 const makeSut = () => {
   const useCaseStub = jest.fn(async () => Promise.resolve({}))
@@ -15,13 +15,13 @@ const makeSut = () => {
 }
 
 describe('IngestionDispatcher Controller', () => {
-  it('Should throw an InternalServerError if useCase throws an Error', async () => {
+  it('Should throw an InternalServerErrorException if useCase throws an Error', async () => {
     const { sut, useCaseStub } = makeSut()
     useCaseStub.mockRejectedValueOnce(new Error('Generic error'))
     try {
       await sut()
     } catch (error) {
-      expect(error).toBeInstanceOf(InternalServerError)
+      expect(error).toBeInstanceOf(InternalServerErrorException)
       expect(error.statusCode).toBe(500)
       expect(error.message).toBe('Generic error')
     }

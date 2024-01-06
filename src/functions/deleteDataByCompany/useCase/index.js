@@ -1,4 +1,4 @@
-const { NotFoundError } = require('../../../common/errors')
+const { NotFoundException } = require('../../../common/errors')
 
 module.exports = ({
   repositories,
@@ -10,7 +10,7 @@ module.exports = ({
   const company = await repositories.companies.findOne({ _id: id })
 
   if (!company) {
-    throw new NotFoundError('Company not found')
+    throw new NotFoundException('Company not found')
   }
 
   const deletableRepositories = Object.values(repositories).filter(repository => repository.allowsDeleteAllData)

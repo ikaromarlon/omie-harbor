@@ -1,5 +1,5 @@
 const config = require('../../../config')
-const { NotFoundError } = require('../../../common/errors')
+const { NotFoundException } = require('../../../common/errors')
 const { OMIE_WEBHOOK_EVENTS } = require('../../../common/enums')
 const deleteOrder = require('./deleteOrder')
 const deleteContract = require('./deleteContract')
@@ -36,7 +36,7 @@ module.exports = ({
     const company = await repositories.companies.findOne({ 'credentials.appKey': appKey })
 
     if (!company) {
-      throw new NotFoundError(`Company related to appKey '${appKey}' not found`)
+      throw new NotFoundException(`Company related to appKey '${appKey}' not found`)
     }
 
     const action = actions[topic]

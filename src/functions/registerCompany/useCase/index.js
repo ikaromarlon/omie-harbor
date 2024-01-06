@@ -1,4 +1,4 @@
-const { NotFoundError } = require('../../../common/errors')
+const { NotFoundException } = require('../../../common/errors')
 
 module.exports = ({
   omieService,
@@ -16,7 +16,7 @@ module.exports = ({
   const omieCompany = await omieService.getCompany(credentials, true)
 
   if (!omieCompany) {
-    throw new NotFoundError('Company not found in Omie service. Check the AppKey and AppSecret and try again.')
+    throw new NotFoundException('Company not found in Omie service. Check the AppKey and AppSecret and try again.')
   }
 
   const omieCnae = await omieService.getCnae(credentials)

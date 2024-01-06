@@ -1,4 +1,4 @@
-const { ExternalServerError } = require('../../common/errors')
+const { BadGatewayException } = require('../../common/errors')
 
 /**
  * Receive an error from Omie API and check if it should be thrown or not
@@ -6,7 +6,7 @@ const { ExternalServerError } = require('../../common/errors')
  * @param {*} response The rensponse that should be returned if the error should not be thrown
  * @param {Boolean} forceThrow Force the Error throw
  * @returns {*} Returns the response parameter or an error should be thrown
- * @throws {ExternalServerError} The message iuncludes the information provided by error with Bad Gateway HTTP response
+ * @throws {BadGatewayException} The message iuncludes the information provided by error with Bad Gateway HTTP response
  */
 module.exports = (error, response = null, forceThrow = false) => {
   const { faultcode, faultstring, error_code, error_message } = error.response?.data || {} // eslint-disable-line
@@ -24,7 +24,7 @@ module.exports = (error, response = null, forceThrow = false) => {
 
   const errorFound = errorMapping[faultcode]
 
-  if (forceThrow || !errorFound || errorFound.throw) throw new ExternalServerError(`Omie Service Request Error: [${faultcode ?? error_code}] ${faultstring ?? error_message}`, error) // eslint-disable-line
+  if (forceThrow || !errorFound || errorFound.throw) throw new BadGatewayException(`Omie Service Request Error: [${faultcode ?? error_code}] ${faultstring ?? error_message}`, error) // eslint-disable-line
 
   return response
 }

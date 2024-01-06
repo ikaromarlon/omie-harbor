@@ -1,5 +1,5 @@
 const makeController = require('../../../../src/functions/registerCompany/controller')
-const { ValidationError, InternalServerError } = require('../../../../src/common/errors')
+const { UnprocessableEntityException, InternalServerErrorException } = require('../../../../src/common/errors')
 const { mockSavedOmieCompanies } = require('../../../mocks')
 
 const makeSut = () => {
@@ -27,38 +27,38 @@ const makeSut = () => {
 }
 
 describe('registerCompany Controller', () => {
-  it('Should throw an InternalServerError if validateRequestSchema throws an Error', async () => {
+  it('Should throw an InternalServerErrorException if validateRequestSchema throws an Error', async () => {
     const { sut, validateRequestSchemaStub, mockRequest } = makeSut()
     validateRequestSchemaStub.mockImplementationOnce(() => { throw new Error('Generic error') })
     try {
       await sut(mockRequest)
     } catch (error) {
-      expect(error).toBeInstanceOf(InternalServerError)
+      expect(error).toBeInstanceOf(InternalServerErrorException)
       expect(error.statusCode).toBe(500)
       expect(error.message).toBe('Generic error')
     }
   })
 
-  it('Should throw an ValidationError if validateRequestSchema throws a ValidationError', async () => {
+  it('Should throw an UnprocessableEntityException if validateRequestSchema throws a UnprocessableEntityException', async () => {
     const { sut, validateRequestSchemaStub, mockRequest } = makeSut()
-    validateRequestSchemaStub.mockImplementationOnce(() => { throw new ValidationError('appSecret is required') })
+    validateRequestSchemaStub.mockImplementationOnce(() => { throw new UnprocessableEntityException('appSecret is required') })
     mockRequest.payload = { appKey: 'the_app_key' }
     try {
       await sut(mockRequest)
     } catch (error) {
-      expect(error).toBeInstanceOf(ValidationError)
+      expect(error).toBeInstanceOf(UnprocessableEntityException)
       expect(error.statusCode).toBe(422)
       expect(error.message).toBe('appSecret is required')
     }
   })
 
-  it('Should throw an InternalServerError if useCase throws an Error', async () => {
+  it('Should throw an InternalServerErrorException if useCase throws an Error', async () => {
     const { sut, useCaseStub, mockRequest } = makeSut()
     useCaseStub.mockRejectedValueOnce(new Error('Generic error'))
     try {
       await sut(mockRequest)
     } catch (error) {
-      expect(error).toBeInstanceOf(InternalServerError)
+      expect(error).toBeInstanceOf(InternalServerErrorException)
       expect(error.statusCode).toBe(500)
       expect(error.message).toBe('Generic error')
     }
