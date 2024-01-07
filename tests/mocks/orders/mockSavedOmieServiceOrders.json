@@ -15,7 +15,7 @@
     "categoryId": "44d50267-4bc1-42bc-923a-00df2968a2be",
     "type": "OS",
     "registerDate": "2019-05-03T19:54:33.000Z",
-    "expectedPaymentDate": "2019-05-03",
+    "expectedPaymentDate": "2019-05-03T03:00:00.000Z",
     "grossValue": 13215.44,
     "netValue": 13215.44,
     "discounts": 0,

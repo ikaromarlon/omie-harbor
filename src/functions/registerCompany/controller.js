@@ -2,12 +2,12 @@ const { successHandler, errorHandler } = require('../../common/handlers')
 
 module.exports = ({
   schema,
-  validateRequestSchema,
+  validateWithSchema,
   service
 }) => async (request) => {
   try {
     /* AWS API Gateway HTTP event */
-    const payload = validateRequestSchema(request.payload, schema)
+    const payload = validateWithSchema(request.payload, schema)
 
     const data = await service({ payload })
 

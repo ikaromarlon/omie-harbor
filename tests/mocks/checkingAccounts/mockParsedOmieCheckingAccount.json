@@ -13,7 +13,7 @@
     "description": "Conta Corrente"
   },
   "initialBalance": 0,
-  "initialBalanceDate": "2019-07-01",
+  "initialBalanceDate": "2019-07-01T03:00:00.000Z",
   "blocked": false,
   "isActive": true
 }

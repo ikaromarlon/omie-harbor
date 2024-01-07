@@ -1,10 +1,10 @@
-const { emptyProperties } = require('../../../common/helpers')
+const { nullProperties } = require('../../../common/utils')
 
 const makeEmptyRecord = (id, { companyId, isActive, ...data }) => {
   const emptyRecord = {
     _id: id,
     companyId,
-    ...emptyProperties(data, true)
+    ...nullProperties(data, true)
   }
   if (isActive !== undefined) emptyRecord.isActive = true
   return emptyRecord

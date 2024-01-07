@@ -292,7 +292,7 @@ describe('FinancialMovement Mapping', () => {
       accountReceivableId: mockAccountReceivableId
     })
 
-    expect(result).toEqual({ ...mockParsedOmieFinancialMovement, registerDate: '2019-05-03', issueDate: null, paymentDate: null, dueDate: null, expectedPaymentDate: null })
+    expect(result).toEqual({ ...mockParsedOmieFinancialMovement, registerDate: '2019-05-03T03:00:00.000Z', issueDate: null, paymentDate: null, dueDate: null, expectedPaymentDate: null })
   })
 
   it('Should return mapped financial movement successfully with reconciliationDate', () => {
@@ -334,7 +334,7 @@ describe('FinancialMovement Mapping', () => {
       accountReceivableId: mockAccountReceivableId
     })
 
-    expect(result).toEqual({ ...mockParsedOmieFinancialMovement, reconciliationDate: '2019-01-02' })
+    expect(result).toEqual({ ...mockParsedOmieFinancialMovement, reconciliationDate: '2019-01-02T03:00:00.000Z' })
   })
 
   it('Should return mapped financial movement successfully without category: use emptyRecordsIds.category instead', () => {

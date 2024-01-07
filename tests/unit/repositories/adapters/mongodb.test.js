@@ -1,5 +1,5 @@
 const { Db } = require('mongodb')
-const mongodb = require('../../../../src/repositories/utils/mongodb')
+const mongodb = require('../../../../src/repositories/helpers/mongodb')
 
 const makeSut = () => ({ sut: mongodb })
 

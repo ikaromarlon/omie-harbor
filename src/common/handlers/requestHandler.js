@@ -1,4 +1,4 @@
-const bodyParser = require('../utils/bodyParser')
+const bodyParser = require('../helpers/bodyParser')
 
 module.exports = (request, context) => {
   const {

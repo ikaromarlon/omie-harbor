@@ -1,5 +1,5 @@
 const factory = require('../../../../src/functions/webhook')
-const mongodb = require('../../../../src/repositories/utils/mongodb')
+const mongodb = require('../../../../src/repositories/helpers/mongodb')
 
 const makeSut = () => ({ sut: factory })
 

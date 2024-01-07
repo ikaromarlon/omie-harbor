@@ -1,5 +1,5 @@
-const mongodb = require('../../../../src/repositories/utils/mongodb')
-const makeDbRepository = require('../../../../src/repositories/utils/makeDbRepository')
+const mongodb = require('../../../../src/repositories/helpers/mongodb')
+const makeDbRepository = require('../../../../src/repositories/helpers/makeDbRepository')
 
 let db
 const dbName = 'test'

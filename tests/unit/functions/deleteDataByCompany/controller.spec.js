@@ -8,19 +8,19 @@ const makeSut = () => {
     payload: { companyId }
   }
 
-  const validateRequestSchemaStub = jest.fn(() => (mockRequest.payload))
+  const validateWithSchemaStub = jest.fn(() => (mockRequest.payload))
   const mockSchema = {}
   const serviceStub = jest.fn(async () => Promise.resolve({ success: true }))
 
   const controller = makeController({
     schema: mockSchema,
-    validateRequestSchema: validateRequestSchemaStub,
+    validateWithSchema: validateWithSchemaStub,
     service: serviceStub
   })
 
   return {
     sut: controller,
-    validateRequestSchemaStub,
+    validateWithSchemaStub,
     serviceStub,
     mockRequest,
     mockSchema
@@ -28,9 +28,9 @@ const makeSut = () => {
 }
 
 describe('deleteDataByCompany Controller', () => {
-  it('Should throw an InternalServerErrorException if validateRequestSchema throws an Error', async () => {
-    const { sut, validateRequestSchemaStub, mockRequest } = makeSut()
-    validateRequestSchemaStub.mockImplementationOnce(() => { throw new Error('Generic error') })
+  it('Should throw an InternalServerErrorException if validateWithSchema throws an Error', async () => {
+    const { sut, validateWithSchemaStub, mockRequest } = makeSut()
+    validateWithSchemaStub.mockImplementationOnce(() => { throw new Error('Generic error') })
     try {
       await sut(mockRequest)
     } catch (error) {
@@ -40,9 +40,9 @@ describe('deleteDataByCompany Controller', () => {
     }
   })
 
-  it('Should throw an UnprocessableEntityException if validateRequestSchema throws a UnprocessableEntityException', async () => {
-    const { sut, validateRequestSchemaStub, mockRequest } = makeSut()
-    validateRequestSchemaStub.mockImplementationOnce(() => { throw new UnprocessableEntityException('Invalid field') })
+  it('Should throw an UnprocessableEntityException if validateWithSchema throws a UnprocessableEntityException', async () => {
+    const { sut, validateWithSchemaStub, mockRequest } = makeSut()
+    validateWithSchemaStub.mockImplementationOnce(() => { throw new UnprocessableEntityException('Invalid field') })
     mockRequest.payload.companyId = 'invalid_companyId'
     try {
       await sut(mockRequest)
@@ -66,10 +66,10 @@ describe('deleteDataByCompany Controller', () => {
   })
 
   it('Should return success: http request', async () => {
-    const { sut, validateRequestSchemaStub, serviceStub, mockSchema } = makeSut()
+    const { sut, validateWithSchemaStub, serviceStub, mockSchema } = makeSut()
     const mockRequest = { payload: { companyId } }
     const result = await sut(mockRequest)
-    expect(validateRequestSchemaStub).toHaveBeenCalledWith(mockRequest.payload, mockSchema)
+    expect(validateWithSchemaStub).toHaveBeenCalledWith(mockRequest.payload, mockSchema)
     expect(serviceStub).toHaveBeenCalledWith({ payload: { companyId } })
     expect(result.statusCode).toBe(200)
     expect(result.data).toEqual({ success: true })

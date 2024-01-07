@@ -1,5 +1,5 @@
 const axios = require('axios')
-const { millisecondsToSeconds } = require('../helpers')
+const { millisecondsToSeconds } = require('../utils')
 
 module.exports = () => {
   const requester = axios

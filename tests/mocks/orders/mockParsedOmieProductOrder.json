@@ -13,7 +13,7 @@
   "categoryId": "44d50267-4bc1-42bc-923a-00df2968a2be",
   "type": "PEDIDO",
   "registerDate": "2021-06-01T12:32:05.000Z",
-  "expectedPaymentDate": "2021-06-02",
+  "expectedPaymentDate": "2021-06-02T03:00:00.000Z",
   "grossValue": 37,
   "netValue": 37,
   "discounts": 0,

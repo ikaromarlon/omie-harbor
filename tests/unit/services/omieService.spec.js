@@ -1,6 +1,6 @@
-jest.mock('../../../src/services/utils/omieErrorHandler', () => jest.fn((omieError, response) => response))
+jest.mock('../../../src/services/helpers/omieErrorHandler', () => jest.fn((omieError, response) => response))
 
-const omieErrorHandler = require('../../../src/services/utils/omieErrorHandler')
+const omieErrorHandler = require('../../../src/services/helpers/omieErrorHandler')
 const makeOmieService = require('../../../src/services/omieService')
 const {
   mockOmieCompaniesResponse,

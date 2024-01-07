@@ -1,4 +1,4 @@
-const { getNumbers } = require('../../common/helpers')
+const { getNumbers } = require('../../common/utils')
 
 module.exports = ({
   credentials,

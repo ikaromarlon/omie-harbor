@@ -4,8 +4,7 @@ module.exports = Object.freeze({
     service: process.env.SERVICE,
     stage: process.env.STAGE,
     version: process.env.VERSION,
-    region: process.env.REGION,
-    brazilianOffSetTimeZone: -3
+    region: process.env.REGION
   },
   db: {
     mongodb: {

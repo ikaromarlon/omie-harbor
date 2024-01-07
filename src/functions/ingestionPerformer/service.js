@@ -1,6 +1,6 @@
 const config = require('../../config')
 const { NotFoundException, UnprocessableEntityException } = require('../../common/errors')
-const { daysToMilliseconds, uuidFrom } = require('../../common/helpers')
+const { daysToMilliseconds, uuidFrom } = require('../../common/utils')
 const updateDimensions = require('./useCases/updateDimensions')
 const updateFacts = require('./useCases/updateFacts')
 

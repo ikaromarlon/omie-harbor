@@ -1,4 +1,4 @@
-const { brDateToISO } = require('../../../common/helpers')
+const { brDateToISO } = require('../../../common/utils')
 
 module.exports = ({
   companyId,

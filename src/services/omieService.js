@@ -1,7 +1,7 @@
-const omieErrorHandler = require('./utils/omieErrorHandler')
-const makeOmieRequest = require('./utils/makeOmieRequest')
+const omieErrorHandler = require('./helpers/omieErrorHandler')
+const makeOmieRequest = require('./helpers/makeOmieRequest')
 const { services: { omie: { apiBaseUrl } } } = require('../config')
-const { isoDateToBR } = require('../common/helpers')
+const { isoDateToBR } = require('../common/utils')
 
 module.exports = ({ requester }) => {
   const defaultPagination = { pageNumber: 1, recordsPerPage: 500 }
@@ -135,8 +135,8 @@ module.exports = ({ requester }) => {
         registros_por_pagina: defaultPagination.recordsPerPage
       }]
     }
-    if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate)[0]
-    if (params.endDate) body.param[0].filtrar_por_data_ate = isoDateToBR(params.endDate)[0]
+    if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate).date
+    if (params.endDate) body.param[0].filtrar_por_data_ate = isoDateToBR(params.endDate).date
 
     const propertiesMapping = { data: 'ListarContasCorrentes', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
@@ -162,8 +162,8 @@ module.exports = ({ requester }) => {
         exibir_caracteristicas: 'S'
       }]
     }
-    if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate)[0]
-    if (params.endDate) body.param[0].filtrar_por_data_ate = isoDateToBR(params.endDate)[0]
+    if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate).date
+    if (params.endDate) body.param[0].filtrar_por_data_ate = isoDateToBR(params.endDate).date
 
     const propertiesMapping = { data: 'clientes_cadastro', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
@@ -210,8 +210,8 @@ module.exports = ({ requester }) => {
         registros_por_pagina: defaultPagination.recordsPerPage
       }]
     }
-    if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate)[0]
-    if (params.endDate) body.param[0].filtrar_por_data_ate = isoDateToBR(params.endDate)[0]
+    if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate).date
+    if (params.endDate) body.param[0].filtrar_por_data_ate = isoDateToBR(params.endDate).date
 
     const propertiesMapping = { data: 'departamentos', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
@@ -307,8 +307,8 @@ module.exports = ({ requester }) => {
         apenas_importado_api: 'N'
       }]
     }
-    if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate)[0]
-    if (params.endDate) body.param[0].filtrar_por_data_ate = isoDateToBR(params.endDate)[0]
+    if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate).date
+    if (params.endDate) body.param[0].filtrar_por_data_ate = isoDateToBR(params.endDate).date
 
     const propertiesMapping = { data: 'cadastro', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
@@ -335,8 +335,8 @@ module.exports = ({ requester }) => {
         exibir_caracteristicas: 'S'
       }]
     }
-    if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate)[0]
-    if (params.endDate) body.param[0].filtrar_por_data_ate = isoDateToBR(params.endDate)[0]
+    if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate).date
+    if (params.endDate) body.param[0].filtrar_por_data_ate = isoDateToBR(params.endDate).date
 
     const propertiesMapping = { data: 'produto_servico_cadastro', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
@@ -361,16 +361,16 @@ module.exports = ({ requester }) => {
       }]
     }
     if (params.createdFrom) {
-      body.param[0].dInclusaoInicial = isoDateToBR(params.createdFrom)[0]
+      body.param[0].dInclusaoInicial = isoDateToBR(params.createdFrom).date
     }
     if (params.createdTo) {
-      body.param[0].dInclusaoFinal = isoDateToBR(params.createdTo)[0]
+      body.param[0].dInclusaoFinal = isoDateToBR(params.createdTo).date
     }
     if (params.updatedFrom) {
-      body.param[0].dAlteracaoInicial = isoDateToBR(params.updatedFrom)[0]
+      body.param[0].dAlteracaoInicial = isoDateToBR(params.updatedFrom).date
     }
     if (params.updatedTo) {
-      body.param[0].dAlteracaoFinal = isoDateToBR(params.updatedTo)[0]
+      body.param[0].dAlteracaoFinal = isoDateToBR(params.updatedTo).date
     }
 
     const propertiesMapping = { data: 'cadastros', pagination: { currentPage: 'nPagina', totalPages: 'nTotPaginas' } }
@@ -470,8 +470,8 @@ module.exports = ({ requester }) => {
         cExibirInfoCadastro: 'S'
       }]
     }
-    if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate)[0]
-    if (params.endDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.endDate)[0]
+    if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate).date
+    if (params.endDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.endDate).date
 
     const propertiesMapping = { data: 'contratoCadastro', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
@@ -496,8 +496,8 @@ module.exports = ({ requester }) => {
         apenas_importado_api: 'N'
       }]
     }
-    if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate)[0]
-    if (params.endDate) body.param[0].filtrar_por_data_ate = isoDateToBR(params.endDate)[0]
+    if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate).date
+    if (params.endDate) body.param[0].filtrar_por_data_ate = isoDateToBR(params.endDate).date
 
     const propertiesMapping = { data: 'pedido_venda_produto', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
@@ -522,8 +522,8 @@ module.exports = ({ requester }) => {
         apenas_importado_api: 'N'
       }]
     }
-    if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate)[0]
-    if (params.endDate) body.param[0].filtrar_por_data_ate = isoDateToBR(params.endDate)[0]
+    if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate).date
+    if (params.endDate) body.param[0].filtrar_por_data_ate = isoDateToBR(params.endDate).date
 
     const propertiesMapping = { data: 'osCadastro', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
@@ -552,8 +552,8 @@ module.exports = ({ requester }) => {
         tpAmb: '1'
       }]
     }
-    if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate)[0]
-    if (params.endDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.endDate)[0]
+    if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate).date
+    if (params.endDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.endDate).date
 
     const propertiesMapping = { data: 'nfCadastro', pagination: { currentPage: 'pagina', totalPages: 'total_de_paginas' } }
 
@@ -580,8 +580,8 @@ module.exports = ({ requester }) => {
         cExibirDescricao: 'S'
       }]
     }
-    if (params.startDate) body.param[0].dEmiInicial = isoDateToBR(params.startDate)[0]
-    if (params.endDate) body.param[0].dEmiFinal = isoDateToBR(params.endDate)[0]
+    if (params.startDate) body.param[0].dEmiInicial = isoDateToBR(params.startDate).date
+    if (params.endDate) body.param[0].dEmiFinal = isoDateToBR(params.endDate).date
 
     const propertiesMapping = { data: 'nfseEncontradas', pagination: { currentPage: 'nPagina', totalPages: 'nTotPaginas' } }
 
@@ -606,16 +606,16 @@ module.exports = ({ requester }) => {
       }]
     }
     if (params.createdFrom) {
-      body.param[0].dDtIncDe = isoDateToBR(params.createdFrom)[0]
+      body.param[0].dDtIncDe = isoDateToBR(params.createdFrom).date
     }
     if (params.createdTo) {
-      body.param[0].dDtIncAte = isoDateToBR(params.createdTo)[0]
+      body.param[0].dDtIncAte = isoDateToBR(params.createdTo).date
     }
     if (params.updatedFrom) {
-      body.param[0].dDtAltDe = isoDateToBR(params.updatedFrom)[0]
+      body.param[0].dDtAltDe = isoDateToBR(params.updatedFrom).date
     }
     if (params.updatedTo) {
-      body.param[0].dDtAltAte = isoDateToBR(params.updatedTo)[0]
+      body.param[0].dDtAltAte = isoDateToBR(params.updatedTo).date
     }
 
     const propertiesMapping = { data: 'pagamentos', pagination: { currentPage: 'nPagina', totalPages: 'nTotPaginas' } }
@@ -641,16 +641,16 @@ module.exports = ({ requester }) => {
       }]
     }
     if (params.createdFrom) {
-      body.param[0].dDtIncDe = isoDateToBR(params.createdFrom)[0]
+      body.param[0].dDtIncDe = isoDateToBR(params.createdFrom).date
     }
     if (params.createdTo) {
-      body.param[0].dDtIncAte = isoDateToBR(params.createdTo)[0]
+      body.param[0].dDtIncAte = isoDateToBR(params.createdTo).date
     }
     if (params.updatedFrom) {
-      body.param[0].dDtAltDe = isoDateToBR(params.updatedFrom)[0]
+      body.param[0].dDtAltDe = isoDateToBR(params.updatedFrom).date
     }
     if (params.updatedTo) {
-      body.param[0].dDtAltAte = isoDateToBR(params.updatedTo)[0]
+      body.param[0].dDtAltAte = isoDateToBR(params.updatedTo).date
     }
 
     const propertiesMapping = { data: 'itens', pagination: { currentPage: 'nPagina', totalPages: 'nTotPaginas' } }
@@ -720,16 +720,16 @@ module.exports = ({ requester }) => {
       }]
     }
     if (params.createdFrom) {
-      body.param[0].dDtIncDe = isoDateToBR(params.createdFrom)[0]
+      body.param[0].dDtIncDe = isoDateToBR(params.createdFrom).date
     }
     if (params.createdTo) {
-      body.param[0].dDtIncAte = isoDateToBR(params.createdTo)[0]
+      body.param[0].dDtIncAte = isoDateToBR(params.createdTo).date
     }
     if (params.updatedFrom) {
-      body.param[0].dDtAltDe = isoDateToBR(params.updatedFrom)[0]
+      body.param[0].dDtAltDe = isoDateToBR(params.updatedFrom).date
     }
     if (params.updatedTo) {
-      body.param[0].dDtAltAte = isoDateToBR(params.updatedTo)[0]
+      body.param[0].dDtAltAte = isoDateToBR(params.updatedTo).date
     }
     if (params.type) {
       body.param[0].cNatureza = params.type
@@ -764,16 +764,16 @@ module.exports = ({ requester }) => {
       }]
     }
     if (params.createdFrom) {
-      body.param[0].dDtIncDe = isoDateToBR(params.createdFrom)[0]
+      body.param[0].dDtIncDe = isoDateToBR(params.createdFrom).date
     }
     if (params.createdTo) {
-      body.param[0].dDtIncAte = isoDateToBR(params.createdTo)[0]
+      body.param[0].dDtIncAte = isoDateToBR(params.createdTo).date
     }
     if (params.updatedFrom) {
-      body.param[0].dDtAltDe = isoDateToBR(params.updatedFrom)[0]
+      body.param[0].dDtAltDe = isoDateToBR(params.updatedFrom).date
     }
     if (params.updatedTo) {
-      body.param[0].dDtAltAte = isoDateToBR(params.updatedTo)[0]
+      body.param[0].dDtAltAte = isoDateToBR(params.updatedTo).date
     }
 
     const propertiesMapping = { data: 'movimentos', pagination: { currentPage: 'nPagina', totalPages: 'nTotPaginas' } }

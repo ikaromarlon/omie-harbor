@@ -1,5 +1,5 @@
 const { PRODUCT_TYPES, CONTRACT_STATUS } = require('../enums')
-const { brDateToISO, multiply } = require('../../../common/helpers')
+const { brDateToISO, multiply } = require('../../../common/utils')
 
 module.exports = ({
   companyId,

@@ -1,6 +1,6 @@
 const makeController = require('./controller')
 const schema = require('./schema')
-const validateRequestSchema = require('../../common/utils/validateRequestSchema')
+const validateWithSchema = require('../../common/helpers/validateWithSchema')
 const makeService = require('./service')
 const { dbRepositories } = require('../../repositories')
 const mappings = require('./mappings')
@@ -23,7 +23,7 @@ module.exports = async () => {
 
   const controller = makeController({
     schema,
-    validateRequestSchema,
+    validateWithSchema,
     service
   })
 

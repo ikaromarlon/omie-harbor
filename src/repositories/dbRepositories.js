@@ -1,6 +1,6 @@
 const config = require('../config')
-const mongodb = require('./utils/mongodb')
-const makeDbRepository = require('./utils/makeDbRepository')
+const mongodb = require('./helpers/mongodb')
+const makeDbRepository = require('./helpers/makeDbRepository')
 
 module.exports = async () => {
   const db = await mongodb.connect(config.db.mongodb.uri, config.db.mongodb.dbName)

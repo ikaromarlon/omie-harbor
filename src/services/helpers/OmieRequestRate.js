@@ -1,5 +1,5 @@
 const { services: { omie: { requestPeriodSeconds, maxRequestPerPeriod } } } = require('../../config')
-const { sleep, millisecondsToSeconds } = require('../../common/helpers')
+const { sleep, millisecondsToSeconds } = require('../../common/utils')
 
 const OmieRequestRate = function () {
   this.count = 0

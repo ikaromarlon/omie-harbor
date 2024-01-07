@@ -1,4 +1,4 @@
-const { uuid } = require('../../common/helpers')
+const { uuid } = require('../../common/utils')
 
 module.exports = ({
   name,

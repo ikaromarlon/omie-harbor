@@ -10,19 +10,19 @@ const makeSut = () => {
     }
   }
 
-  const validateRequestSchemaStub = jest.fn(() => ({}))
+  const validateWithSchemaStub = jest.fn(() => ({}))
   const mockSchema = {}
   const serviceStub = jest.fn(async () => null)
 
   const controller = makeController({
     schema: mockSchema,
-    validateRequestSchema: validateRequestSchemaStub,
+    validateWithSchema: validateWithSchemaStub,
     service: serviceStub
   })
 
   return {
     sut: controller,
-    validateRequestSchemaStub,
+    validateWithSchemaStub,
     serviceStub,
     mockRequest,
     mockSchema
@@ -30,9 +30,9 @@ const makeSut = () => {
 }
 
 describe('webhook Controller', () => {
-  it('Should throw an UnprocessableEntityException if validateRequestSchema throws a UnprocessableEntityException', async () => {
-    const { sut, validateRequestSchemaStub, mockRequest } = makeSut()
-    validateRequestSchemaStub.mockImplementationOnce(() => { throw new UnprocessableEntityException('Invalid value') })
+  it('Should throw an UnprocessableEntityException if validateWithSchema throws a UnprocessableEntityException', async () => {
+    const { sut, validateWithSchemaStub, mockRequest } = makeSut()
+    validateWithSchemaStub.mockImplementationOnce(() => { throw new UnprocessableEntityException('Invalid value') })
     mockRequest.original.Records[0].body = '{"anyField":"invalid_value"}'
     try {
       await sut(mockRequest)

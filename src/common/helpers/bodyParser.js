@@ -1,4 +1,4 @@
-const { tryJsonParse } = require('../helpers')
+const { tryJsonParse } = require('../utils')
 
 module.exports = ({ headers = {}, body, isBase64Encoded }) => {
   const boundary = headers['Content-Type'] ?? headers['content-type'] ?? 'application/json'

@@ -1,5 +1,5 @@
 const { ORDER_TYPES } = require('../enums')
-const { brDateToISO, multiply } = require('../../../common/helpers')
+const { brDateToISO, multiply } = require('../../../common/utils')
 
 module.exports = ({
   companyId,
