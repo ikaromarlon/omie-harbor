@@ -1,17 +1,8 @@
-const factory = require('../../../../src/functions/dataExport')
-const mongodb = require('../../../../src/repositories/helpers/mongodb')
+const sut = require('../../../../src/functions/dataExport')
 
-const makeSut = () => ({ sut: factory })
-
-describe('dataExport Factory', () => {
-  beforeAll(async () => mongodb.connect(process.env.MONGODB_URI, 'test'))
-
-  afterAll(async () => mongodb.disconnect())
-
-  it('Should setup function dependencies and return a controller method', async () => {
-    const { sut } = makeSut()
-    const result = await sut()
-    expect(result).toBeInstanceOf(Function)
-    expect(result.constructor.name).toBe('AsyncFunction')
+describe('dataExport - factory', () => {
+  it('Should setup dependencies and return a handler function', async () => {
+    expect(sut.handler).toBeInstanceOf(Function)
+    expect(sut.handler.constructor.name).toBe('AsyncFunction')
   })
 })

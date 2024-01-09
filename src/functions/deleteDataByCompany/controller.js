@@ -1,18 +1,21 @@
-const { successHandler, errorHandler } = require('../../common/handlers')
+const handleSuccess = require('../../infra/lambda/handleSuccess')
+const handleError = require('../../infra/lambda/handleError')
 
 module.exports = ({
+  service,
   schema,
-  validateWithSchema,
-  service
+  validateWithSchema
 }) => async (request) => {
   try {
-    /* AWS API Gateway HTTP event */
-    const payload = validateWithSchema(request.payload, schema)
+    /* API Gateway HTTP event */
+    const { params } = request
 
-    const data = await service({ payload })
+    const payload = validateWithSchema(params, schema)
 
-    return successHandler({ data })
+    const data = await service(payload)
+
+    return handleSuccess(data)
   } catch (error) {
-    throw errorHandler(error)
+    return handleError(error)
   }
 }

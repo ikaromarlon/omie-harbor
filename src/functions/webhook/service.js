@@ -8,11 +8,11 @@ const deleteAccountReceivable = require('./useCases/deleteAccountReceivable')
 const deleteFinancialMovement = require('./useCases/deleteFinancialMovement')
 
 module.exports = ({
-  repositories,
+  Repositories,
   logger,
   queuer
 }) => {
-  const handler = async ({ payload }) => {
+  const handler = async (payload) => {
     const actions = {
       [OMIE_WEBHOOK_EVENTS.SERVICE_ORDER.DELETED]: deleteOrder,
       [OMIE_WEBHOOK_EVENTS.SALES_ORDER.DELETED]: deleteOrder,
@@ -32,6 +32,8 @@ module.exports = ({
         pong: config.app.name
       }
     }
+
+    const repositories = await Repositories()
 
     const company = await repositories.companies.findOne({ 'credentials.appKey': appKey })
 
@@ -53,22 +55,15 @@ module.exports = ({
       hasAffected = Object.values(result.deleted).some(e => e)
     }
 
-    logger.info({
-      title: 'webhook',
-      message: `Action for company ${company._id} - ${company.name}: ${topic}`,
-      data: {
-        result,
-        payload
-      }
-    })
+    logger.info(
+      `Action for company ${company._id} - ${company.name}: ${topic}`,
+      { result, payload }
+    )
 
     if (hasAffected) {
       await queuer.sendCompanyToDataExportQueue(company._id)
 
-      logger.info({
-        title: 'webhook',
-        message: `Company ${company._id} - ${company.name} sent to dataExport process`
-      })
+      logger.info(`Company ${company._id} - ${company.name} sent to dataExport process`)
     }
 
     return result

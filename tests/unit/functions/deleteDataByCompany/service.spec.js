@@ -81,7 +81,7 @@ const makeSut = () => {
   }
 
   const service = makeService({
-    repositories: mockRepositories,
+    Repositories: () => mockRepositories,
     queuer: mockQueuer,
     logger: mockLogger
   })
@@ -98,7 +98,7 @@ const makeSut = () => {
 describe('deleteDataByCompany service', () => {
   it('Should delete data by company successfully', async () => {
     const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer } = makeSut()
-    const result = await sut({ payload: mockPayload })
+    const result = await sut(mockPayload)
     const { id } = mockPayload
     expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ _id: id })
     expect(mockRepositories.categories.deleteMany).toHaveBeenCalledWith({ companyId: id })
@@ -144,7 +144,7 @@ describe('deleteDataByCompany service', () => {
     mockPayload.id = 'any-invalid-company-id'
     mockRepositories.companies.findOne.mockResolvedValueOnce(null)
     try {
-      await sut({ payload: mockPayload })
+      await sut(mockPayload)
     } catch (error) {
       const { id } = mockPayload
       expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ _id: id })

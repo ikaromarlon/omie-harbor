@@ -1,5 +1,5 @@
 registerCompany:
-  handler: src/index.handler
+  handler: src/functions/registerCompany/index.handler
   iamRoleStatementsName: ${self:custom.service.name}-registerCompany-role
   events:
     - schedule: ${self:custom.service.warmup}
@@ -14,7 +14,7 @@ registerCompany:
       - 'src/shared/mappings/companyMapping.js'
 
 deleteDataByCompany:
-  handler: src/index.handler
+  handler: src/functions/deleteDataByCompany/index.handler
   iamRoleStatementsName: ${self:custom.service.name}-deleteDataByCompany-role
   iamRoleStatements:
     - Effect: Allow
@@ -34,7 +34,7 @@ deleteDataByCompany:
       - 'src/functions/deleteDataByCompany/**'
 
 ingestionDispatcher:
-  handler: src/index.handler
+  handler: src/functions/ingestionDispatcher/index.handler
   iamRoleStatementsName: ${self:custom.service.name}-ingestionDispatcher-role
   iamRoleStatements:
     - Effect: Allow
@@ -52,7 +52,7 @@ ingestionDispatcher:
       - 'src/functions/ingestionDispatcher/**'
 
 ingestionPerformer:
-  handler: src/index.handler
+  handler: src/functions/ingestionPerformer/index.handler
   memorySize: 1024
   timeout: 900
   iamRoleStatementsName: ${self:custom.service.name}-ingestionPerformer-role
@@ -73,7 +73,7 @@ ingestionPerformer:
       - 'src/shared/mappings/companyMapping.js'
 
 dataExport:
-  handler: src/index.handler
+  handler: src/functions/dataExport/index.handler
   memorySize: ${self:custom.service.dataExportMemorySize.${sls:stage}}
   timeout: 900
   iamRoleStatementsName: ${self:custom.service.name}-dataExport-role
@@ -93,8 +93,8 @@ dataExport:
       - 'src/functions/dataExport/**'
 
 webhook:
-  handler: src/index.handler
-  timeout: ${self:provider.timeout}
+  handler: src/functions/webhook/index.handler
+  timeout: 30
   iamRoleStatementsName: ${self:custom.service.name}-webhook-role
   iamRoleStatements:
     - Effect: Allow
@@ -103,6 +103,7 @@ webhook:
       Resource:
         - Fn::GetAtt: [ DataExportQueue, Arn ]
   events:
+    # the endpoint is defined in custom.apiGatewayServiceProxies
     - sqs:
         arn:
           Fn::GetAtt: [ WebhookQueue, Arn ]

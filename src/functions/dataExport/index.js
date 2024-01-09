@@ -1,26 +1,24 @@
+const handleRequest = require('../../infra/lambda/handleRequest')
 const makeController = require('./controller')
+const makeService = require('./service')
 const schema = require('./schema')
 const validateWithSchema = require('../../common/helpers/validateWithSchema')
-const makeService = require('./service')
-const { dbRepositories } = require('../../repositories')
+const Repositories = require('../../repositories')
+const Bucket = require('../../common/adapters/bucket')
 const logger = require('../../common/adapters/logger')
-const makeBucket = require('../../common/adapters/bucket')
 
-module.exports = async () => {
-  const repositories = await dbRepositories()
-  const bucket = makeBucket()
+const bucket = Bucket()
 
-  const service = makeService({
-    repositories,
-    logger,
-    bucket
-  })
+const service = makeService({
+  Repositories,
+  bucket,
+  logger
+})
 
-  const controller = makeController({
-    schema,
-    validateWithSchema,
-    service
-  })
+const controller = makeController({
+  service,
+  schema,
+  validateWithSchema
+})
 
-  return controller
-}
+exports.handler = handleRequest(controller)

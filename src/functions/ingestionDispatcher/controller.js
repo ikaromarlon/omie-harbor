@@ -1,15 +1,16 @@
-const { successHandler, errorHandler } = require('../../common/handlers')
+const handleSuccess = require('../../infra/lambda/handleSuccess')
+const handleError = require('../../infra/lambda/handleError')
 
 module.exports = ({
   service
 }) => async () => {
   try {
-    /* AWS EventBridge scheduled event */
+    /* EventBridge scheduled event */
 
     const data = await service()
 
-    return successHandler({ data })
+    return handleSuccess(data)
   } catch (error) {
-    throw errorHandler(error)
+    return handleError(error)
   }
 }

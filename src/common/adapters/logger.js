@@ -1,13 +1,22 @@
-const log = ({ title, message, data }) => {
+const log = (type, message, data) => {
   const logData = JSON.stringify({
-    message,
+    type,
     timestamp: new Date(),
+    message,
     data
   }, null, 2)
-  return `${title ? `${title}:` : ''}\n${logData}`.trim()
+  return `${message ? `${message}\n` : ''}${logData}`
 }
 
 module.exports = {
-  info: ({ title, message, data }) => console.info(log({ title, message, data })),
-  error: ({ title, message, data }) => console.error(log({ title, message, data }))
+  info: (message, data) => console.info(log(
+    'INFO',
+    message,
+    data
+  )),
+  error: (message, data) => console.error(log(
+    'ERROR',
+    message,
+    data
+  ))
 }

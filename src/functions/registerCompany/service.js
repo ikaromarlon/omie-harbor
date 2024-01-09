@@ -3,14 +3,16 @@ const { NotFoundException } = require('../../common/errors')
 module.exports = ({
   omieService,
   companyMapping,
-  companiesRepository
-}) => async ({ payload }) => {
+  Repositories
+}) => async (payload) => {
   const credentials = {
     appKey: payload.appKey.trim(),
     appSecret: payload.appSecret.trim()
   }
 
-  const company = await companiesRepository.findOne({ credentials })
+  const repositories = await Repositories()
+
+  const company = await repositories.companies.findOne({ credentials })
   if (company) return company
 
   const omieCompany = await omieService.getCompany(credentials, true)
@@ -23,5 +25,5 @@ module.exports = ({
 
   const companyData = companyMapping({ omieCompany, omieCnae, credentials })
 
-  return companiesRepository.createOrUpdateOne({ credentials }, companyData)
+  return repositories.companies.createOrUpdateOne({ credentials }, companyData)
 }

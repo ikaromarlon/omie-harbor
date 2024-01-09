@@ -15,7 +15,7 @@ const makeSut = () => {
   }
 
   const service = makeService({
-    repositories: mockRepositories,
+    Repositories: () => mockRepositories,
     queuer: mockQueuer,
     logger: mockLogger
   })

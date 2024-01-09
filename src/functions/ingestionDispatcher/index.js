@@ -1,22 +1,20 @@
+const handleRequest = require('../../infra/lambda/handleRequest')
 const makeController = require('./controller')
 const makeService = require('./service')
-const { dbRepositories } = require('../../repositories')
+const Repositories = require('../../repositories')
+const Queuer = require('../../common/adapters/queuer')
 const logger = require('../../common/adapters/logger')
-const makeQueuer = require('../../common/adapters/queuer')
 
-module.exports = async () => {
-  const repositories = await dbRepositories()
-  const queuer = makeQueuer()
+const queuer = Queuer()
 
-  const service = makeService({
-    repositories,
-    queuer,
-    logger
-  })
+const service = makeService({
+  Repositories,
+  queuer,
+  logger
+})
 
-  const controller = makeController({
-    service
-  })
+const controller = makeController({
+  service
+})
 
-  return controller
-}
+exports.handler = handleRequest(controller)

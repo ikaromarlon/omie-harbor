@@ -1,4 +1,4 @@
-const { BadGatewayException } = require('../../common/errors')
+const { BadGatewayException } = require('../../../common/errors')
 
 /**
  * Receive an error from Omie API and check if it should be thrown or not

@@ -1,11 +1,13 @@
 const { NotFoundException } = require('../../common/errors')
 
 module.exports = ({
-  repositories,
-  queuer,
-  logger
-}) => async ({ payload }) => {
+  Repositories,
+  logger,
+  queuer
+}) => async (payload) => {
   const { id } = payload
+
+  const repositories = await Repositories()
 
   const company = await repositories.companies.findOne({ _id: id })
 
@@ -22,10 +24,7 @@ module.exports = ({
 
   await queuer.sendCompanyToDataExportQueue(company._id)
 
-  logger.info({
-    title: 'deleteDataByCompany',
-    message: `Company ${company._id} - ${company.name} sent to dataExport process`
-  })
+  logger.info(`Company ${company._id} - ${company.name} sent to dataExport process`)
 
   return {
     success: true,

@@ -1,11 +1,6 @@
 const { uuid } = require('../../common/utils')
 
-module.exports = ({
-  name,
-  db,
-  properties = {},
-  customOperations = () => ({})
-}) => {
+module.exports = (name, db, properties = {}) => {
   const collection = db.collection(name)
 
   const parseFilter = (filter) => Object.entries(filter).reduce((acc, [k, v]) => {
@@ -122,7 +117,6 @@ module.exports = ({
       const result = await collection.deleteMany(parsedFilter)
       return result.deletedCount
     },
-    ...customOperations(collection),
     ...properties
   }
 }

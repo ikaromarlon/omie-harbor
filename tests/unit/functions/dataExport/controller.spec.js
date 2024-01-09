@@ -5,11 +5,11 @@ const companyId = '25c176b6-b200-4575-9217-e23c6105163c'
 
 const makeSut = () => {
   const mockRequest = {
-    original: {
-      Records: [{
-        body: `{"companyId":"${companyId}"}`
-      }]
-    }
+    records: [{
+      body: {
+        companyId
+      }
+    }]
   }
 
   const validateWithSchemaStub = jest.fn(() => ({ companyId }))
@@ -47,7 +47,7 @@ describe('dataExport Controller', () => {
   it('Should throw an UnprocessableEntityException if validateWithSchema throws a UnprocessableEntityException', async () => {
     const { sut, validateWithSchemaStub, mockRequest } = makeSut()
     validateWithSchemaStub.mockImplementationOnce(() => { throw new UnprocessableEntityException('Invalid field') })
-    mockRequest.original.Records[0].body = '{"companyId":"invalid_companyId"}'
+    mockRequest.records[0].body.companyId = 'invalid_companyId'
     try {
       await sut(mockRequest)
     } catch (error) {
@@ -73,7 +73,7 @@ describe('dataExport Controller', () => {
     const { sut, validateWithSchemaStub, serviceStub, mockRequest, mockSchema } = makeSut()
     const result = await sut(mockRequest)
     expect(validateWithSchemaStub).toHaveBeenCalledWith({ companyId }, mockSchema)
-    expect(serviceStub).toHaveBeenCalledWith({ payload: { companyId } })
+    expect(serviceStub).toHaveBeenCalledWith({ companyId })
     expect(result.statusCode).toBe(200)
     expect(result.data).toEqual({ success: true })
   })

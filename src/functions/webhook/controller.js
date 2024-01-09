@@ -1,21 +1,21 @@
-const { errorHandler, successHandler } = require('../../common/handlers')
-const { tryJsonParse } = require('../../common/utils')
+const handleSuccess = require('../../infra/lambda/handleSuccess')
+const handleError = require('../../infra/lambda/handleError')
 
 module.exports = ({
+  service,
   schema,
-  validateWithSchema,
-  service
+  validateWithSchema
 }) => async (request) => {
   try {
-    /* AWS SQS event */
-    const parsedData = tryJsonParse(request.original.Records[0].body)
+    /* SQS event */
+    const { records } = request
 
-    const payload = validateWithSchema(parsedData, schema)
+    const payload = validateWithSchema(records[0].body, schema)
 
-    const data = await service({ payload })
+    const data = await service(payload)
 
-    return successHandler({ data })
+    return handleSuccess(data)
   } catch (error) {
-    throw errorHandler(error)
+    return handleError(error)
   }
 }

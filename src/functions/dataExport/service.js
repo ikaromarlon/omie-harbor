@@ -1,19 +1,21 @@
 module.exports = ({
-  repositories,
-  logger,
-  bucket
-}) => async ({ payload }) => {
+  Repositories,
+  bucket,
+  logger
+}) => async (payload) => {
   const { companyId } = payload
 
   const filter = {}
   if (companyId) filter._id = companyId
+
+  const repositories = await Repositories()
 
   const companies = await repositories.companies.find(filter)
 
   await Promise.all(companies.map(async (company) => {
     const { _id: companyId, name } = company
 
-    logger.info({ title: 'dataExport', message: `Getting data from database for company ${companyId} - ${name}` })
+    logger.info(`Getting data from database for company ${companyId} - ${name}`)
 
     const [
       categories,
@@ -43,7 +45,7 @@ module.exports = ({
       repositories.financialMovements.find({ companyId })
     ])
 
-    logger.info({ title: 'dataExport', message: `Uploading data to bucket for company ${companyId} - ${name}` })
+    logger.info(`Uploading data to bucket for company ${companyId} - ${name}`)
 
     await bucket.storeCompanyData(companyId, {
       companies: [company],
@@ -61,7 +63,7 @@ module.exports = ({
       financialMovements
     })
 
-    logger.info({ title: 'dataExport', message: `Data export completed for company ${companyId} - ${name}` })
+    logger.info(`Data export completed for company ${companyId} - ${name}`)
   }))
 
   return { success: true }

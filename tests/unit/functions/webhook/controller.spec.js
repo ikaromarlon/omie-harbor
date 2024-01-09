@@ -3,11 +3,9 @@ const { InternalServerErrorException, UnprocessableEntityException } = require('
 
 const makeSut = () => {
   const mockRequest = {
-    original: {
-      Records: [{
-        body: '{}'
-      }]
-    }
+    records: [{
+      body: '{}'
+    }]
   }
 
   const validateWithSchemaStub = jest.fn(() => ({}))
@@ -33,7 +31,7 @@ describe('webhook Controller', () => {
   it('Should throw an UnprocessableEntityException if validateWithSchema throws a UnprocessableEntityException', async () => {
     const { sut, validateWithSchemaStub, mockRequest } = makeSut()
     validateWithSchemaStub.mockImplementationOnce(() => { throw new UnprocessableEntityException('Invalid value') })
-    mockRequest.original.Records[0].body = '{"anyField":"invalid_value"}'
+    mockRequest.records[0].body = '{"anyField":"invalid_value"}'
     try {
       await sut(mockRequest)
     } catch (error) {
@@ -58,7 +56,7 @@ describe('webhook Controller', () => {
   it('Should return success', async () => {
     const { sut, serviceStub, mockRequest } = makeSut()
     const result = await sut(mockRequest)
-    expect(serviceStub).toHaveBeenCalledWith({ payload: {} })
+    expect(serviceStub).toHaveBeenCalledWith({})
     expect(result.statusCode).toBe(200)
     expect(result.data).toEqual(null)
   })

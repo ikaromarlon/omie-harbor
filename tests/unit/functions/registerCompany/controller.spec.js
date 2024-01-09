@@ -4,10 +4,10 @@ const { mockSavedOmieCompanies } = require('../../../mocks')
 
 const makeSut = () => {
   const mockRequest = {
-    payload: { appKey: 'the_app_key', appSecret: 'the_app_secret' }
+    body: { appKey: 'the_app_key', appSecret: 'the_app_secret' }
   }
 
-  const validateWithSchemaStub = jest.fn(() => mockRequest.payload)
+  const validateWithSchemaStub = jest.fn(() => mockRequest.body)
   const mockSchema = {}
   const serviceStub = jest.fn(async () => Promise.resolve(mockSavedOmieCompanies[0]))
 
@@ -42,7 +42,7 @@ describe('registerCompany Controller', () => {
   it('Should throw an UnprocessableEntityException if validateWithSchema throws a UnprocessableEntityException', async () => {
     const { sut, validateWithSchemaStub, mockRequest } = makeSut()
     validateWithSchemaStub.mockImplementationOnce(() => { throw new UnprocessableEntityException('appSecret is required') })
-    mockRequest.payload = { appKey: 'the_app_key' }
+    mockRequest.body = { appKey: 'the_app_key' }
     try {
       await sut(mockRequest)
     } catch (error) {
@@ -67,8 +67,8 @@ describe('registerCompany Controller', () => {
   it('Should call validateWithSchema successfully', async () => {
     const { sut, validateWithSchemaStub, serviceStub, mockRequest, mockSchema } = makeSut()
     const result = await sut(mockRequest)
-    expect(validateWithSchemaStub).toHaveBeenCalledWith(mockRequest.payload, mockSchema)
-    expect(serviceStub).toHaveBeenCalledWith({ payload: mockRequest.payload })
+    expect(validateWithSchemaStub).toHaveBeenCalledWith(mockRequest.body, mockSchema)
+    expect(serviceStub).toHaveBeenCalledWith(mockRequest.body)
     expect(result.statusCode).toBe(200)
     expect(result.data).toEqual(mockSavedOmieCompanies[0])
   })

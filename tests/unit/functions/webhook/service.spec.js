@@ -19,11 +19,9 @@ const makeSut = () => {
   const mockCompany = mockSavedOmieCompanies[0]
 
   const mockPayload = {
-    payload: {
-      topic: 'Entity.event',
-      event: {},
-      appKey: 'the-app-key'
-    }
+    topic: 'Entity.event',
+    event: {},
+    appKey: 'the-app-key'
   }
 
   const mockRepositories = {
@@ -60,7 +58,7 @@ const makeSut = () => {
   }
 
   const service = makeService({
-    repositories: mockRepositories,
+    Repositories: () => mockRepositories,
     logger: mockLogger,
     queuer: mockQueuer
   })
@@ -78,7 +76,7 @@ const makeSut = () => {
 describe('webhook service', () => {
   it('Should receive a ping payload and finish process early', async () => {
     const { sut, mockRepositories, mockLogger, mockQueuer } = makeSut()
-    const mockPayload = { payload: { ping: 'Omie' } }
+    const mockPayload = { ping: 'Omie' }
     const result = await sut(mockPayload)
     expect(mockRepositories.companies.findOne).toHaveBeenCalledTimes(0)
     expect(mockLogger.info).toHaveBeenCalledTimes(0)
@@ -94,11 +92,11 @@ describe('webhook service', () => {
     mockRepositories.companies.findOne.mockResolvedValueOnce(null)
     try {
       await sut(mockPayload)
-      expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ 'credentials.appKey': mockPayload.payload.appKey })
+      expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ 'credentials.appKey': mockPayload.appKey })
     } catch (error) {
       expect(error).toBeInstanceOf(NotFoundException)
       expect(error.statusCode).toBe(404)
-      expect(error.message).toBe(`Company related to appKey '${mockPayload.payload.appKey}' not found`)
+      expect(error.message).toBe(`Company related to appKey '${mockPayload.appKey}' not found`)
     }
     expect(mockLogger.info).toHaveBeenCalledTimes(0)
     expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
@@ -107,16 +105,12 @@ describe('webhook service', () => {
   it('Should not find action', async () => {
     const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
     const result = await sut(mockPayload)
-    expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ 'credentials.appKey': mockPayload.payload.appKey })
+    expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ 'credentials.appKey': mockPayload.appKey })
     expect(mockLogger.info).toHaveBeenCalledTimes(1)
-    expect(mockLogger.info).toHaveBeenCalledWith({
-      title: 'webhook',
-      message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
-      data: {
-        result,
-        payload: mockPayload.payload
-      }
-    })
+    expect(mockLogger.info).toHaveBeenCalledWith(
+      `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.topic}`,
+      { result, payload: mockPayload }
+    )
     expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
     expect(result).toEqual({
       message: 'Unknown action: Entity.event'
@@ -127,8 +121,8 @@ describe('webhook service', () => {
     it('Should follow deleteOrder flow due to OrdemServico.Excluida and does not find orders', async () => {
       const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
 
-      mockPayload.payload.topic = 'OrdemServico.Excluida'
-      mockPayload.payload.event = { idOrdemServico: '00000000' }
+      mockPayload.topic = 'OrdemServico.Excluida'
+      mockPayload.event = { idOrdemServico: '00000000' }
       mockRepositories.orders.find.mockResolvedValueOnce([])
 
       const result = await sut(mockPayload)
@@ -142,14 +136,10 @@ describe('webhook service', () => {
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
       expect(mockLogger.info).toHaveBeenCalledTimes(1)
-      expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'webhook',
-        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
-        data: {
-          result,
-          payload: mockPayload.payload
-        }
-      })
+      expect(mockLogger.info).toHaveBeenNthCalledWith(1,
+        `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.topic}`,
+        { result, payload: mockPayload }
+      )
       expect(result).toEqual({
         deleted: {
           orders: 0,
@@ -162,8 +152,8 @@ describe('webhook service', () => {
     it('Should follow deleteOrder flow due to OrdemServico.Excluida action and delete records', async () => {
       const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
 
-      mockPayload.payload.topic = 'OrdemServico.Excluida'
-      mockPayload.payload.event = { idOrdemServico: '618754178' }
+      mockPayload.topic = 'OrdemServico.Excluida'
+      mockPayload.event = { idOrdemServico: '618754178' }
       mockRepositories.orders.find.mockResolvedValueOnce(mockSavedOmieServiceOrders)
       mockRepositories.orders.deleteMany.mockResolvedValueOnce(1)
       mockRepositories.accountsReceivable.deleteMany.mockResolvedValueOnce(1)
@@ -189,18 +179,13 @@ describe('webhook service', () => {
       })
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany._id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
-      expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'webhook',
-        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
-        data: {
-          result,
-          payload: mockPayload.payload
-        }
-      })
-      expect(mockLogger.info).toHaveBeenNthCalledWith(2, {
-        title: 'webhook',
-        message: `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
-      })
+      expect(mockLogger.info).toHaveBeenNthCalledWith(1,
+        `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.topic}`,
+        { result, payload: mockPayload }
+      )
+      expect(mockLogger.info).toHaveBeenNthCalledWith(2,
+        `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
+      )
       expect(result).toEqual({
         deleted: {
           orders: 1,
@@ -215,8 +200,8 @@ describe('webhook service', () => {
     it('Should follow deleteOrder flow due to VendaProduto.Excluida and does not find orders', async () => {
       const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
 
-      mockPayload.payload.topic = 'VendaProduto.Excluida'
-      mockPayload.payload.event = { idPedido: '00000000' }
+      mockPayload.topic = 'VendaProduto.Excluida'
+      mockPayload.event = { idPedido: '00000000' }
       mockRepositories.orders.find.mockResolvedValueOnce([])
 
       const result = await sut(mockPayload)
@@ -230,14 +215,10 @@ describe('webhook service', () => {
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
       expect(mockLogger.info).toHaveBeenCalledTimes(1)
-      expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'webhook',
-        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
-        data: {
-          result,
-          payload: mockPayload.payload
-        }
-      })
+      expect(mockLogger.info).toHaveBeenNthCalledWith(1,
+        `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.topic}`,
+        { result, payload: mockPayload }
+      )
       expect(result).toEqual({
         deleted: {
           orders: 0,
@@ -250,8 +231,8 @@ describe('webhook service', () => {
     it('Should follow deleteOrder flow due to VendaProduto.Excluida action and delete records', async () => {
       const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
 
-      mockPayload.payload.topic = 'VendaProduto.Excluida'
-      mockPayload.payload.event = { idPedido: '915642742' }
+      mockPayload.topic = 'VendaProduto.Excluida'
+      mockPayload.event = { idPedido: '915642742' }
       mockRepositories.orders.find.mockResolvedValueOnce(mockSavedOmieProductOrders)
       mockRepositories.orders.deleteMany.mockResolvedValueOnce(1)
       mockRepositories.accountsReceivable.deleteMany.mockResolvedValueOnce(1)
@@ -277,18 +258,13 @@ describe('webhook service', () => {
       })
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany._id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
-      expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'webhook',
-        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
-        data: {
-          result,
-          payload: mockPayload.payload
-        }
-      })
-      expect(mockLogger.info).toHaveBeenNthCalledWith(2, {
-        title: 'webhook',
-        message: `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
-      })
+      expect(mockLogger.info).toHaveBeenNthCalledWith(1,
+        `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.topic}`,
+        { result, payload: mockPayload }
+      )
+      expect(mockLogger.info).toHaveBeenNthCalledWith(2,
+        `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
+      )
       expect(result).toEqual({
         deleted: {
           orders: 1,
@@ -303,8 +279,8 @@ describe('webhook service', () => {
     it('Should follow deleteContract flow due to ContratoServico.Excluido and does not find contracts', async () => {
       const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
 
-      mockPayload.payload.topic = 'ContratoServico.Excluido'
-      mockPayload.payload.event = { nCodCtr: '00000000' }
+      mockPayload.topic = 'ContratoServico.Excluido'
+      mockPayload.event = { nCodCtr: '00000000' }
       mockRepositories.contracts.find.mockResolvedValueOnce([])
 
       const result = await sut(mockPayload)
@@ -318,14 +294,10 @@ describe('webhook service', () => {
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
       expect(mockLogger.info).toHaveBeenCalledTimes(1)
-      expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'webhook',
-        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
-        data: {
-          result,
-          payload: mockPayload.payload
-        }
-      })
+      expect(mockLogger.info).toHaveBeenNthCalledWith(1,
+        `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.topic}`,
+        { result, payload: mockPayload }
+      )
       expect(result).toEqual({
         deleted: {
           contracts: 0,
@@ -338,8 +310,8 @@ describe('webhook service', () => {
     it('Should follow deleteContract flow due to ContratoServico.Excluido action and delete records', async () => {
       const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
 
-      mockPayload.payload.topic = 'ContratoServico.Excluido'
-      mockPayload.payload.event = { nCodCtr: '617704532' }
+      mockPayload.topic = 'ContratoServico.Excluido'
+      mockPayload.event = { nCodCtr: '617704532' }
       mockRepositories.contracts.find.mockResolvedValueOnce(mockSavedOmieContracts)
       mockRepositories.contracts.deleteMany.mockResolvedValueOnce(1)
       mockRepositories.accountsReceivable.deleteMany.mockResolvedValueOnce(1)
@@ -365,18 +337,13 @@ describe('webhook service', () => {
       })
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany._id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
-      expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'webhook',
-        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
-        data: {
-          result,
-          payload: mockPayload.payload
-        }
-      })
-      expect(mockLogger.info).toHaveBeenNthCalledWith(2, {
-        title: 'webhook',
-        message: `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
-      })
+      expect(mockLogger.info).toHaveBeenNthCalledWith(1,
+        `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.topic}`,
+        { result, payload: mockPayload }
+      )
+      expect(mockLogger.info).toHaveBeenNthCalledWith(2,
+        `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
+      )
       expect(result).toEqual({
         deleted: {
           contracts: 1,
@@ -391,8 +358,8 @@ describe('webhook service', () => {
     it('Should follow deleteAccountPayable flow due to Financas.ContaPagar.Excluido and does not find accountsPayable', async () => {
       const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
 
-      mockPayload.payload.topic = 'Financas.ContaPagar.Excluido'
-      mockPayload.payload.event = { codigo_lancamento_omie: '00000000' }
+      mockPayload.topic = 'Financas.ContaPagar.Excluido'
+      mockPayload.event = { codigo_lancamento_omie: '00000000' }
       mockRepositories.accountsPayable.find.mockResolvedValueOnce([])
 
       const result = await sut(mockPayload)
@@ -405,14 +372,10 @@ describe('webhook service', () => {
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
       expect(mockLogger.info).toHaveBeenCalledTimes(1)
-      expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'webhook',
-        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
-        data: {
-          result,
-          payload: mockPayload.payload
-        }
-      })
+      expect(mockLogger.info).toHaveBeenNthCalledWith(1,
+        `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.topic}`,
+        { result, payload: mockPayload }
+      )
       expect(result).toEqual({
         deleted: {
           accountsPayable: 0,
@@ -424,8 +387,8 @@ describe('webhook service', () => {
     it('Should follow deleteAccountPayable flow due to Financas.ContaPagar.Excluido action and delete records', async () => {
       const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
 
-      mockPayload.payload.topic = 'Financas.ContaPagar.Excluido'
-      mockPayload.payload.event = { codigo_lancamento_omie: '618738728' }
+      mockPayload.topic = 'Financas.ContaPagar.Excluido'
+      mockPayload.event = { codigo_lancamento_omie: '618738728' }
       mockRepositories.accountsPayable.find.mockResolvedValueOnce(mockSavedOmieAccountsPayable)
       mockRepositories.accountsPayable.deleteMany.mockResolvedValueOnce(1)
       mockRepositories.financialMovements.deleteMany.mockResolvedValueOnce(1)
@@ -446,18 +409,13 @@ describe('webhook service', () => {
       })
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany._id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
-      expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'webhook',
-        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
-        data: {
-          result,
-          payload: mockPayload.payload
-        }
-      })
-      expect(mockLogger.info).toHaveBeenNthCalledWith(2, {
-        title: 'webhook',
-        message: `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
-      })
+      expect(mockLogger.info).toHaveBeenNthCalledWith(1,
+        `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.topic}`,
+        { result, payload: mockPayload }
+      )
+      expect(mockLogger.info).toHaveBeenNthCalledWith(2,
+        `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
+      )
       expect(result).toEqual({
         deleted: {
           accountsPayable: 1,
@@ -471,8 +429,8 @@ describe('webhook service', () => {
     it('Should follow deleteAccountReceivable flow due to Financas.ContaReceber.Excluido and does not find accountsReceivable', async () => {
       const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
 
-      mockPayload.payload.topic = 'Financas.ContaReceber.Excluido'
-      mockPayload.payload.event = { codigo_lancamento_omie: '00000000' }
+      mockPayload.topic = 'Financas.ContaReceber.Excluido'
+      mockPayload.event = { codigo_lancamento_omie: '00000000' }
       mockRepositories.accountsReceivable.find.mockResolvedValueOnce([])
 
       const result = await sut(mockPayload)
@@ -485,14 +443,10 @@ describe('webhook service', () => {
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
       expect(mockLogger.info).toHaveBeenCalledTimes(1)
-      expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'webhook',
-        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
-        data: {
-          result,
-          payload: mockPayload.payload
-        }
-      })
+      expect(mockLogger.info).toHaveBeenNthCalledWith(1,
+        `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.topic}`,
+        { result, payload: mockPayload }
+      )
       expect(result).toEqual({
         deleted: {
           accountsReceivable: 0,
@@ -504,8 +458,8 @@ describe('webhook service', () => {
     it('Should follow deleteAccountReceivable flow due to Financas.ContaReceber.Excluido action and delete records', async () => {
       const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
 
-      mockPayload.payload.topic = 'Financas.ContaReceber.Excluido'
-      mockPayload.payload.event = { codigo_lancamento_omie: '618738728' }
+      mockPayload.topic = 'Financas.ContaReceber.Excluido'
+      mockPayload.event = { codigo_lancamento_omie: '618738728' }
       mockRepositories.accountsReceivable.find.mockResolvedValueOnce(mockSavedOmieAccountsReceivable)
       mockRepositories.accountsReceivable.deleteMany.mockResolvedValueOnce(1)
       mockRepositories.financialMovements.deleteMany.mockResolvedValueOnce(1)
@@ -526,18 +480,13 @@ describe('webhook service', () => {
       })
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany._id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
-      expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'webhook',
-        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
-        data: {
-          result,
-          payload: mockPayload.payload
-        }
-      })
-      expect(mockLogger.info).toHaveBeenNthCalledWith(2, {
-        title: 'webhook',
-        message: `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
-      })
+      expect(mockLogger.info).toHaveBeenNthCalledWith(1,
+        `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.topic}`,
+        { result, payload: mockPayload }
+      )
+      expect(mockLogger.info).toHaveBeenNthCalledWith(2,
+        `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
+      )
       expect(result).toEqual({
         deleted: {
           accountsReceivable: 1,
@@ -551,8 +500,8 @@ describe('webhook service', () => {
     it('Should follow deleteFinancialMovement flow due to Financas.ContaCorrente.Lancamento.Excluido action and delete records', async () => {
       const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
 
-      mockPayload.payload.topic = 'Financas.ContaCorrente.Lancamento.Excluido'
-      mockPayload.payload.event = { nCodLanc: '617704532' }
+      mockPayload.topic = 'Financas.ContaCorrente.Lancamento.Excluido'
+      mockPayload.event = { nCodLanc: '617704532' }
       mockRepositories.financialMovements.deleteMany.mockResolvedValueOnce(1)
 
       const result = await sut(mockPayload)
@@ -563,18 +512,13 @@ describe('webhook service', () => {
       })
       expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany._id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
-      expect(mockLogger.info).toHaveBeenNthCalledWith(1, {
-        title: 'webhook',
-        message: `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.payload.topic}`,
-        data: {
-          result,
-          payload: mockPayload.payload
-        }
-      })
-      expect(mockLogger.info).toHaveBeenNthCalledWith(2, {
-        title: 'webhook',
-        message: `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
-      })
+      expect(mockLogger.info).toHaveBeenNthCalledWith(1,
+        `Action for company ${mockCompany._id} - ${mockCompany.name}: ${mockPayload.topic}`,
+        { result, payload: mockPayload }
+      )
+      expect(mockLogger.info).toHaveBeenNthCalledWith(2,
+        `Company ${mockCompany._id} - ${mockCompany.name} sent to dataExport process`
+      )
       expect(result).toEqual({
         deleted: {
           financialMovements: 1

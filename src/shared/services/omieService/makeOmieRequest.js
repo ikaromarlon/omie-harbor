@@ -1,8 +1,12 @@
 const OmieRequestRate = require('./OmieRequestRate')
 
-const omieRequestRate = new OmieRequestRate()
+let omieRequestRate
 
 module.exports = async ({ requester, method, url, body, propertiesMapping }) => {
+  if (!omieRequestRate) {
+    omieRequestRate = new OmieRequestRate()
+  }
+
   const responses = []
   responses.push(await requester[method](url, body))
   await omieRequestRate.addRequest()

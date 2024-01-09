@@ -50,7 +50,7 @@ const makeSut = () => {
   }
 
   const service = makeService({
-    repositories: mockRepositories,
+    Repositories: () => mockRepositories,
     logger: mockLogger,
     bucket: mockBucket
   })
@@ -70,7 +70,7 @@ const makeSut = () => {
 describe('dataExport service', () => {
   it('Should call repositories.companies.find successfully', async () => {
     const { sut, mockPayload, mockRepositories, mockLogger, mockBucket, mockSavedOmieProductsServices, mockSavedOmieOrders, mockSavedOmieBillingSaved } = makeSut()
-    const result = await sut({ payload: mockPayload })
+    const result = await sut(mockPayload)
     expect(mockRepositories.companies.find).toHaveBeenCalledWith({ _id: mockPayload.companyId })
     expect(mockLogger.info).toHaveBeenCalledTimes(3)
     expect(mockRepositories.categories.find).toHaveBeenCalledWith({ companyId: mockPayload.companyId })

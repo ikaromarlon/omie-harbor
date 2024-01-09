@@ -1,25 +1,24 @@
+const handleRequest = require('../../infra/lambda/handleRequest')
 const makeController = require('./controller')
+const makeService = require('./service')
 const schema = require('./schema')
 const validateWithSchema = require('../../common/helpers/validateWithSchema')
-const makeService = require('./service')
-const { dbRepositories } = require('../../repositories')
+const OmieService = require('../../shared/services/omieService')
 const companyMapping = require('../../shared/mappings/companyMapping')
-const makeServices = require('../../services')
+const Repositories = require('../../repositories')
 
-module.exports = async () => {
-  const { omieService } = makeServices()
+const omieService = OmieService()
 
-  const service = makeService({
-    omieService,
-    companyMapping,
-    companiesRepository: (await dbRepositories()).companies
-  })
+const service = makeService({
+  omieService,
+  companyMapping,
+  Repositories
+})
 
-  const controller = makeController({
-    schema,
-    validateWithSchema,
-    service
-  })
+const controller = makeController({
+  service,
+  schema,
+  validateWithSchema
+})
 
-  return controller
-}
+exports.handler = handleRequest(controller)

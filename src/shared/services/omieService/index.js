@@ -1,12 +1,16 @@
-const omieErrorHandler = require('./helpers/omieErrorHandler')
-const makeOmieRequest = require('./helpers/makeOmieRequest')
-const { services: { omie: { apiBaseUrl } } } = require('../config')
-const { isoDateToBR } = require('../common/utils')
+const requester = require('../../../common/adapters/requester')
+const makeOmieRequest = require('./makeOmieRequest')
+const handleOmieError = require('./handleOmieError')
+const { isoDateToBR } = require('../../../common/utils')
+const {
+  omie: {
+    apiBaseUrl,
+    recordsPerPage,
+    defaultForceThrow
+  }
+} = require('../../../config/services')
 
-module.exports = ({ requester }) => {
-  const defaultPagination = { pageNumber: 1, recordsPerPage: 500 }
-  const defaultForceThrow = false
-
+module.exports = () => {
   const getCompany = async ({ appKey, appSecret }, forceThrow = defaultForceThrow) => {
     const url = `${apiBaseUrl}/geral/empresas/`
 
@@ -15,8 +19,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        pagina: defaultPagination.pageNumber,
-        registros_por_pagina: defaultPagination.recordsPerPage,
+        pagina: 1,
+        registros_por_pagina: recordsPerPage,
         apenas_importado_api: 'N'
       }]
     }
@@ -27,7 +31,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response[0]
     } catch (error) {
-      return omieErrorHandler(error, null, forceThrow)
+      return handleOmieError(error, null, forceThrow)
     }
   }
 
@@ -50,7 +54,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -62,8 +66,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        pagina: defaultPagination.pageNumber,
-        registros_por_pagina: defaultPagination.recordsPerPage
+        pagina: 1,
+        registros_por_pagina: recordsPerPage
       }]
     }
 
@@ -73,7 +77,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -85,8 +89,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        pagina: defaultPagination.pageNumber,
-        registros_por_pagina: defaultPagination.recordsPerPage
+        pagina: 1,
+        registros_por_pagina: recordsPerPage
       }]
     }
 
@@ -96,7 +100,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -108,8 +112,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        pagina: defaultPagination.pageNumber,
-        registros_por_pagina: defaultPagination.recordsPerPage
+        pagina: 1,
+        registros_por_pagina: recordsPerPage
       }]
     }
 
@@ -119,7 +123,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -131,8 +135,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        pagina: defaultPagination.pageNumber,
-        registros_por_pagina: defaultPagination.recordsPerPage
+        pagina: 1,
+        registros_por_pagina: recordsPerPage
       }]
     }
     if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate).date
@@ -144,7 +148,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -156,8 +160,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        pagina: defaultPagination.pageNumber,
-        registros_por_pagina: defaultPagination.recordsPerPage,
+        pagina: 1,
+        registros_por_pagina: recordsPerPage,
         apenas_importado_api: 'N',
         exibir_caracteristicas: 'S'
       }]
@@ -171,7 +175,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -183,8 +187,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        pagina: defaultPagination.pageNumber,
-        registros_por_pagina: defaultPagination.recordsPerPage
+        pagina: 1,
+        registros_por_pagina: recordsPerPage
       }]
     }
 
@@ -194,7 +198,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -206,8 +210,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        pagina: defaultPagination.pageNumber,
-        registros_por_pagina: defaultPagination.recordsPerPage
+        pagina: 1,
+        registros_por_pagina: recordsPerPage
       }]
     }
     if (params.startDate) body.param[0].filtrar_por_data_de = isoDateToBR(params.startDate).date
@@ -219,7 +223,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -245,7 +249,7 @@ module.exports = ({ requester }) => {
         inativo: 'N'
       }
     } catch (error) {
-      return omieErrorHandler(error, null, forceThrow)
+      return handleOmieError(error, null, forceThrow)
     }
   }
 
@@ -270,7 +274,7 @@ module.exports = ({ requester }) => {
         descricao: description
       }
     } catch (error) {
-      return omieErrorHandler(error, null, forceThrow)
+      return handleOmieError(error, null, forceThrow)
     }
   }
 
@@ -290,7 +294,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body })
       return response
     } catch (error) {
-      return omieErrorHandler(error, null, forceThrow)
+      return handleOmieError(error, null, forceThrow)
     }
   }
 
@@ -302,8 +306,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        pagina: defaultPagination.pageNumber,
-        registros_por_pagina: defaultPagination.recordsPerPage,
+        pagina: 1,
+        registros_por_pagina: recordsPerPage,
         apenas_importado_api: 'N'
       }]
     }
@@ -316,7 +320,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -328,8 +332,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        pagina: defaultPagination.pageNumber,
-        registros_por_pagina: defaultPagination.recordsPerPage,
+        pagina: 1,
+        registros_por_pagina: recordsPerPage,
         apenas_importado_api: 'N',
         filtrar_apenas_omiepdv: 'N',
         exibir_caracteristicas: 'S'
@@ -344,7 +348,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -356,8 +360,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        nPagina: defaultPagination.pageNumber,
-        nRegPorPagina: defaultPagination.recordsPerPage
+        nPagina: 1,
+        nRegPorPagina: recordsPerPage
       }]
     }
     if (params.createdFrom) {
@@ -379,7 +383,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -391,8 +395,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        pagina: defaultPagination.pageNumber,
-        registros_por_pagina: defaultPagination.recordsPerPage
+        pagina: 1,
+        registros_por_pagina: recordsPerPage
       }]
     }
 
@@ -402,7 +406,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -414,8 +418,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        pagina: defaultPagination.pageNumber,
-        registros_por_pagina: defaultPagination.recordsPerPage
+        pagina: 1,
+        registros_por_pagina: recordsPerPage
       }]
     }
 
@@ -425,7 +429,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -451,7 +455,7 @@ module.exports = ({ requester }) => {
 
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -463,8 +467,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        pagina: defaultPagination.pageNumber,
-        registros_por_pagina: defaultPagination.recordsPerPage,
+        pagina: 1,
+        registros_por_pagina: recordsPerPage,
         apenas_importado_api: 'N',
         cExibeObs: 'S',
         cExibirInfoCadastro: 'S'
@@ -479,7 +483,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -491,8 +495,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        pagina: defaultPagination.pageNumber,
-        registros_por_pagina: defaultPagination.recordsPerPage,
+        pagina: 1,
+        registros_por_pagina: recordsPerPage,
         apenas_importado_api: 'N'
       }]
     }
@@ -505,7 +509,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -517,8 +521,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        pagina: defaultPagination.pageNumber,
-        registros_por_pagina: defaultPagination.recordsPerPage,
+        pagina: 1,
+        registros_por_pagina: recordsPerPage,
         apenas_importado_api: 'N'
       }]
     }
@@ -531,7 +535,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -543,8 +547,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        pagina: defaultPagination.pageNumber,
-        registros_por_pagina: defaultPagination.recordsPerPage,
+        pagina: 1,
+        registros_por_pagina: recordsPerPage,
         apenas_importado_api: 'N',
         ordenar_por: 'CODIGO',
         cDetalhesPedido: 'S',
@@ -561,7 +565,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -573,8 +577,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        nPagina: defaultPagination.pageNumber,
-        nRegPorPagina: defaultPagination.recordsPerPage,
+        nPagina: 1,
+        nRegPorPagina: recordsPerPage,
         cAmbienteNFSe: 'P',
         cExibirDepartamentos: 'S',
         cExibirDescricao: 'S'
@@ -589,7 +593,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -601,8 +605,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        nPagina: defaultPagination.pageNumber,
-        nRegPorPagina: defaultPagination.recordsPerPage
+        nPagina: 1,
+        nRegPorPagina: recordsPerPage
       }]
     }
     if (params.createdFrom) {
@@ -624,7 +628,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -636,8 +640,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        nPagina: defaultPagination.pageNumber,
-        nRegPorPagina: defaultPagination.recordsPerPage
+        nPagina: 1,
+        nRegPorPagina: recordsPerPage
       }]
     }
     if (params.createdFrom) {
@@ -659,7 +663,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -681,7 +685,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -703,7 +707,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -715,8 +719,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        nPagina: defaultPagination.pageNumber,
-        nRegPorPagina: defaultPagination.recordsPerPage
+        nPagina: 1,
+        nRegPorPagina: recordsPerPage
       }]
     }
     if (params.createdFrom) {
@@ -741,7 +745,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
@@ -757,8 +761,8 @@ module.exports = ({ requester }) => {
       app_key: appKey,
       app_secret: appSecret,
       param: [{
-        nPagina: defaultPagination.pageNumber,
-        nRegPorPagina: defaultPagination.recordsPerPage,
+        nPagina: 1,
+        nRegPorPagina: recordsPerPage,
         lDadosCad: 'S',
         cExibirDepartamentos: 'S'
       }]
@@ -782,7 +786,7 @@ module.exports = ({ requester }) => {
       const response = await makeOmieRequest({ requester, method: 'post', url, body, propertiesMapping })
       return response
     } catch (error) {
-      return omieErrorHandler(error, [], forceThrow)
+      return handleOmieError(error, [], forceThrow)
     }
   }
 
