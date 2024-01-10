@@ -1,4 +1,5 @@
-const { BadGatewayException } = require('../../../common/errors')
+const { ForbiddenException, BadGatewayException } = require('../../../common/errors')
+const HttpStatus = require('../../../common/helpers/HttpStatus')
 
 /**
  * Receive an error from Omie API and check if it should be thrown or not
@@ -9,7 +10,12 @@ const { BadGatewayException } = require('../../../common/errors')
  * @throws {BadGatewayException} The message iuncludes the information provided by error with Bad Gateway HTTP response
  */
 module.exports = (error, response = null, forceThrow = false) => {
-  const { faultcode, faultstring, error_code, error_message } = error.response?.data || {} // eslint-disable-line
+  const {
+    faultcode,
+    faultstring,
+    error_code: errCode,
+    error_message: errMessage
+  } = error.data.response || {} // eslint-disable-line
 
   const errorMapping = {
     'SOAP-ENV:Server': { throw: true }, // i.e.: 'SOAP-ERROR: Broken response from Application Server (4)'
@@ -22,9 +28,17 @@ module.exports = (error, response = null, forceThrow = false) => {
     'SOAP-ENV:Client-8020': { throw: false } // i.e.: 'ERROR: Esta requisição já foi processada ou está sendo processada e você pode tentar novamente às [?]. (1)'
   }
 
-  const errorFound = errorMapping[faultcode]
+  const errorFound = errorMapping[faultcode || errCode]
 
-  if (forceThrow || !errorFound || errorFound.throw) throw new BadGatewayException(`Omie Service Request Error: [${faultcode ?? error_code}] ${faultstring ?? error_message}`, error) // eslint-disable-line
+  const message = `Omie Error: ${faultstring || errMessage}`
+
+  if (error.data.statusCode === HttpStatus.FORBIDDEN) {
+    throw new ForbiddenException(message)
+  }
+
+  if (forceThrow || !errorFound || errorFound.throw) {
+    throw new BadGatewayException(message, error.data)
+  }
 
   return response
 }

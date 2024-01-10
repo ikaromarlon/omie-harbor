@@ -21,11 +21,31 @@ class BadRequestException extends HttpException {
   }
 }
 
+class ForbiddenException extends HttpException {
+  constructor (message, data) {
+    super(
+      HttpStatus.FORBIDDEN,
+      message ?? 'Access denied',
+      data
+    )
+  }
+}
+
 class NotFoundException extends HttpException {
   constructor (message, data) {
     super(
       HttpStatus.NOT_FOUND,
       message ?? 'Resource not found',
+      data
+    )
+  }
+}
+
+class ConflictException extends HttpException {
+  constructor (message, data) {
+    super(
+      HttpStatus.CONFLICT,
+      message ?? 'Resource already existis',
       data
     )
   }
@@ -55,7 +75,7 @@ class BadGatewayException extends HttpException {
   constructor (message, data) {
     super(
       HttpStatus.BAD_GATEWAY,
-      message ?? 'An external service has broken',
+      message ?? 'Error calling an external service',
       data
     )
   }
@@ -64,7 +84,9 @@ class BadGatewayException extends HttpException {
 module.exports = {
   HttpException,
   BadRequestException,
+  ForbiddenException,
   NotFoundException,
+  ConflictException,
   UnprocessableEntityException,
   InternalServerErrorException,
   BadGatewayException

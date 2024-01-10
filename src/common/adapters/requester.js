@@ -1,58 +1,31 @@
 const axios = require('axios')
-const { millisecondsToSeconds } = require('../utils')
+const { BadGatewayException } = require('../errors')
 
-const makeResponse = ({ startDate, endDate, response }) => ({
-  startDate: new Date(startDate),
-  endDate: new Date(endDate),
-  responseTime: `${millisecondsToSeconds(endDate - startDate)}s`,
-  statusCode: response.status,
-  headers: response.headers,
-  data: response.data
-})
+const handleResponse = (response) => response.data
 
-const errorHandler = ({ startDate, endDate, error }) => {
-  const [name, version] = error.config.headers['User-Agent'].split('/')
-  const err = new Error(error.message)
-  err.startDate = new Date(startDate)
-  err.endDate = new Date(startDate)
-  err.responseTime = `${millisecondsToSeconds(endDate - startDate)}s`
-  err.agent = {
-    name,
-    version,
-    errorCode: error.code,
-    errorNumber: error.errno
-  }
-  err.request = {
-    method: error.config.method,
-    url: error.config.url,
-    data: error.config.data,
-    headers: error.config.headers
-  }
-  err.response = {
-    statusCode: error.response?.status,
-    data: error.response?.data,
-    headers: error.response?.headers
-  }
-  return err
+const handleError = (error) => {
+  throw new BadGatewayException(null, {
+    statusCode: error.response.status,
+    response: error.response.data,
+    headers: error.response.headers
+  })
 }
 
 module.exports = {
   get: async (url, headers = {}) => {
-    const startDate = Date.now()
     try {
       const response = await axios.get(url, { headers })
-      return makeResponse({ startDate, endDate: Date.now(), response })
+      return handleResponse(response)
     } catch (error) {
-      throw errorHandler({ startDate, endDate: Date.now(), error })
+      return handleError(error)
     }
   },
   post: async (url, data = {}, headers = {}) => {
-    const startDate = Date.now()
     try {
       const response = await axios.post(url, data, { headers })
-      return makeResponse({ startDate, endDate: Date.now(), response })
+      return handleResponse(response)
     } catch (error) {
-      throw errorHandler({ startDate, endDate: Date.now(), error })
+      return handleError(error)
     }
   }
 }
