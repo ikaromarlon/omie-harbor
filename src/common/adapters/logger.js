@@ -1,12 +1,9 @@
-const log = (type, message, data) => {
-  const logData = JSON.stringify({
-    type,
-    timestamp: new Date(),
-    message,
-    data
-  }, null, 2)
-  return `${message ? `${message}\n` : ''}${logData}`
-}
+const log = (type, message, data) => JSON.stringify({
+  message,
+  type,
+  timestamp: new Date(),
+  data
+}, null, 2)
 
 module.exports = {
   info: (message, data) => console.info(log(
