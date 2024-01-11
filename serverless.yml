@@ -25,7 +25,7 @@ provider:
     apiKeySourceType: HEADER
     apiKeys:
       - name: ${self:custom.service.name}
-        value: ${self:custom.service.apiKey.${sls:stage}}
+        value: ${env:API_KEY, param:apiKey}
         enabled: true
   stackTags:
     service: ${self:service}
@@ -48,8 +48,9 @@ package:
 plugins:
   - serverless-iam-roles-per-function
   - serverless-apigateway-service-proxy
-  - serverless-cloudside-plugin
   - serverless-offline
+
+params: ${file(./serverless/params.yml)}
 
 custom: ${file(./serverless/custom.yml)}
 

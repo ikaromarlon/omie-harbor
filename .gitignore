@@ -113,6 +113,6 @@ globalConfig.json
 serverless-output.yml
 .env.*
 !.env.example
-.vscode/events/*
-!.vscode/events/*.example
-!.vscode/events/*.md
+events/*
+!events/*.example
+!events/*.md

@@ -1,7 +1,7 @@
 serverless-offline:
   httpPort: 3001
   noPrependStageInUrl: true
-  apiKey: ${self:custom.service.apiKey.${sls:stage}}
+  apiKey: ${env:API_KEY, param:apiKey}
   disableScheduledEvents: true
 
 serverless-iam-roles-per-function:
@@ -33,6 +33,7 @@ service:
     rate: rate(5 minutes)
     enabled: ${self:custom.service.warmupEnabled.${sls:stage}}
     input: '{"warmup":true}'
+  apiKey: ${env:API_KEY, param:apiKey}
   # by environment
   region:
     dev: us-east-1
@@ -40,9 +41,6 @@ service:
   domain:
     dev: dev.api.omie-harbor.app
     prd: api.omie-harbor.app
-  apiKey:
-    dev: d41d8cd98f00b204e9800998ecf8427e
-    prd: ${param:API_KEY, env:API_KEY}
   warmupEnabled:
     dev: false
     prd: false

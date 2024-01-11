@@ -2,7 +2,7 @@ APP_NAME: 'Omie Harbor'
 SERVICE: ${self:custom.service.name}
 STAGE: ${sls:stage}
 VERSION: ${file(./package.json):version}
-SQS_INGESTION_QUEUE_URL: { 'Ref': 'IngestionQueue'}
-SQS_DATA_EXPORT_QUEUE_URL: { 'Ref': 'DataExportQueue'}
-S3_DATA_EXPORT_BUCKET_NAME: { 'Ref': 'DataExportBucket'}
-MONGODB_URI: ${param:MONGODB_URI, env:MONGODB_URI}
+MONGODB_URI: ${env:MONGODB_URI, param:MONGODB_URI}
+SQS_INGESTION_QUEUE_URL: ${env:SQS_INGESTION_QUEUE_URL, param:ingestionQueueUrl}
+SQS_DATA_EXPORT_QUEUE_URL: ${env:SQS_DATA_EXPORT_QUEUE_URL, param:dataExportQueueUrl}
+S3_DATA_EXPORT_BUCKET_NAME: ${env:S3_DATA_EXPORT_BUCKET_NAME, param:dataExportBucketName}
