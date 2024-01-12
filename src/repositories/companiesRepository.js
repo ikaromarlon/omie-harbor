@@ -12,9 +12,9 @@ module.exports = () => {
     find: async ({
       isActive
     } = {}) => {
-      const filters = {}
-      if (isActive !== undefined) filters.isActive = isActive
-      return repository.findMany(filters)
+      const filter = {}
+      if (isActive !== undefined) filter.isActive = isActive
+      return repository.findMany(filter)
     },
 
     findById: async id => {

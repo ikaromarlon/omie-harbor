@@ -3,16 +3,16 @@ const { makeDocument, parseDocument, parseDocuments, parseFilters } = require('.
 module.exports = (name, MongodbHelper, config, props = {}) => ({
   name,
   ...props,
-  findOne: async (filters, options = {}) => {
+  findOne: async (filter, options = {}) => {
     const collection = await MongodbHelper.collection(name, config)
-    const parsedFilters = parseFilters(filters)
-    const result = await collection.findOne(parsedFilters, options)
+    const parsedFilter = parseFilters(filter)
+    const result = await collection.findOne(parsedFilter, options)
     return parseDocument(result)
   },
-  findMany: async (filters = {}, options = {}) => {
+  findMany: async (filter = {}, options = {}) => {
     const collection = await MongodbHelper.collection(name, config)
-    const parsedFilters = parseFilters(filters)
-    const result = await collection.find(parsedFilters, options)
+    const parsedFilter = parseFilters(filter)
+    const result = await collection.find(parsedFilter, options)
     return parseDocuments(result)
   },
   insertOne: async (data, options = {}) => {
@@ -21,45 +21,45 @@ module.exports = (name, MongodbHelper, config, props = {}) => ({
     const result = await collection.insertOne(doc, options)
     return parseDocument({ _id: result.insertedId, ...doc })
   },
-  updateOne: async (data, filters = {}, options = {}) => {
+  updateOne: async (data, filter = {}, options = {}) => {
     const collection = await MongodbHelper.collection(name, config)
-    const parsedFilters = parseFilters(filters)
+    const parsedFilter = parseFilters(filter)
     const doc = makeDocument(data, true)
     const result = await collection.findOneAndUpdate(
-      parsedFilters,
+      parsedFilter,
       { $set: doc },
       { returnDocument: 'after', ...options }
     )
     return parseDocument(result.value)
   },
-  deleteOne: async (filters = {}, options = {}) => {
+  deleteOne: async (filter = {}, options = {}) => {
     const collection = await MongodbHelper.collection(name, config)
-    const parsedFilters = parseFilters(filters)
-    const result = await collection.deleteOne(parsedFilters, options)
+    const parsedFilter = parseFilters(filter)
+    const result = await collection.deleteOne(parsedFilter, options)
     return Boolean(result.deletedCount)
   },
-  deleteMany: async (filters = {}, options = {}) => {
+  deleteMany: async (filter = {}, options = {}) => {
     const collection = await MongodbHelper.collection(name, config)
-    const parsedFilters = parseFilters(filters)
-    const result = await collection.deleteMany(parsedFilters, options)
+    const parsedFilter = parseFilters(filter)
+    const result = await collection.deleteMany(parsedFilter, options)
     return result.deletedCount
   },
-  count: async (filters = {}, options = {}) => {
+  count: async (filter = {}, options = {}) => {
     const collection = await MongodbHelper.collection(name, config)
-    const parsedFilters = parseFilters(filters)
-    return collection.count(parsedFilters, options)
+    const parsedFilter = parseFilters(filter)
+    return collection.count(parsedFilter, options)
   },
   aggregate: async (pipeline, options = {}) => {
     const collection = await MongodbHelper.collection(name, config)
     const result = await collection.aggregate(pipeline, options)
     return parseDocuments(result)
   },
-  createOrUpdateOne: async (data, filters = {}, options = {}) => {
+  createOrUpdateOne: async (data, filter = {}, options = {}) => {
     const collection = await MongodbHelper.collection(name, config)
     const { _id, createdAt, updatedAt, ...other } = makeDocument(data)
-    const parsedFilters = Object.keys(filters).length ? parseFilters(filters) : { _id }
+    const parsedFilter = Object.keys(filter).length ? parseFilters(filter) : { _id }
     const result = await collection.findOneAndUpdate(
-      parsedFilters,
+      parsedFilter,
       {
         $setOnInsert: { _id, createdAt },
         $set: { ...other, updatedAt }
@@ -78,16 +78,16 @@ module.exports = (name, MongodbHelper, config, props = {}) => ({
     if (buildFilter.length && batch.length) {
       const batchWrite = batch.map(data => {
         const doc = makeDocument(data)
-        const filters = buildFilter.reduce((acc, f) => {
+        const filter = buildFilter.reduce((acc, f) => {
           if (f === 'id') acc._id = doc._id
           acc[f] = doc[f]
           return acc
         }, {})
-        const parsedFilters = parseFilters(filters)
+        const parsedFilter = parseFilters(filter)
         const { _id, createdAt, updatedAt, ...other } = doc
         return {
           updateOne: {
-            filter: parsedFilters,
+            filter: parsedFilter,
             update: {
               $setOnInsert: { _id, createdAt },
               $set: { ...other, updatedAt }

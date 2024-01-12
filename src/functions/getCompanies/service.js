@@ -13,12 +13,12 @@ module.exports = ({
     return company
   }
 
-  const filters = {}
+  const filter = {}
   if (payload.isActive !== undefined) {
-    filters.isActive = payload.isActive
+    filter.isActive = payload.isActive
   }
 
-  const companies = await companiesRepository.find(filters)
+  const companies = await companiesRepository.find(filter)
 
   return companies
 }
