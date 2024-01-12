@@ -13,6 +13,25 @@ registerCompany:
       - 'src/functions/registerCompany/**'
       - 'src/shared/**'
 
+getCompanies:
+  handler: src/functions/getCompanies/index.handler
+  iamRoleStatementsName: ${self:custom.service.name}-getCompanies-role
+  events:
+    - schedule: ${self:custom.service.warmup}
+    - http:
+        path: companies
+        method: GET
+        cors: true
+        private: true
+    - http:
+        path: companies/{id}
+        method: GET
+        cors: true
+        private: true
+  package:
+    patterns:
+      - 'src/functions/getCompanies/**'
+
 deleteDataByCompany:
   handler: src/functions/deleteDataByCompany/index.handler
   iamRoleStatementsName: ${self:custom.service.name}-deleteDataByCompany-role

@@ -43,6 +43,21 @@
       "console": "integratedTerminal"
     },
     {
+      "name": "Invoke getCompanies",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
+      "args": [
+        "invoke", "local",
+        "-f", "getCompanies",
+        "-p", "${workspaceFolder}/events/getCompanies-http.json"
+      ],
+      "env": {
+        "SLS_DEBUG": "*"
+      },
+      "console": "integratedTerminal"
+    },
+    {
       "name": "Invoke ingestionDispatcher",
       "type": "node",
       "request": "launch",

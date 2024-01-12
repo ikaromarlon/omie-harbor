@@ -1,0 +1,8 @@
+{
+  "pathParameters": {
+    "id": "65a0236844821770a086e86f"
+  },
+  "QueryString": {
+    "isActive": true
+  } 
+}
