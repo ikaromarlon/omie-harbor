@@ -11,12 +11,14 @@
     "dev": "nodemon -e js --exec \"npm start\"",
     "debug": "SLS_DEBUG=* node --inspect node_modules/serverless/bin/serverless offline --noTimeout",
     "test": "jest --runInBand --silent --passWithNoTests",
-    "deploy": "sls deploy --verbose",
     "lint": "standard --fix",
     "lint:staged": "lint-staged",
     "test:unit": "npm test -- --config jest.config.unit.js",
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm run test:unit -- --collectCoverage",
+    "deploy": "sls deploy --verbose",
+    "deploy:dev": "npm run deploy -- --stage=dev",
+    "deploy:prd": "npm run deploy -- --stage=prd",
     "prepare": "husky install"
   },
   "author": {
