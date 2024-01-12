@@ -15,7 +15,7 @@
     "productServiceId": "26b22bcb-1773-4242-b8bd-e5c2b79b694a",
     "cfop": "5.102",
     "municipalServiceCode": null,
-    "contractId": "11a73cc1-9fda-51cb-b02c-d8a740aa6452",
+    "contractId": null,
     "categoryId": "44d50267-4bc1-42bc-923a-00df2968a2be",
     "origin": "PEDIDO",
     "type": "NF-e",

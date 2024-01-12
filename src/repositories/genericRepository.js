@@ -1,16 +1,21 @@
+const config = require('../config')
 const MongodbHelper = require('../infra/db/mongodb')
 
-module.exports = () => ({
-  categories: MongodbHelper.repository('categories'),
-  departments: MongodbHelper.repository('departments'),
-  projects: MongodbHelper.repository('projects'),
-  customers: MongodbHelper.repository('customers'),
-  productsServices: MongodbHelper.repository('products-services'),
-  checkingAccounts: MongodbHelper.repository('checking-accounts'),
-  contracts: MongodbHelper.repository('contracts'),
-  orders: MongodbHelper.repository('orders'),
-  billing: MongodbHelper.repository('billing'),
-  accountsPayable: MongodbHelper.repository('accounts-payable'),
-  accountsReceivable: MongodbHelper.repository('accounts-receivable'),
-  financialMovements: MongodbHelper.repository('financial-movements')
-})
+module.exports = () => {
+  const repositories = Object.entries({
+    categories: 'categories',
+    departments: 'departments',
+    projects: 'projects',
+    customers: 'customers',
+    productsServices: 'products-services',
+    checkingAccounts: 'checking-accounts',
+    contracts: 'contracts',
+    orders: 'orders',
+    billing: 'billing',
+    accountsPayable: 'accounts-payable',
+    accountsReceivable: 'accounts-receivable',
+    financialMovements: 'financial-movements'
+  }).reduce((acc, [key, name]) => ({ ...acc, [key]: MongodbHelper.repository(name, config.db.mongodb) }), {})
+
+  return repositories
+}

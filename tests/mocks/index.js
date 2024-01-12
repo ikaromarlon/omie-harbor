@@ -1,18 +1,4 @@
 module.exports = {
-  mockEmptyRecordsIds: require('./mockEmptyRecordsIds.json'),
-  mockEmptyCategory: require('./categories/mockEmptyCategory.json'),
-  mockEmptyCheckingAccount: require('./checkingAccounts/mockEmptyCheckingAccount.json'),
-  mockEmptyCustomer: require('./customers/mockEmptyCustomer.json'),
-  mockEmptyDepartment: require('./departments/mockEmptyDepartment.json'),
-  mockEmptyProductService: require('./products-services/mockEmptyProductService.json'),
-  mockEmptyProject: require('./projects/mockEmptyProject.json'),
-  mockEmptyContract: require('./contracts/mockEmptyContract.json'),
-  mockEmptyOrder: require('./orders/mockEmptyOrder.json'),
-  mockEmptyBilling: require('./billing/mockEmptyBilling.json'),
-  mockEmptyAccountPayable: require('./titles/mockEmptyAccountPayable.json'),
-  mockEmptyAccountReceivable: require('./titles/mockEmptyAccountReceivable.json'),
-  mockEmptyFinancialMovement: require('./financialMovements/mockEmptyFinancialMovement.json'),
-
   mockOmieActivitiesResponse: require('./mockOmieActivitiesResponse.json'),
   mockOmieCnaeResponse: require('./mockOmieCnaeResponse.json'),
   mockOmieBillingStepsResponse: require('./mockOmieBillingStepsResponse.json'),

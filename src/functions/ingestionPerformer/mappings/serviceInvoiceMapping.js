@@ -10,7 +10,6 @@ module.exports = ({
   departmentId,
   productServiceId,
   categoryId,
-  emptyRecordsIds,
   contractId,
   order
 }) => {
@@ -23,17 +22,17 @@ module.exports = ({
     documentKey: omieInvoice.Cabecalho.nChaveNFe || null,
     documentNumber: omieInvoice.Cabecalho.nNumeroNFSe || null,
     documentSerie: omieInvoice.Cabecalho.cSerieNFSe || null,
-    orderId: order?.id ?? emptyRecordsIds.order,
+    orderId: order?.id ?? null,
     orderNumber: order?.orderNumber ?? null,
-    customerId: customerId ?? emptyRecordsIds.customer,
-    projectId: projectId ?? emptyRecordsIds.project,
-    productServiceId: productServiceId ?? emptyRecordsIds.productService,
-    categoryId: categoryId ?? emptyRecordsIds.category,
-    departmentId: departmentId ?? emptyRecordsIds.department,
+    customerId: customerId ?? null,
+    projectId: projectId ?? null,
+    productServiceId: productServiceId ?? null,
+    categoryId: categoryId ?? null,
+    departmentId: departmentId ?? null,
     departmentPercentage,
     cfop: null, /** only for products */
     municipalServiceCode: omieInvoiceItem.CodigoServico, /** Omie returns CodigoServico as municipalServiceCode in NFS-e API */
-    contractId: contractId ?? emptyRecordsIds.contract,
+    contractId: contractId ?? null,
     origin: order?.type ?? null,
     type: 'NFS-e',
     registerDate: brDateToISO(omieInvoice.Inclusao.cDataInclusao, omieInvoice.Inclusao.cHoraInclusao),

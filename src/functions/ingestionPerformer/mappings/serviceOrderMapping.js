@@ -12,7 +12,6 @@ module.exports = ({
   departmentId,
   productServiceId,
   categoryId,
-  emptyRecordsIds,
   contractId
 }) => {
   const ORDER_OPERATION_CODE = '01'
@@ -28,15 +27,15 @@ module.exports = ({
     companyId,
     externalId: String(omieOrder.Cabecalho.nCodOS),
     orderNumber: String(omieOrder.Cabecalho.cNumOS),
-    customerId: customerId ?? emptyRecordsIds.customer,
-    projectId: projectId ?? emptyRecordsIds.project,
-    productServiceId: productServiceId ?? emptyRecordsIds.productService,
-    categoryId: categoryId ?? emptyRecordsIds.category,
-    departmentId: departmentId ?? emptyRecordsIds.department,
+    customerId: customerId ?? null,
+    projectId: projectId ?? null,
+    productServiceId: productServiceId ?? null,
+    categoryId: categoryId ?? null,
+    departmentId: departmentId ?? null,
     departmentPercentage,
     cfop: null, /** only for PEDIDO */
     municipalServiceCode: omieOrderItem.cCodServMun || null,
-    contractId: contractId ?? emptyRecordsIds.contract,
+    contractId: contractId ?? null,
     type: ORDER_TYPES.SERVICE_ORDER,
     registerDate: brDateToISO(omieOrder.InfoCadastro.dDtInc, omieOrder.InfoCadastro.cHrInc),
     expectedPaymentDate: brDateToISO(omieOrder.Cabecalho.dDtPrevisao),

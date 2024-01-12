@@ -10,7 +10,6 @@ module.exports = ({
   departmentId,
   productServiceId,
   categoryId,
-  emptyRecordsIds,
   order
 }) => {
   const departmentPercentage = omieInvoiceDepartment?.nPercentualDistribuicao ?? 100
@@ -22,17 +21,17 @@ module.exports = ({
     documentKey: omieInvoice.compl.cChaveNFe,
     documentNumber: omieInvoice.ide.nNF,
     documentSerie: omieInvoice.ide.serie,
-    orderId: order?.id ?? emptyRecordsIds.order,
+    orderId: order?.id ?? null,
     orderNumber: order?.orderNumber ?? null,
-    customerId: customerId ?? emptyRecordsIds.customer,
-    projectId: projectId ?? emptyRecordsIds.project,
-    productServiceId: productServiceId ?? emptyRecordsIds.productService,
-    categoryId: categoryId ?? emptyRecordsIds.category,
-    departmentId: departmentId ?? emptyRecordsIds.department,
+    customerId: customerId ?? null,
+    projectId: projectId ?? null,
+    productServiceId: productServiceId ?? null,
+    categoryId: categoryId ?? null,
+    departmentId: departmentId ?? null,
     departmentPercentage,
     cfop: omieInvoiceItem.prod.CFOP || null,
     municipalServiceCode: null, /** only for NFS-e */
-    contractId: emptyRecordsIds.contract, /** only for NFS-e */
+    contractId: null, /** only for NFS-e */
     origin: order?.type ?? null,
     type: 'NF-e',
     registerDate: brDateToISO(omieInvoice.info.dInc, omieInvoice.info.hInc),

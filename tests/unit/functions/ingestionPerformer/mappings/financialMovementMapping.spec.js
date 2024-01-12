@@ -1,6 +1,5 @@
 const titleMapping = require('../../../../../src/functions/ingestionPerformer/mappings/financialMovementMapping')
 const {
-  mockEmptyRecordsIds,
   mockOmieFinancialMovementsResponse,
   mockParsedOmieFinancialMovement,
   mockOmieDocumentTypesResponse,
@@ -71,7 +70,6 @@ describe('FinancialMovement Mapping', () => {
       omieDocumentTypes: mockOmieDocumentTypes,
       order: mockOrder,
       billing: mockBilling,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: mockCustomerId,
       projectId: mockProjectId,
       departmentId: mockDepartmentId,
@@ -113,7 +111,6 @@ describe('FinancialMovement Mapping', () => {
       omieDocumentTypes: mockOmieDocumentTypes,
       order: mockOrder,
       billing: mockBilling,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: mockCustomerId,
       projectId: mockProjectId,
       departmentId: mockDepartmentId,
@@ -155,7 +152,6 @@ describe('FinancialMovement Mapping', () => {
       omieDocumentTypes: mockOmieDocumentTypes,
       order: mockOrder,
       billing: mockBilling,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: mockCustomerId,
       projectId: mockProjectId,
       departmentId: mockDepartmentId,
@@ -197,7 +193,6 @@ describe('FinancialMovement Mapping', () => {
       omieDocumentTypes: mockOmieDocumentTypes,
       order: mockOrder,
       billing: mockBilling,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: mockCustomerId,
       projectId: mockProjectId,
       departmentId: mockDepartmentId,
@@ -239,7 +234,6 @@ describe('FinancialMovement Mapping', () => {
       omieDocumentTypes: mockOmieDocumentTypes,
       order: mockOrder,
       billing: mockBilling,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: mockCustomerId,
       projectId: mockProjectId,
       departmentId: mockDepartmentId,
@@ -281,7 +275,6 @@ describe('FinancialMovement Mapping', () => {
       omieDocumentTypes: mockOmieDocumentTypes,
       order: mockOrder,
       billing: mockBilling,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: mockCustomerId,
       projectId: mockProjectId,
       departmentId: mockDepartmentId,
@@ -323,7 +316,6 @@ describe('FinancialMovement Mapping', () => {
       omieDocumentTypes: mockOmieDocumentTypes,
       order: mockOrder,
       billing: mockBilling,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: mockCustomerId,
       projectId: mockProjectId,
       departmentId: mockDepartmentId,
@@ -337,89 +329,7 @@ describe('FinancialMovement Mapping', () => {
     expect(result).toEqual({ ...mockParsedOmieFinancialMovement, reconciliationDate: '2019-01-02T03:00:00.000Z' })
   })
 
-  it('Should return mapped financial movement successfully without category: use emptyRecordsIds.category instead', () => {
-    const {
-      sut,
-      mockOmieFinancialMovement,
-      mockOmieDocumentTypes,
-      mockOmieEntryOrigins,
-      mockOrder,
-      mockBilling,
-      mockCompanyId,
-      mockCustomerId,
-      mockProjectId,
-      mockDepartmentId,
-      mockCheckingAccountId,
-      mockContractId,
-      mockAccountPayable,
-      mockAccountReceivableId
-    } = makeSut()
-
-    const result = sut({
-      companyId: mockCompanyId,
-      omieFinancialMovement: mockOmieFinancialMovement,
-      omieFinancialMovementDepartment: mockOmieFinancialMovement.departamentos[0],
-      omieFinancialMovementCategory: null,
-      omieEntryOrigins: mockOmieEntryOrigins,
-      omieDocumentTypes: mockOmieDocumentTypes,
-      order: mockOrder,
-      billing: mockBilling,
-      emptyRecordsIds: mockEmptyRecordsIds,
-      customerId: mockCustomerId,
-      projectId: mockProjectId,
-      departmentId: mockDepartmentId,
-      categoryId: null,
-      checkingAccountId: mockCheckingAccountId,
-      contractId: mockContractId,
-      accountPayableId: mockAccountPayable,
-      accountReceivableId: mockAccountReceivableId
-    })
-
-    expect(result).toEqual({ ...mockParsedOmieFinancialMovement, categoryId: mockEmptyRecordsIds.category, categoryPercentage: 100, value: 195 })
-  })
-
-  it('Should return mapped financial movement successfully without department: use emptyRecordsIds.department instead', () => {
-    const {
-      sut,
-      mockOmieFinancialMovement,
-      mockOmieDocumentTypes,
-      mockOmieEntryOrigins,
-      mockOrder,
-      mockBilling,
-      mockCompanyId,
-      mockCustomerId,
-      mockProjectId,
-      mockCategoryId,
-      mockCheckingAccountId,
-      mockContractId,
-      mockAccountPayable,
-      mockAccountReceivableId
-    } = makeSut()
-
-    const result = sut({
-      companyId: mockCompanyId,
-      omieFinancialMovement: mockOmieFinancialMovement,
-      omieFinancialMovementDepartment: null,
-      omieFinancialMovementCategory: mockOmieFinancialMovement.categorias[0],
-      omieEntryOrigins: mockOmieEntryOrigins,
-      omieDocumentTypes: mockOmieDocumentTypes,
-      order: mockOrder,
-      billing: mockBilling,
-      emptyRecordsIds: mockEmptyRecordsIds,
-      customerId: mockCustomerId,
-      projectId: mockProjectId,
-      departmentId: null,
-      categoryId: mockCategoryId,
-      checkingAccountId: mockCheckingAccountId,
-      contractId: mockContractId,
-      accountPayableId: mockAccountPayable,
-      accountReceivableId: mockAccountReceivableId
-    })
-
-    expect(result).toEqual({ ...mockParsedOmieFinancialMovement, departmentId: mockEmptyRecordsIds.department, departmentPercentage: 100, value: 195 })
-  })
-
-  it('Should return mapped financial movement successfully without relationships ids: use emptyRecordsIds instead', () => {
+  it('Should return mapped financial movement successfully without relationships', () => {
     const {
       sut,
       mockOmieFinancialMovement,
@@ -437,7 +347,6 @@ describe('FinancialMovement Mapping', () => {
       omieDocumentTypes: mockOmieDocumentTypes,
       order: null,
       billing: null,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: null,
       projectId: null,
       departmentId: null,
@@ -450,21 +359,21 @@ describe('FinancialMovement Mapping', () => {
 
     expect(result).toEqual({
       ...mockParsedOmieFinancialMovement,
-      categoryId: mockEmptyRecordsIds.category,
-      departmentId: mockEmptyRecordsIds.department,
-      projectId: mockEmptyRecordsIds.project,
-      customerId: mockEmptyRecordsIds.customer,
-      checkingAccountId: mockEmptyRecordsIds.checkingAccount,
+      categoryId: null,
+      departmentId: null,
+      projectId: null,
+      customerId: null,
+      checkingAccountId: null,
       departmentPercentage: 100,
       categoryPercentage: 100,
       value: 195,
-      orderId: mockEmptyRecordsIds.order,
+      orderId: null,
       orderNumber: null,
-      billingId: mockEmptyRecordsIds.billing,
+      billingId: null,
       origin: null,
-      contractId: mockEmptyRecordsIds.contract,
-      accountPayableId: mockEmptyRecordsIds.accountPayable,
-      accountReceivableId: mockEmptyRecordsIds.accountReceivable
+      contractId: null,
+      accountPayableId: null,
+      accountReceivableId: null
     })
   })
 })

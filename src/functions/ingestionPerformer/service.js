@@ -1,6 +1,6 @@
 const config = require('../../config')
 const { NotFoundException, UnprocessableEntityException } = require('../../common/errors')
-const { daysToMilliseconds, uuidFrom } = require('../../common/utils')
+const { daysToMilliseconds } = require('../../common/utils')
 const updateCompany = require('./useCases/updateCompany')
 const updateDimensions = require('./useCases/updateDimensions')
 const updateFacts = require('./useCases/updateFacts')
@@ -30,21 +30,6 @@ module.exports = ({
   if (!startDate && !endDate) {
     startDate = new Date()
     startDate.setMilliseconds(startDate.getMilliseconds() - daysToMilliseconds(config.services.omie.ingestionPeriod))
-  }
-
-  const emptyRecordsIds = {
-    category: uuidFrom(`${companyId}-category`),
-    department: uuidFrom(`${companyId}-department`),
-    project: uuidFrom(`${companyId}-project`),
-    customer: uuidFrom(`${companyId}-customer`),
-    checkingAccount: uuidFrom(`${companyId}-checkingAccount`),
-    productService: uuidFrom(`${companyId}-productService`),
-    contract: uuidFrom(`${companyId}-contract`),
-    order: uuidFrom(`${companyId}-order`),
-    billing: uuidFrom(`${companyId}-billing`),
-    accountPayable: uuidFrom(`${companyId}-accountPayable`),
-    accountReceivable: uuidFrom(`${companyId}-accountReceivable`),
-    financialMovement: uuidFrom(`${companyId}-financialMovement`)
   }
 
   const { name, credentials } = company
@@ -82,8 +67,7 @@ module.exports = ({
     mappings,
     repositories,
     omieBanks,
-    omieCnae,
-    emptyRecordsIds
+    omieCnae
   })
 
   await updateFacts({
@@ -94,8 +78,7 @@ module.exports = ({
     companyId,
     mappings,
     repositories,
-    omieDocumentTypes,
-    emptyRecordsIds
+    omieDocumentTypes
   })
 
   logger.info(`Ingestion completed for company ${companyId} - ${name}`)

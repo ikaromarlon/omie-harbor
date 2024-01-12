@@ -1,6 +1,5 @@
 const serviceInvoiceMapping = require('../../../../../src/functions/ingestionPerformer/mappings/serviceInvoiceMapping')
 const {
-  mockEmptyRecordsIds,
   mockOmieServiceInvoicesResponse,
   mockParsedOmieServiceInvoice
 } = require('../../../../mocks')
@@ -50,7 +49,6 @@ describe('Service Invoice Mapping', () => {
       omieInvoice: mockOmieServiceInvoice,
       omieInvoiceDepartment: mockOmieServiceInvoice.OrdemServico.Departamentos[0],
       omieInvoiceItem: mockOmieServiceInvoice.ListaServicos[0],
-      emptyRecordsIds: mockEmptyRecordsIds,
       order: mockOrder,
       customerId: mockCustomerId,
       projectId: mockProjectId,
@@ -63,38 +61,7 @@ describe('Service Invoice Mapping', () => {
     expect(result).toEqual(mockParsedOmieServiceInvoice)
   })
 
-  it('Should return mapped service invoice successfully without department: use emptyRecordsIds.department instead', () => {
-    const {
-      sut,
-      mockOmieServiceInvoice,
-      mockOrder,
-      mockCompanyId,
-      mockCustomerId,
-      mockProjectId,
-      mockProductServiceId,
-      mockCategoryId,
-      mockContractId
-    } = makeSut()
-
-    const result = sut({
-      companyId: mockCompanyId,
-      omieInvoice: mockOmieServiceInvoice,
-      omieInvoiceDepartment: null,
-      omieInvoiceItem: mockOmieServiceInvoice.ListaServicos[0],
-      emptyRecordsIds: mockEmptyRecordsIds,
-      order: mockOrder,
-      customerId: mockCustomerId,
-      projectId: mockProjectId,
-      departmentId: null,
-      productServiceId: mockProductServiceId,
-      categoryId: mockCategoryId,
-      contractId: mockContractId
-    })
-
-    expect(result).toEqual({ ...mockParsedOmieServiceInvoice, departmentId: mockEmptyRecordsIds.department })
-  })
-
-  it('Should return mapped service invoice successfully without relationships ids: use emptyRecordsIds instead', () => {
+  it('Should return mapped service invoice successfully without relationships', () => {
     const {
       sut,
       mockOmieServiceInvoice,
@@ -106,7 +73,6 @@ describe('Service Invoice Mapping', () => {
       omieInvoice: mockOmieServiceInvoice,
       omieInvoiceDepartment: null,
       omieInvoiceItem: mockOmieServiceInvoice.ListaServicos[0],
-      emptyRecordsIds: mockEmptyRecordsIds,
       order: null,
       customerId: null,
       projectId: null,
@@ -118,13 +84,13 @@ describe('Service Invoice Mapping', () => {
 
     expect(result).toEqual({
       ...mockParsedOmieServiceInvoice,
-      categoryId: mockEmptyRecordsIds.category,
-      departmentId: mockEmptyRecordsIds.department,
-      projectId: mockEmptyRecordsIds.project,
-      customerId: mockEmptyRecordsIds.customer,
-      productServiceId: mockEmptyRecordsIds.productService,
-      contractId: mockEmptyRecordsIds.contract,
-      orderId: mockEmptyRecordsIds.order,
+      categoryId: null,
+      departmentId: null,
+      projectId: null,
+      customerId: null,
+      productServiceId: null,
+      contractId: null,
+      orderId: null,
       orderNumber: null,
       origin: null
     })
@@ -149,7 +115,6 @@ describe('Service Invoice Mapping', () => {
       omieInvoice: { ...mockOmieServiceInvoice, Cabecalho: { ...mockOmieServiceInvoice.Cabecalho, nChaveNFe: undefined, nNumeroNFSe: undefined } },
       omieInvoiceDepartment: mockOmieServiceInvoice.OrdemServico.Departamentos[0],
       omieInvoiceItem: mockOmieServiceInvoice.ListaServicos[0],
-      emptyRecordsIds: mockEmptyRecordsIds,
       order: mockOrder,
       customerId: mockCustomerId,
       projectId: mockProjectId,
@@ -181,7 +146,6 @@ describe('Service Invoice Mapping', () => {
       omieInvoice: mockOmieServiceInvoice,
       omieInvoiceDepartment: mockOmieServiceInvoice.OrdemServico.Departamentos[0],
       omieInvoiceItem: { ...mockOmieServiceInvoice.ListaServicos[0], nValorICMS: undefined, nValorISS: undefined },
-      emptyRecordsIds: mockEmptyRecordsIds,
       order: mockOrder,
       customerId: mockCustomerId,
       projectId: mockProjectId,

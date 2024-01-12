@@ -1,6 +1,5 @@
 const titleMapping = require('../../../../../src/functions/ingestionPerformer/mappings/titleMapping')
 const {
-  mockEmptyRecordsIds,
   mockOmieAccountsReceivableResponse,
   mockParsedOmieAccountReceivable,
   mockOmieDocumentTypesResponse
@@ -58,7 +57,6 @@ describe('Title Mapping', () => {
       omieDocumentTypes: mockOmieDocumentTypes,
       order: mockOrder,
       billing: mockBilling,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: mockCustomerId,
       projectId: mockProjectId,
       departmentId: mockDepartmentId,
@@ -93,7 +91,6 @@ describe('Title Mapping', () => {
       omieDocumentTypes: mockOmieDocumentTypes,
       order: mockOrder,
       billing: mockBilling,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: mockCustomerId,
       projectId: mockProjectId,
       departmentId: mockDepartmentId,
@@ -128,7 +125,6 @@ describe('Title Mapping', () => {
       omieDocumentTypes: mockOmieDocumentTypes,
       order: mockOrder,
       billing: mockBilling,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: mockCustomerId,
       projectId: mockProjectId,
       departmentId: mockDepartmentId,
@@ -139,75 +135,7 @@ describe('Title Mapping', () => {
     expect(result).toEqual({ ...mockParsedOmieAccountReceivable, issueDate: null, paymentDate: null })
   })
 
-  it('Should return mapped title successfully without category: use emptyRecordsIds.category instead', () => {
-    const {
-      sut,
-      mockOmieTitle,
-      mockOmieDocumentTypes,
-      mockOrder,
-      mockBilling,
-      mockCompanyId,
-      mockCustomerId,
-      mockProjectId,
-      mockDepartmentId,
-      mockContractId
-    } = makeSut()
-
-    const result = sut({
-      companyId: mockCompanyId,
-      omieTitle: mockOmieTitle,
-      omieTitleEntries: mockOmieTitle.lancamentos,
-      omieTitleDepartment: mockOmieTitle.departamentos[0],
-      omieTitleCategory: null,
-      omieDocumentTypes: mockOmieDocumentTypes,
-      order: mockOrder,
-      billing: mockBilling,
-      emptyRecordsIds: mockEmptyRecordsIds,
-      customerId: mockCustomerId,
-      projectId: mockProjectId,
-      departmentId: mockDepartmentId,
-      categoryId: null,
-      contractId: mockContractId
-    })
-
-    expect(result).toEqual({ ...mockParsedOmieAccountReceivable, categoryId: mockEmptyRecordsIds.category })
-  })
-
-  it('Should return mapped title successfully without department: use emptyRecordsIds.department instead', () => {
-    const {
-      sut,
-      mockOmieTitle,
-      mockOmieDocumentTypes,
-      mockOrder,
-      mockBilling,
-      mockCompanyId,
-      mockCustomerId,
-      mockProjectId,
-      mockCategoryId,
-      mockContractId
-    } = makeSut()
-
-    const result = sut({
-      companyId: mockCompanyId,
-      omieTitle: mockOmieTitle,
-      omieTitleEntries: mockOmieTitle.lancamentos,
-      omieTitleDepartment: null,
-      omieTitleCategory: mockOmieTitle.cabecTitulo.aCodCateg[0],
-      omieDocumentTypes: mockOmieDocumentTypes,
-      order: mockOrder,
-      billing: mockBilling,
-      emptyRecordsIds: mockEmptyRecordsIds,
-      customerId: mockCustomerId,
-      projectId: mockProjectId,
-      departmentId: null,
-      categoryId: mockCategoryId,
-      contractId: mockContractId
-    })
-
-    expect(result).toEqual({ ...mockParsedOmieAccountReceivable, departmentId: mockEmptyRecordsIds.department })
-  })
-
-  it('Should return mapped title successfully without relationships ids: use emptyRecordsIds instead', () => {
+  it('Should return mapped title successfully without relationships', () => {
     const {
       sut,
       mockOmieTitle,
@@ -224,7 +152,6 @@ describe('Title Mapping', () => {
       omieDocumentTypes: mockOmieDocumentTypes,
       order: null,
       billing: null,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: null,
       projectId: null,
       departmentId: null,
@@ -234,14 +161,14 @@ describe('Title Mapping', () => {
 
     expect(result).toEqual({
       ...mockParsedOmieAccountReceivable,
-      categoryId: mockEmptyRecordsIds.category,
-      departmentId: mockEmptyRecordsIds.department,
-      projectId: mockEmptyRecordsIds.project,
-      customerId: mockEmptyRecordsIds.customer,
-      contractId: mockEmptyRecordsIds.contract,
-      orderId: mockEmptyRecordsIds.order,
+      categoryId: null,
+      departmentId: null,
+      projectId: null,
+      customerId: null,
+      contractId: null,
+      orderId: null,
       orderNumber: null,
-      billingId: mockEmptyRecordsIds.billing,
+      billingId: null,
       origin: null
     })
   })
@@ -270,7 +197,6 @@ describe('Title Mapping', () => {
       omieDocumentTypes: mockOmieDocumentTypes,
       order: mockOrder,
       billing: mockBilling,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: mockCustomerId,
       projectId: mockProjectId,
       departmentId: mockDepartmentId,

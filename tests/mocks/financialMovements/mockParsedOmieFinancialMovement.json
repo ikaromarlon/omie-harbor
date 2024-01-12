@@ -17,7 +17,7 @@
   "billingId": "7be89715-63e6-426a-a952-ae19b700a28f",
   "origin": "NFS-e",
   "accountPayableId": "2f9671a0-1b1e-4e45-8f59-b76f10af37e1",
-  "accountReceivableId": "04116369-c871-534a-ada6-5ee0e57b4a47",
+  "accountReceivableId": null,
   "type": {
     "code": "NFS",
     "description": "Nota Fiscal de Serviço"

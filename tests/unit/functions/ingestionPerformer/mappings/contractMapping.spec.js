@@ -1,6 +1,5 @@
 const contractMapping = require('../../../../../src/functions/ingestionPerformer/mappings/contractMapping')
 const {
-  mockEmptyRecordsIds,
   mockOmieContractsResponse,
   mockParsedOmieContract,
   mockOmieContractStepsResponse,
@@ -54,7 +53,6 @@ describe('Contract Mapping', () => {
       omieContractItem: mockOmieContract.itensContrato[0],
       omieContractBillingTypes: mockOmieContractBillingTypes,
       omieContractSteps: mockOmieContractSteps,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: mockCustomerId,
       projectId: mockProjectId,
       departmentId: mockDepartmentId,
@@ -65,38 +63,7 @@ describe('Contract Mapping', () => {
     expect(result).toEqual(mockParsedOmieContract)
   })
 
-  it('Should return mapped contract successfully without department: use emptyRecordsIds.department instead', () => {
-    const {
-      sut,
-      mockOmieContract,
-      mockOmieContractSteps,
-      mockOmieContractBillingTypes,
-      mockCompanyId,
-      mockCustomerId,
-      mockProjectId,
-      mockProductServiceId,
-      mockCategoryId
-    } = makeSut()
-
-    const result = sut({
-      companyId: mockCompanyId,
-      omieContract: mockOmieContract,
-      omieContractDepartment: null,
-      omieContractItem: mockOmieContract.itensContrato[0],
-      omieContractBillingTypes: mockOmieContractBillingTypes,
-      omieContractSteps: mockOmieContractSteps,
-      emptyRecordsIds: mockEmptyRecordsIds,
-      customerId: mockCustomerId,
-      projectId: mockProjectId,
-      departmentId: null,
-      productServiceId: mockProductServiceId,
-      categoryId: mockCategoryId
-    })
-
-    expect(result).toEqual({ ...mockParsedOmieContract, departmentId: mockEmptyRecordsIds.department })
-  })
-
-  it('Should return mapped contract successfully without relationships ids: use emptyRecordsIds instead', () => {
+  it('Should return mapped contract successfully without relationships', () => {
     const {
       sut,
       mockOmieContract,
@@ -112,7 +79,6 @@ describe('Contract Mapping', () => {
       omieContractItem: mockOmieContract.itensContrato[0],
       omieContractBillingTypes: mockOmieContractBillingTypes,
       omieContractSteps: mockOmieContractSteps,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: null,
       projectId: null,
       departmentId: null,
@@ -122,11 +88,11 @@ describe('Contract Mapping', () => {
 
     expect(result).toEqual({
       ...mockParsedOmieContract,
-      categoryId: mockEmptyRecordsIds.category,
-      departmentId: mockEmptyRecordsIds.department,
-      projectId: mockEmptyRecordsIds.project,
-      customerId: mockEmptyRecordsIds.customer,
-      productServiceId: mockEmptyRecordsIds.productService
+      categoryId: null,
+      departmentId: null,
+      projectId: null,
+      customerId: null,
+      productServiceId: null
     })
   })
 
@@ -151,7 +117,6 @@ describe('Contract Mapping', () => {
       omieContractItem: { ...mockOmieContract.itensContrato[0], itemImpostos: { ...mockOmieContract.itensContrato[0].itemImpostos, valorICMS: 0, valorISS: undefined } },
       omieContractBillingTypes: mockOmieContractBillingTypes,
       omieContractSteps: mockOmieContractSteps,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: mockCustomerId,
       projectId: mockProjectId,
       departmentId: mockDepartmentId,
@@ -183,7 +148,6 @@ describe('Contract Mapping', () => {
       omieContractItem: mockOmieContract.itensContrato[0],
       omieContractBillingTypes: mockOmieContractBillingTypes,
       omieContractSteps: mockOmieContractSteps,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: mockCustomerId,
       projectId: mockProjectId,
       departmentId: mockDepartmentId,
@@ -215,7 +179,6 @@ describe('Contract Mapping', () => {
       omieContractItem: { ...mockOmieContract.itensContrato[0], itemCabecalho: { ...mockOmieContract.itensContrato[0].itemCabecalho, codServMunic: '' } },
       omieContractBillingTypes: mockOmieContractBillingTypes,
       omieContractSteps: mockOmieContractSteps,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: mockCustomerId,
       projectId: mockProjectId,
       departmentId: mockDepartmentId,

@@ -1,6 +1,5 @@
 const serviceOrderMapping = require('../../../../../src/functions/ingestionPerformer/mappings/serviceOrderMapping')
 const {
-  mockEmptyRecordsIds,
   mockOmieServiceOrdersResponse,
   mockParsedOmieServiceOrder,
   mockOmieBillingStepsResponse
@@ -52,7 +51,6 @@ describe('Service Order Mapping', () => {
       omieOrderDepartment: mockOmieServiceOrder.Departamentos[0],
       omieOrderItem: mockOmieServiceOrder.ServicosPrestados[0],
       omieBillingSteps: mockOmieBillingSteps,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: mockCustomerId,
       projectId: mockProjectId,
       departmentId: mockDepartmentId,
@@ -64,38 +62,7 @@ describe('Service Order Mapping', () => {
     expect(result).toEqual(mockParsedOmieServiceOrder)
   })
 
-  it('Should return mapped product sale order successfully without department: use emptyRecordsIds.department instead', () => {
-    const {
-      sut,
-      mockOmieServiceOrder,
-      mockOmieBillingSteps,
-      mockCompanyId,
-      mockCustomerId,
-      mockProjectId,
-      mockProductServiceId,
-      mockCategoryId,
-      mockContractId
-    } = makeSut()
-
-    const result = sut({
-      companyId: mockCompanyId,
-      omieOrder: mockOmieServiceOrder,
-      omieOrderDepartment: null,
-      omieOrderItem: mockOmieServiceOrder.ServicosPrestados[0],
-      omieBillingSteps: mockOmieBillingSteps,
-      emptyRecordsIds: mockEmptyRecordsIds,
-      customerId: mockCustomerId,
-      projectId: mockProjectId,
-      departmentId: null,
-      productServiceId: mockProductServiceId,
-      categoryId: mockCategoryId,
-      contractId: mockContractId
-    })
-
-    expect(result).toEqual({ ...mockParsedOmieServiceOrder, departmentId: mockEmptyRecordsIds.department })
-  })
-
-  it('Should return mapped product sale order successfully without relationships ids: use emptyRecordsIds instead', () => {
+  it('Should return mapped product sale order successfully without relationships', () => {
     const {
       sut,
       mockOmieServiceOrder,
@@ -109,7 +76,6 @@ describe('Service Order Mapping', () => {
       omieOrderDepartment: null,
       omieOrderItem: mockOmieServiceOrder.ServicosPrestados[0],
       omieBillingSteps: mockOmieBillingSteps,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: null,
       projectId: null,
       departmentId: null,
@@ -120,12 +86,12 @@ describe('Service Order Mapping', () => {
 
     expect(result).toEqual({
       ...mockParsedOmieServiceOrder,
-      categoryId: mockEmptyRecordsIds.category,
-      departmentId: mockEmptyRecordsIds.department,
-      projectId: mockEmptyRecordsIds.project,
-      customerId: mockEmptyRecordsIds.customer,
-      productServiceId: mockEmptyRecordsIds.productService,
-      contractId: mockEmptyRecordsIds.contract
+      categoryId: null,
+      departmentId: null,
+      projectId: null,
+      customerId: null,
+      productServiceId: null,
+      contractId: null
     })
   })
 
@@ -149,7 +115,6 @@ describe('Service Order Mapping', () => {
       omieOrderDepartment: mockOmieServiceOrder.Departamentos[0],
       omieOrderItem: { ...mockOmieServiceOrder.ServicosPrestados[0], impostos: { ...mockOmieServiceOrder.ServicosPrestados[0].impostos, nValorICMS: undefined, nValorISS: undefined } },
       omieBillingSteps: mockOmieBillingSteps,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: mockCustomerId,
       projectId: mockProjectId,
       departmentId: mockDepartmentId,
@@ -191,7 +156,6 @@ describe('Service Order Mapping', () => {
       omieOrderDepartment: mockOmieServiceOrder.Departamentos[0],
       omieOrderItem: mockOmieServiceOrder.ServicosPrestados[0],
       omieBillingSteps: mockOmieBillingSteps2,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: mockCustomerId,
       projectId: mockProjectId,
       departmentId: mockDepartmentId,
@@ -223,7 +187,6 @@ describe('Service Order Mapping', () => {
       omieOrderDepartment: mockOmieServiceOrder.Departamentos[0],
       omieOrderItem: { ...mockOmieServiceOrder.ServicosPrestados[0], cCodServMun: '' },
       omieBillingSteps: mockOmieBillingSteps,
-      emptyRecordsIds: mockEmptyRecordsIds,
       customerId: mockCustomerId,
       projectId: mockProjectId,
       departmentId: mockDepartmentId,

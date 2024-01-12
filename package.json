@@ -28,8 +28,7 @@
   "dependencies": {
     "axios": "^1.6.3",
     "joi": "^17.11.0",
-    "mongodb": "^6.3.0",
-    "uuid-by-string": "^4.0.0"
+    "mongodb": "^6.3.0"
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.484.0",
