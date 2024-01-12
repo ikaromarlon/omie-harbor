@@ -58,18 +58,6 @@ npm start
 
 NOTE: To debug the application use VS Code Debugger
 
-### Setup a new DB
-
-If you are using a new MongoDB database you should setup indexes. You can do this by runing:
-
-```bash
-npm run bin:dev # for development environment
-```
-or
-```bash
-npm run bin:prd # for production environment
-```
-
 ### Deploy the application
 
 For Development environment:
