@@ -32,6 +32,20 @@ getCompanies:
     patterns:
       - 'src/functions/getCompanies/**'
 
+updateCompany:
+  handler: src/functions/updateCompany/index.handler
+  iamRoleStatementsName: ${self:custom.service.name}-updateCompany-role
+  events:
+    - schedule: ${self:custom.service.warmup}
+    - http:
+        path: companies/{id}
+        method: PATCH
+        cors: true
+        private: true
+  package:
+    patterns:
+      - 'src/functions/updateCompany/**'
+
 deleteDataByCompany:
   handler: src/functions/deleteDataByCompany/index.handler
   iamRoleStatementsName: ${self:custom.service.name}-deleteDataByCompany-role

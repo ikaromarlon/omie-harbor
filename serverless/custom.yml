@@ -26,6 +26,11 @@ apiGatewayServiceProxies:
             success: |-
               { "message": "accepted" }
 
+# customDomain:
+#   domainName: ${self:custom.service.domain.${self:provider.stage}}
+#   stage: ${self:provider.stage}
+#   createRoute53Record: true
+
 service:
   name: ${self:service}-${sls:stage}
   warmup:

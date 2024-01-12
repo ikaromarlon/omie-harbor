@@ -30,7 +30,7 @@ module.exports = (name, MongodbHelper, config, props = {}) => ({
       { $set: doc },
       { returnDocument: 'after', ...options }
     )
-    return parseDocument(result.value)
+    return parseDocument(result)
   },
   deleteOne: async (filter = {}, options = {}) => {
     const collection = await MongodbHelper.collection(name, config)

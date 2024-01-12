@@ -33,7 +33,7 @@ module.exports = () => {
     },
 
     update: async ({ id, ...data }) => {
-      return repository.updateOne({ id }, data)
+      return repository.updateOne(data, { id })
     }
   }
 }

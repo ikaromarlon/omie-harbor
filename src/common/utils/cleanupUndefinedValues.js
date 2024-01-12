@@ -10,7 +10,7 @@ const isObject = require('./isObject')
  * const result = cleanupUndefinedValues(data) // Output: { a: 1, c: { d: 2 } }
  */
 module.exports = function cleanupUndefinedValues (data) {
-  if (isObject(data)) {
+  if (isObject(data) && !(data instanceof Date)) {
     const newData = {}
     for (const key in data) {
       if (typeof data[key] !== 'undefined') {

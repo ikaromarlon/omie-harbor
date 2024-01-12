@@ -8,9 +8,9 @@ module.exports = ({
 }) => async (request) => {
   try {
     /* API Gateway HTTP event */
-    const { params, query } = request
+    const { params, body } = request
 
-    const payload = validateWithSchema({ ...params, ...query }, schema)
+    const payload = validateWithSchema({ ...params, ...body }, schema)
 
     const data = await service(payload)
 

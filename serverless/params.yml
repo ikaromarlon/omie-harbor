@@ -3,4 +3,4 @@ default:
   dataExportQueueUrl: !Ref DataExportQueue
   dataExportBucketName: !Ref DataExportBucket
 dev:
-  apiKey: 'd41d8cd98f00b204e9800998ecf8427e'
+  apiKey: d41d8cd98f00b204e9800998ecf8427e
