@@ -36,6 +36,7 @@
     "@aws-sdk/client-s3": "^3.484.0",
     "@aws-sdk/client-ses": "^3.484.0",
     "@aws-sdk/client-sqs": "^3.484.0",
+    "@aws-sdk/s3-request-presigner": "^3.490.0",
     "@shelf/jest-mongodb": "^4.2.0",
     "@types/jest": "^29.5.11",
     "dotenv": "^16.3.1",

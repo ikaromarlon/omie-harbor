@@ -1,9 +1,9 @@
 module.exports = {
   omie: {
     apiBaseUrl: 'https://app.omie.com.br/api/v1',
-    ingestionPeriod: 3, /** days back */
-    requestPeriod: 60, /** in seconds */
-    maxRequestPerPeriod: 200, /** in seconds */
+    ingestionPeriod: 3, // days back
+    requestPeriod: 60, // in seconds
+    maxRequestPerPeriod: 200, // in seconds
     recordsPerPage: 500,
     defaultForceThrow: false
   },
@@ -13,7 +13,8 @@ module.exports = {
   },
   S3: {
     dataExportBucket: {
-      name: process.env.S3_DATA_EXPORT_BUCKET_NAME
+      name: process.env.S3_DATA_EXPORT_BUCKET_NAME,
+      signedUrlExpiration: 10 // in seconds
     }
   }
 }

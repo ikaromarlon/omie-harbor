@@ -66,6 +66,26 @@ deleteDataByCompany:
     patterns:
       - 'src/functions/deleteDataByCompany/**'
 
+getCompanyData:
+  handler: src/functions/getCompanyData/index.handler
+  iamRoleStatementsName: ${self:custom.service.name}-getCompanyData-role
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+      Resource:
+        - Fn::Join: ['', [Fn::GetAtt: [ DataExportBucket, Arn ], '/*']]
+  events:
+    - schedule: ${self:custom.service.warmup}
+    - http:
+        path: companies/{id}/data
+        method: GET
+        cors: true
+        private: true
+  package:
+    patterns:
+      - 'src/functions/getCompanyData/**'
+
 ingestionDispatcher:
   handler: src/functions/ingestionDispatcher/index.handler
   iamRoleStatementsName: ${self:custom.service.name}-ingestionDispatcher-role

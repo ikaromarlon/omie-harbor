@@ -1,5 +1,6 @@
 module.exports = {
   OK: 200,
+  SEE_OTHER: 303,
   NO_CONTENT: 204,
   BAD_REQUEST: 400,
   FORBIDDEN: 403,
