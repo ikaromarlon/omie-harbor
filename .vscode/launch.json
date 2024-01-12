@@ -28,36 +28,6 @@
       "console": "integratedTerminal"
     },
     {
-      "name": "Invoke deleteDataByCompany",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
-      "args": [
-        "invoke", "local",
-        "-f", "deleteDataByCompany",
-        "-p", "${workspaceFolder}/events/deleteDataByCompany-http.json"
-      ],
-      "env": {
-        "SLS_DEBUG": "*"
-      },
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "Invoke getCompanies",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
-      "args": [
-        "invoke", "local",
-        "-f", "getCompanies",
-        "-p", "${workspaceFolder}/events/getCompanies-http.json"
-      ],
-      "env": {
-        "SLS_DEBUG": "*"
-      },
-      "console": "integratedTerminal"
-    },
-    {
       "name": "Invoke ingestionDispatcher",
       "type": "node",
       "request": "launch",
@@ -80,21 +50,6 @@
         "invoke", "local",
         "-f", "ingestionPerformer",
         "-p", "${workspaceFolder}/events/ingestionPerformer-sqs.json"
-      ],
-      "env": {
-        "SLS_DEBUG": "*"
-      },
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "Invoke registerCompany",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/node_modules/serverless/bin/serverless.js",
-      "args": [
-        "invoke", "local",
-        "-f", "registerCompany",
-        "-p", "${workspaceFolder}/events/registerCompany-http.json"
       ],
       "env": {
         "SLS_DEBUG": "*"
