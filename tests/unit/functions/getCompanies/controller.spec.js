@@ -65,7 +65,7 @@ describe('getCompanies Controller', () => {
     }
   })
 
-  it('Should return success: http request', async () => {
+  it('Should return success', async () => {
     const { sut, validateWithSchemaStub, serviceStub, mockSchema, mockRequest } = makeSut()
     const result = await sut(mockRequest)
     expect(validateWithSchemaStub).toHaveBeenCalledWith(mockRequest.params, mockSchema)

@@ -1,14 +1,15 @@
-const makeController = require('../../../../src/functions/deleteDataByCompany/controller')
+const makeController = require('../../../../src/functions/updateCompany/controller')
 const { UnprocessableEntityException, InternalServerErrorException } = require('../../../../src/common/errors')
 
 const companyId = '25c176b6-b200-4575-9217-e23c6105163c'
 
 const makeSut = () => {
   const mockRequest = {
-    params: { companyId }
+    params: { companyId },
+    body: { isActive: false }
   }
 
-  const validateWithSchemaStub = jest.fn(() => (mockRequest.params))
+  const validateWithSchemaStub = jest.fn(() => ({ ...mockRequest.params, ...mockRequest.body }))
   const mockSchema = {}
   const serviceStub = jest.fn(async () => Promise.resolve({ success: true }))
 
@@ -27,7 +28,7 @@ const makeSut = () => {
   }
 }
 
-describe('deleteDataByCompany Controller', () => {
+describe('updateCompany Controller', () => {
   it('Should throw an InternalServerErrorException if validateWithSchema throws an Error', async () => {
     const { sut, validateWithSchemaStub, mockRequest } = makeSut()
     validateWithSchemaStub.mockImplementationOnce(() => { throw new Error('Generic error') })
@@ -68,8 +69,8 @@ describe('deleteDataByCompany Controller', () => {
   it('Should return success', async () => {
     const { sut, validateWithSchemaStub, serviceStub, mockSchema, mockRequest } = makeSut()
     const result = await sut(mockRequest)
-    expect(validateWithSchemaStub).toHaveBeenCalledWith(mockRequest.params, mockSchema)
-    expect(serviceStub).toHaveBeenCalledWith({ companyId })
+    expect(validateWithSchemaStub).toHaveBeenCalledWith({ ...mockRequest.params, ...mockRequest.body }, mockSchema)
+    expect(serviceStub).toHaveBeenCalledWith({ ...mockRequest.params, ...mockRequest.body })
     expect(result.statusCode).toBe(200)
     expect(result.data).toEqual({ success: true })
   })
