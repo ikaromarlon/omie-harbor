@@ -11,7 +11,7 @@ registerCompany:
   package:
     patterns:
       - 'src/functions/registerCompany/**'
-      - 'src/shared/mappings/companyMapping.js'
+      - 'src/shared/**'
 
 deleteDataByCompany:
   handler: src/functions/deleteDataByCompany/index.handler
@@ -70,7 +70,7 @@ ingestionPerformer:
   package:
     patterns:
       - 'src/functions/ingestionPerformer/**'
-      - 'src/shared/mappings/companyMapping.js'
+      - 'src/shared/**'
 
 dataExport:
   handler: src/functions/dataExport/index.handler

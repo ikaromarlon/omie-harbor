@@ -2,8 +2,18 @@ const config = require('../../config')
 const { NotFoundException, UnprocessableEntityException } = require('../../common/errors')
 const { daysToMilliseconds } = require('../../common/utils')
 const updateCompany = require('./useCases/updateCompany')
-const updateDimensions = require('./useCases/updateDimensions')
-const updateFacts = require('./useCases/updateFacts')
+const updateCategories = require('./useCases/updateCategories')
+const updateDepartments = require('./useCases/updateDepartments')
+const updateProjects = require('./useCases/updateProjects')
+const updateCustomers = require('./useCases/updateCustomers')
+const updateProductsServices = require('./useCases/updateProductsServices')
+const updateCheckingAccounts = require('./useCases/updateCheckingAccounts')
+const updateContracts = require('./useCases/updateContracts')
+const updateOrders = require('./useCases/updateOrders')
+const updateBilling = require('./useCases/updateBilling')
+const updateAccountsPayable = require('./useCases/updateAccountsPayable')
+const updateAccountsReceivable = require('./useCases/updateAccountsReceivable')
+const updateFinancialMovements = require('./useCases/updateFinancialMovements')
 
 module.exports = ({
   omieService,
@@ -49,6 +59,7 @@ module.exports = ({
     omieService.getDocumentTypes(credentials)
   ])
 
+  /* main entity -> */
   await updateCompany({
     omieService,
     credentials,
@@ -57,29 +68,138 @@ module.exports = ({
     companyMapping: mappings.companyMapping,
     companiesRepository
   })
+  /* <- main entity */
 
-  await updateDimensions({
+  /* dimension entities -> */
+  await updateCategories({
     omieService,
     credentials,
-    startDate,
-    endDate,
     companyId,
-    mappings,
-    repositories,
-    omieBanks,
-    omieCnae
+    categoryMapping: mappings.categoryMapping,
+    categoriesRepository: repositories.categories
   })
 
-  await updateFacts({
+  await updateDepartments({
     omieService,
     credentials,
+    companyId,
     startDate,
     endDate,
+    departmentMapping: mappings.departmentMapping,
+    departmentsRepository: repositories.departments
+  })
+
+  await updateProjects({
+    omieService,
+    credentials,
     companyId,
-    mappings,
+    startDate,
+    endDate,
+    projectMapping: mappings.projectMapping,
+    projectsRepository: repositories.projects
+  })
+
+  await updateCustomers({
+    omieService,
+    credentials,
+    companyId,
+    startDate,
+    endDate,
+    omieCnae,
+    omieBanks,
+    customerMapping: mappings.customerMapping,
+    customersRepository: repositories.customers
+  })
+
+  await updateProductsServices({
+    omieService,
+    credentials,
+    companyId,
+    startDate,
+    endDate,
+    productMapping: mappings.productMapping,
+    serviceMapping: mappings.serviceMapping,
+    productsServicesRepository: repositories.productsServices
+  })
+
+  await updateCheckingAccounts({
+    omieService,
+    credentials,
+    companyId,
+    startDate,
+    endDate,
+    omieBanks,
+    checkingAccountMapping: mappings.checkingAccountMapping,
+    checkingAccountsRepository: repositories.checkingAccounts
+  })
+
+  await updateContracts({
+    omieService,
+    credentials,
+    companyId,
+    startDate,
+    endDate,
+    contractMapping: mappings.contractMapping,
+    repositories
+  })
+
+  await updateOrders({
+    omieService,
+    credentials,
+    companyId,
+    startDate,
+    endDate,
+    productOrderMapping: mappings.productOrderMapping,
+    serviceOrderMapping: mappings.serviceOrderMapping,
+    repositories
+  })
+  /* <- dimension entities */
+
+  /* fact entities -> */
+  await updateBilling({
+    omieService,
+    credentials,
+    companyId,
+    startDate,
+    endDate,
+    productInvoiceMapping: mappings.productInvoiceMapping,
+    serviceInvoiceMapping: mappings.serviceInvoiceMapping,
+    repositories
+  })
+
+  await updateAccountsPayable({
+    omieService,
+    credentials,
+    companyId,
+    startDate,
+    endDate,
+    titleMapping: mappings.titleMapping,
     repositories,
     omieDocumentTypes
   })
+
+  await updateAccountsReceivable({
+    omieService,
+    credentials,
+    companyId,
+    startDate,
+    endDate,
+    titleMapping: mappings.titleMapping,
+    repositories,
+    omieDocumentTypes
+  })
+
+  await updateFinancialMovements({
+    omieService,
+    credentials,
+    companyId,
+    startDate,
+    endDate,
+    financialMovementMapping: mappings.financialMovementMapping,
+    repositories,
+    omieDocumentTypes
+  })
+  /* <- fact entities */
 
   logger.info(`Ingestion completed for company ${companyId} - ${name}`)
 
