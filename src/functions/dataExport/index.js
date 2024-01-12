@@ -5,17 +5,17 @@ const schema = require('./schema')
 const validateWithSchema = require('../../common/helpers/validateWithSchema')
 const Repositories = require('../../repositories/genericRepository')
 const CompaniesRepository = require('../../repositories/companiesRepository')
-const Bucket = require('../../common/adapters/bucket')
-const logger = require('../../common/adapters/logger')
+const S3 = require('../../infra/s3')
+const logger = require('../../common/helpers/logger')
 
-const bucket = Bucket()
+const s3 = S3()
 const companiesRepository = CompaniesRepository()
 const repositories = Repositories()
 
 const service = makeService({
   companiesRepository,
   repositories,
-  bucket,
+  s3,
   logger
 })
 

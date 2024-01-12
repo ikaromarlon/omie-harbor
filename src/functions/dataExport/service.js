@@ -3,7 +3,7 @@ const { NotFoundException } = require('../../common/errors')
 module.exports = ({
   companiesRepository,
   repositories,
-  bucket,
+  s3,
   logger
 }) => async (payload) => {
   const { companyId } = payload
@@ -27,9 +27,9 @@ module.exports = ({
     return acc
   }, {})
 
-  logger.info(`Uploading data to bucket for company ${company.is} - ${company.name}`)
+  logger.info(`Uploading data to s3 for company ${company.is} - ${company.name}`)
 
-  await bucket.storeCompanyData(companyId, {
+  await s3.storeCompanyData(companyId, {
     company,
     ...records
   })

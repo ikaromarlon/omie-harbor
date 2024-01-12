@@ -54,7 +54,7 @@ const makeSut = () => {
     info: jest.fn(() => null)
   }
 
-  const mockQueuer = {
+  const mockSQS = {
     sendCompanyToDataExportQueue: jest.fn(async () => null)
   }
 
@@ -62,7 +62,7 @@ const makeSut = () => {
     companiesRepository: mockCompanyRepository,
     repositories: mockRepositories,
     logger: mockLogger,
-    queuer: mockQueuer
+    sqs: mockSQS
   })
 
   return {
@@ -72,18 +72,18 @@ const makeSut = () => {
     mockRepositories,
     mockLogger,
     mockCompany,
-    mockQueuer
+    mockSQS
   }
 }
 
 describe('webhook service', () => {
   it('Should receive a ping payload and finish process early', async () => {
-    const { sut, mockCompanyRepository, mockLogger, mockQueuer } = makeSut()
+    const { sut, mockCompanyRepository, mockLogger, mockSQS } = makeSut()
     const mockPayload = { ping: 'Omie' }
     const result = await sut(mockPayload)
     expect(mockCompanyRepository.findByAppKey).toHaveBeenCalledTimes(0)
     expect(mockLogger.info).toHaveBeenCalledTimes(0)
-    expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
+    expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
     expect(result).toEqual({
       ping: 'Omie',
       pong: 'Omie Harbor'
@@ -91,7 +91,7 @@ describe('webhook service', () => {
   })
 
   it('Should not find company and throw an NotFoundException', async () => {
-    const { sut, mockPayload, mockCompanyRepository, mockLogger, mockQueuer } = makeSut()
+    const { sut, mockPayload, mockCompanyRepository, mockLogger, mockSQS } = makeSut()
     mockCompanyRepository.findByAppKey.mockResolvedValueOnce(null)
     try {
       await sut(mockPayload)
@@ -102,11 +102,11 @@ describe('webhook service', () => {
       expect(error.message).toBe(`Company related to appKey '${mockPayload.appKey}' not found`)
     }
     expect(mockLogger.info).toHaveBeenCalledTimes(0)
-    expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
+    expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
   })
 
   it('Should not find action', async () => {
-    const { sut, mockPayload, mockCompanyRepository, mockLogger, mockQueuer, mockCompany } = makeSut()
+    const { sut, mockPayload, mockCompanyRepository, mockLogger, mockSQS, mockCompany } = makeSut()
     const result = await sut(mockPayload)
     expect(mockCompanyRepository.findByAppKey).toHaveBeenCalledWith(mockPayload.appKey)
     expect(mockLogger.info).toHaveBeenCalledTimes(1)
@@ -114,7 +114,7 @@ describe('webhook service', () => {
       `Action for company ${mockCompany.id} - ${mockCompany.name}: ${mockPayload.topic}`,
       { result, payload: mockPayload }
     )
-    expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
+    expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
     expect(result).toEqual({
       message: 'Unknown action: Entity.event'
     })
@@ -122,7 +122,7 @@ describe('webhook service', () => {
 
   describe('OrdemServico.Excluida action', () => {
     it('Should follow deleteOrder flow due to OrdemServico.Excluida and does not find orders', async () => {
-      const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
+      const { sut, mockPayload, mockRepositories, mockLogger, mockSQS, mockCompany } = makeSut()
 
       mockPayload.topic = 'OrdemServico.Excluida'
       mockPayload.event = { idOrdemServico: '00000000' }
@@ -137,7 +137,7 @@ describe('webhook service', () => {
       expect(mockRepositories.orders.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
-      expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
+      expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
       expect(mockLogger.info).toHaveBeenCalledTimes(1)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1,
         `Action for company ${mockCompany.id} - ${mockCompany.name}: ${mockPayload.topic}`,
@@ -153,7 +153,7 @@ describe('webhook service', () => {
     })
 
     it('Should follow deleteOrder flow due to OrdemServico.Excluida action and delete records', async () => {
-      const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
+      const { sut, mockPayload, mockRepositories, mockLogger, mockSQS, mockCompany } = makeSut()
 
       mockPayload.topic = 'OrdemServico.Excluida'
       mockPayload.event = { idOrdemServico: '618754178' }
@@ -180,7 +180,7 @@ describe('webhook service', () => {
         companyId: mockCompany.id,
         orderId: [mockSavedOmieServiceOrders[0].id]
       })
-      expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany.id)
+      expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany.id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1,
         `Action for company ${mockCompany.id} - ${mockCompany.name}: ${mockPayload.topic}`,
@@ -201,7 +201,7 @@ describe('webhook service', () => {
 
   describe('VendaProduto.Excluida action', () => {
     it('Should follow deleteOrder flow due to VendaProduto.Excluida and does not find orders', async () => {
-      const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
+      const { sut, mockPayload, mockRepositories, mockLogger, mockSQS, mockCompany } = makeSut()
 
       mockPayload.topic = 'VendaProduto.Excluida'
       mockPayload.event = { idPedido: '00000000' }
@@ -216,7 +216,7 @@ describe('webhook service', () => {
       expect(mockRepositories.orders.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
-      expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
+      expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
       expect(mockLogger.info).toHaveBeenCalledTimes(1)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1,
         `Action for company ${mockCompany.id} - ${mockCompany.name}: ${mockPayload.topic}`,
@@ -232,7 +232,7 @@ describe('webhook service', () => {
     })
 
     it('Should follow deleteOrder flow due to VendaProduto.Excluida action and delete records', async () => {
-      const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
+      const { sut, mockPayload, mockRepositories, mockLogger, mockSQS, mockCompany } = makeSut()
 
       mockPayload.topic = 'VendaProduto.Excluida'
       mockPayload.event = { idPedido: '915642742' }
@@ -259,7 +259,7 @@ describe('webhook service', () => {
         companyId: mockCompany.id,
         orderId: [mockSavedOmieProductOrders[0].id]
       })
-      expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany.id)
+      expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany.id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1,
         `Action for company ${mockCompany.id} - ${mockCompany.name}: ${mockPayload.topic}`,
@@ -280,7 +280,7 @@ describe('webhook service', () => {
 
   describe('ContratoServico.Excluido action', () => {
     it('Should follow deleteContract flow due to ContratoServico.Excluido and does not find contracts', async () => {
-      const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
+      const { sut, mockPayload, mockRepositories, mockLogger, mockSQS, mockCompany } = makeSut()
 
       mockPayload.topic = 'ContratoServico.Excluido'
       mockPayload.event = { nCodCtr: '00000000' }
@@ -295,7 +295,7 @@ describe('webhook service', () => {
       expect(mockRepositories.contracts.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
-      expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
+      expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
       expect(mockLogger.info).toHaveBeenCalledTimes(1)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1,
         `Action for company ${mockCompany.id} - ${mockCompany.name}: ${mockPayload.topic}`,
@@ -311,7 +311,7 @@ describe('webhook service', () => {
     })
 
     it('Should follow deleteContract flow due to ContratoServico.Excluido action and delete records', async () => {
-      const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
+      const { sut, mockPayload, mockRepositories, mockLogger, mockSQS, mockCompany } = makeSut()
 
       mockPayload.topic = 'ContratoServico.Excluido'
       mockPayload.event = { nCodCtr: '617704532' }
@@ -338,7 +338,7 @@ describe('webhook service', () => {
         companyId: mockCompany.id,
         contractId: [mockSavedOmieContracts[0].id]
       })
-      expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany.id)
+      expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany.id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1,
         `Action for company ${mockCompany.id} - ${mockCompany.name}: ${mockPayload.topic}`,
@@ -359,7 +359,7 @@ describe('webhook service', () => {
 
   describe('Financas.ContaPagar.Excluido action', () => {
     it('Should follow deleteAccountPayable flow due to Financas.ContaPagar.Excluido and does not find accountsPayable', async () => {
-      const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
+      const { sut, mockPayload, mockRepositories, mockLogger, mockSQS, mockCompany } = makeSut()
 
       mockPayload.topic = 'Financas.ContaPagar.Excluido'
       mockPayload.event = { codigo_lancamento_omie: '00000000' }
@@ -373,7 +373,7 @@ describe('webhook service', () => {
       })
       expect(mockRepositories.accountsPayable.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
-      expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
+      expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
       expect(mockLogger.info).toHaveBeenCalledTimes(1)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1,
         `Action for company ${mockCompany.id} - ${mockCompany.name}: ${mockPayload.topic}`,
@@ -388,7 +388,7 @@ describe('webhook service', () => {
     })
 
     it('Should follow deleteAccountPayable flow due to Financas.ContaPagar.Excluido action and delete records', async () => {
-      const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
+      const { sut, mockPayload, mockRepositories, mockLogger, mockSQS, mockCompany } = makeSut()
 
       mockPayload.topic = 'Financas.ContaPagar.Excluido'
       mockPayload.event = { codigo_lancamento_omie: '618738728' }
@@ -410,7 +410,7 @@ describe('webhook service', () => {
         companyId: mockCompany.id,
         accountPayableId: [mockSavedOmieAccountsPayable[0].id]
       })
-      expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany.id)
+      expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany.id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1,
         `Action for company ${mockCompany.id} - ${mockCompany.name}: ${mockPayload.topic}`,
@@ -430,7 +430,7 @@ describe('webhook service', () => {
 
   describe('Financas.ContaReceber.Excluido action', () => {
     it('Should follow deleteAccountReceivable flow due to Financas.ContaReceber.Excluido and does not find accountsReceivable', async () => {
-      const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
+      const { sut, mockPayload, mockRepositories, mockLogger, mockSQS, mockCompany } = makeSut()
 
       mockPayload.topic = 'Financas.ContaReceber.Excluido'
       mockPayload.event = { codigo_lancamento_omie: '00000000' }
@@ -444,7 +444,7 @@ describe('webhook service', () => {
       })
       expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
-      expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
+      expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
       expect(mockLogger.info).toHaveBeenCalledTimes(1)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1,
         `Action for company ${mockCompany.id} - ${mockCompany.name}: ${mockPayload.topic}`,
@@ -459,7 +459,7 @@ describe('webhook service', () => {
     })
 
     it('Should follow deleteAccountReceivable flow due to Financas.ContaReceber.Excluido action and delete records', async () => {
-      const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
+      const { sut, mockPayload, mockRepositories, mockLogger, mockSQS, mockCompany } = makeSut()
 
       mockPayload.topic = 'Financas.ContaReceber.Excluido'
       mockPayload.event = { codigo_lancamento_omie: '618738728' }
@@ -481,7 +481,7 @@ describe('webhook service', () => {
         companyId: mockCompany.id,
         accountReceivableId: [mockSavedOmieAccountsReceivable[0].id]
       })
-      expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany.id)
+      expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany.id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1,
         `Action for company ${mockCompany.id} - ${mockCompany.name}: ${mockPayload.topic}`,
@@ -501,7 +501,7 @@ describe('webhook service', () => {
 
   describe('Financas.ContaCorrente.Lancamento.Excluido action', () => {
     it('Should follow deleteFinancialMovement flow due to Financas.ContaCorrente.Lancamento.Excluido action and delete records', async () => {
-      const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer, mockCompany } = makeSut()
+      const { sut, mockPayload, mockRepositories, mockLogger, mockSQS, mockCompany } = makeSut()
 
       mockPayload.topic = 'Financas.ContaCorrente.Lancamento.Excluido'
       mockPayload.event = { nCodLanc: '617704532' }
@@ -513,7 +513,7 @@ describe('webhook service', () => {
         companyId: mockCompany.id,
         externalId: '617704532'
       })
-      expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany.id)
+      expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany.id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
       expect(mockLogger.info).toHaveBeenNthCalledWith(1,
         `Action for company ${mockCompany.id} - ${mockCompany.name}: ${mockPayload.topic}`,

@@ -76,14 +76,14 @@ const makeSut = () => {
     info: jest.fn(() => null)
   }
 
-  const mockQueuer = {
+  const mockSQS = {
     sendCompanyToDataExportQueue: jest.fn(async () => null)
   }
 
   const service = makeService({
     companiesRepository: mockCompaniesRepository,
     repositories: mockRepositories,
-    queuer: mockQueuer,
+    sqs: mockSQS,
     logger: mockLogger
   })
 
@@ -93,13 +93,13 @@ const makeSut = () => {
     mockCompaniesRepository,
     mockRepositories,
     mockLogger,
-    mockQueuer
+    mockSQS
   }
 }
 
 describe('deleteDataByCompany service', () => {
   it('Should delete data by company successfully', async () => {
-    const { sut, mockPayload, mockCompaniesRepository, mockRepositories, mockLogger, mockQueuer } = makeSut()
+    const { sut, mockPayload, mockCompaniesRepository, mockRepositories, mockLogger, mockSQS } = makeSut()
     const result = await sut(mockPayload)
     const { id } = mockPayload
     expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(id)
@@ -116,7 +116,7 @@ describe('deleteDataByCompany service', () => {
     expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledWith({ companyId: id })
     expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledWith({ companyId: id })
     expect(mockLogger.info).toHaveBeenCalledTimes(1)
-    expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(id)
+    expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledWith(id)
     expect(result).toEqual({
       company: {
         id: mockSavedOmieCompanies[0].id,
@@ -141,7 +141,7 @@ describe('deleteDataByCompany service', () => {
   })
 
   it('Should throw a NotFoundException due to not find company', async () => {
-    const { sut, mockPayload, mockCompaniesRepository, mockRepositories, mockLogger, mockQueuer } = makeSut()
+    const { sut, mockPayload, mockCompaniesRepository, mockRepositories, mockLogger, mockSQS } = makeSut()
     mockPayload.id = 'any-invalid-company-id'
     mockCompaniesRepository.findById.mockResolvedValueOnce(null)
     try {
@@ -162,7 +162,7 @@ describe('deleteDataByCompany service', () => {
       expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockLogger.info).toHaveBeenCalledTimes(0)
-      expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
+      expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledTimes(0)
       expect(error).toBeInstanceOf(NotFoundException)
       expect(error.message).toBe('Company not found')
     }

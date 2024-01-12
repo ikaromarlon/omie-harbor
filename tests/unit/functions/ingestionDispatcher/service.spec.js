@@ -10,13 +10,13 @@ const makeSut = () => {
     info: jest.fn(() => null)
   }
 
-  const mockQueuer = {
-    sendCompanyToIngestionQueue: jest.fn(async () => Promise.resolve('https://the-queuer-url/data.json'))
+  const mockSQS = {
+    sendCompanyToIngestionQueue: jest.fn(async () => Promise.resolve('https://the-sqs-url/data.json'))
   }
 
   const service = makeService({
     companiesRepository: mockCompanyRepository,
-    queuer: mockQueuer,
+    sqs: mockSQS,
     logger: mockLogger
   })
 
@@ -24,25 +24,25 @@ const makeSut = () => {
     sut: service,
     mockCompanyRepository,
     mockLogger,
-    mockQueuer
+    mockSQS
   }
 }
 
 describe('ingestionDispatcher service', () => {
   it('Should return success', async () => {
-    const { sut, mockCompanyRepository, mockQueuer, mockLogger } = makeSut()
+    const { sut, mockCompanyRepository, mockSQS, mockLogger } = makeSut()
     const result = await sut()
     expect(mockCompanyRepository.find).toHaveBeenCalledWith({ isActive: true })
-    expect(mockQueuer.sendCompanyToIngestionQueue).toHaveBeenCalledWith(mockSavedOmieCompanies[0].id)
+    expect(mockSQS.sendCompanyToIngestionQueue).toHaveBeenCalledWith(mockSavedOmieCompanies[0].id)
     expect(mockLogger.info).toHaveBeenCalledTimes(1)
     expect(result).toEqual({ success: true })
   })
 
-  it('Should return success but not call queuer.sendCompanyToIngestionQueue', async () => {
-    const { sut, mockQueuer, mockCompanyRepository, mockLogger } = makeSut()
+  it('Should return success but not call sqs.sendCompanyToIngestionQueue', async () => {
+    const { sut, mockSQS, mockCompanyRepository, mockLogger } = makeSut()
     mockCompanyRepository.find.mockResolvedValueOnce([])
     const result = await sut()
-    expect(mockQueuer.sendCompanyToIngestionQueue).toHaveBeenCalledTimes(0)
+    expect(mockSQS.sendCompanyToIngestionQueue).toHaveBeenCalledTimes(0)
     expect(mockLogger.info).toHaveBeenCalledTimes(1)
     expect(result).toEqual({ success: true })
   })

@@ -130,7 +130,7 @@ const makeSut = () => {
     error: jest.fn(() => null)
   }
 
-  const mockQueuer = {
+  const mockSQS = {
     sendCompanyToDataExportQueue: jest.fn(async () => null)
   }
 
@@ -140,7 +140,7 @@ const makeSut = () => {
     companiesRepository: mockCompaniesRepository,
     repositories: mockRepositories,
     logger: mockLogger,
-    queuer: mockQueuer
+    sqs: mockSQS
   })
 
   return {
@@ -153,7 +153,7 @@ const makeSut = () => {
     mockCompaniesRepository,
     mockRepositories,
     mockLogger,
-    mockQueuer,
+    mockSQS,
     mockCustomerId,
     mockProjectId,
     mockDepartmentId,
@@ -967,7 +967,7 @@ describe('ingestionPerformer service', () => {
   })
 
   it('Should return success with custom parameters', async () => {
-    const { sut, mockPayload, mockLogger, mockOmieService, mockQueuer } = makeSut()
+    const { sut, mockPayload, mockLogger, mockOmieService, mockSQS } = makeSut()
     mockPayload.startDate = '2022-01-01'
     mockPayload.endDate = '2022-01-31'
     const result = await sut(mockPayload)
@@ -975,18 +975,18 @@ describe('ingestionPerformer service', () => {
     expect(mockOmieService.getBanks).toHaveBeenCalledTimes(1)
     expect(mockOmieService.getCnae).toHaveBeenCalledTimes(1)
     expect(mockOmieService.getDocumentTypes).toHaveBeenCalledTimes(1)
-    expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockPayload.companyId)
+    expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockPayload.companyId)
     expect(result).toEqual({ success: true })
   })
 
   it('Should return success without custom parameters', async () => {
-    const { sut, mockPayload, mockLogger, mockOmieService, mockQueuer } = makeSut()
+    const { sut, mockPayload, mockLogger, mockOmieService, mockSQS } = makeSut()
     const result = await sut(mockPayload)
     expect(mockLogger.info).toHaveBeenCalledTimes(3)
     expect(mockOmieService.getBanks).toHaveBeenCalledTimes(1)
     expect(mockOmieService.getCnae).toHaveBeenCalledTimes(1)
     expect(mockOmieService.getDocumentTypes).toHaveBeenCalledTimes(1)
-    expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockPayload.companyId)
+    expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockPayload.companyId)
     expect(result).toEqual({ success: true })
   })
 })

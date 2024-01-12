@@ -1,5 +1,5 @@
 const HttpStatus = require('../../common/helpers/HttpStatus')
-const logger = require('../../common/adapters/logger')
+const logger = require('../../common/helpers/logger')
 const { isServerSideError } = require('../../common/errors')
 
 module.exports = (error, statusCode, headers = {}) => {

@@ -10,7 +10,7 @@ module.exports = ({
   mappings,
   companiesRepository,
   repositories,
-  queuer,
+  sqs,
   logger
 }) => async (payload) => {
   const { companyId } = payload
@@ -100,7 +100,7 @@ module.exports = ({
 
   logger.info(`Ingestion completed for company ${companyId} - ${name}`)
 
-  await queuer.sendCompanyToDataExportQueue(companyId)
+  await sqs.sendCompanyToDataExportQueue(companyId)
 
   logger.info(`Company ${companyId} - ${name} sent to dataExport process`)
 

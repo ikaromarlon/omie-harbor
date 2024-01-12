@@ -11,7 +11,7 @@ module.exports = ({
   companiesRepository,
   repositories,
   logger,
-  queuer
+  sqs
 }) => {
   const handler = async (payload) => {
     const actions = {
@@ -60,7 +60,7 @@ module.exports = ({
     )
 
     if (hasAffected) {
-      await queuer.sendCompanyToDataExportQueue(company.id)
+      await sqs.sendCompanyToDataExportQueue(company.id)
 
       logger.info(`Company ${company.id} - ${company.name} sent to dataExport process`)
     }

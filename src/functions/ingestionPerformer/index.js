@@ -7,20 +7,20 @@ const OmieService = require('../../shared/services/omieService')
 const mappings = require('./mappings')
 const CompaniesRepository = require('../../repositories/companiesRepository')
 const Repositories = require('../../repositories/genericRepository')
-const Queuer = require('../../common/adapters/queuer')
-const logger = require('../../common/adapters/logger')
+const SQS = require('../../infra/sqs')
+const logger = require('../../common/helpers/logger')
 
 const omieService = OmieService()
 const companiesRepository = CompaniesRepository()
 const repositories = Repositories()
-const queuer = Queuer()
+const sqs = SQS()
 
 const service = makeService({
   omieService,
   mappings,
   companiesRepository,
   repositories,
-  queuer,
+  sqs,
   logger
 })
 

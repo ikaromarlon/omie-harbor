@@ -4,7 +4,7 @@ module.exports = ({
   companiesRepository,
   repositories,
   logger,
-  queuer
+  sqs
 }) => async (payload) => {
   const { id: companyId } = payload
 
@@ -25,7 +25,7 @@ module.exports = ({
     return acc
   }, {})
 
-  await queuer.sendCompanyToDataExportQueue(company.id)
+  await sqs.sendCompanyToDataExportQueue(company.id)
 
   logger.info(`Company ${company.id} - ${company.name} sent to dataExport process`)
 

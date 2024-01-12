@@ -49,7 +49,7 @@ const makeSut = () => {
     error: jest.fn(() => null)
   }
 
-  const mockBucket = {
+  const mockS3 = {
     storeCompanyData: jest.fn(async () => Promise.resolve(null))
   }
 
@@ -57,7 +57,7 @@ const makeSut = () => {
     companiesRepository: mockCompanyRepository,
     repositories: mockRepositories,
     logger: mockLogger,
-    bucket: mockBucket
+    s3: mockS3
   })
 
   return {
@@ -66,7 +66,7 @@ const makeSut = () => {
     mockCompanyRepository,
     mockRepositories,
     mockLogger,
-    mockBucket,
+    mockS3,
     mockSavedOmieProductsServices,
     mockSavedOmieOrders,
     mockSavedOmieBillingSaved
@@ -74,8 +74,8 @@ const makeSut = () => {
 }
 
 describe('dataExport service', () => {
-  it('Should not export data to bucket successfully', async () => {
-    const { sut, mockPayload, mockCompanyRepository, mockRepositories, mockLogger, mockBucket } = makeSut()
+  it('Should not export data to s3 successfully', async () => {
+    const { sut, mockPayload, mockCompanyRepository, mockRepositories, mockLogger, mockS3 } = makeSut()
 
     mockCompanyRepository.findById.mockResolvedValueOnce(null)
 
@@ -100,11 +100,11 @@ describe('dataExport service', () => {
     expect(mockRepositories.accountsPayable.findMany).toHaveBeenCalledTimes(0)
     expect(mockRepositories.accountsReceivable.findMany).toHaveBeenCalledTimes(0)
     expect(mockRepositories.financialMovements.findMany).toHaveBeenCalledTimes(0)
-    expect(mockBucket.storeCompanyData).toHaveBeenCalledTimes(0)
+    expect(mockS3.storeCompanyData).toHaveBeenCalledTimes(0)
   })
 
-  it('Should export data to bucket successfully', async () => {
-    const { sut, mockPayload, mockCompanyRepository, mockRepositories, mockLogger, mockBucket, mockSavedOmieProductsServices, mockSavedOmieOrders, mockSavedOmieBillingSaved } = makeSut()
+  it('Should export data to s3 successfully', async () => {
+    const { sut, mockPayload, mockCompanyRepository, mockRepositories, mockLogger, mockS3, mockSavedOmieProductsServices, mockSavedOmieOrders, mockSavedOmieBillingSaved } = makeSut()
     const result = await sut(mockPayload)
     expect(mockCompanyRepository.findById).toHaveBeenCalledWith(mockPayload.companyId)
     expect(mockLogger.info).toHaveBeenCalledTimes(3)
@@ -120,7 +120,7 @@ describe('dataExport service', () => {
     expect(mockRepositories.accountsPayable.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
     expect(mockRepositories.accountsReceivable.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
     expect(mockRepositories.financialMovements.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockBucket.storeCompanyData).toHaveBeenCalledWith(mockPayload.companyId, {
+    expect(mockS3.storeCompanyData).toHaveBeenCalledWith(mockPayload.companyId, {
       company: mockSavedOmieCompanies[0],
       categories: mockSavedOmieCategories,
       departments: mockSavedOmieDepartments,

@@ -1,4 +1,4 @@
-const requester = require('../../../common/adapters/requester')
+const requester = require('../../../common/helpers/requester')
 const makeOmieRequest = require('./makeOmieRequest')
 const handleOmieError = require('./handleOmieError')
 const { isoDateToBR } = require('../../../common/utils')
