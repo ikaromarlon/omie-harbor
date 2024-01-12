@@ -7,7 +7,7 @@ const {
 
 const makeSut = () => {
   const mockOmieServiceInvoice = mockOmieServiceInvoicesResponse.nfseEncontradas[0]
-  const mockOrder = { _id: '854806eb-b46f-476d-9d3c-88e1bdf17c95', orderNumber: '15', type: 'OS' }
+  const mockOrder = { id: '854806eb-b46f-476d-9d3c-88e1bdf17c95', orderNumber: '15', type: 'OS' }
   const mockCompanyId = '25c176b6-b200-4575-9217-e23c6105163c'
   const mockCustomerId = '3a58bc83-dec0-436e-a98c-20fba8f58b56'
   const mockProjectId = '3fbf0118-b5f9-48b0-8269-40cf0fd28d55'

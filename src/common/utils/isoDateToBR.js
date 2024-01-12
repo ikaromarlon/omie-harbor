@@ -29,7 +29,9 @@ module.exports = function isoDateToBR (isoDate) {
    */
   const BR_OFFSET_TIME = 3
 
-  const [d, t] = isoDate.split('T')
+  const isoString = new Date(isoDate).toISOString()
+
+  const [d, t] = isoString.split('T')
 
   const dateInstance = new Date(d)
 

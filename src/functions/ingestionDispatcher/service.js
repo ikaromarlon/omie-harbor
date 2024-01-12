@@ -1,16 +1,14 @@
 module.exports = ({
-  Repositories,
+  companiesRepository,
   queuer,
   logger
 }) => async () => {
-  const repositories = await Repositories()
-
-  const companies = await repositories.companies.find({ isActive: true })
+  const companies = await companiesRepository.find({ isActive: true })
 
   const companiesSent = await Promise.all(companies.map(async (company) => {
-    await queuer.sendCompanyToIngestionQueue(company._id)
+    await queuer.sendCompanyToIngestionQueue(company.id)
     return {
-      id: company._id,
+      id: company.id,
       name: company.name
     }
   }))

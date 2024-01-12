@@ -2,8 +2,8 @@ const makeService = require('../../../../src/functions/ingestionDispatcher/servi
 const { mockSavedOmieCompanies } = require('../../../mocks')
 
 const makeSut = () => {
-  const mockRepositories = {
-    companies: { find: jest.fn(async () => Promise.resolve(mockSavedOmieCompanies)) }
+  const mockCompanyRepository = {
+    find: jest.fn(async () => Promise.resolve(mockSavedOmieCompanies))
   }
 
   const mockLogger = {
@@ -15,14 +15,14 @@ const makeSut = () => {
   }
 
   const service = makeService({
-    Repositories: () => mockRepositories,
+    companiesRepository: mockCompanyRepository,
     queuer: mockQueuer,
     logger: mockLogger
   })
 
   return {
     sut: service,
-    mockRepositories,
+    mockCompanyRepository,
     mockLogger,
     mockQueuer
   }
@@ -30,17 +30,17 @@ const makeSut = () => {
 
 describe('ingestionDispatcher service', () => {
   it('Should return success', async () => {
-    const { sut, mockRepositories, mockQueuer, mockLogger } = makeSut()
+    const { sut, mockCompanyRepository, mockQueuer, mockLogger } = makeSut()
     const result = await sut()
-    expect(mockRepositories.companies.find).toHaveBeenCalledWith({ isActive: true })
-    expect(mockQueuer.sendCompanyToIngestionQueue).toHaveBeenCalledWith(mockSavedOmieCompanies[0]._id)
+    expect(mockCompanyRepository.find).toHaveBeenCalledWith({ isActive: true })
+    expect(mockQueuer.sendCompanyToIngestionQueue).toHaveBeenCalledWith(mockSavedOmieCompanies[0].id)
     expect(mockLogger.info).toHaveBeenCalledTimes(1)
     expect(result).toEqual({ success: true })
   })
 
   it('Should return success but not call queuer.sendCompanyToIngestionQueue', async () => {
-    const { sut, mockQueuer, mockRepositories, mockLogger } = makeSut()
-    mockRepositories.companies.find.mockResolvedValueOnce([])
+    const { sut, mockQueuer, mockCompanyRepository, mockLogger } = makeSut()
+    mockCompanyRepository.find.mockResolvedValueOnce([])
     const result = await sut()
     expect(mockQueuer.sendCompanyToIngestionQueue).toHaveBeenCalledTimes(0)
     expect(mockLogger.info).toHaveBeenCalledTimes(1)

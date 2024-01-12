@@ -5,14 +5,15 @@ const schema = require('./schema')
 const validateWithSchema = require('../../common/helpers/validateWithSchema')
 const OmieService = require('../../shared/services/omieService')
 const companyMapping = require('../../shared/mappings/companyMapping')
-const Repositories = require('../../repositories')
+const CompaniesRepository = require('../../repositories/companiesRepository')
 
 const omieService = OmieService()
+const companiesRepository = CompaniesRepository()
 
 const service = makeService({
   omieService,
   companyMapping,
-  Repositories
+  companiesRepository
 })
 
 const controller = makeController({

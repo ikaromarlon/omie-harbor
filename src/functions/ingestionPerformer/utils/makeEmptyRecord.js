@@ -2,7 +2,7 @@ const { nullProperties } = require('../../../common/utils')
 
 const makeEmptyRecord = (id, { companyId, isActive, ...data }) => {
   const emptyRecord = {
-    _id: id,
+    id,
     companyId,
     ...nullProperties(data, true)
   }

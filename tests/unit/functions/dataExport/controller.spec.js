@@ -74,7 +74,7 @@ describe('dataExport Controller', () => {
     const result = await sut(mockRequest)
     expect(validateWithSchemaStub).toHaveBeenCalledWith({ companyId }, mockSchema)
     expect(serviceStub).toHaveBeenCalledWith({ companyId })
-    expect(result.statusCode).toBe(200)
+    expect(result.statusCode).toBe(204)
     expect(result.data).toEqual({ success: true })
   })
 })

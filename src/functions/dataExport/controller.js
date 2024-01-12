@@ -1,5 +1,6 @@
 const handleSuccess = require('../../infra/lambda/handleSuccess')
 const handleError = require('../../infra/lambda/handleError')
+const HttpStatus = require('../../common/helpers/HttpStatus')
 
 module.exports = ({
   service,
@@ -14,7 +15,7 @@ module.exports = ({
 
     const data = await service(payload)
 
-    return handleSuccess(data)
+    return handleSuccess(data, HttpStatus.NO_CONTENT)
   } catch (error) {
     return handleError(error)
   }

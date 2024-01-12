@@ -65,55 +65,59 @@ const makeSut = () => {
     financialMovementMapping: jest.fn(() => mocks.mockParsedOmieFinancialMovement)
   }
 
+  const mockCompaniesRepository = {
+    findById: jest.fn(async () => mocks.mockSavedOmieCompanies[0]),
+    update: jest.fn(async () => null)
+  }
+
   const mockRepositories = {
     /** dimensions */
     companies: {
-      findOne: jest.fn(async () => mocks.mockSavedOmieCompanies[0]),
-      createOrUpdateOne: jest.fn(async () => null)
+      findOne: jest.fn(async () => mocks.mockSavedOmieCompanies[0])
     },
     categories: {
-      find: jest.fn(async () => mocks.mockSavedOmieCategories),
+      findMany: jest.fn(async () => mocks.mockSavedOmieCategories),
       createOrUpdateMany: jest.fn(async () => null)
     },
     departments: {
-      find: jest.fn(async () => mocks.mockSavedOmieDepartments),
+      findMany: jest.fn(async () => mocks.mockSavedOmieDepartments),
       createOrUpdateMany: jest.fn(async () => null)
     },
     projects: {
-      find: jest.fn(async () => mocks.mockSavedOmieProjects),
+      findMany: jest.fn(async () => mocks.mockSavedOmieProjects),
       createOrUpdateMany: jest.fn(async () => null)
     },
     customers: {
-      find: jest.fn(async () => mocks.mockSavedOmieCustomers),
+      findMany: jest.fn(async () => mocks.mockSavedOmieCustomers),
       createOrUpdateMany: jest.fn(async () => null)
     },
     productsServices: {
-      find: jest.fn(async () => [...mocks.mockSavedOmieProducts, ...mocks.mockSavedOmieServices]),
+      findMany: jest.fn(async () => [...mocks.mockSavedOmieProducts, ...mocks.mockSavedOmieServices]),
       createOrUpdateMany: jest.fn(async () => null)
     },
     checkingAccounts: {
-      find: jest.fn(async () => mocks.mockSavedOmieCheckingAccounts),
+      findMany: jest.fn(async () => mocks.mockSavedOmieCheckingAccounts),
       createOrUpdateMany: jest.fn(async () => null)
     },
     contracts: {
-      find: jest.fn(async () => mocks.mockSavedOmieContracts),
+      findMany: jest.fn(async () => mocks.mockSavedOmieContracts),
       deleteOldAndCreateNew: jest.fn(async () => null)
     },
     orders: {
-      find: jest.fn(async () => [...mocks.mockSavedOmieProductOrders, ...mocks.mockSavedOmieServiceOrders]),
+      findMany: jest.fn(async () => [...mocks.mockSavedOmieProductOrders, ...mocks.mockSavedOmieServiceOrders]),
       deleteOldAndCreateNew: jest.fn(async () => null)
     },
     /** facts */
     billing: {
-      find: jest.fn(async () => [...mocks.mockSavedOmieProductInvoices, ...mocks.mockSavedOmieServiceInvoices]),
+      findMany: jest.fn(async () => [...mocks.mockSavedOmieProductInvoices, ...mocks.mockSavedOmieServiceInvoices]),
       deleteOldAndCreateNew: jest.fn(async () => null)
     },
     accountsPayable: {
-      find: jest.fn(async () => mocks.mockSavedOmieAccountsPayable),
+      findMany: jest.fn(async () => mocks.mockSavedOmieAccountsPayable),
       deleteOldAndCreateNew: jest.fn(async () => null)
     },
     accountsReceivable: {
-      find: jest.fn(async () => []),
+      findMany: jest.fn(async () => []),
       deleteOldAndCreateNew: jest.fn(async () => null)
     },
     financialMovements: {
@@ -133,7 +137,8 @@ const makeSut = () => {
   const service = makeService({
     omieService: mockOmieService,
     mappings: mockMappings,
-    Repositories: () => mockRepositories,
+    companiesRepository: mockCompaniesRepository,
+    repositories: mockRepositories,
     logger: mockLogger,
     queuer: mockQueuer
   })
@@ -145,6 +150,7 @@ const makeSut = () => {
     mockCredentials,
     mockOmieService,
     mockMappings,
+    mockCompaniesRepository,
     mockRepositories,
     mockLogger,
     mockQueuer,
@@ -173,10 +179,10 @@ afterEach(() => {
 describe('ingestionPerformer service', () => {
   it('Should not find company and throws a NotFoundException', async () => {
     const sutPackage = makeSut()
-    const { sut, mockPayload, mockRepositories } = sutPackage
+    const { sut, mockPayload, mockCompaniesRepository } = sutPackage
     const spySut = jest.spyOn(sutPackage, 'sut')
     mockPayload.companyId = 'any-invalid-or-non-existing-id'
-    mockRepositories.companies.findOne.mockResolvedValue(null)
+    mockCompaniesRepository.findById.mockResolvedValue(null)
     try {
       await sut(mockPayload)
     } catch (error) {
@@ -184,15 +190,15 @@ describe('ingestionPerformer service', () => {
       expect(error.statusCode).toBe(404)
       expect(error.message).toBe(`Company ${mockPayload.companyId} not found`)
     }
-    expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ _id: mockPayload.companyId })
-    expect(spySut).toReturnTimes(0)
+    expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(mockPayload.companyId)
+    expect(spySut).toHaveReturnedTimes(0)
   })
 
   it('Should find company but throws a UnprocessableEntityException', async () => {
     const sutPackage = makeSut()
-    const { sut, mockPayload, mockRepositories } = sutPackage
+    const { sut, mockPayload, mockCompaniesRepository } = sutPackage
     const spySut = jest.spyOn(sutPackage, 'sut')
-    mockRepositories.companies.findOne.mockResolvedValue({ ...mocks.mockSavedOmieCompanies[0], isActive: false })
+    mockCompaniesRepository.findById.mockResolvedValue({ ...mocks.mockSavedOmieCompanies[0], isActive: false })
     try {
       await sut(mockPayload)
     } catch (error) {
@@ -200,36 +206,34 @@ describe('ingestionPerformer service', () => {
       expect(error.statusCode).toBe(422)
       expect(error.message).toBe(`Company ${mockPayload.companyId} is not active`)
     }
-    expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ _id: mockPayload.companyId })
-    expect(spySut).toReturnTimes(0)
+    expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(mockPayload.companyId)
+    expect(spySut).toHaveReturnedTimes(0)
   })
 
-  it('Should call repositories.companies.findOne successfully', async () => {
-    const { sut, mockPayload, mockRepositories } = makeSut()
+  it('Should call companiesRepository.findById successfully', async () => {
+    const { sut, mockPayload, mockCompaniesRepository } = makeSut()
     await sut(mockPayload)
-    expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ _id: mockPayload.companyId })
+    expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(mockPayload.companyId)
   })
 
   describe('updateCompany', () => {
     it('Should updated company successfully', async () => {
-      const { sut, mockPayload, mockOmieService, mockCredentials, mockMappings, mockCompanyId, mockRepositories } = makeSut()
+      const { sut, mockPayload, mockOmieService, mockCredentials, mockMappings, mockCompanyId, mockCompaniesRepository } = makeSut()
       await sut(mockPayload)
       expect(mockOmieService.getCompany).toHaveBeenCalledTimes(1)
       expect(mockMappings.companyMapping).toHaveBeenCalledWith({ omieCompany: mocks.mockOmieCompaniesResponse.empresas_cadastro[0], omieCnae: mocks.mockOmieCnaeResponse.cadastros, credentials: mockCredentials })
-      expect(mockRepositories.companies.createOrUpdateOne).toHaveBeenCalledWith({ _id: mockCompanyId }, mocks.mockParsedOmieCompany)
+      expect(mockCompaniesRepository.update).toHaveBeenCalledWith({ id: mockCompanyId, ...mocks.mockParsedOmieCompany })
     })
+
     it('Should updated company with inactive record successfully', async () => {
-      const { sut, mockPayload, mockOmieService, mockCredentials, mockMappings, mockCompanyId, mockRepositories } = makeSut()
+      const { sut, mockPayload, mockOmieService, mockCredentials, mockMappings, mockCompanyId, mockCompaniesRepository } = makeSut()
       const mockOmieCompanyResponse = { ...mocks.mockOmieCompaniesResponse.empresas_cadastro[0], inativa: 'S' }
       mockOmieService.getCompany.mockResolvedValue(mockOmieCompanyResponse)
       mockMappings.companyMapping.mockReturnValueOnce({ ...mocks.mockParsedOmieCompany, isActive: false })
       await sut(mockPayload)
       expect(mockOmieService.getCompany).toHaveBeenCalledTimes(1)
       expect(mockMappings.companyMapping).toHaveBeenCalledWith({ omieCompany: mockOmieCompanyResponse, omieCnae: mocks.mockOmieCnaeResponse.cadastros, credentials: mockCredentials })
-      expect(mockRepositories.companies.createOrUpdateOne).toHaveBeenCalledWith({ _id: mockCompanyId }, {
-        ...mocks.mockParsedOmieCompany,
-        isActive: false
-      })
+      expect(mockCompaniesRepository.update).toHaveBeenCalledWith({ id: mockCompanyId, ...mocks.mockParsedOmieCompany, isActive: false })
     })
   })
 
@@ -241,7 +245,7 @@ describe('ingestionPerformer service', () => {
         expect(mockOmieService.getCategories).toHaveBeenCalledTimes(1)
         expect(mockMappings.categoryMapping).toHaveBeenCalledWith({ omieCategory: mocks.mockOmieCategoriesResponse.categoria_cadastro[0], companyId: mockCompanyId })
         expect(mockMappings.categoryMapping).toHaveReturnedWith(mocks.mockParsedOmieCategory)
-        expect(mockRepositories.categories.createOrUpdateMany).toHaveBeenCalledWith(['companyId', 'externalId'], [mocks.mockParsedOmieCategory, mocks.mockEmptyCategory])
+        expect(mockRepositories.categories.createOrUpdateMany).toHaveBeenCalledWith([mocks.mockParsedOmieCategory, mocks.mockEmptyCategory], ['companyId', 'externalId'])
       })
     })
 
@@ -252,7 +256,7 @@ describe('ingestionPerformer service', () => {
         expect(mockOmieService.getDepartments).toHaveBeenCalledTimes(1)
         expect(mockMappings.departmentMapping).toHaveBeenCalledWith({ omieDepartment: mocks.mockOmieDepartmentsResponse.departamentos[0], companyId: mockCompanyId })
         expect(mockMappings.departmentMapping).toHaveReturnedWith(mocks.mockParsedOmieDepartment)
-        expect(mockRepositories.departments.createOrUpdateMany).toHaveBeenCalledWith(['companyId', 'externalId'], [mocks.mockParsedOmieDepartment, mocks.mockEmptyDepartment])
+        expect(mockRepositories.departments.createOrUpdateMany).toHaveBeenCalledWith([mocks.mockParsedOmieDepartment, mocks.mockEmptyDepartment], ['companyId', 'externalId'])
       })
     })
 
@@ -263,7 +267,7 @@ describe('ingestionPerformer service', () => {
         expect(mockOmieService.getProjects).toHaveBeenCalledTimes(1)
         expect(mockMappings.projectMapping).toHaveBeenCalledWith({ omieProject: mocks.mockOmieProjectsResponse.cadastro[0], companyId: mockCompanyId })
         expect(mockMappings.projectMapping).toHaveReturnedWith(mocks.mockParsedOmieProject)
-        expect(mockRepositories.projects.createOrUpdateMany).toHaveBeenCalledWith(['companyId', 'externalId'], [mocks.mockParsedOmieProject, mocks.mockEmptyProject])
+        expect(mockRepositories.projects.createOrUpdateMany).toHaveBeenCalledWith([mocks.mockParsedOmieProject, mocks.mockEmptyProject], ['companyId', 'externalId'])
       })
     })
 
@@ -275,7 +279,7 @@ describe('ingestionPerformer service', () => {
         expect(mockOmieService.getActivities).toHaveBeenCalledTimes(1)
         expect(mockMappings.customerMapping).toHaveBeenCalledWith({ omieCustomer: mocks.mockOmieCustomersResponse.clientes_cadastro[0], omieActivities: mocks.mockOmieActivitiesResponse.lista_tipos_atividade, omieBanks: mocks.mockOmieBanksResponse.fin_banco_cadastro, omieCnae: mocks.mockOmieCnaeResponse.cadastros, companyId: mockCompanyId })
         expect(mockMappings.customerMapping).toHaveReturnedWith(mocks.mockParsedOmieCustomer)
-        expect(mockRepositories.customers.createOrUpdateMany).toHaveBeenCalledWith(['companyId', 'externalId'], [mocks.mockParsedOmieCustomer, mocks.mockEmptyCustomer])
+        expect(mockRepositories.customers.createOrUpdateMany).toHaveBeenCalledWith([mocks.mockParsedOmieCustomer, mocks.mockEmptyCustomer], ['companyId', 'externalId'])
       })
     })
 
@@ -289,7 +293,7 @@ describe('ingestionPerformer service', () => {
         expect(mockMappings.productMapping).toHaveReturnedWith(mocks.mockParsedOmieProduct)
         expect(mockMappings.serviceMapping).toHaveBeenCalledWith({ omieService: mocks.mockOmieServicesResponse.cadastros[0], companyId: mockCompanyId })
         expect(mockMappings.serviceMapping).toHaveReturnedWith(mocks.mockParsedOmieService)
-        expect(mockRepositories.productsServices.createOrUpdateMany).toHaveBeenCalledWith(['companyId', 'externalId'], [mocks.mockParsedOmieProduct, mocks.mockParsedOmieService, mocks.mockEmptyProductService])
+        expect(mockRepositories.productsServices.createOrUpdateMany).toHaveBeenCalledWith([mocks.mockParsedOmieProduct, mocks.mockParsedOmieService, mocks.mockEmptyProductService], ['companyId', 'externalId'])
       })
     })
 
@@ -301,7 +305,7 @@ describe('ingestionPerformer service', () => {
         expect(mockOmieService.getCheckingAccountTypes).toHaveBeenCalledTimes(1)
         expect(mockMappings.checkingAccountMapping).toHaveBeenCalledWith({ omieCheckingAccount: mocks.mockOmieCheckingAccountsResponse.ListarContasCorrentes[0], omieBanks: mocks.mockOmieBanksResponse.fin_banco_cadastro, omieCheckingAccountTypes: mocks.mockOmieCheckingAccountTypesResponse.cadastros, companyId: mockCompanyId })
         expect(mockMappings.checkingAccountMapping).toHaveReturnedWith(mocks.mockParsedOmieCheckingAccount)
-        expect(mockRepositories.checkingAccounts.createOrUpdateMany).toHaveBeenCalledWith(['companyId', 'externalId'], [mocks.mockParsedOmieCheckingAccount, mocks.mockEmptyCheckingAccount])
+        expect(mockRepositories.checkingAccounts.createOrUpdateMany).toHaveBeenCalledWith([mocks.mockParsedOmieCheckingAccount, mocks.mockEmptyCheckingAccount], ['companyId', 'externalId'])
       })
     })
 
@@ -327,7 +331,7 @@ describe('ingestionPerformer service', () => {
           emptyRecordsIds: mocks.mockEmptyRecordsIds
         })
         expect(mockMappings.contractMapping).toHaveReturnedWith(mocks.mockParsedOmieContract)
-        expect(mockRepositories.contracts.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'externalId', 'type'], [mocks.mockParsedOmieContract, mocks.mockEmptyContract])
+        expect(mockRepositories.contracts.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockParsedOmieContract, mocks.mockEmptyContract], ['companyId', 'externalId', 'type'])
       })
 
       it('Should receive contracts from Omie with departments array but missing department id', async () => {
@@ -395,7 +399,7 @@ describe('ingestionPerformer service', () => {
           contractId: mockContractId
         })
         expect(mockMappings.serviceOrderMapping).toHaveReturnedWith(mocks.mockParsedOmieServiceOrder)
-        expect(mockRepositories.orders.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'externalId', 'type'], [mocks.mockParsedOmieProductOrder, mocks.mockParsedOmieServiceOrder, mocks.mockEmptyOrder])
+        expect(mockRepositories.orders.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockParsedOmieProductOrder, mocks.mockParsedOmieServiceOrder, mocks.mockEmptyOrder], ['companyId', 'externalId', 'type'])
       })
 
       it('Should receive orders from Omie with departments array but missing department id', async () => {
@@ -492,7 +496,7 @@ describe('ingestionPerformer service', () => {
           contractId: mockContractId
         })
         expect(mockMappings.serviceInvoiceMapping).toHaveReturnedWith(mocks.mockParsedOmieServiceInvoice)
-        expect(mockRepositories.billing.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'externalId', 'type'], [mocks.mockParsedOmieProductInvoice, mocks.mockParsedOmieServiceInvoice, mocks.mockEmptyBilling])
+        expect(mockRepositories.billing.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockParsedOmieProductInvoice, mocks.mockParsedOmieServiceInvoice, mocks.mockEmptyBilling], ['companyId', 'externalId', 'type'])
       })
 
       it('Should receive billing from Omie with departments array but missing department id', async () => {
@@ -625,7 +629,7 @@ describe('ingestionPerformer service', () => {
           contractId: mockContractId
         })
         expect(mockMappings.titleMapping).toHaveNthReturnedWith(1, mocks.mockParsedOmieAccountPayable)
-        expect(mockRepositories.accountsPayable.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'externalId', 'titleId'], [mocks.mockParsedOmieAccountPayable, mocks.mockEmptyAccountPayable])
+        expect(mockRepositories.accountsPayable.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockParsedOmieAccountPayable, mocks.mockEmptyAccountPayable], ['companyId', 'externalId', 'titleId'])
       })
 
       it('Should receive accountsPayable from Omie with departments array but missing department id', async () => {
@@ -657,7 +661,7 @@ describe('ingestionPerformer service', () => {
           contractId: mockContractId
         })
         expect(mockMappings.titleMapping).toHaveNthReturnedWith(1, mocks.mockParsedOmieAccountPayable)
-        expect(mockRepositories.accountsPayable.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'externalId', 'titleId'], [mocks.mockParsedOmieAccountPayable, mocks.mockEmptyAccountPayable])
+        expect(mockRepositories.accountsPayable.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockParsedOmieAccountPayable, mocks.mockEmptyAccountPayable], ['companyId', 'externalId', 'titleId'])
       })
 
       it('Should call omieMappings.title without categories list: use fixed category in title details', async () => {
@@ -731,7 +735,7 @@ describe('ingestionPerformer service', () => {
           contractId: mockContractId
         })
         expect(mockMappings.titleMapping).toHaveNthReturnedWith(2, mocks.mockParsedOmieAccountReceivable)
-        expect(mockRepositories.accountsReceivable.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'externalId', 'titleId'], [mocks.mockParsedOmieAccountReceivable, mocks.mockEmptyAccountReceivable])
+        expect(mockRepositories.accountsReceivable.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockParsedOmieAccountReceivable, mocks.mockEmptyAccountReceivable], ['companyId', 'externalId', 'titleId'])
       })
 
       it('Should call omieMappings.title without title entries', async () => {
@@ -757,7 +761,7 @@ describe('ingestionPerformer service', () => {
           contractId: mockContractId
         })
         expect(mockMappings.titleMapping).toHaveNthReturnedWith(2, mocks.mockParsedOmieAccountReceivable)
-        expect(mockRepositories.accountsReceivable.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'externalId', 'titleId'], [mocks.mockParsedOmieAccountReceivable, mocks.mockEmptyAccountReceivable])
+        expect(mockRepositories.accountsReceivable.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockParsedOmieAccountReceivable, mocks.mockEmptyAccountReceivable], ['companyId', 'externalId', 'titleId'])
       })
 
       it('Should receive accountsReceivable from Omie with departments array but missing department id', async () => {
@@ -841,7 +845,7 @@ describe('ingestionPerformer service', () => {
           accountReceivableId: undefined
         })
         expect(mockMappings.financialMovementMapping).toHaveReturnedWith(mocks.mockParsedOmieFinancialMovement)
-        expect(mockRepositories.financialMovements.deleteOldAndCreateNew).toHaveBeenCalledWith(['companyId', 'externalId', 'movementId'], [mocks.mockParsedOmieFinancialMovement, mocks.mockEmptyFinancialMovement])
+        expect(mockRepositories.financialMovements.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockParsedOmieFinancialMovement, mocks.mockEmptyFinancialMovement], ['companyId', 'externalId', 'movementId'])
       })
 
       it('Should receive financialMovements from Omie with departments array but missing department id', async () => {
@@ -852,8 +856,8 @@ describe('ingestionPerformer service', () => {
 
       it('Should call omieMappings.financialMovement successfully with accountReceivable instead of accountPayable', async () => {
         const { sut, mockPayload, mockCompanyId, mockMappings, mockRepositories, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockCheckingAccountId, mockContractId, mockAccountReceivableId } = makeSut()
-        mockRepositories.accountsPayable.find.mockResolvedValue([])
-        mockRepositories.accountsReceivable.find.mockResolvedValue(mocks.mockSavedOmieAccountsReceivable)
+        mockRepositories.accountsPayable.findMany.mockResolvedValue([])
+        mockRepositories.accountsReceivable.findMany.mockResolvedValue(mocks.mockSavedOmieAccountsReceivable)
         mockMappings.financialMovementMapping.mockReturnValueOnce({ ...mocks.mockParsedOmieFinancialMovement, accountPayableId: null, accountReceivableId: mockAccountReceivableId })
         await sut(mockPayload)
         expect(mockMappings.financialMovementMapping).toHaveBeenCalledWith({

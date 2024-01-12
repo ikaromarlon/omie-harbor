@@ -5,69 +5,69 @@ const { mockSavedOmieCompanies } = require('../../../mocks')
 const makeSut = () => {
   const mockPayload = { id: '25c176b6-b200-4575-9217-e23c6105163c' }
 
+  const mockCompaniesRepository = {
+    findById: jest.fn(async () => mockSavedOmieCompanies[0])
+  }
+
   const mockRepositories = {
-    companies: {
-      name: 'companies',
-      findOne: jest.fn(async () => mockSavedOmieCompanies[0])
-    },
     categories: {
       name: 'categories',
-      allowsDeleteAllData: true,
+      allowDeleteAllData: true,
       deleteMany: jest.fn(async () => 0)
     },
     departments: {
       name: 'departments',
-      allowsDeleteAllData: true,
+      allowDeleteAllData: true,
       deleteMany: jest.fn(async () => 0)
     },
     projects: {
       name: 'projects',
-      allowsDeleteAllData: true,
+      allowDeleteAllData: true,
       deleteMany: jest.fn(async () => 0)
     },
     customers: {
       name: 'customers',
-      allowsDeleteAllData: true,
+      allowDeleteAllData: true,
       deleteMany: jest.fn(async () => 0)
     },
     productsServices: {
       name: 'productsServices',
-      allowsDeleteAllData: true,
+      allowDeleteAllData: true,
       deleteMany: jest.fn(async () => 0)
     },
     checkingAccounts: {
       name: 'checkingAccounts',
-      allowsDeleteAllData: true,
+      allowDeleteAllData: true,
       deleteMany: jest.fn(async () => 0)
     },
     contracts: {
       name: 'contracts',
-      allowsDeleteAllData: true,
+      allowDeleteAllData: true,
       deleteMany: jest.fn(async () => 0)
     },
     orders: {
       name: 'orders',
-      allowsDeleteAllData: true,
+      allowDeleteAllData: true,
       deleteMany: jest.fn(async () => 0)
     },
     billing: {
       name: 'billing',
-      allowsDeleteAllData: true,
+      allowDeleteAllData: true,
       deleteMany: jest.fn(async () => 0)
     },
     accountsPayable: {
       name: 'accountsPayable',
-      allowsDeleteAllData: true,
+      allowDeleteAllData: true,
       deleteMany: jest.fn(async () => 0)
     },
     accountsReceivable: {
       name: 'accountsReceivable',
-      allowsDeleteAllData: true,
+      allowDeleteAllData: true,
       deleteMany: jest.fn(async () => 0)
     },
     financialMovements: {
       name: 'financialMovements',
-      allowsDeleteAllData: true,
+      allowDeleteAllData: true,
       deleteMany: jest.fn(async () => 0)
     }
   }
@@ -81,7 +81,8 @@ const makeSut = () => {
   }
 
   const service = makeService({
-    Repositories: () => mockRepositories,
+    companiesRepository: mockCompaniesRepository,
+    repositories: mockRepositories,
     queuer: mockQueuer,
     logger: mockLogger
   })
@@ -89,6 +90,7 @@ const makeSut = () => {
   return {
     sut: service,
     mockPayload,
+    mockCompaniesRepository,
     mockRepositories,
     mockLogger,
     mockQueuer
@@ -97,10 +99,10 @@ const makeSut = () => {
 
 describe('deleteDataByCompany service', () => {
   it('Should delete data by company successfully', async () => {
-    const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer } = makeSut()
+    const { sut, mockPayload, mockCompaniesRepository, mockRepositories, mockLogger, mockQueuer } = makeSut()
     const result = await sut(mockPayload)
     const { id } = mockPayload
-    expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ _id: id })
+    expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(id)
     expect(mockRepositories.categories.deleteMany).toHaveBeenCalledWith({ companyId: id })
     expect(mockRepositories.departments.deleteMany).toHaveBeenCalledWith({ companyId: id })
     expect(mockRepositories.projects.deleteMany).toHaveBeenCalledWith({ companyId: id })
@@ -116,9 +118,8 @@ describe('deleteDataByCompany service', () => {
     expect(mockLogger.info).toHaveBeenCalledTimes(1)
     expect(mockQueuer.sendCompanyToDataExportQueue).toHaveBeenCalledWith(id)
     expect(result).toEqual({
-      success: true,
       company: {
-        id: mockSavedOmieCompanies[0]._id,
+        id: mockSavedOmieCompanies[0].id,
         cnpj: mockSavedOmieCompanies[0].cnpj,
         name: mockSavedOmieCompanies[0].name
       },
@@ -140,14 +141,14 @@ describe('deleteDataByCompany service', () => {
   })
 
   it('Should throw a NotFoundException due to not find company', async () => {
-    const { sut, mockPayload, mockRepositories, mockLogger, mockQueuer } = makeSut()
+    const { sut, mockPayload, mockCompaniesRepository, mockRepositories, mockLogger, mockQueuer } = makeSut()
     mockPayload.id = 'any-invalid-company-id'
-    mockRepositories.companies.findOne.mockResolvedValueOnce(null)
+    mockCompaniesRepository.findById.mockResolvedValueOnce(null)
     try {
       await sut(mockPayload)
     } catch (error) {
       const { id } = mockPayload
-      expect(mockRepositories.companies.findOne).toHaveBeenCalledWith({ _id: id })
+      expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(id)
       expect(mockRepositories.categories.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.departments.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.projects.deleteMany).toHaveBeenCalledTimes(0)

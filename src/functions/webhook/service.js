@@ -8,7 +8,8 @@ const deleteAccountReceivable = require('./useCases/deleteAccountReceivable')
 const deleteFinancialMovement = require('./useCases/deleteFinancialMovement')
 
 module.exports = ({
-  Repositories,
+  companiesRepository,
+  repositories,
   logger,
   queuer
 }) => {
@@ -33,9 +34,7 @@ module.exports = ({
       }
     }
 
-    const repositories = await Repositories()
-
-    const company = await repositories.companies.findOne({ 'credentials.appKey': appKey })
+    const company = await companiesRepository.findByAppKey(appKey)
 
     if (!company) {
       throw new NotFoundException(`Company related to appKey '${appKey}' not found`)
@@ -50,20 +49,20 @@ module.exports = ({
     let hasAffected = false
 
     if (action) {
-      result = await action(company._id, event, repositories)
+      result = await action(company.id, event, repositories)
 
       hasAffected = Object.values(result.deleted).some(e => e)
     }
 
     logger.info(
-      `Action for company ${company._id} - ${company.name}: ${topic}`,
+      `Action for company ${company.id} - ${company.name}: ${topic}`,
       { result, payload }
     )
 
     if (hasAffected) {
-      await queuer.sendCompanyToDataExportQueue(company._id)
+      await queuer.sendCompanyToDataExportQueue(company.id)
 
-      logger.info(`Company ${company._id} - ${company.name} sent to dataExport process`)
+      logger.info(`Company ${company.id} - ${company.name} sent to dataExport process`)
     }
 
     return result

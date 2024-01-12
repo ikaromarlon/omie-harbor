@@ -11,8 +11,8 @@ const makeSut = () => {
   const mockOmieFinancialMovement = mockOmieFinancialMovementsResponse.movimentos[0]
   const mockOmieDocumentTypes = mockOmieDocumentTypesResponse.tipo_documento_cadastro
   const mockOmieEntryOrigins = mockOmieEntryOriginsResponse.origem
-  const mockOrder = { _id: '854806eb-b46f-476d-9d3c-88e1bdf17c95', orderNumber: '15' }
-  const mockBilling = { _id: '7be89715-63e6-426a-a952-ae19b700a28f', type: 'NFS-e' }
+  const mockOrder = { id: '854806eb-b46f-476d-9d3c-88e1bdf17c95', orderNumber: '15' }
+  const mockBilling = { id: '7be89715-63e6-426a-a952-ae19b700a28f', type: 'NFS-e' }
   const mockCompanyId = '25c176b6-b200-4575-9217-e23c6105163c'
   const mockCustomerId = '3a58bc83-dec0-436e-a98c-20fba8f58b56'
   const mockProjectId = '3fbf0118-b5f9-48b0-8269-40cf0fd28d55'

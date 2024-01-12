@@ -3,7 +3,7 @@ const deleteContract = async (
   data,
   repositories
 ) => {
-  const contracts = await repositories.contracts.find({
+  const contracts = await repositories.contracts.findMany({
     companyId,
     externalId: String(data.nCodCtr)
   })
@@ -18,13 +18,13 @@ const deleteContract = async (
 
   if (contracts.length) {
     const contractIds = [...contracts.reduce((acc, e) => {
-      acc.add(e._id)
+      acc.add(e.id)
       return acc
     }, new Set())]
 
     result.deleted.contracts = await repositories.contracts.deleteMany({
       companyId,
-      _id: contractIds
+      id: contractIds
     })
 
     result.deleted.accountsReceivable = await repositories.accountsReceivable.deleteMany({

@@ -451,7 +451,7 @@ module.exports = () => {
     try {
       const responses = await Promise.all(Object.keys(STEPS).map(async (step) => requester.post(url, { ...body, param: [{ cEtapa: String(step) }] })))
 
-      const response = responses.flatMap(e => ({ etapa: e.data.cEtapa, descricao: STEPS[e.data.cEtapa], contratos: e.data.listaContratos }))
+      const response = responses.flatMap(e => ({ etapa: e.cEtapa, descricao: STEPS[e.cEtapa], contratos: e.listaContratos }))
 
       return response
     } catch (error) {

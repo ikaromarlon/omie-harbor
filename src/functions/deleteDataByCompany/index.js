@@ -3,14 +3,18 @@ const makeController = require('./controller')
 const makeService = require('./service')
 const schema = require('./schema')
 const validateWithSchema = require('../../common/helpers/validateWithSchema')
-const Repositories = require('../../repositories')
+const CompaniesRepository = require('../../repositories/companiesRepository')
+const Repositories = require('../../repositories/genericRepository')
 const Queuer = require('../../common/adapters/queuer')
 const logger = require('../../common/adapters/logger')
 
 const queuer = Queuer()
+const companiesRepository = CompaniesRepository()
+const repositories = Repositories()
 
 const service = makeService({
-  Repositories,
+  companiesRepository,
+  repositories,
   queuer,
   logger
 })

@@ -12,7 +12,7 @@ module.exports = {
     dataExportQueueUrl: process.env.SQS_DATA_EXPORT_QUEUE_URL
   },
   S3: {
-    detaExportBucket: {
+    dataExportBucket: {
       name: process.env.S3_DATA_EXPORT_BUCKET_NAME
     }
   }

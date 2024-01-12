@@ -1,3 +1,4 @@
+const { NotFoundException } = require('../../../../src/common/errors')
 const makeService = require('../../../../src/functions/dataExport/service')
 const {
   mockSavedOmieCompanies,
@@ -24,20 +25,23 @@ const makeSut = () => {
   const mockSavedOmieOrders = [...mockSavedOmieProductOrders, ...mockSavedOmieServiceOrders]
   const mockSavedOmieBillingSaved = [...mockSavedOmieProductInvoices, ...mockSavedOmieServiceInvoices]
 
+  const mockCompanyRepository = {
+    findById: jest.fn(async () => mockSavedOmieCompanies[0])
+  }
+
   const mockRepositories = {
-    companies: { find: jest.fn(async () => mockSavedOmieCompanies) },
-    categories: { find: jest.fn(async () => mockSavedOmieCategories) },
-    departments: { find: jest.fn(async () => mockSavedOmieDepartments) },
-    projects: { find: jest.fn(async () => mockSavedOmieProjects) },
-    customers: { find: jest.fn(async () => mockSavedOmieCustomers) },
-    productsServices: { find: jest.fn(async () => mockSavedOmieProductsServices) },
-    checkingAccounts: { find: jest.fn(async () => mockSavedOmieCheckingAccounts) },
-    contracts: { find: jest.fn(async () => mockSavedOmieContracts) },
-    orders: { find: jest.fn(async () => mockSavedOmieOrders) },
-    billing: { find: jest.fn(async () => mockSavedOmieBillingSaved) },
-    accountsPayable: { find: jest.fn(async () => mockSavedOmieAccountsPayable) },
-    accountsReceivable: { find: jest.fn(async () => mockSavedOmieAccountsReceivable) },
-    financialMovements: { find: jest.fn(async () => mockSavedOmieFinancialMovements) }
+    categories: { findMany: jest.fn(async () => mockSavedOmieCategories) },
+    departments: { findMany: jest.fn(async () => mockSavedOmieDepartments) },
+    projects: { findMany: jest.fn(async () => mockSavedOmieProjects) },
+    customers: { findMany: jest.fn(async () => mockSavedOmieCustomers) },
+    productsServices: { findMany: jest.fn(async () => mockSavedOmieProductsServices) },
+    checkingAccounts: { findMany: jest.fn(async () => mockSavedOmieCheckingAccounts) },
+    contracts: { findMany: jest.fn(async () => mockSavedOmieContracts) },
+    orders: { findMany: jest.fn(async () => mockSavedOmieOrders) },
+    billing: { findMany: jest.fn(async () => mockSavedOmieBillingSaved) },
+    accountsPayable: { findMany: jest.fn(async () => mockSavedOmieAccountsPayable) },
+    accountsReceivable: { findMany: jest.fn(async () => mockSavedOmieAccountsReceivable) },
+    financialMovements: { findMany: jest.fn(async () => mockSavedOmieFinancialMovements) }
   }
 
   const mockLogger = {
@@ -50,7 +54,8 @@ const makeSut = () => {
   }
 
   const service = makeService({
-    Repositories: () => mockRepositories,
+    companiesRepository: mockCompanyRepository,
+    repositories: mockRepositories,
     logger: mockLogger,
     bucket: mockBucket
   })
@@ -58,6 +63,7 @@ const makeSut = () => {
   return {
     sut: service,
     mockPayload,
+    mockCompanyRepository,
     mockRepositories,
     mockLogger,
     mockBucket,
@@ -68,25 +74,54 @@ const makeSut = () => {
 }
 
 describe('dataExport service', () => {
-  it('Should call repositories.companies.find successfully', async () => {
-    const { sut, mockPayload, mockRepositories, mockLogger, mockBucket, mockSavedOmieProductsServices, mockSavedOmieOrders, mockSavedOmieBillingSaved } = makeSut()
+  it('Should not export data to bucket successfully', async () => {
+    const { sut, mockPayload, mockCompanyRepository, mockRepositories, mockLogger, mockBucket } = makeSut()
+
+    mockCompanyRepository.findById.mockResolvedValueOnce(null)
+
+    try {
+      await sut(mockPayload)
+    } catch (error) {
+      expect(error).toBeInstanceOf(NotFoundException)
+      expect(error.statusCode).toBe(404)
+      expect(error.message).toBe('Company not found')
+    }
+    expect(mockCompanyRepository.findById).toHaveBeenCalledWith(mockPayload.companyId)
+    expect(mockLogger.info).toHaveBeenCalledTimes(0)
+    expect(mockRepositories.categories.findMany).toHaveBeenCalledTimes(0)
+    expect(mockRepositories.departments.findMany).toHaveBeenCalledTimes(0)
+    expect(mockRepositories.projects.findMany).toHaveBeenCalledTimes(0)
+    expect(mockRepositories.customers.findMany).toHaveBeenCalledTimes(0)
+    expect(mockRepositories.productsServices.findMany).toHaveBeenCalledTimes(0)
+    expect(mockRepositories.checkingAccounts.findMany).toHaveBeenCalledTimes(0)
+    expect(mockRepositories.contracts.findMany).toHaveBeenCalledTimes(0)
+    expect(mockRepositories.orders.findMany).toHaveBeenCalledTimes(0)
+    expect(mockRepositories.billing.findMany).toHaveBeenCalledTimes(0)
+    expect(mockRepositories.accountsPayable.findMany).toHaveBeenCalledTimes(0)
+    expect(mockRepositories.accountsReceivable.findMany).toHaveBeenCalledTimes(0)
+    expect(mockRepositories.financialMovements.findMany).toHaveBeenCalledTimes(0)
+    expect(mockBucket.storeCompanyData).toHaveBeenCalledTimes(0)
+  })
+
+  it('Should export data to bucket successfully', async () => {
+    const { sut, mockPayload, mockCompanyRepository, mockRepositories, mockLogger, mockBucket, mockSavedOmieProductsServices, mockSavedOmieOrders, mockSavedOmieBillingSaved } = makeSut()
     const result = await sut(mockPayload)
-    expect(mockRepositories.companies.find).toHaveBeenCalledWith({ _id: mockPayload.companyId })
+    expect(mockCompanyRepository.findById).toHaveBeenCalledWith(mockPayload.companyId)
     expect(mockLogger.info).toHaveBeenCalledTimes(3)
-    expect(mockRepositories.categories.find).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.departments.find).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.projects.find).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.customers.find).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.productsServices.find).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.checkingAccounts.find).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.contracts.find).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.orders.find).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.billing.find).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.accountsPayable.find).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.accountsReceivable.find).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.financialMovements.find).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
+    expect(mockRepositories.categories.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
+    expect(mockRepositories.departments.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
+    expect(mockRepositories.projects.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
+    expect(mockRepositories.customers.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
+    expect(mockRepositories.productsServices.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
+    expect(mockRepositories.checkingAccounts.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
+    expect(mockRepositories.contracts.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
+    expect(mockRepositories.orders.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
+    expect(mockRepositories.billing.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
+    expect(mockRepositories.accountsPayable.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
+    expect(mockRepositories.accountsReceivable.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
+    expect(mockRepositories.financialMovements.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
     expect(mockBucket.storeCompanyData).toHaveBeenCalledWith(mockPayload.companyId, {
-      companies: mockSavedOmieCompanies,
+      company: mockSavedOmieCompanies[0],
       categories: mockSavedOmieCategories,
       departments: mockSavedOmieDepartments,
       projects: mockSavedOmieProjects,

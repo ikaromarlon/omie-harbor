@@ -11,7 +11,7 @@ module.exports = (error, statusCode, headers = {}) => {
     headers
   }
 
-  if (isServerSideError(response.statusCode)) {
+  if (isServerSideError(response)) {
     logger.error('PROCESS ENDED WITH ERROR', {
       response,
       error: {

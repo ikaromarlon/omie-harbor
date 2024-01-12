@@ -22,7 +22,7 @@ module.exports = ({
     documentKey: omieInvoice.compl.cChaveNFe,
     documentNumber: omieInvoice.ide.nNF,
     documentSerie: omieInvoice.ide.serie,
-    orderId: order?._id ?? emptyRecordsIds.order,
+    orderId: order?.id ?? emptyRecordsIds.order,
     orderNumber: order?.orderNumber ?? null,
     customerId: customerId ?? emptyRecordsIds.customer,
     projectId: projectId ?? emptyRecordsIds.project,

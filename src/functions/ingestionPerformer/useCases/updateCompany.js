@@ -4,9 +4,9 @@ module.exports = async ({
   company,
   omieCnae,
   companyMapping,
-  repositories
+  companiesRepository
 }) => {
   const omieCompany = await omieService.getCompany(credentials)
   const companyData = companyMapping({ omieCompany, omieCnae, credentials })
-  await repositories.companies.createOrUpdateOne({ _id: company._id }, companyData)
+  await companiesRepository.update({ id: company.id, ...companyData })
 }

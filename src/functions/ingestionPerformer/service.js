@@ -8,19 +8,19 @@ const updateFacts = require('./useCases/updateFacts')
 module.exports = ({
   omieService,
   mappings,
-  Repositories,
+  companiesRepository,
+  repositories,
   queuer,
   logger
 }) => async (payload) => {
   const { companyId } = payload
 
-  const repositories = await Repositories()
-
-  const company = await repositories.companies.findOne({ _id: companyId })
+  const company = await companiesRepository.findById(companyId)
 
   if (!company) {
     throw new NotFoundException(`Company ${companyId} not found`)
   }
+
   if (company.isActive !== true) {
     throw new UnprocessableEntityException(`Company ${companyId} is not active`)
   }
@@ -70,7 +70,7 @@ module.exports = ({
     company,
     omieCnae,
     companyMapping: mappings.companyMapping,
-    repositories
+    companiesRepository
   })
 
   await updateDimensions({

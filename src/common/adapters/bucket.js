@@ -3,11 +3,11 @@ const config = require('../../config')
 
 module.exports = () => {
   const S3 = new S3Client()
-  const { detaExportBucket } = config.services.S3
+  const { dataExportBucket } = config.services.S3
   return {
     storeCompanyData: async (companyId, data) => {
       const command = new PutObjectCommand({
-        Bucket: detaExportBucket.name,
+        Bucket: dataExportBucket.name,
         Key: `${companyId}.json`,
         Body: Buffer.from(JSON.stringify(data)),
         ContentType: 'application/json'

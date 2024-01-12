@@ -1,29 +1,29 @@
-const { NotFoundException } = require('../../common/errors')
+const { NotFoundException, ConflictException } = require('../../common/errors')
 
 module.exports = ({
   omieService,
   companyMapping,
-  Repositories
-}) => async (payload) => {
-  const credentials = {
-    appKey: payload.appKey.trim(),
-    appSecret: payload.appSecret.trim()
+  companiesRepository
+}) => async ({ appKey, appSecret }) => {
+  const credentials = { appKey, appSecret }
+
+  const hasCompany = await companiesRepository.findByCredentials(appKey, appSecret)
+
+  if (hasCompany) {
+    throw new ConflictException('Company with provided credentials already exists.')
   }
-
-  const repositories = await Repositories()
-
-  const company = await repositories.companies.findOne({ credentials })
-  if (company) return company
 
   const omieCompany = await omieService.getCompany(credentials, true)
 
   if (!omieCompany) {
-    throw new NotFoundException('Company not found in Omie service. Check the AppKey and AppSecret and try again.')
+    throw new NotFoundException('Company not found at Omie. Check the AppKey and AppSecret and try again.')
   }
 
   const omieCnae = await omieService.getCnae(credentials)
 
   const companyData = companyMapping({ omieCompany, omieCnae, credentials })
 
-  return repositories.companies.createOrUpdateOne({ credentials }, companyData)
+  const company = await companiesRepository.create(companyData)
+
+  return company
 }

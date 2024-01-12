@@ -3,7 +3,7 @@ const deleteAccountReceivable = async (
   data,
   repositories
 ) => {
-  const accountsReceivable = await repositories.accountsReceivable.find({
+  const accountsReceivable = await repositories.accountsReceivable.findMany({
     companyId,
     externalId: String(data.codigo_lancamento_omie)
   })
@@ -17,13 +17,13 @@ const deleteAccountReceivable = async (
 
   if (accountsReceivable.length) {
     const titleIds = [...accountsReceivable.reduce((acc, e) => {
-      acc.add(e._id)
+      acc.add(e.id)
       return acc
     }, new Set())]
 
     result.deleted.accountsReceivable = await repositories.accountsReceivable.deleteMany({
       companyId,
-      _id: titleIds
+      id: titleIds
     })
 
     result.deleted.financialMovements = await repositories.financialMovements.deleteMany({

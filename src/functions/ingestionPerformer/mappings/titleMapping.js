@@ -44,9 +44,9 @@ module.exports = ({
     departmentPercentage,
     categoryPercentage,
     contractId: contractId ?? emptyRecordsIds.contract,
-    orderId: order?._id ?? emptyRecordsIds.order,
+    orderId: order?.id ?? emptyRecordsIds.order,
     orderNumber: order?.orderNumber ?? null,
-    billingId: billing?._id ?? emptyRecordsIds.billing,
+    billingId: billing?.id ?? emptyRecordsIds.billing,
     origin: billing?.type ?? null,
     type: {
       code: omieDocumentType.codigo,

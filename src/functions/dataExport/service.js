@@ -1,70 +1,40 @@
+const { NotFoundException } = require('../../common/errors')
+
 module.exports = ({
-  Repositories,
+  companiesRepository,
+  repositories,
   bucket,
   logger
 }) => async (payload) => {
   const { companyId } = payload
 
-  const filter = {}
-  if (companyId) filter._id = companyId
+  const company = await companiesRepository.findById(companyId)
 
-  const repositories = await Repositories()
+  if (!company) {
+    throw new NotFoundException('Company not found')
+  }
 
-  const companies = await repositories.companies.find(filter)
+  logger.info(`Fetching data from database for company ${company.id} - ${company.name}`)
 
-  await Promise.all(companies.map(async (company) => {
-    const { _id: companyId, name } = company
+  const repos = Object.keys(repositories)
 
-    logger.info(`Getting data from database for company ${companyId} - ${name}`)
+  const result = await Promise.all(
+    repos.map(name => repositories[name].findMany({ companyId }))
+  )
 
-    const [
-      categories,
-      departments,
-      projects,
-      customers,
-      productsServices,
-      checkingAccounts,
-      contracts,
-      orders,
-      billing,
-      accountsPayable,
-      accountsReceivable,
-      financialMovements
-    ] = await Promise.all([
-      repositories.categories.find({ companyId }),
-      repositories.departments.find({ companyId }),
-      repositories.projects.find({ companyId }),
-      repositories.customers.find({ companyId }),
-      repositories.productsServices.find({ companyId }),
-      repositories.checkingAccounts.find({ companyId }),
-      repositories.contracts.find({ companyId }),
-      repositories.orders.find({ companyId }),
-      repositories.billing.find({ companyId }),
-      repositories.accountsPayable.find({ companyId }),
-      repositories.accountsReceivable.find({ companyId }),
-      repositories.financialMovements.find({ companyId })
-    ])
+  const records = repos.reduce((acc, name, i) => {
+    acc[name] = result[i]
+    return acc
+  }, {})
 
-    logger.info(`Uploading data to bucket for company ${companyId} - ${name}`)
+  logger.info(`Uploading data to bucket for company ${company.is} - ${company.name}`)
 
-    await bucket.storeCompanyData(companyId, {
-      companies: [company],
-      categories,
-      departments,
-      projects,
-      customers,
-      productsServices,
-      checkingAccounts,
-      contracts,
-      orders,
-      billing,
-      accountsPayable,
-      accountsReceivable,
-      financialMovements
-    })
+  await bucket.storeCompanyData(companyId, {
+    company,
+    ...records
+  })
 
-    logger.info(`Data export completed for company ${companyId} - ${name}`)
-  }))
+  logger.info(`Data export completed for company ${company.is} - ${company.name}`)
 
   return { success: true }
 }

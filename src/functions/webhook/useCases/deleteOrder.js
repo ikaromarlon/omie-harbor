@@ -3,7 +3,7 @@ const deleteOrder = async (
   data,
   repositories
 ) => {
-  const orders = await repositories.orders.find({
+  const orders = await repositories.orders.findMany({
     companyId,
     externalId: String(data.idOrdemServico ?? data.idPedido)
   })
@@ -18,13 +18,13 @@ const deleteOrder = async (
 
   if (orders.length) {
     const orderIds = [...orders.reduce((acc, e) => {
-      acc.add(e._id)
+      acc.add(e.id)
       return acc
     }, new Set())]
 
     result.deleted.orders = await repositories.orders.deleteMany({
       companyId,
-      _id: orderIds
+      id: orderIds
     })
 
     result.deleted.accountsReceivable = await repositories.accountsReceivable.deleteMany({
