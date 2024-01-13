@@ -96,6 +96,12 @@ ingestionDispatcher:
       Resource:
         - Fn::GetAtt: [ IngestionQueue, Arn ]
   events:
+    - schedule: ${self:custom.service.warmup}
+    - http:
+        path: companies/ingest
+        method: POST
+        cors: true
+        private: true
     - schedule:
         name: ${self:custom.service.name}-ingestionDispatcher-rule1
         rate: ${self:custom.service.ingestionDispatcherScheduleRate.${sls:stage}}

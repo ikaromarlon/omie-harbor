@@ -30,20 +30,26 @@ const parseDocument = (data) => {
 
 const parseDocuments = async data => (await data.toArray()).map(parseDocument)
 
-const parseFilters = ({ _id, id, ...others } = {}) => ({
-  ...(_id ?? id ? { _id: parseId(_id ?? id) } : {}),
-  ...Object.entries(others).reduce((acc, [key, value]) => {
-    /* ignore undefined values */
-    if (typeof value === 'undefined') return acc
-    /* set key-value */
-    acc[key] = value
-    /* keep mongodb special operators */
-    if (key.indexOf('$') === 0) return acc
-    /* deal with arrays */
-    if (Array.isArray(value)) acc[key] = { $in: value }
-    return acc
-  }, {})
-})
+const parseFilters = ({ _id, id, ...others } = {}) => {
+  let tmpId = parseId(_id ?? id)
+  if (Array.isArray(tmpId)) {
+    tmpId = { $in: tmpId.map(parseId) }
+  }
+  return {
+    ...(tmpId ? { _id: tmpId } : {}),
+    ...Object.entries(others).reduce((acc, [key, value]) => {
+      /* ignore undefined values */
+      if (typeof value === 'undefined') return acc
+      /* set key-value */
+      acc[key] = value
+      /* keep mongodb special operators */
+      if (key.indexOf('$') === 0) return acc
+      /* deal with arrays */
+      if (Array.isArray(value)) acc[key] = { $in: value }
+      return acc
+    }, {})
+  }
+}
 
 module.exports = {
   makeId,

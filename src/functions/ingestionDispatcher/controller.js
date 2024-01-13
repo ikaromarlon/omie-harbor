@@ -2,12 +2,21 @@ const handleSuccess = require('../../infra/lambda/handleSuccess')
 const handleError = require('../../infra/lambda/handleError')
 
 module.exports = ({
-  service
-}) => async () => {
+  service,
+  schema,
+  validateWithSchema
+}) => async (request) => {
   try {
     /* EventBridge scheduled event */
+    let payload = {}
 
-    const data = await service()
+    /* API Gateway HTTP event */
+    const { body } = request
+    if (body) {
+      payload = validateWithSchema(body, schema)
+    }
+
+    const data = await service(payload)
 
     return handleSuccess(data)
   } catch (error) {
