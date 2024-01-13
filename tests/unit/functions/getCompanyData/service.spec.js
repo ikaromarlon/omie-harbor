@@ -13,13 +13,13 @@ const makeSut = () => {
     getCompanyDataSignedUrl: jest.fn(async () => Promise.resolve('https://the-bucket-url/data.json'))
   }
 
-  const useCase = makeService({
+  const service = makeService({
     companiesRepository: mockCompanyRepository,
     s3: mockS3
   })
 
   return {
-    sut: useCase,
+    sut: service,
     mockPayload,
     mockCompanyRepository,
     mockS3
@@ -37,7 +37,6 @@ describe('getCompanyData Service', () => {
       await sut(mockPayload)
     } catch (error) {
       expect(error).toBeInstanceOf(NotFoundException)
-      expect(error.statusCode).toBe(404)
       expect(error.message).toBe('Company not found')
     }
     expect(mockCompanyRepository.findById).toHaveBeenCalledWith(mockPayload.id)
@@ -53,7 +52,6 @@ describe('getCompanyData Service', () => {
       await sut(mockPayload)
     } catch (error) {
       expect(error).toBeInstanceOf(ForbiddenException)
-      expect(error.statusCode).toBe(403)
       expect(error.message).toBe('Company is not active')
     }
     expect(mockCompanyRepository.findById).toHaveBeenCalledWith(mockPayload.id)

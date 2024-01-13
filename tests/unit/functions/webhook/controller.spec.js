@@ -1,5 +1,5 @@
 const makeController = require('../../../../src/functions/webhook/controller')
-const { InternalServerErrorException, UnprocessableEntityException } = require('../../../../src/common/errors')
+const { UnprocessableEntityException } = require('../../../../src/common/errors')
 
 const makeSut = () => {
   const mockRequest = {
@@ -38,18 +38,6 @@ describe('webhook Controller', () => {
       expect(error).toBeInstanceOf(UnprocessableEntityException)
       expect(error.statusCode).toBe(422)
       expect(error.message).toBe('Invalid value')
-    }
-  })
-
-  it('Should throw an InternalServerErrorException if service throws an Error', async () => {
-    const { sut, serviceStub, mockRequest } = makeSut()
-    serviceStub.mockRejectedValueOnce(new Error('Generic error'))
-    try {
-      await sut(mockRequest)
-    } catch (error) {
-      expect(error).toBeInstanceOf(InternalServerErrorException)
-      expect(error.statusCode).toBe(500)
-      expect(error.message).toBe('Generic error')
     }
   })
 

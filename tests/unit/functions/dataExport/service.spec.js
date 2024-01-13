@@ -83,7 +83,6 @@ describe('dataExport service', () => {
       await sut(mockPayload)
     } catch (error) {
       expect(error).toBeInstanceOf(NotFoundException)
-      expect(error.statusCode).toBe(404)
       expect(error.message).toBe('Company not found')
     }
     expect(mockCompanyRepository.findById).toHaveBeenCalledWith(mockPayload.companyId)

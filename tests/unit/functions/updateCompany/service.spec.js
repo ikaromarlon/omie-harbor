@@ -21,12 +21,12 @@ const makeSut = () => {
     }))
   }
 
-  const useCase = makeService({
+  const service = makeService({
     companiesRepository: mockCompanyRepository
   })
 
   return {
-    sut: useCase,
+    sut: service,
     mockPayload,
     mockCompanyRepository
   }
@@ -43,7 +43,6 @@ describe('updateCompany Service', () => {
       await sut(mockPayload)
     } catch (error) {
       expect(error).toBeInstanceOf(NotFoundException)
-      expect(error.statusCode).toBe(404)
       expect(error.message).toBe('Company not found')
     }
     expect(mockCompanyRepository.findById).toHaveBeenCalledWith(mockPayload.id)

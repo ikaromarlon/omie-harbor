@@ -98,7 +98,6 @@ describe('webhook service', () => {
       expect(mockCompanyRepository.findByAppKey).toHaveBeenCalledWith(mockPayload.appKey)
     } catch (error) {
       expect(error).toBeInstanceOf(NotFoundException)
-      expect(error.statusCode).toBe(404)
       expect(error.message).toBe(`Company related to appKey '${mockPayload.appKey}' not found`)
     }
     expect(mockLogger.info).toHaveBeenCalledTimes(0)

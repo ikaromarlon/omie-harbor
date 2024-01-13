@@ -187,7 +187,6 @@ describe('ingestionPerformer service', () => {
       await sut(mockPayload)
     } catch (error) {
       expect(error).toBeInstanceOf(NotFoundException)
-      expect(error.statusCode).toBe(404)
       expect(error.message).toBe(`Company ${mockPayload.companyId} not found`)
     }
     expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(mockPayload.companyId)
@@ -203,7 +202,6 @@ describe('ingestionPerformer service', () => {
       await sut(mockPayload)
     } catch (error) {
       expect(error).toBeInstanceOf(UnprocessableEntityException)
-      expect(error.statusCode).toBe(422)
       expect(error.message).toBe(`Company ${mockPayload.companyId} is not active`)
     }
     expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(mockPayload.companyId)

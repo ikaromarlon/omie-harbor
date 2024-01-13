@@ -1,37 +1,64 @@
 const makeController = require('../../../../src/functions/ingestionDispatcher/controller')
-const { InternalServerErrorException } = require('../../../../src/common/errors')
+const { UnprocessableEntityException } = require('../../../../src/common/errors')
+
+const companyId = '25c176b6-b200-4575-9217-e23c6105163c'
 
 const makeSut = () => {
-  const serviceStub = jest.fn(async () => Promise.resolve({}))
+  const mockRequest = {}
+
+  const validateWithSchemaStub = jest.fn(() => ({ companyId }))
+  const mockSchema = {}
+  const serviceStub = jest.fn(async () => Promise.resolve({ success: true }))
 
   const controller = makeController({
+    schema: mockSchema,
+    validateWithSchema: validateWithSchemaStub,
     service: serviceStub
   })
 
   return {
     sut: controller,
-    serviceStub
+    validateWithSchemaStub,
+    serviceStub,
+    mockRequest,
+    mockSchema
   }
 }
 
-describe('IngestionDispatcher Controller', () => {
-  it('Should throw an InternalServerErrorException if service throws an Error', async () => {
-    const { sut, serviceStub } = makeSut()
-    serviceStub.mockRejectedValueOnce(new Error('Generic error'))
-    try {
-      await sut()
-    } catch (error) {
-      expect(error).toBeInstanceOf(InternalServerErrorException)
-      expect(error.statusCode).toBe(500)
-      expect(error.message).toBe('Generic error')
-    }
+describe('ingestionDispatcher Controller', () => {
+  describe('EventBridge trigger', () => {
+    it('Should return success', async () => {
+      const { sut, validateWithSchemaStub, serviceStub, mockRequest } = makeSut()
+      const result = await sut(mockRequest)
+      expect(validateWithSchemaStub).toHaveBeenCalledTimes(0)
+      expect(serviceStub).toHaveBeenCalledWith({})
+      expect(result.statusCode).toBe(200)
+      expect(result.data).toEqual({ success: true })
+    })
   })
 
-  it('Should return success with statusCode 200', async () => {
-    const { sut, serviceStub } = makeSut()
-    const result = await sut()
-    expect(serviceStub).toHaveBeenCalled()
-    expect(result.statusCode).toBe(200)
-    expect(result.data).toEqual({})
+  describe('API Gateway HTTP trigger', () => {
+    it('Should throw an UnprocessableEntityException if validateWithSchema throws a UnprocessableEntityException', async () => {
+      const { sut, validateWithSchemaStub, mockRequest } = makeSut()
+      validateWithSchemaStub.mockImplementationOnce(() => { throw new UnprocessableEntityException('Invalid field') })
+      mockRequest.body = { companyId: 'invalid_companyId' }
+      try {
+        await sut(mockRequest)
+      } catch (error) {
+        expect(error).toBeInstanceOf(UnprocessableEntityException)
+        expect(error.statusCode).toBe(422)
+        expect(error.message).toBe('Invalid field')
+      }
+    })
+
+    it('Should return success', async () => {
+      const { sut, validateWithSchemaStub, serviceStub, mockSchema, mockRequest } = makeSut()
+      mockRequest.body = { companyId }
+      const result = await sut(mockRequest)
+      expect(validateWithSchemaStub).toHaveBeenCalledWith(mockRequest.body, mockSchema)
+      expect(serviceStub).toHaveBeenCalledWith({ companyId })
+      expect(result.statusCode).toBe(200)
+      expect(result.data).toEqual({ success: true })
+    })
   })
 })

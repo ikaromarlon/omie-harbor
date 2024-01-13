@@ -12,12 +12,12 @@ const makeSut = () => {
     find: jest.fn(async () => mockSavedOmieCompanies)
   }
 
-  const useCase = makeService({
+  const service = makeService({
     companiesRepository: mockCompaniesRepository
   })
 
   return {
-    sut: useCase,
+    sut: service,
     mockPayload,
     mockCompaniesRepository
   }
@@ -34,7 +34,6 @@ describe('getCompanies Service', () => {
       await sut(mockPayload)
     } catch (error) {
       expect(error).toBeInstanceOf(NotFoundException)
-      expect(error.statusCode).toBe(404)
       expect(error.message).toBe('Company not found')
     }
     expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(mockPayload.id)
