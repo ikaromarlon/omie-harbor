@@ -4,12 +4,12 @@ const { UnprocessableEntityException } = require('../../../../src/common/errors'
 const companyId = '25c176b6-b200-4575-9217-e23c6105163c'
 
 const makeSut = () => {
-  const mockRequest = {
+  const request = {
     params: { companyId },
     body: { isActive: false }
   }
 
-  const validateWithSchemaStub = jest.fn(() => ({ ...mockRequest.params, ...mockRequest.body }))
+  const validateWithSchemaStub = jest.fn(() => ({ ...request.params, ...request.body }))
   const mockSchema = {}
   const serviceStub = jest.fn(async () => Promise.resolve({ success: true }))
 
@@ -23,18 +23,18 @@ const makeSut = () => {
     sut: controller,
     validateWithSchemaStub,
     serviceStub,
-    mockRequest,
+    request,
     mockSchema
   }
 }
 
-describe('updateCompany Controller', () => {
+describe('updateCompany - controller', () => {
   it('Should throw an UnprocessableEntityException if validateWithSchema throws a UnprocessableEntityException', async () => {
-    const { sut, validateWithSchemaStub, mockRequest } = makeSut()
+    const { sut, validateWithSchemaStub, request } = makeSut()
     validateWithSchemaStub.mockImplementationOnce(() => { throw new UnprocessableEntityException('Invalid field') })
-    mockRequest.params.companyId = 'invalid_companyId'
+    request.params.companyId = 'invalid_companyId'
     try {
-      await sut(mockRequest)
+      await sut(request)
     } catch (error) {
       expect(error).toBeInstanceOf(UnprocessableEntityException)
       expect(error.statusCode).toBe(422)
@@ -43,10 +43,10 @@ describe('updateCompany Controller', () => {
   })
 
   it('Should return success', async () => {
-    const { sut, validateWithSchemaStub, serviceStub, mockSchema, mockRequest } = makeSut()
-    const result = await sut(mockRequest)
-    expect(validateWithSchemaStub).toHaveBeenCalledWith({ ...mockRequest.params, ...mockRequest.body }, mockSchema)
-    expect(serviceStub).toHaveBeenCalledWith({ ...mockRequest.params, ...mockRequest.body })
+    const { sut, validateWithSchemaStub, serviceStub, mockSchema, request } = makeSut()
+    const result = await sut(request)
+    expect(validateWithSchemaStub).toHaveBeenCalledWith({ ...request.params, ...request.body }, mockSchema)
+    expect(serviceStub).toHaveBeenCalledWith({ ...request.params, ...request.body })
     expect(result.statusCode).toBe(200)
     expect(result.data).toEqual({ success: true })
   })

@@ -4,7 +4,7 @@ const { UnprocessableEntityException } = require('../../../../src/common/errors'
 const companyId = '25c176b6-b200-4575-9217-e23c6105163c'
 
 const makeSut = () => {
-  const mockRequest = {
+  const request = {
     records: [{
       body: {
         companyId: [companyId]
@@ -26,18 +26,18 @@ const makeSut = () => {
     sut: controller,
     validateWithSchemaStub,
     serviceStub,
-    mockRequest,
+    request,
     mockSchema
   }
 }
 
-describe('IngestionPerformer Controller', () => {
+describe('IngestionPerformer - controller', () => {
   it('Should throw an UnprocessableEntityException if validateWithSchema throws a UnprocessableEntityException', async () => {
-    const { sut, validateWithSchemaStub, mockRequest } = makeSut()
+    const { sut, validateWithSchemaStub, request } = makeSut()
     validateWithSchemaStub.mockImplementationOnce(() => { throw new UnprocessableEntityException('Invalid field') })
-    mockRequest.records[0].body.companyId = 'invalid_companyId'
+    request.records[0].body.companyId = 'invalid_companyId'
     try {
-      await sut(mockRequest)
+      await sut(request)
     } catch (error) {
       expect(error).toBeInstanceOf(UnprocessableEntityException)
       expect(error.statusCode).toBe(422)
@@ -46,8 +46,8 @@ describe('IngestionPerformer Controller', () => {
   })
 
   it('Should return success: queue request (default)', async () => {
-    const { sut, validateWithSchemaStub, serviceStub, mockRequest, mockSchema } = makeSut()
-    const result = await sut(mockRequest)
+    const { sut, validateWithSchemaStub, serviceStub, request, mockSchema } = makeSut()
+    const result = await sut(request)
     expect(validateWithSchemaStub).toHaveBeenCalledWith({ companyId: [companyId] }, mockSchema)
     expect(serviceStub).toHaveBeenCalledWith({ companyId })
     expect(result.statusCode).toBe(200)

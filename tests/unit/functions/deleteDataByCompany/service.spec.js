@@ -3,7 +3,7 @@ const makeService = require('../../../../src/functions/deleteDataByCompany/servi
 const { mockSavedOmieCompanies } = require('../../../mocks')
 
 const makeSut = () => {
-  const mockPayload = { id: '25c176b6-b200-4575-9217-e23c6105163c' }
+  const payload = { id: '25c176b6-b200-4575-9217-e23c6105163c' }
 
   const mockCompaniesRepository = {
     findById: jest.fn(async () => mockSavedOmieCompanies[0])
@@ -89,7 +89,7 @@ const makeSut = () => {
 
   return {
     sut: service,
-    mockPayload,
+    payload,
     mockCompaniesRepository,
     mockRepositories,
     mockLogger,
@@ -97,11 +97,11 @@ const makeSut = () => {
   }
 }
 
-describe('deleteDataByCompany service', () => {
+describe('deleteDataByCompany - service', () => {
   it('Should delete data by company successfully', async () => {
-    const { sut, mockPayload, mockCompaniesRepository, mockRepositories, mockLogger, mockSQS } = makeSut()
-    const result = await sut(mockPayload)
-    const { id } = mockPayload
+    const { sut, payload, mockCompaniesRepository, mockRepositories, mockLogger, mockSQS } = makeSut()
+    const result = await sut(payload)
+    const { id } = payload
     expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(id)
     expect(mockRepositories.categories.deleteMany).toHaveBeenCalledWith({ companyId: id })
     expect(mockRepositories.departments.deleteMany).toHaveBeenCalledWith({ companyId: id })
@@ -141,13 +141,13 @@ describe('deleteDataByCompany service', () => {
   })
 
   it('Should throw a NotFoundException due to not find company', async () => {
-    const { sut, mockPayload, mockCompaniesRepository, mockRepositories, mockLogger, mockSQS } = makeSut()
-    mockPayload.id = 'any-invalid-company-id'
+    const { sut, payload, mockCompaniesRepository, mockRepositories, mockLogger, mockSQS } = makeSut()
+    payload.id = 'any-invalid-company-id'
     mockCompaniesRepository.findById.mockResolvedValueOnce(null)
     try {
-      await sut(mockPayload)
+      await sut(payload)
     } catch (error) {
-      const { id } = mockPayload
+      const { id } = payload
       expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(id)
       expect(mockRepositories.categories.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.departments.deleteMany).toHaveBeenCalledTimes(0)

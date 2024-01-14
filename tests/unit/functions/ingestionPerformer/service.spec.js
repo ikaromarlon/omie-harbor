@@ -4,7 +4,7 @@ const mocks = require('../../../mocks')
 
 const makeSut = () => {
   const mockCompanyId = '25c176b6-b200-4575-9217-e23c6105163c'
-  const mockPayload = { companyId: mockCompanyId }
+  const payload = { companyId: mockCompanyId }
   const mockCredentials = { appKey: 'the_app_key', appSecret: 'the_app_secret' }
   const mockCustomerId = '3a58bc83-dec0-436e-a98c-20fba8f58b56'
   const mockProjectId = '3fbf0118-b5f9-48b0-8269-40cf0fd28d55'
@@ -145,7 +145,7 @@ const makeSut = () => {
 
   return {
     sut: service,
-    mockPayload,
+    payload,
     mockCompanyId,
     mockCredentials,
     mockOmieService,
@@ -176,59 +176,59 @@ afterEach(() => {
   jest.useRealTimers()
 })
 
-describe('ingestionPerformer service', () => {
+describe('ingestionPerformer - service', () => {
   it('Should not find company and throws a NotFoundException', async () => {
     const sutPackage = makeSut()
-    const { sut, mockPayload, mockCompaniesRepository } = sutPackage
+    const { sut, payload, mockCompaniesRepository } = sutPackage
     const spySut = jest.spyOn(sutPackage, 'sut')
-    mockPayload.companyId = 'any-invalid-or-non-existing-id'
+    payload.companyId = 'any-invalid-or-non-existing-id'
     mockCompaniesRepository.findById.mockResolvedValue(null)
     try {
-      await sut(mockPayload)
+      await sut(payload)
     } catch (error) {
       expect(error).toBeInstanceOf(NotFoundException)
-      expect(error.message).toBe(`Company ${mockPayload.companyId} not found`)
+      expect(error.message).toBe(`Company ${payload.companyId} not found`)
     }
-    expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(mockPayload.companyId)
+    expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(payload.companyId)
     expect(spySut).toHaveReturnedTimes(0)
   })
 
   it('Should find company but throws a UnprocessableEntityException', async () => {
     const sutPackage = makeSut()
-    const { sut, mockPayload, mockCompaniesRepository } = sutPackage
+    const { sut, payload, mockCompaniesRepository } = sutPackage
     const spySut = jest.spyOn(sutPackage, 'sut')
     mockCompaniesRepository.findById.mockResolvedValue({ ...mocks.mockSavedOmieCompanies[0], isActive: false })
     try {
-      await sut(mockPayload)
+      await sut(payload)
     } catch (error) {
       expect(error).toBeInstanceOf(UnprocessableEntityException)
-      expect(error.message).toBe(`Company ${mockPayload.companyId} is not active`)
+      expect(error.message).toBe(`Company ${payload.companyId} is not active`)
     }
-    expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(mockPayload.companyId)
+    expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(payload.companyId)
     expect(spySut).toHaveReturnedTimes(0)
   })
 
   it('Should call companiesRepository.findById successfully', async () => {
-    const { sut, mockPayload, mockCompaniesRepository } = makeSut()
-    await sut(mockPayload)
-    expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(mockPayload.companyId)
+    const { sut, payload, mockCompaniesRepository } = makeSut()
+    await sut(payload)
+    expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(payload.companyId)
   })
 
   describe('updateCompany', () => {
     it('Should updated company successfully', async () => {
-      const { sut, mockPayload, mockOmieService, mockCredentials, mockMappings, mockCompanyId, mockCompaniesRepository } = makeSut()
-      await sut(mockPayload)
+      const { sut, payload, mockOmieService, mockCredentials, mockMappings, mockCompanyId, mockCompaniesRepository } = makeSut()
+      await sut(payload)
       expect(mockOmieService.getCompany).toHaveBeenCalledTimes(1)
       expect(mockMappings.companyMapping).toHaveBeenCalledWith({ omieCompany: mocks.mockOmieCompaniesResponse.empresas_cadastro[0], omieCnae: mocks.mockOmieCnaeResponse.cadastros, credentials: mockCredentials })
       expect(mockCompaniesRepository.update).toHaveBeenCalledWith({ id: mockCompanyId, ...mocks.mockParsedOmieCompany })
     })
 
     it('Should updated company with inactive record successfully', async () => {
-      const { sut, mockPayload, mockOmieService, mockCredentials, mockMappings, mockCompanyId, mockCompaniesRepository } = makeSut()
+      const { sut, payload, mockOmieService, mockCredentials, mockMappings, mockCompanyId, mockCompaniesRepository } = makeSut()
       const mockOmieCompanyResponse = { ...mocks.mockOmieCompaniesResponse.empresas_cadastro[0], inativa: 'S' }
       mockOmieService.getCompany.mockResolvedValue(mockOmieCompanyResponse)
       mockMappings.companyMapping.mockReturnValueOnce({ ...mocks.mockParsedOmieCompany, isActive: false })
-      await sut(mockPayload)
+      await sut(payload)
       expect(mockOmieService.getCompany).toHaveBeenCalledTimes(1)
       expect(mockMappings.companyMapping).toHaveBeenCalledWith({ omieCompany: mockOmieCompanyResponse, omieCnae: mocks.mockOmieCnaeResponse.cadastros, credentials: mockCredentials })
       expect(mockCompaniesRepository.update).toHaveBeenCalledWith({ id: mockCompanyId, ...mocks.mockParsedOmieCompany, isActive: false })
@@ -238,8 +238,8 @@ describe('ingestionPerformer service', () => {
   describe('updateDimensions', () => {
     describe('updateCategories', () => {
       it('Should update categories successfully', async () => {
-        const { sut, mockPayload, mockOmieService, mockCompanyId, mockMappings, mockRepositories } = makeSut()
-        await sut(mockPayload)
+        const { sut, payload, mockOmieService, mockCompanyId, mockMappings, mockRepositories } = makeSut()
+        await sut(payload)
         expect(mockOmieService.getCategories).toHaveBeenCalledTimes(1)
         expect(mockMappings.categoryMapping).toHaveBeenCalledWith({ omieCategory: mocks.mockOmieCategoriesResponse.categoria_cadastro[0], companyId: mockCompanyId })
         expect(mockMappings.categoryMapping).toHaveReturnedWith(mocks.mockParsedOmieCategory)
@@ -249,8 +249,8 @@ describe('ingestionPerformer service', () => {
 
     describe('updateDepartments', () => {
       it('Should update departments successfully', async () => {
-        const { sut, mockPayload, mockOmieService, mockCompanyId, mockMappings, mockRepositories } = makeSut()
-        await sut(mockPayload)
+        const { sut, payload, mockOmieService, mockCompanyId, mockMappings, mockRepositories } = makeSut()
+        await sut(payload)
         expect(mockOmieService.getDepartments).toHaveBeenCalledTimes(1)
         expect(mockMappings.departmentMapping).toHaveBeenCalledWith({ omieDepartment: mocks.mockOmieDepartmentsResponse.departamentos[0], companyId: mockCompanyId })
         expect(mockMappings.departmentMapping).toHaveReturnedWith(mocks.mockParsedOmieDepartment)
@@ -260,8 +260,8 @@ describe('ingestionPerformer service', () => {
 
     describe('updateProjects', () => {
       it('Should update projects successfully', async () => {
-        const { sut, mockPayload, mockOmieService, mockCompanyId, mockMappings, mockRepositories } = makeSut()
-        await sut(mockPayload)
+        const { sut, payload, mockOmieService, mockCompanyId, mockMappings, mockRepositories } = makeSut()
+        await sut(payload)
         expect(mockOmieService.getProjects).toHaveBeenCalledTimes(1)
         expect(mockMappings.projectMapping).toHaveBeenCalledWith({ omieProject: mocks.mockOmieProjectsResponse.cadastro[0], companyId: mockCompanyId })
         expect(mockMappings.projectMapping).toHaveReturnedWith(mocks.mockParsedOmieProject)
@@ -271,8 +271,8 @@ describe('ingestionPerformer service', () => {
 
     describe('updateCustomers', () => {
       it('Should update customers successfully', async () => {
-        const { sut, mockPayload, mockOmieService, mockCompanyId, mockMappings, mockRepositories } = makeSut()
-        await sut(mockPayload)
+        const { sut, payload, mockOmieService, mockCompanyId, mockMappings, mockRepositories } = makeSut()
+        await sut(payload)
         expect(mockOmieService.getCustomers).toHaveBeenCalledTimes(1)
         expect(mockOmieService.getActivities).toHaveBeenCalledTimes(1)
         expect(mockMappings.customerMapping).toHaveBeenCalledWith({ omieCustomer: mocks.mockOmieCustomersResponse.clientes_cadastro[0], omieActivities: mocks.mockOmieActivitiesResponse.lista_tipos_atividade, omieBanks: mocks.mockOmieBanksResponse.fin_banco_cadastro, omieCnae: mocks.mockOmieCnaeResponse.cadastros, companyId: mockCompanyId })
@@ -283,8 +283,8 @@ describe('ingestionPerformer service', () => {
 
     describe('updateProductsServices', () => {
       it('Should update productsServices successfully', async () => {
-        const { sut, mockPayload, mockOmieService, mockCompanyId, mockMappings, mockRepositories } = makeSut()
-        await sut(mockPayload)
+        const { sut, payload, mockOmieService, mockCompanyId, mockMappings, mockRepositories } = makeSut()
+        await sut(payload)
         expect(mockOmieService.getProducts).toHaveBeenCalledTimes(1)
         expect(mockOmieService.getServices).toHaveBeenCalledTimes(2)
         expect(mockMappings.productMapping).toHaveBeenCalledWith({ omieProduct: mocks.mockOmieProductsResponse.produto_servico_cadastro[0], companyId: mockCompanyId })
@@ -297,8 +297,8 @@ describe('ingestionPerformer service', () => {
 
     describe('updateCheckingAccounts', () => {
       it('Should update checking accounts successfully', async () => {
-        const { sut, mockPayload, mockOmieService, mockCompanyId, mockMappings, mockRepositories } = makeSut()
-        await sut(mockPayload)
+        const { sut, payload, mockOmieService, mockCompanyId, mockMappings, mockRepositories } = makeSut()
+        await sut(payload)
         expect(mockOmieService.getCheckingAccounts).toHaveBeenCalledTimes(1)
         expect(mockOmieService.getCheckingAccountTypes).toHaveBeenCalledTimes(1)
         expect(mockMappings.checkingAccountMapping).toHaveBeenCalledWith({ omieCheckingAccount: mocks.mockOmieCheckingAccountsResponse.ListarContasCorrentes[0], omieBanks: mocks.mockOmieBanksResponse.fin_banco_cadastro, omieCheckingAccountTypes: mocks.mockOmieCheckingAccountTypesResponse.cadastros, companyId: mockCompanyId })
@@ -309,8 +309,8 @@ describe('ingestionPerformer service', () => {
 
     describe('updateContracts', () => {
       it('Should update contracts successfully', async () => {
-        const { sut, mockPayload, mockOmieService, mockCompanyId, mockMappings, mockCustomerId, mockProjectId, mockDepartmentId, mockServiceId, mockCategoryId, mockRepositories } = makeSut()
-        await sut(mockPayload)
+        const { sut, payload, mockOmieService, mockCompanyId, mockMappings, mockCustomerId, mockProjectId, mockDepartmentId, mockServiceId, mockCategoryId, mockRepositories } = makeSut()
+        await sut(payload)
         expect(mockOmieService.getContracts).toHaveBeenCalledTimes(1)
         expect(mockOmieService.getContractSteps).toHaveBeenCalledTimes(1)
         expect(mockOmieService.getContractBillingTypes).toHaveBeenCalledTimes(1)
@@ -332,16 +332,16 @@ describe('ingestionPerformer service', () => {
       })
 
       it('Should receive contracts from Omie with departments array but missing department id', async () => {
-        const { sut, mockPayload, mockOmieService } = makeSut()
+        const { sut, payload, mockOmieService } = makeSut()
         mockOmieService.getContracts.mockResolvedValue([{ ...mocks.mockOmieContractsResponse.contratoCadastro[0], departamentos: [{}] }])
-        await sut(mockPayload)
+        await sut(payload)
       })
 
       it('Should call omieMappings.contract successfully without relationships', async () => {
-        const { sut, mockPayload, mockCompanyId, mockMappings, mockOmieService } = makeSut()
+        const { sut, payload, mockCompanyId, mockMappings, mockOmieService } = makeSut()
         const mockOmieContract = { ...mocks.mockOmieContractsResponse.contratoCadastro[0], departamentos: [], cabecalho: { ...mocks.mockOmieContractsResponse.contratoCadastro[0].cabecalho, nCodCli: undefined }, infAdic: { ...mocks.mockOmieContractsResponse.contratoCadastro[0].infAdic, nCodProj: undefined }, itensContrato: [{ ...mocks.mockOmieContractsResponse.contratoCadastro[0].itensContrato[0], itemCabecalho: { ...mocks.mockOmieContractsResponse.contratoCadastro[0].itensContrato[0].itemCabecalho, codServico: undefined, cCodCategItem: undefined } }] }
         mockOmieService.getContracts.mockResolvedValue([mockOmieContract])
-        await sut(mockPayload)
+        await sut(payload)
         expect(mockMappings.contractMapping).toHaveBeenCalledWith({
           omieContract: mockOmieContract,
           omieContractDepartment: {},
@@ -361,8 +361,8 @@ describe('ingestionPerformer service', () => {
 
     describe('updateOrders', () => {
       it('Should update orders successfully', async () => {
-        const { sut, mockPayload, mockOmieService, mockCompanyId, mockMappings, mockCustomerId, mockProjectId, mockDepartmentId, mockProductId, mockServiceId, mockCategoryId, mockContractId, mockRepositories } = makeSut()
-        await sut(mockPayload)
+        const { sut, payload, mockOmieService, mockCompanyId, mockMappings, mockCustomerId, mockProjectId, mockDepartmentId, mockProductId, mockServiceId, mockCategoryId, mockContractId, mockRepositories } = makeSut()
+        await sut(payload)
         expect(mockOmieService.getProductOrders).toHaveBeenCalledTimes(1)
         expect(mockOmieService.getServiceOrders).toHaveBeenCalledTimes(1)
         expect(mockOmieService.getBillingSteps).toHaveBeenCalledTimes(1)
@@ -397,29 +397,29 @@ describe('ingestionPerformer service', () => {
       })
 
       it('Should receive orders from Omie with departments array but missing department id', async () => {
-        const { sut, mockPayload, mockOmieService } = makeSut()
+        const { sut, payload, mockOmieService } = makeSut()
         mockOmieService.getProductOrders.mockResolvedValue([{ ...mocks.mockOmieProductOrdersResponse.pedido_venda_produto[0], departamentos: [{}] }])
         mockOmieService.getServiceOrders.mockResolvedValue([{ ...mocks.mockOmieServiceOrdersResponse.osCadastro[0], Departamentos: [{}] }])
-        await sut(mockPayload)
+        await sut(payload)
       })
 
       it('Should call omieMappings.serviceOrder and not call omieMappings.productOrder', async () => {
-        const { sut, mockPayload, mockMappings, mockOmieService } = makeSut()
+        const { sut, payload, mockMappings, mockOmieService } = makeSut()
         mockOmieService.getProductOrders.mockResolvedValue([])
-        await sut(mockPayload)
+        await sut(payload)
         expect(mockMappings.serviceOrderMapping).toHaveBeenCalled()
         expect(mockMappings.productOrderMapping).toHaveBeenCalledTimes(0)
       })
 
       it('Should call omieMappings.productOrder and omieMappings.serviceOrder successfully without relationships', async () => {
-        const { sut, mockPayload, mockCompanyId, mockMappings, mockOmieService } = makeSut()
+        const { sut, payload, mockCompanyId, mockMappings, mockOmieService } = makeSut()
 
         const mockOmieProductOrder = { ...mocks.mockOmieProductOrdersResponse.pedido_venda_produto[0], departamentos: [], cabecalho: { ...mocks.mockOmieProductOrdersResponse.pedido_venda_produto[0].cabecalho, codigo_cliente: undefined }, informacoes_adicionais: { ...mocks.mockOmieProductOrdersResponse.pedido_venda_produto[0].informacoes_adicionais, codProj: undefined }, det: [{ ...mocks.mockOmieProductOrdersResponse.pedido_venda_produto[0].det[0], inf_adic: { ...mocks.mockOmieProductOrdersResponse.pedido_venda_produto[0].det[0].inf_adic, codigo_categoria_item: undefined }, produto: { ...mocks.mockOmieProductOrdersResponse.pedido_venda_produto[0].det[0].inf_adic.produto, codigo_produto: undefined } }] }
         mockOmieService.getProductOrders.mockResolvedValue([mockOmieProductOrder])
         const mockOmieServiceOrder = { ...mocks.mockOmieServiceOrdersResponse.osCadastro[0], Departamentos: [], Cabecalho: { ...mocks.mockOmieServiceOrdersResponse.osCadastro[0].Cabecalho, nCodCli: undefined }, InformacoesAdicionais: { ...mocks.mockOmieServiceOrdersResponse.osCadastro[0].InformacoesAdicionais, nCodProj: undefined, cNumContrato: undefined }, ServicosPrestados: [{ ...mocks.mockOmieServiceOrdersResponse.osCadastro[0].ServicosPrestados[0], cCodCategItem: undefined, nCodServico: undefined }] }
         mockOmieService.getServiceOrders.mockResolvedValue([mockOmieServiceOrder])
 
-        await sut(mockPayload)
+        await sut(payload)
 
         expect(mockMappings.productOrderMapping).toHaveBeenCalledWith({
           omieOrder: mockOmieProductOrder,
@@ -455,8 +455,8 @@ describe('ingestionPerformer service', () => {
   describe('updateFacts', () => {
     describe('updateBilling', () => {
       it('Should update billing successfully', async () => {
-        const { sut, mockPayload, mockOmieService, mockCompanyId, mockMappings, mockCustomerId, mockProjectId, mockDepartmentId, mockProductId, mockServiceId, mockCategoryId, mockContractId, mockRepositories } = makeSut()
-        await sut(mockPayload)
+        const { sut, payload, mockOmieService, mockCompanyId, mockMappings, mockCustomerId, mockProjectId, mockDepartmentId, mockProductId, mockServiceId, mockCategoryId, mockContractId, mockRepositories } = makeSut()
+        await sut(payload)
         expect(mockOmieService.getProductInvoices).toHaveBeenCalledTimes(1)
         expect(mockOmieService.getServiceInvoices).toHaveBeenCalledTimes(1)
         expect(mockMappings.productInvoiceMapping).toHaveBeenCalledWith({
@@ -490,29 +490,29 @@ describe('ingestionPerformer service', () => {
       })
 
       it('Should receive billing from Omie with departments array but missing department id', async () => {
-        const { sut, mockPayload, mockOmieService } = makeSut()
+        const { sut, payload, mockOmieService } = makeSut()
         mockOmieService.getProductInvoices.mockResolvedValue([{ ...mocks.mockOmieProductInvoicesResponse.nfCadastro[0], pedido: { ...mocks.mockOmieProductInvoicesResponse.nfCadastro[0].pedido, Departamentos: [{}] } }])
         mockOmieService.getServiceInvoices.mockResolvedValue([{ ...mocks.mockOmieServiceInvoicesResponse.nfseEncontradas[0], OrdemServico: { ...mocks.mockOmieProductInvoicesResponse.nfCadastro[0].OrdemServico, Departamentos: [{}] } }])
-        await sut(mockPayload)
+        await sut(payload)
       })
 
       it('Should call omieMappings.serviceOrder and not call omieMappings.serviceInvoice', async () => {
-        const { sut, mockPayload, mockMappings, mockOmieService } = makeSut()
+        const { sut, payload, mockMappings, mockOmieService } = makeSut()
         mockOmieService.getProductInvoices.mockResolvedValue([])
-        await sut(mockPayload)
+        await sut(payload)
         expect(mockMappings.serviceInvoiceMapping).toHaveBeenCalled()
         expect(mockMappings.productInvoiceMapping).toHaveBeenCalledTimes(0)
       })
 
       it('Should call omieMappings.productInvoice successfully without relationships', async () => {
-        const { sut, mockPayload, mockCompanyId, mockMappings, mockOmieService } = makeSut()
+        const { sut, payload, mockCompanyId, mockMappings, mockOmieService } = makeSut()
 
         const mockOmieProductInvoice = { ...mocks.mockOmieProductInvoicesResponse.nfCadastro[0], pedido: { Departamentos: [] }, nfDestInt: { ...mocks.mockOmieProductInvoicesResponse.nfCadastro[0].nfDestInt, nCodCli: undefined }, compl: { ...mocks.mockOmieProductInvoicesResponse.nfCadastro[0].compl, nIdPedido: undefined }, det: [{ ...mocks.mockOmieProductInvoicesResponse.nfCadastro[0].det[0], nfProdInt: { ...mocks.mockOmieProductInvoicesResponse.nfCadastro[0].det[0].nfProdInt, nCodProd: undefined } }] }
         mockOmieService.getProductInvoices.mockResolvedValue([mockOmieProductInvoice])
         const mockOmieServiceInvoice = { ...mocks.mockOmieServiceInvoicesResponse.nfseEncontradas[0], OrdemServico: { Departamentos: [], nCodigoContrato: undefined, nCodigoOS: undefined }, Cabecalho: { ...mocks.mockOmieServiceInvoicesResponse.nfseEncontradas[0].Cabecalho, nCodigoCliente: undefined }, ListaServicos: [{ ...mocks.mockOmieServiceInvoicesResponse.nfseEncontradas[0].ListaServicos[0], CodigoServico: undefined }], Adicionais: { ...mocks.mockOmieServiceInvoicesResponse.nfseEncontradas[0].Adicionais, nCodigoProjeto: undefined } }
         mockOmieService.getServiceInvoices.mockResolvedValue([mockOmieServiceInvoice])
 
-        await sut(mockPayload)
+        await sut(payload)
 
         expect(mockMappings.productInvoiceMapping).toHaveBeenCalledWith({
           omieInvoice: mockOmieProductInvoice,
@@ -545,10 +545,10 @@ describe('ingestionPerformer service', () => {
       })
 
       it('Should call omieMappings.productInvoice successfully without order: undefined', async () => {
-        const { sut, mockPayload, mockCompanyId, mockMappings, mockOmieService, mockCustomerId, mockDepartmentId, mockProductId } = makeSut()
+        const { sut, payload, mockCompanyId, mockMappings, mockOmieService, mockCustomerId, mockDepartmentId, mockProductId } = makeSut()
         const mockOmieProductInvoice = { ...mocks.mockOmieProductInvoicesResponse.nfCadastro[0], compl: { ...mocks.mockOmieProductInvoicesResponse.nfCadastro[0].compl, nIdPedido: undefined } }
         mockOmieService.getProductInvoices.mockResolvedValue([mockOmieProductInvoice])
-        await sut(mockPayload)
+        await sut(payload)
         expect(mockMappings.productInvoiceMapping).toHaveBeenCalledWith({
           omieInvoice: mockOmieProductInvoice,
           omieInvoiceDepartment: mocks.mockOmieProductInvoicesResponse.nfCadastro[0].pedido.Departamentos[0],
@@ -565,10 +565,10 @@ describe('ingestionPerformer service', () => {
       })
 
       it('Should call omieMappings.productInvoice successfully without order: 0', async () => {
-        const { sut, mockPayload, mockCompanyId, mockMappings, mockOmieService, mockCustomerId, mockDepartmentId, mockProductId } = makeSut()
+        const { sut, payload, mockCompanyId, mockMappings, mockOmieService, mockCustomerId, mockDepartmentId, mockProductId } = makeSut()
         const mockOmieProductInvoice = { ...mocks.mockOmieProductInvoicesResponse.nfCadastro[0], compl: { ...mocks.mockOmieProductInvoicesResponse.nfCadastro[0].compl, nIdPedido: '0' } }
         mockOmieService.getProductInvoices.mockResolvedValue([mockOmieProductInvoice])
-        await sut(mockPayload)
+        await sut(payload)
         expect(mockMappings.productInvoiceMapping).toHaveBeenCalledWith({
           omieInvoice: mockOmieProductInvoice,
           omieInvoiceDepartment: mocks.mockOmieProductInvoicesResponse.nfCadastro[0].pedido.Departamentos[0],
@@ -585,18 +585,18 @@ describe('ingestionPerformer service', () => {
       })
 
       it('Should not call omieMappings.productInvoice due to no matched order', async () => {
-        const { sut, mockPayload, mockMappings, mockOmieService } = makeSut()
+        const { sut, payload, mockMappings, mockOmieService } = makeSut()
         const mockOmieProductInvoice = { ...mocks.mockOmieProductInvoicesResponse.nfCadastro[0], compl: { ...mocks.mockOmieProductInvoicesResponse.nfCadastro[0].compl, nIdPedido: 123456 } }
         mockOmieService.getProductInvoices.mockResolvedValue([mockOmieProductInvoice])
-        await sut(mockPayload)
+        await sut(payload)
         expect(mockMappings.productInvoiceMapping).toHaveBeenCalledTimes(0)
       })
     })
 
     describe('updateAccountsPayable', () => {
       it('Should update accounts payable successfully', async () => {
-        const { sut, mockPayload, mockOmieService, mockCompanyId, mockMappings, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockContractId, mockRepositories } = makeSut()
-        await sut(mockPayload)
+        const { sut, payload, mockOmieService, mockCompanyId, mockMappings, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockContractId, mockRepositories } = makeSut()
+        await sut(payload)
         expect(mockOmieService.getAccountsPayable).toHaveBeenCalledTimes(2)
         expect(mockMappings.titleMapping).toHaveBeenCalledWith({
           omieTitle: mocks.mockOmieAccountsPayableResponse.titulosEncontrados[0],
@@ -618,16 +618,16 @@ describe('ingestionPerformer service', () => {
       })
 
       it('Should receive accountsPayable from Omie with departments array but missing department id', async () => {
-        const { sut, mockPayload, mockOmieService } = makeSut()
+        const { sut, payload, mockOmieService } = makeSut()
         mockOmieService.getAccountsPayable.mockResolvedValue([{ ...mocks.mockOmieAccountsPayableResponse.titulosEncontrados[0], departamentos: [{}] }])
-        await sut(mockPayload)
+        await sut(payload)
       })
 
       it('Should call omieMappings.title without title entries', async () => {
-        const { sut, mockPayload, mockOmieService, mockCompanyId, mockMappings, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockContractId, mockRepositories } = makeSut()
+        const { sut, payload, mockOmieService, mockCompanyId, mockMappings, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockContractId, mockRepositories } = makeSut()
         const mockOmieAccountPayable = { ...mocks.mockOmieAccountsPayableResponse.titulosEncontrados[0], lancamentos: undefined }
         mockOmieService.getAccountsPayable.mockResolvedValue([mockOmieAccountPayable])
-        await sut(mockPayload)
+        await sut(payload)
         expect(mockOmieService.getAccountsPayable).toHaveBeenCalledTimes(2)
         expect(mockMappings.titleMapping).toHaveBeenCalledWith({
           omieTitle: mockOmieAccountPayable,
@@ -649,10 +649,10 @@ describe('ingestionPerformer service', () => {
       })
 
       it('Should call omieMappings.title without categories list: use fixed category in title details', async () => {
-        const { sut, mockPayload, mockCompanyId, mockMappings, mockOmieService, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockContractId } = makeSut()
+        const { sut, payload, mockCompanyId, mockMappings, mockOmieService, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockContractId } = makeSut()
         const mockOmieAccountPayable = { ...mocks.mockOmieAccountsPayableResponse.titulosEncontrados[0], cabecTitulo: { ...mocks.mockOmieAccountsPayableResponse.titulosEncontrados[0].cabecTitulo, aCodCateg: [] } }
         mockOmieService.getAccountsPayable.mockResolvedValue([mockOmieAccountPayable])
-        await sut(mockPayload)
+        await sut(payload)
         expect(mockMappings.titleMapping).toHaveBeenCalledWith({
           omieTitle: mockOmieAccountPayable,
           omieTitleDepartment: mocks.mockOmieAccountsPayableResponse.titulosEncontrados[0].departamentos[0],
@@ -672,10 +672,10 @@ describe('ingestionPerformer service', () => {
       })
 
       it('Should call omieMappings.title successfully without relationships', async () => {
-        const { sut, mockPayload, mockCompanyId, mockMappings, mockOmieService } = makeSut()
+        const { sut, payload, mockCompanyId, mockMappings, mockOmieService } = makeSut()
         const mockOmieAccountPayable = { ...mocks.mockOmieAccountsPayableResponse.titulosEncontrados[0], departamentos: [], cabecTitulo: { ...mocks.mockOmieAccountsPayableResponse.titulosEncontrados[0].cabecTitulo, aCodCateg: [], nCodCliente: undefined, cCodProjeto: undefined, nCodCC: undefined, nCodCtr: undefined, nCodOS: undefined, nCodNF: undefined, nCodTitulo: undefined, cCodCateg: undefined }, lancamentos: [{ ...mocks.mockOmieAccountsPayableResponse.titulosEncontrados[0].lancamentos[0], nCodCC: undefined }] }
         mockOmieService.getAccountsPayable.mockResolvedValue([mockOmieAccountPayable])
-        await sut(mockPayload)
+        await sut(payload)
         expect(mockMappings.titleMapping).toHaveBeenCalledWith({
           omieTitle: mockOmieAccountPayable,
           omieTitleDepartment: {},
@@ -697,8 +697,8 @@ describe('ingestionPerformer service', () => {
 
     describe('updateAccountsReceivable', () => {
       it('Should update accounts receivable successfully', async () => {
-        const { sut, mockPayload, mockOmieService, mockCompanyId, mockMappings, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockContractId, mockRepositories } = makeSut()
-        await sut(mockPayload)
+        const { sut, payload, mockOmieService, mockCompanyId, mockMappings, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockContractId, mockRepositories } = makeSut()
+        await sut(payload)
         expect(mockOmieService.getAccountsReceivable).toHaveBeenCalledTimes(2)
         expect(mockMappings.titleMapping).toHaveBeenCalledWith({
           omieTitle: mocks.mockOmieAccountsReceivableResponse.titulosEncontrados[0],
@@ -720,10 +720,10 @@ describe('ingestionPerformer service', () => {
       })
 
       it('Should call omieMappings.title without title entries', async () => {
-        const { sut, mockPayload, mockOmieService, mockCompanyId, mockMappings, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockContractId, mockRepositories } = makeSut()
+        const { sut, payload, mockOmieService, mockCompanyId, mockMappings, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockContractId, mockRepositories } = makeSut()
         const mockOmieAccountReceivable = { ...mocks.mockOmieAccountsReceivableResponse.titulosEncontrados[0], lancamentos: undefined }
         mockOmieService.getAccountsReceivable.mockResolvedValue([mockOmieAccountReceivable])
-        await sut(mockPayload)
+        await sut(payload)
         expect(mockOmieService.getAccountsReceivable).toHaveBeenCalledTimes(2)
         expect(mockMappings.titleMapping).toHaveBeenCalledWith({
           omieTitle: mockOmieAccountReceivable,
@@ -745,16 +745,16 @@ describe('ingestionPerformer service', () => {
       })
 
       it('Should receive accountsReceivable from Omie with departments array but missing department id', async () => {
-        const { sut, mockPayload, mockOmieService } = makeSut()
+        const { sut, payload, mockOmieService } = makeSut()
         mockOmieService.getAccountsReceivable.mockResolvedValue([{ ...mocks.mockOmieAccountsReceivableResponse.titulosEncontrados[0], departamentos: [{}] }])
-        await sut(mockPayload)
+        await sut(payload)
       })
 
       it('Should call omieMappings.title without categories list: use fixed category in title details', async () => {
-        const { sut, mockPayload, mockCompanyId, mockMappings, mockOmieService, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockContractId } = makeSut()
+        const { sut, payload, mockCompanyId, mockMappings, mockOmieService, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockContractId } = makeSut()
         const mockOmieAccountReceivable = { ...mocks.mockOmieAccountsReceivableResponse.titulosEncontrados[0], cabecTitulo: { ...mocks.mockOmieAccountsReceivableResponse.titulosEncontrados[0].cabecTitulo, aCodCateg: [] } }
         mockOmieService.getAccountsReceivable.mockResolvedValue([mockOmieAccountReceivable])
-        await sut(mockPayload)
+        await sut(payload)
         expect(mockMappings.titleMapping).toHaveBeenCalledWith({
           omieTitle: mockOmieAccountReceivable,
           omieTitleDepartment: mocks.mockOmieAccountsReceivableResponse.titulosEncontrados[0].departamentos[0],
@@ -774,10 +774,10 @@ describe('ingestionPerformer service', () => {
       })
 
       it('Should call omieMappings.title successfully without relationships', async () => {
-        const { sut, mockPayload, mockCompanyId, mockMappings, mockOmieService } = makeSut()
+        const { sut, payload, mockCompanyId, mockMappings, mockOmieService } = makeSut()
         const mockOmieAccountReceivable = { ...mocks.mockOmieAccountsReceivableResponse.titulosEncontrados[0], departamentos: [], cabecTitulo: { ...mocks.mockOmieAccountsReceivableResponse.titulosEncontrados[0].cabecTitulo, aCodCateg: [], nCodCliente: undefined, cCodProjeto: undefined, nCodCC: undefined, nCodCtr: undefined, nCodOS: undefined, nCodNF: undefined, nCodTitulo: undefined, cCodCateg: undefined }, lancamentos: [{ ...mocks.mockOmieAccountsReceivableResponse.titulosEncontrados[0].lancamentos[0], nCodCC: undefined }] }
         mockOmieService.getAccountsReceivable.mockResolvedValue([mockOmieAccountReceivable])
-        await sut(mockPayload)
+        await sut(payload)
         expect(mockMappings.titleMapping).toHaveBeenCalledWith({
           omieTitle: mockOmieAccountReceivable,
           omieTitleDepartment: {},
@@ -799,8 +799,8 @@ describe('ingestionPerformer service', () => {
 
     describe('updateFinancialMovements', () => {
       it('Should update successfully', async () => {
-        const { sut, mockPayload, mockOmieService, mockCompanyId, mockMappings, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockCheckingAccountId, mockContractId, mockAccountPayable, mockRepositories } = makeSut()
-        await sut(mockPayload)
+        const { sut, payload, mockOmieService, mockCompanyId, mockMappings, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockCheckingAccountId, mockContractId, mockAccountPayable, mockRepositories } = makeSut()
+        await sut(payload)
         expect(mockOmieService.getEntryOrigins).toHaveBeenCalledTimes(1)
         expect(mockOmieService.getFinancialMovements).toHaveBeenCalledTimes(2)
         expect(mockMappings.financialMovementMapping).toHaveBeenCalledWith({
@@ -826,17 +826,17 @@ describe('ingestionPerformer service', () => {
       })
 
       it('Should receive financialMovements from Omie with departments array but missing department id', async () => {
-        const { sut, mockPayload, mockOmieService } = makeSut()
+        const { sut, payload, mockOmieService } = makeSut()
         mockOmieService.getFinancialMovements.mockResolvedValue([{ ...mocks.mockOmieFinancialMovementsResponse.movimentos[0], departamentos: [{}] }])
-        await sut(mockPayload)
+        await sut(payload)
       })
 
       it('Should call omieMappings.financialMovement successfully with accountReceivable instead of accountPayable', async () => {
-        const { sut, mockPayload, mockCompanyId, mockMappings, mockRepositories, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockCheckingAccountId, mockContractId, mockAccountReceivableId } = makeSut()
+        const { sut, payload, mockCompanyId, mockMappings, mockRepositories, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockCheckingAccountId, mockContractId, mockAccountReceivableId } = makeSut()
         mockRepositories.accountsPayable.findMany.mockResolvedValue([])
         mockRepositories.accountsReceivable.findMany.mockResolvedValue(mocks.mockSavedOmieAccountsReceivable)
         mockMappings.financialMovementMapping.mockReturnValueOnce({ ...mocks.mockParsedOmieFinancialMovement, accountPayableId: null, accountReceivableId: mockAccountReceivableId })
-        await sut(mockPayload)
+        await sut(payload)
         expect(mockMappings.financialMovementMapping).toHaveBeenCalledWith({
           omieFinancialMovement: mocks.mockOmieFinancialMovementsResponse.movimentos[0],
           omieFinancialMovementDepartment: mocks.mockOmieFinancialMovementsResponse.movimentos[0].departamentos[0],
@@ -859,10 +859,10 @@ describe('ingestionPerformer service', () => {
       })
 
       it('Should call omieMappings.financialMovement successfully without categories list: use static category in title details', async () => {
-        const { sut, mockPayload, mockCompanyId, mockOmieService, mockMappings, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockCheckingAccountId, mockContractId, mockAccountPayable } = makeSut()
+        const { sut, payload, mockCompanyId, mockOmieService, mockMappings, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockCheckingAccountId, mockContractId, mockAccountPayable } = makeSut()
         const mockOmieFinancialMovement = { ...mocks.mockOmieFinancialMovementsResponse.movimentos[0], categorias: [] }
         mockOmieService.getFinancialMovements.mockResolvedValue([mockOmieFinancialMovement])
-        await sut(mockPayload)
+        await sut(payload)
         expect(mockMappings.financialMovementMapping).toHaveBeenCalledWith({
           omieFinancialMovement: mockOmieFinancialMovement,
           omieFinancialMovementDepartment: mocks.mockOmieFinancialMovementsResponse.movimentos[0].departamentos[0],
@@ -885,10 +885,10 @@ describe('ingestionPerformer service', () => {
       })
 
       it('Should call omieMappings.financialMovement successfully without relationships', async () => {
-        const { sut, mockPayload, mockCompanyId, mockMappings, mockOmieService } = makeSut()
+        const { sut, payload, mockCompanyId, mockMappings, mockOmieService } = makeSut()
         const mockOmieFinancialMovement = { ...mocks.mockOmieFinancialMovementsResponse.movimentos[0], departamentos: [], categorias: [], detalhes: { ...mocks.mockOmieFinancialMovementsResponse.movimentos[0].detalhes, nCodCliente: undefined, cCodProjeto: undefined, nCodCC: undefined, nCodCtr: undefined, nCodOS: undefined, nCodNF: undefined, nCodTitulo: undefined, cCodCateg: undefined } }
         mockOmieService.getFinancialMovements.mockResolvedValue([mockOmieFinancialMovement])
-        await sut(mockPayload)
+        await sut(payload)
         expect(mockMappings.financialMovementMapping).toHaveBeenCalledWith({
           omieFinancialMovement: mockOmieFinancialMovement,
           omieFinancialMovementDepartment: {},
@@ -913,26 +913,26 @@ describe('ingestionPerformer service', () => {
   })
 
   it('Should return success with custom parameters', async () => {
-    const { sut, mockPayload, mockLogger, mockOmieService, mockSQS } = makeSut()
-    mockPayload.startDate = '2022-01-01'
-    mockPayload.endDate = '2022-01-31'
-    const result = await sut(mockPayload)
+    const { sut, payload, mockLogger, mockOmieService, mockSQS } = makeSut()
+    payload.startDate = '2022-01-01'
+    payload.endDate = '2022-01-31'
+    const result = await sut(payload)
     expect(mockLogger.info).toHaveBeenCalledTimes(3)
     expect(mockOmieService.getBanks).toHaveBeenCalledTimes(1)
     expect(mockOmieService.getCnae).toHaveBeenCalledTimes(1)
     expect(mockOmieService.getDocumentTypes).toHaveBeenCalledTimes(1)
-    expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockPayload.companyId)
+    expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledWith(payload.companyId)
     expect(result).toEqual({ success: true })
   })
 
   it('Should return success without custom parameters', async () => {
-    const { sut, mockPayload, mockLogger, mockOmieService, mockSQS } = makeSut()
-    const result = await sut(mockPayload)
+    const { sut, payload, mockLogger, mockOmieService, mockSQS } = makeSut()
+    const result = await sut(payload)
     expect(mockLogger.info).toHaveBeenCalledTimes(3)
     expect(mockOmieService.getBanks).toHaveBeenCalledTimes(1)
     expect(mockOmieService.getCnae).toHaveBeenCalledTimes(1)
     expect(mockOmieService.getDocumentTypes).toHaveBeenCalledTimes(1)
-    expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockPayload.companyId)
+    expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledWith(payload.companyId)
     expect(result).toEqual({ success: true })
   })
 })

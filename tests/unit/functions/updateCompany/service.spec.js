@@ -7,7 +7,7 @@ const {
 jest.useFakeTimers('modern').setSystemTime(new Date())
 
 const makeSut = () => {
-  const mockPayload = {
+  const payload = {
     id: '25c176b6-b200-4575-9217-e23c6105163c',
     isActive: false
   }
@@ -16,7 +16,7 @@ const makeSut = () => {
     findById: jest.fn(async () => mockSavedOmieCompanies[0]),
     update: jest.fn(async () => ({
       ...mockSavedOmieCompanies[0],
-      isActive: mockPayload.isActive,
+      isActive: payload.isActive,
       statusAt: new Date().toISOString()
     }))
   }
@@ -27,49 +27,49 @@ const makeSut = () => {
 
   return {
     sut: service,
-    mockPayload,
+    payload,
     mockCompanyRepository
   }
 }
 
-describe('updateCompany Service', () => {
+describe('updateCompany - service', () => {
   it('Should not find company and throws a NotFoundException', async () => {
     const sutPackage = makeSut()
-    const { sut, mockPayload, mockCompanyRepository } = sutPackage
+    const { sut, payload, mockCompanyRepository } = sutPackage
     const spySut = jest.spyOn(sutPackage, 'sut')
-    mockPayload.id = 'any-invalid-or-non-existing-id'
+    payload.id = 'any-invalid-or-non-existing-id'
     mockCompanyRepository.findById.mockResolvedValueOnce(null)
     try {
-      await sut(mockPayload)
+      await sut(payload)
     } catch (error) {
       expect(error).toBeInstanceOf(NotFoundException)
       expect(error.message).toBe('Company not found')
     }
-    expect(mockCompanyRepository.findById).toHaveBeenCalledWith(mockPayload.id)
+    expect(mockCompanyRepository.findById).toHaveBeenCalledWith(payload.id)
     expect(spySut).toHaveBeenCalledTimes(0)
   })
 
   it('Should return unchanged company', async () => {
-    const { sut, mockPayload, mockCompanyRepository } = makeSut()
-    mockPayload.isActive = true
-    const result = await sut(mockPayload)
-    expect(mockCompanyRepository.findById).toHaveBeenCalledWith(mockPayload.id)
+    const { sut, payload, mockCompanyRepository } = makeSut()
+    payload.isActive = true
+    const result = await sut(payload)
+    expect(mockCompanyRepository.findById).toHaveBeenCalledWith(payload.id)
     expect(mockCompanyRepository.update).toHaveBeenCalledTimes(0)
     expect(result).toEqual(mockSavedOmieCompanies[0])
   })
 
   it('Should return updated company successfully', async () => {
-    const { sut, mockPayload, mockCompanyRepository } = makeSut()
-    const result = await sut(mockPayload)
-    expect(mockCompanyRepository.findById).toHaveBeenCalledWith(mockPayload.id)
+    const { sut, payload, mockCompanyRepository } = makeSut()
+    const result = await sut(payload)
+    expect(mockCompanyRepository.findById).toHaveBeenCalledWith(payload.id)
     expect(mockCompanyRepository.update).toHaveBeenCalledWith({
-      id: mockPayload.id,
-      isActive: mockPayload.isActive,
+      id: payload.id,
+      isActive: payload.isActive,
       statusAt: new Date().toISOString()
     })
     expect(result).toEqual({
       ...mockSavedOmieCompanies[0],
-      isActive: mockPayload.isActive,
+      isActive: payload.isActive,
       statusAt: new Date().toISOString()
     })
   })

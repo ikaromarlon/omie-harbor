@@ -2,7 +2,7 @@ const makeController = require('../../../../src/functions/webhook/controller')
 const { UnprocessableEntityException } = require('../../../../src/common/errors')
 
 const makeSut = () => {
-  const mockRequest = {
+  const request = {
     records: [{
       body: '{}'
     }]
@@ -22,18 +22,18 @@ const makeSut = () => {
     sut: controller,
     validateWithSchemaStub,
     serviceStub,
-    mockRequest,
+    request,
     mockSchema
   }
 }
 
-describe('webhook Controller', () => {
+describe('webhook - controller', () => {
   it('Should throw an UnprocessableEntityException if validateWithSchema throws a UnprocessableEntityException', async () => {
-    const { sut, validateWithSchemaStub, mockRequest } = makeSut()
+    const { sut, validateWithSchemaStub, request } = makeSut()
     validateWithSchemaStub.mockImplementationOnce(() => { throw new UnprocessableEntityException('Invalid value') })
-    mockRequest.records[0].body = '{"anyField":"invalid_value"}'
+    request.records[0].body = '{"anyField":"invalid_value"}'
     try {
-      await sut(mockRequest)
+      await sut(request)
     } catch (error) {
       expect(error).toBeInstanceOf(UnprocessableEntityException)
       expect(error.statusCode).toBe(422)
@@ -42,8 +42,8 @@ describe('webhook Controller', () => {
   })
 
   it('Should return success', async () => {
-    const { sut, serviceStub, mockRequest } = makeSut()
-    const result = await sut(mockRequest)
+    const { sut, serviceStub, request } = makeSut()
+    const result = await sut(request)
     expect(serviceStub).toHaveBeenCalledWith({})
     expect(result.statusCode).toBe(200)
     expect(result.data).toEqual(null)

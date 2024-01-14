@@ -20,12 +20,12 @@ const makeSut = () => {
     companiesRepository: mockCompanyRepository
   })
 
-  const mockPayload = { appKey: 'the_app_key', appSecret: 'the_app_secret' }
-  const mockCredentials = { appKey: mockPayload.appKey, appSecret: mockPayload.appSecret }
+  const payload = { appKey: 'the_app_key', appSecret: 'the_app_secret' }
+  const mockCredentials = { appKey: payload.appKey, appSecret: payload.appSecret }
 
   return {
     sut: service,
-    mockPayload,
+    payload,
     mockCredentials,
     omieServiceStub,
     companyMappingStub,
@@ -33,12 +33,12 @@ const makeSut = () => {
   }
 }
 
-describe('registerCompany service', () => {
+describe('registerCompany - service', () => {
   it('Should return error if a company with provided credentials already exists in the database', async () => {
-    const { sut, mockPayload, mockCredentials, omieServiceStub, companyMappingStub, mockCompanyRepository } = makeSut()
+    const { sut, payload, mockCredentials, omieServiceStub, companyMappingStub, mockCompanyRepository } = makeSut()
     mockCompanyRepository.findByCredentials.mockResolvedValueOnce(mockSavedOmieCompanies[0])
     try {
-      await sut(mockPayload)
+      await sut(payload)
     } catch (error) {
       expect(error).toBeInstanceOf(ConflictException)
       expect(error.message).toBe('Company with provided credentials already exists.')
@@ -51,11 +51,11 @@ describe('registerCompany service', () => {
 
   it('Should return error if company not found at Omie', async () => {
     const sutPackage = makeSut()
-    const { sut, mockPayload, mockCredentials, omieServiceStub, companyMappingStub, mockCompanyRepository } = sutPackage
+    const { sut, payload, mockCredentials, omieServiceStub, companyMappingStub, mockCompanyRepository } = sutPackage
     const spySut = jest.spyOn(sutPackage, 'sut')
     omieServiceStub.getCompany.mockResolvedValueOnce(null)
     try {
-      await sut(mockPayload)
+      await sut(payload)
     } catch (error) {
       expect(error).toBeInstanceOf(NotFoundException)
       expect(error.message).toBe('Company not found at Omie. Check the AppKey and AppSecret and try again.')
@@ -69,8 +69,8 @@ describe('registerCompany service', () => {
   })
 
   it('Should register Omie company successfully', async () => {
-    const { sut, mockPayload, mockCredentials, omieServiceStub, companyMappingStub, mockCompanyRepository } = makeSut()
-    const result = await sut(mockPayload)
+    const { sut, payload, mockCredentials, omieServiceStub, companyMappingStub, mockCompanyRepository } = makeSut()
+    const result = await sut(payload)
     expect(mockCompanyRepository.findByCredentials).toHaveBeenCalledWith(mockCredentials.appKey, mockCredentials.appSecret)
     expect(omieServiceStub.getCompany).toHaveBeenCalledWith(mockCredentials, true)
     expect(omieServiceStub.getCnae).toHaveBeenCalledWith(mockCredentials)

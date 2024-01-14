@@ -3,7 +3,7 @@ const makeService = require('../../../../src/functions/ingestionDispatcher/servi
 const { mockSavedOmieCompanies } = require('../../../mocks')
 
 const makeSut = () => {
-  const mockPayload = {
+  const payload = {
     isActive: true
   }
 
@@ -30,17 +30,17 @@ const makeSut = () => {
     mockCompanyRepository,
     mockLogger,
     mockSQS,
-    mockPayload
+    payload
   }
 }
 
-describe('ingestionDispatcher service', () => {
+describe('ingestionDispatcher - service', () => {
   it('Should not find companies and do not send to ingestion', async () => {
     const { sut, mockSQS, mockCompanyRepository, mockLogger } = makeSut()
-    const mockPayload = { companyId: ['non-existing-company-id'] }
+    const payload = { companyId: ['non-existing-company-id'] }
     mockCompanyRepository.find.mockResolvedValueOnce([])
     try {
-      await sut(mockPayload)
+      await sut(payload)
     } catch (error) {
       expect(error).toBeInstanceOf(UnprocessableEntityException)
       expect(error.message).toBe('Invalid companies')
@@ -53,10 +53,10 @@ describe('ingestionDispatcher service', () => {
 
   it('Should find inactive companies and do not send to ingestion', async () => {
     const { sut, mockSQS, mockCompanyRepository, mockLogger } = makeSut()
-    const mockPayload = { companyId: ['25c176b6-b200-4575-9217-e23c6105163c'] }
+    const payload = { companyId: ['25c176b6-b200-4575-9217-e23c6105163c'] }
     mockCompanyRepository.find.mockResolvedValueOnce([{ ...mockSavedOmieCompanies[0], isActive: false }])
     try {
-      await sut(mockPayload)
+      await sut(payload)
     } catch (error) {
       expect(error).toBeInstanceOf(UnprocessableEntityException)
       expect(error.message).toBe('Invalid companies')
@@ -69,8 +69,8 @@ describe('ingestionDispatcher service', () => {
 
   it('Should return success with companies filter', async () => {
     const { sut, mockSQS, mockCompanyRepository, mockLogger } = makeSut()
-    const mockPayload = { companyId: ['25c176b6-b200-4575-9217-e23c6105163c'] }
-    const result = await sut(mockPayload)
+    const payload = { companyId: ['25c176b6-b200-4575-9217-e23c6105163c'] }
+    const result = await sut(payload)
     expect(mockCompanyRepository.find).toHaveBeenCalledWith({ id: ['25c176b6-b200-4575-9217-e23c6105163c'] })
     expect(mockSQS.sendCompanyToIngestionQueue).toHaveBeenCalledWith(mockSavedOmieCompanies[0].id)
     expect(mockLogger.info).toHaveBeenCalledTimes(1)
@@ -78,9 +78,9 @@ describe('ingestionDispatcher service', () => {
   })
 
   it('Should return success with isActive filter', async () => {
-    const { sut, mockCompanyRepository, mockSQS, mockLogger, mockPayload } = makeSut()
-    const result = await sut(mockPayload)
-    expect(mockCompanyRepository.find).toHaveBeenCalledWith(mockPayload)
+    const { sut, mockCompanyRepository, mockSQS, mockLogger, payload } = makeSut()
+    const result = await sut(payload)
+    expect(mockCompanyRepository.find).toHaveBeenCalledWith(payload)
     expect(mockSQS.sendCompanyToIngestionQueue).toHaveBeenCalledWith(mockSavedOmieCompanies[0].id)
     expect(mockLogger.info).toHaveBeenCalledTimes(1)
     expect(result).toEqual({ success: true })

@@ -20,7 +20,7 @@ const {
 } = require('../../../mocks')
 
 const makeSut = () => {
-  const mockPayload = { companyId: '25c176b6-b200-4575-9217-e23c6105163c' }
+  const payload = { companyId: '25c176b6-b200-4575-9217-e23c6105163c' }
   const mockSavedOmieProductsServices = [...mockSavedOmieProducts, ...mockSavedOmieServices]
   const mockSavedOmieOrders = [...mockSavedOmieProductOrders, ...mockSavedOmieServiceOrders]
   const mockSavedOmieBillingSaved = [...mockSavedOmieProductInvoices, ...mockSavedOmieServiceInvoices]
@@ -62,7 +62,7 @@ const makeSut = () => {
 
   return {
     sut: service,
-    mockPayload,
+    payload,
     mockCompanyRepository,
     mockRepositories,
     mockLogger,
@@ -73,19 +73,19 @@ const makeSut = () => {
   }
 }
 
-describe('dataExport service', () => {
+describe('dataExport - service', () => {
   it('Should not export data to s3 successfully', async () => {
-    const { sut, mockPayload, mockCompanyRepository, mockRepositories, mockLogger, mockS3 } = makeSut()
+    const { sut, payload, mockCompanyRepository, mockRepositories, mockLogger, mockS3 } = makeSut()
 
     mockCompanyRepository.findById.mockResolvedValueOnce(null)
 
     try {
-      await sut(mockPayload)
+      await sut(payload)
     } catch (error) {
       expect(error).toBeInstanceOf(NotFoundException)
       expect(error.message).toBe('Company not found')
     }
-    expect(mockCompanyRepository.findById).toHaveBeenCalledWith(mockPayload.companyId)
+    expect(mockCompanyRepository.findById).toHaveBeenCalledWith(payload.companyId)
     expect(mockLogger.info).toHaveBeenCalledTimes(0)
     expect(mockRepositories.categories.findMany).toHaveBeenCalledTimes(0)
     expect(mockRepositories.departments.findMany).toHaveBeenCalledTimes(0)
@@ -103,23 +103,23 @@ describe('dataExport service', () => {
   })
 
   it('Should export data to s3 successfully', async () => {
-    const { sut, mockPayload, mockCompanyRepository, mockRepositories, mockLogger, mockS3, mockSavedOmieProductsServices, mockSavedOmieOrders, mockSavedOmieBillingSaved } = makeSut()
-    const result = await sut(mockPayload)
-    expect(mockCompanyRepository.findById).toHaveBeenCalledWith(mockPayload.companyId)
+    const { sut, payload, mockCompanyRepository, mockRepositories, mockLogger, mockS3, mockSavedOmieProductsServices, mockSavedOmieOrders, mockSavedOmieBillingSaved } = makeSut()
+    const result = await sut(payload)
+    expect(mockCompanyRepository.findById).toHaveBeenCalledWith(payload.companyId)
     expect(mockLogger.info).toHaveBeenCalledTimes(3)
-    expect(mockRepositories.categories.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.departments.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.projects.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.customers.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.productsServices.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.checkingAccounts.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.contracts.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.orders.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.billing.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.accountsPayable.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.accountsReceivable.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockRepositories.financialMovements.findMany).toHaveBeenCalledWith({ companyId: mockPayload.companyId })
-    expect(mockS3.storeCompanyData).toHaveBeenCalledWith(mockPayload.companyId, {
+    expect(mockRepositories.categories.findMany).toHaveBeenCalledWith({ companyId: payload.companyId })
+    expect(mockRepositories.departments.findMany).toHaveBeenCalledWith({ companyId: payload.companyId })
+    expect(mockRepositories.projects.findMany).toHaveBeenCalledWith({ companyId: payload.companyId })
+    expect(mockRepositories.customers.findMany).toHaveBeenCalledWith({ companyId: payload.companyId })
+    expect(mockRepositories.productsServices.findMany).toHaveBeenCalledWith({ companyId: payload.companyId })
+    expect(mockRepositories.checkingAccounts.findMany).toHaveBeenCalledWith({ companyId: payload.companyId })
+    expect(mockRepositories.contracts.findMany).toHaveBeenCalledWith({ companyId: payload.companyId })
+    expect(mockRepositories.orders.findMany).toHaveBeenCalledWith({ companyId: payload.companyId })
+    expect(mockRepositories.billing.findMany).toHaveBeenCalledWith({ companyId: payload.companyId })
+    expect(mockRepositories.accountsPayable.findMany).toHaveBeenCalledWith({ companyId: payload.companyId })
+    expect(mockRepositories.accountsReceivable.findMany).toHaveBeenCalledWith({ companyId: payload.companyId })
+    expect(mockRepositories.financialMovements.findMany).toHaveBeenCalledWith({ companyId: payload.companyId })
+    expect(mockS3.storeCompanyData).toHaveBeenCalledWith(payload.companyId, {
       company: mockSavedOmieCompanies[0],
       categories: mockSavedOmieCategories,
       departments: mockSavedOmieDepartments,
