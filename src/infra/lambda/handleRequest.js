@@ -1,10 +1,29 @@
-const formatRequest = require('./formatRequest')
-const formatResponse = require('./formatResponse')
+const tryJsonParse = require('../../common/utils/tryJsonParse')
 
-module.exports = (controller) => async (event) => {
-  if (event.warmup) return console.log('Warming function...')
-  const request = formatRequest(event)
-  const result = await controller(request)
-  const response = formatResponse(result)
-  return response
-}
+const handleHttp = ({
+  headers,
+  pathParameters,
+  queryStringParameters,
+  body
+}) => ({
+  headers: headers ?? null,
+  params: pathParameters ?? null,
+  query: queryStringParameters ?? null,
+  body: body ? tryJsonParse(body) : null
+})
+
+const handleSqs = ({
+  Records
+}) => ({
+  records: Records
+    ? Records.map(e => ({
+      ...e,
+      body: tryJsonParse(e.body)
+    }))
+    : null
+})
+
+module.exports = (event) => ({
+  ...handleHttp(event),
+  ...handleSqs(event)
+})

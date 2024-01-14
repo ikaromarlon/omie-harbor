@@ -2,6 +2,13 @@ const HttpStatus = require('../../common/helpers/HttpStatus')
 
 module.exports = (
   data,
-  statusCode = HttpStatus.OK,
-  headers = {}
-) => ({ statusCode, data, headers })
+  statusCode,
+  headers
+) => {
+  const result = {
+    statusCode: statusCode || HttpStatus.OK,
+    data,
+    headers: headers || {}
+  }
+  return result
+}

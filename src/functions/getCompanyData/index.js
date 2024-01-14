@@ -1,4 +1,4 @@
-const handleRequest = require('../../infra/lambda/handleRequest')
+const handler = require('../../infra/lambda/handler')
 const makeController = require('./controller')
 const makeService = require('./service')
 const schema = require('./schema')
@@ -20,4 +20,4 @@ const controller = makeController({
   validateWithSchema
 })
 
-exports.handler = handleRequest(controller)
+exports.handler = handler(controller)
