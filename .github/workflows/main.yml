@@ -27,6 +27,11 @@ jobs:
 
       - name: Run tests
         run: npm test
+        env:
+          STAGE: 'test'
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          TEST_OMIE_APP_KEY: ${{ vars.TEST_OMIE_APP_KEY }}
+          TEST_OMIE_APP_SECRET: ${{ vars.TEST_OMIE_APP_SECRET }}
 
       - name: Coveralls
         uses: coverallsapp/github-action@v2
