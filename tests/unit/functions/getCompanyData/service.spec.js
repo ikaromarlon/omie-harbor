@@ -1,12 +1,12 @@
 const makeService = require('../../../../src/functions/getCompanyData/service')
 const { NotFoundException, ForbiddenException } = require('../../../../src/common/errors')
-const { mockSavedOmieCompanies } = require('../../../mocks')
+const { mockCompany } = require('../../../mocks')
 
 const makeSut = () => {
   const payload = { id: '25c176b6-b200-4575-9217-e23c6105163c' }
 
   const mockCompanyRepository = {
-    findById: jest.fn(async () => Promise.resolve(mockSavedOmieCompanies[0]))
+    findById: jest.fn(async () => Promise.resolve(mockCompany))
   }
 
   const mockS3 = {
@@ -47,7 +47,7 @@ describe('getCompanyData - service', () => {
     const sutPackage = makeSut()
     const { sut, payload, mockCompanyRepository } = sutPackage
     const spySut = jest.spyOn(sutPackage, 'sut')
-    mockCompanyRepository.findById.mockResolvedValueOnce({ ...mockSavedOmieCompanies[0], isActive: false })
+    mockCompanyRepository.findById.mockResolvedValueOnce({ ...mockCompany, isActive: false })
     try {
       await sut(payload)
     } catch (error) {

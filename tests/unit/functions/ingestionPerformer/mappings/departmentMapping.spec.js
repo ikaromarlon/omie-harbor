@@ -1,9 +1,16 @@
 const departmentMapping = require('../../../../../src/functions/ingestionPerformer/mappings/departmentMapping')
 const {
   mockOmieDepartmentsResponse,
-  mockParsedOmieDepartment,
-  mockParsedOmieParentDepartment
+  mockDepartment,
+  mockParentDepartment
 } = require('../../../../mocks')
+
+delete mockDepartment.id
+delete mockDepartment.createdAt
+delete mockDepartment.updatedAt
+delete mockParentDepartment.id
+delete mockParentDepartment.createdAt
+delete mockParentDepartment.updatedAt
 
 const makeSut = () => {
   const mockOmieDepartment = mockOmieDepartmentsResponse.departamentos[1]
@@ -25,7 +32,7 @@ describe('Department Mapping', () => {
       companyId: mockCompanyId,
       omieDepartment: mockOmieDepartment
     })
-    expect(result).toEqual(mockParsedOmieDepartment)
+    expect(result).toEqual(mockDepartment)
   })
 
   it('Should return mapped parent department successfully', () => {
@@ -34,6 +41,6 @@ describe('Department Mapping', () => {
       companyId: mockCompanyId,
       omieDepartment: mockOmieDepartmentParent
     })
-    expect(result).toEqual(mockParsedOmieParentDepartment)
+    expect(result).toEqual(mockParentDepartment)
   })
 })

@@ -1,8 +1,12 @@
 const productMapping = require('../../../../../src/functions/ingestionPerformer/mappings/productMapping')
 const {
   mockOmieProductsResponse,
-  mockParsedOmieProduct
+  mockProduct
 } = require('../../../../mocks')
+
+delete mockProduct.id
+delete mockProduct.createdAt
+delete mockProduct.updatedAt
 
 const makeSut = () => {
   const mockOmieProduct = mockOmieProductsResponse.produto_servico_cadastro[0]
@@ -22,7 +26,7 @@ describe('Product Mapping', () => {
       companyId: mockCompanyId,
       omieProduct: mockOmieProduct
     })
-    expect(result).toEqual(mockParsedOmieProduct)
+    expect(result).toEqual(mockProduct)
   })
 
   it('Should return mapped product without characteristics', () => {
@@ -31,7 +35,7 @@ describe('Product Mapping', () => {
       companyId: mockCompanyId,
       omieProduct: { ...mockOmieProduct, caracteristicas: null }
     })
-    expect(result).toEqual({ ...mockParsedOmieProduct, characteristics: [] })
+    expect(result).toEqual({ ...mockProduct, characteristics: [] })
   })
 
   it('Should return mapped product without family', () => {
@@ -40,6 +44,6 @@ describe('Product Mapping', () => {
       companyId: mockCompanyId,
       omieProduct: { ...mockOmieProduct, codigo_familia: null, descricao_familia: null }
     })
-    expect(result).toEqual({ ...mockParsedOmieProduct, family: { code: null, description: null } })
+    expect(result).toEqual({ ...mockProduct, family: { code: null, description: null } })
   })
 })

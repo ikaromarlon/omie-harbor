@@ -1,8 +1,12 @@
 const serviceMapping = require('../../../../../src/functions/ingestionPerformer/mappings/serviceMapping')
 const {
   mockOmieServicesResponse,
-  mockParsedOmieService
+  mockService
 } = require('../../../../mocks')
+
+delete mockService.id
+delete mockService.createdAt
+delete mockService.updatedAt
 
 const makeSut = () => {
   const mockOmieService = mockOmieServicesResponse.cadastros[0]
@@ -22,7 +26,7 @@ describe('Service Mapping', () => {
       companyId: mockCompanyId,
       omieService: mockOmieService
     })
-    expect(result).toEqual(mockParsedOmieService)
+    expect(result).toEqual(mockService)
   })
 
   it('Should return mapped service successfully without municipalServiceCode', () => {
@@ -31,6 +35,6 @@ describe('Service Mapping', () => {
       companyId: mockCompanyId,
       omieService: { ...mockOmieService, cabecalho: { ...mockOmieService.cabecalho, cCodServMun: '' } }
     })
-    expect(result).toEqual({ ...mockParsedOmieService, municipalServiceCode: null })
+    expect(result).toEqual({ ...mockService, municipalServiceCode: null })
   })
 })

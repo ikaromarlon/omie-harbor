@@ -1,9 +1,13 @@
 const serviceOrderMapping = require('../../../../../src/functions/ingestionPerformer/mappings/serviceOrderMapping')
 const {
   mockOmieServiceOrdersResponse,
-  mockParsedOmieServiceOrder,
+  mockServiceOrder,
   mockOmieBillingStepsResponse
 } = require('../../../../mocks')
+
+delete mockServiceOrder.id
+delete mockServiceOrder.createdAt
+delete mockServiceOrder.updatedAt
 
 const makeSut = () => {
   const mockOmieServiceOrder = mockOmieServiceOrdersResponse.osCadastro[0]
@@ -59,7 +63,7 @@ describe('Service Order Mapping', () => {
       contractId: mockContractId
     })
 
-    expect(result).toEqual(mockParsedOmieServiceOrder)
+    expect(result).toEqual(mockServiceOrder)
   })
 
   it('Should return mapped product sale order successfully without relationships', () => {
@@ -85,7 +89,7 @@ describe('Service Order Mapping', () => {
     })
 
     expect(result).toEqual({
-      ...mockParsedOmieServiceOrder,
+      ...mockServiceOrder,
       categoryId: null,
       departmentId: null,
       projectId: null,
@@ -123,7 +127,7 @@ describe('Service Order Mapping', () => {
       contractId: mockContractId
     })
 
-    expect(result).toEqual(mockParsedOmieServiceOrder)
+    expect(result).toEqual(mockServiceOrder)
   })
 
   it('Should return mapped product sale order successfully with billingStep using default description', () => {
@@ -164,7 +168,7 @@ describe('Service Order Mapping', () => {
       contractId: mockContractId
     })
 
-    expect(result).toEqual({ ...mockParsedOmieServiceOrder, billingStep: 'Default description' })
+    expect(result).toEqual({ ...mockServiceOrder, billingStep: 'Default description' })
   })
 
   it('Should return mapped product sale order successfully without municipalServiceCode', () => {
@@ -195,6 +199,6 @@ describe('Service Order Mapping', () => {
       contractId: mockContractId
     })
 
-    expect(result).toEqual({ ...mockParsedOmieServiceOrder, municipalServiceCode: null })
+    expect(result).toEqual({ ...mockServiceOrder, municipalServiceCode: null })
   })
 })

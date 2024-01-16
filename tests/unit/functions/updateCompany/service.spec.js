@@ -1,7 +1,7 @@
 const makeService = require('../../../../src/functions/updateCompany/service')
 const { NotFoundException } = require('../../../../src/common/errors')
 const {
-  mockSavedOmieCompanies
+  mockCompany
 } = require('../../../mocks')
 
 jest.useFakeTimers('modern').setSystemTime(new Date())
@@ -13,9 +13,9 @@ const makeSut = () => {
   }
 
   const mockCompanyRepository = {
-    findById: jest.fn(async () => mockSavedOmieCompanies[0]),
+    findById: jest.fn(async () => mockCompany),
     update: jest.fn(async () => ({
-      ...mockSavedOmieCompanies[0],
+      ...mockCompany,
       isActive: payload.isActive,
       statusAt: new Date().toISOString()
     }))
@@ -55,7 +55,7 @@ describe('updateCompany - service', () => {
     const result = await sut(payload)
     expect(mockCompanyRepository.findById).toHaveBeenCalledWith(payload.id)
     expect(mockCompanyRepository.update).toHaveBeenCalledTimes(0)
-    expect(result).toEqual(mockSavedOmieCompanies[0])
+    expect(result).toEqual(mockCompany)
   })
 
   it('Should return updated company successfully', async () => {
@@ -68,7 +68,7 @@ describe('updateCompany - service', () => {
       statusAt: new Date().toISOString()
     })
     expect(result).toEqual({
-      ...mockSavedOmieCompanies[0],
+      ...mockCompany,
       isActive: payload.isActive,
       statusAt: new Date().toISOString()
     })

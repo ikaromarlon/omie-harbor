@@ -7,17 +7,15 @@ jest.mock('../../../../src/config', () => ({
 const { NotFoundException } = require('../../../../src/common/errors')
 const makeService = require('../../../../src/functions/webhook/service')
 const {
-  mockSavedOmieCompanies,
-  mockSavedOmieServiceOrders,
-  mockSavedOmieProductOrders,
-  mockSavedOmieContracts,
-  mockSavedOmieAccountsPayable,
-  mockSavedOmieAccountsReceivable
+  mockCompany,
+  mockServiceOrder,
+  mockProductOrder,
+  mockContract,
+  mockAccountPayable,
+  mockAccountReceivable
 } = require('../../../mocks')
 
 const makeSut = () => {
-  const mockCompany = mockSavedOmieCompanies[0]
-
   const payload = {
     topic: 'Entity.event',
     event: {},
@@ -156,7 +154,7 @@ describe('webhook - service', () => {
 
       payload.topic = 'OrdemServico.Excluida'
       payload.event = { idOrdemServico: '618754178' }
-      mockRepositories.orders.findMany.mockResolvedValueOnce(mockSavedOmieServiceOrders)
+      mockRepositories.orders.findMany.mockResolvedValueOnce([mockServiceOrder])
       mockRepositories.orders.deleteMany.mockResolvedValueOnce(1)
       mockRepositories.accountsReceivable.deleteMany.mockResolvedValueOnce(1)
       mockRepositories.financialMovements.deleteMany.mockResolvedValueOnce(1)
@@ -169,15 +167,15 @@ describe('webhook - service', () => {
       })
       expect(mockRepositories.orders.deleteMany).toHaveBeenCalledWith({
         companyId: mockCompany.id,
-        id: [mockSavedOmieServiceOrders[0].id]
+        id: [mockServiceOrder.id]
       })
       expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledWith({
         companyId: mockCompany.id,
-        orderId: [mockSavedOmieServiceOrders[0].id]
+        orderId: [mockServiceOrder.id]
       })
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledWith({
         companyId: mockCompany.id,
-        orderId: [mockSavedOmieServiceOrders[0].id]
+        orderId: [mockServiceOrder.id]
       })
       expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany.id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
@@ -235,7 +233,7 @@ describe('webhook - service', () => {
 
       payload.topic = 'VendaProduto.Excluida'
       payload.event = { idPedido: '915642742' }
-      mockRepositories.orders.findMany.mockResolvedValueOnce(mockSavedOmieProductOrders)
+      mockRepositories.orders.findMany.mockResolvedValueOnce([mockProductOrder])
       mockRepositories.orders.deleteMany.mockResolvedValueOnce(1)
       mockRepositories.accountsReceivable.deleteMany.mockResolvedValueOnce(1)
       mockRepositories.financialMovements.deleteMany.mockResolvedValueOnce(1)
@@ -248,15 +246,15 @@ describe('webhook - service', () => {
       })
       expect(mockRepositories.orders.deleteMany).toHaveBeenCalledWith({
         companyId: mockCompany.id,
-        id: [mockSavedOmieProductOrders[0].id]
+        id: [mockProductOrder.id]
       })
       expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledWith({
         companyId: mockCompany.id,
-        orderId: [mockSavedOmieProductOrders[0].id]
+        orderId: [mockProductOrder.id]
       })
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledWith({
         companyId: mockCompany.id,
-        orderId: [mockSavedOmieProductOrders[0].id]
+        orderId: [mockProductOrder.id]
       })
       expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany.id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
@@ -314,7 +312,7 @@ describe('webhook - service', () => {
 
       payload.topic = 'ContratoServico.Excluido'
       payload.event = { nCodCtr: '617704532' }
-      mockRepositories.contracts.findMany.mockResolvedValueOnce(mockSavedOmieContracts)
+      mockRepositories.contracts.findMany.mockResolvedValueOnce([mockContract])
       mockRepositories.contracts.deleteMany.mockResolvedValueOnce(1)
       mockRepositories.accountsReceivable.deleteMany.mockResolvedValueOnce(1)
       mockRepositories.financialMovements.deleteMany.mockResolvedValueOnce(1)
@@ -327,15 +325,15 @@ describe('webhook - service', () => {
       })
       expect(mockRepositories.contracts.deleteMany).toHaveBeenCalledWith({
         companyId: mockCompany.id,
-        id: [mockSavedOmieContracts[0].id]
+        id: [mockContract.id]
       })
       expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledWith({
         companyId: mockCompany.id,
-        contractId: [mockSavedOmieContracts[0].id]
+        contractId: [mockContract.id]
       })
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledWith({
         companyId: mockCompany.id,
-        contractId: [mockSavedOmieContracts[0].id]
+        contractId: [mockContract.id]
       })
       expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany.id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
@@ -391,7 +389,7 @@ describe('webhook - service', () => {
 
       payload.topic = 'Financas.ContaPagar.Excluido'
       payload.event = { codigo_lancamento_omie: '618738728' }
-      mockRepositories.accountsPayable.findMany.mockResolvedValueOnce(mockSavedOmieAccountsPayable)
+      mockRepositories.accountsPayable.findMany.mockResolvedValueOnce([mockAccountPayable])
       mockRepositories.accountsPayable.deleteMany.mockResolvedValueOnce(1)
       mockRepositories.financialMovements.deleteMany.mockResolvedValueOnce(1)
 
@@ -403,11 +401,11 @@ describe('webhook - service', () => {
       })
       expect(mockRepositories.accountsPayable.deleteMany).toHaveBeenCalledWith({
         companyId: mockCompany.id,
-        id: [mockSavedOmieAccountsPayable[0].id]
+        id: [mockAccountPayable.id]
       })
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledWith({
         companyId: mockCompany.id,
-        accountPayableId: [mockSavedOmieAccountsPayable[0].id]
+        accountPayableId: [mockAccountPayable.id]
       })
       expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany.id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)
@@ -462,7 +460,7 @@ describe('webhook - service', () => {
 
       payload.topic = 'Financas.ContaReceber.Excluido'
       payload.event = { codigo_lancamento_omie: '618738728' }
-      mockRepositories.accountsReceivable.findMany.mockResolvedValueOnce(mockSavedOmieAccountsReceivable)
+      mockRepositories.accountsReceivable.findMany.mockResolvedValueOnce([mockAccountReceivable])
       mockRepositories.accountsReceivable.deleteMany.mockResolvedValueOnce(1)
       mockRepositories.financialMovements.deleteMany.mockResolvedValueOnce(1)
 
@@ -474,11 +472,11 @@ describe('webhook - service', () => {
       })
       expect(mockRepositories.accountsReceivable.deleteMany).toHaveBeenCalledWith({
         companyId: mockCompany.id,
-        id: [mockSavedOmieAccountsReceivable[0].id]
+        id: [mockAccountReceivable.id]
       })
       expect(mockRepositories.financialMovements.deleteMany).toHaveBeenCalledWith({
         companyId: mockCompany.id,
-        accountReceivableId: [mockSavedOmieAccountsReceivable[0].id]
+        accountReceivableId: [mockAccountReceivable.id]
       })
       expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledWith(mockCompany.id)
       expect(mockLogger.info).toHaveBeenCalledTimes(2)

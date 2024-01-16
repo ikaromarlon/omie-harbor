@@ -1,9 +1,13 @@
 const productOrderMapping = require('../../../../../src/functions/ingestionPerformer/mappings/productOrderMapping')
 const {
   mockOmieProductOrdersResponse,
-  mockParsedOmieProductOrder,
+  mockProductOrder,
   mockOmieBillingStepsResponse
 } = require('../../../../mocks')
+
+delete mockProductOrder.id
+delete mockProductOrder.createdAt
+delete mockProductOrder.updatedAt
 
 const makeSut = () => {
   const mockOmieProductOrder = mockOmieProductOrdersResponse.pedido_venda_produto[0]
@@ -55,7 +59,7 @@ describe('Product Sale Order Mapping', () => {
       categoryId: mockCategoryId
     })
 
-    expect(result).toEqual(mockParsedOmieProductOrder)
+    expect(result).toEqual(mockProductOrder)
   })
 
   it('Should return mapped product sale order successfully without relationships', () => {
@@ -80,7 +84,7 @@ describe('Product Sale Order Mapping', () => {
     })
 
     expect(result).toEqual({
-      ...mockParsedOmieProductOrder,
+      ...mockProductOrder,
       categoryId: null,
       departmentId: null,
       projectId: null,
@@ -115,7 +119,7 @@ describe('Product Sale Order Mapping', () => {
       categoryId: mockCategoryId
     })
 
-    expect(result).toEqual(mockParsedOmieProductOrder)
+    expect(result).toEqual(mockProductOrder)
   })
 
   it('Should return mapped product sale order successfully with billingStep using default description', () => {
@@ -154,7 +158,7 @@ describe('Product Sale Order Mapping', () => {
       categoryId: mockCategoryId
     })
 
-    expect(result).toEqual({ ...mockParsedOmieProductOrder, billingStep: 'Default description' })
+    expect(result).toEqual({ ...mockProductOrder, billingStep: 'Default description' })
   })
 
   it('Should return mapped product sale order successfully without cfop', () => {
@@ -183,6 +187,6 @@ describe('Product Sale Order Mapping', () => {
       categoryId: mockCategoryId
     })
 
-    expect(result).toEqual({ ...mockParsedOmieProductOrder, cfop: null })
+    expect(result).toEqual({ ...mockProductOrder, cfop: null })
   })
 })

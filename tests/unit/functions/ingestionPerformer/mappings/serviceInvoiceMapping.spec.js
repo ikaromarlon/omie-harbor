@@ -1,8 +1,12 @@
 const serviceInvoiceMapping = require('../../../../../src/functions/ingestionPerformer/mappings/serviceInvoiceMapping')
 const {
   mockOmieServiceInvoicesResponse,
-  mockParsedOmieServiceInvoice
+  mockServiceInvoice
 } = require('../../../../mocks')
+
+delete mockServiceInvoice.id
+delete mockServiceInvoice.createdAt
+delete mockServiceInvoice.updatedAt
 
 const makeSut = () => {
   const mockOmieServiceInvoice = mockOmieServiceInvoicesResponse.nfseEncontradas[0]
@@ -58,7 +62,7 @@ describe('Service Invoice Mapping', () => {
       contractId: mockContractId
     })
 
-    expect(result).toEqual(mockParsedOmieServiceInvoice)
+    expect(result).toEqual(mockServiceInvoice)
   })
 
   it('Should return mapped service invoice successfully without relationships', () => {
@@ -83,7 +87,7 @@ describe('Service Invoice Mapping', () => {
     })
 
     expect(result).toEqual({
-      ...mockParsedOmieServiceInvoice,
+      ...mockServiceInvoice,
       categoryId: null,
       departmentId: null,
       projectId: null,
@@ -124,7 +128,7 @@ describe('Service Invoice Mapping', () => {
       contractId: mockContractId
     })
 
-    expect(result).toEqual({ ...mockParsedOmieServiceInvoice, documentKey: null, documentNumber: null })
+    expect(result).toEqual({ ...mockServiceInvoice, documentKey: null, documentNumber: null })
   })
 
   it('Should return mapped service invoice successfully without some taxes', () => {
@@ -155,6 +159,6 @@ describe('Service Invoice Mapping', () => {
       contractId: mockContractId
     })
 
-    expect(result).toEqual(mockParsedOmieServiceInvoice)
+    expect(result).toEqual(mockServiceInvoice)
   })
 })

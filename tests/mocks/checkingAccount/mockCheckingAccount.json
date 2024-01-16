@@ -1,0 +1,22 @@
+{
+  "id": "e5e74170-40ee-42d9-9741-6d708200e306",
+  "externalId": "630881258",
+  "companyId": "25c176b6-b200-4575-9217-e23c6105163c",
+  "bank": {
+    "code": "077",
+    "name": "Banco Inter"
+  },
+  "branch": "0001-9",
+  "accountNumber": "3286745-0",
+  "description": "Banco Inter",
+  "type": {
+    "code": "CC",
+    "description": "Conta Corrente"
+  },
+  "initialBalance": 0,
+  "initialBalanceDate": "2019-07-01T03:00:00.000Z",
+  "blocked": false,
+  "isActive": true,
+  "createdAt": "2021-11-05T15:05:38.233Z",
+  "updatedAt": "2021-11-05T15:29:58.455Z"
+}

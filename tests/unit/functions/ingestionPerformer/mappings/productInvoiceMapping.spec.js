@@ -1,8 +1,12 @@
 const productInvoiceMapping = require('../../../../../src/functions/ingestionPerformer/mappings/productInvoiceMapping')
 const {
   mockOmieProductInvoicesResponse,
-  mockParsedOmieProductInvoice
+  mockProductInvoice
 } = require('../../../../mocks')
+
+delete mockProductInvoice.id
+delete mockProductInvoice.createdAt
+delete mockProductInvoice.updatedAt
 
 const makeSut = () => {
   const mockOmieProductInvoice = mockOmieProductInvoicesResponse.nfCadastro[0]
@@ -54,7 +58,7 @@ describe('Product Invoice Mapping', () => {
       categoryId: mockCategoryId
     })
 
-    expect(result).toEqual(mockParsedOmieProductInvoice)
+    expect(result).toEqual(mockProductInvoice)
   })
 
   it('Should return mapped product invoice successfully without relationships', () => {
@@ -78,7 +82,7 @@ describe('Product Invoice Mapping', () => {
     })
 
     expect(result).toEqual({
-      ...mockParsedOmieProductInvoice,
+      ...mockProductInvoice,
       categoryId: null,
       departmentId: null,
       projectId: null,
@@ -116,7 +120,7 @@ describe('Product Invoice Mapping', () => {
       categoryId: mockCategoryId
     })
 
-    expect(result).toEqual(mockParsedOmieProductInvoice)
+    expect(result).toEqual(mockProductInvoice)
   })
 
   it('Should return mapped product invoice successfully without cfop', () => {
@@ -145,6 +149,6 @@ describe('Product Invoice Mapping', () => {
       categoryId: mockCategoryId
     })
 
-    expect(result).toEqual({ ...mockParsedOmieProductInvoice, cfop: null })
+    expect(result).toEqual({ ...mockProductInvoice, cfop: null })
   })
 })

@@ -1,0 +1,111 @@
+{
+  "pagina": 1,
+  "total_de_paginas": 1,
+  "registros": 1,
+  "total_de_registros": 1,
+  "osCadastro": [
+    {
+      "Cabecalho": {
+        "cCodIntOS": "",
+        "cCodParc": "000",
+        "cEtapa": "60",
+        "cNumOS": "15",
+        "dDtPrevisao": "03/05/2019",
+        "nCodCli": 617700984,
+        "nCodOS": 618754178,
+        "nQtdeParc": 1,
+        "nValorTotal": 13215.44
+      },
+      "Departamentos": [
+        {
+          "cCodDepto": "619153908",
+          "nPerc": 100,
+          "nValor": 13215.44,
+          "nValorFixo": "N"
+        }
+      ],
+      "Email": {
+        "cEnvBoleto": "N",
+        "cEnvLink": "S",
+        "cEnvRecibo": "N",
+        "cEnviarPara": "financeiro@empresa.com.br"
+      },
+      "InfoCadastro": {
+        "cAmbiente": "P",
+        "cCancelada": "N",
+        "cFaturada": "S",
+        "cHrAlt": "16:54:33",
+        "cHrFat": "16:54:34",
+        "cHrInc": "16:54:33",
+        "cOrigem": "CTR",
+        "dDtAlt": "03/05/2019",
+        "dDtFat": "03/05/2019",
+        "dDtInc": "03/05/2019"
+      },
+      "InformacoesAdicionais": {
+        "cCidPrestServ": "SAO PAULO",
+        "cCodCateg": "1.01.01",
+        "cContato": "Fulano",
+        "cDadosAdicNF": "Contrato N. 2018/2019 - Ref. Abr/2019 - Vencto. 10/05/2019",
+        "cNumContrato": "2018/2019",
+        "nCodCC": 630881258,
+        "nCodProj": 617693956
+      },
+      "Observacoes": {},
+      "Parcelas": [
+        {
+          "dDtVenc": "10/05/2019",
+          "nDias": 0,
+          "nParcela": 1,
+          "nPercentual": 100,
+          "nValor": 13215.44
+        }
+      ],
+      "ServicosPrestados": [
+        {
+          "cCodCategItem": "1.01.01",
+          "cCodServLC116": "8.02",
+          "cCodServMun": "8.02",
+          "cDescServ": "Treinamentos Gerenciais",
+          "cNaoGerarFinanceiro": "N",
+          "cRetemISS": "N",
+          "cTpDesconto": "",
+          "cTribServ": "03",
+          "impostos": {
+            "cFixarCOFINS": "",
+            "cFixarCSLL": "",
+            "cFixarINSS": "",
+            "cFixarIRRF": "",
+            "cFixarISS": "",
+            "cFixarPIS": "",
+            "cRetemINSS": "",
+            "nAliqCOFINS": 0,
+            "nAliqCSLL": 0,
+            "nAliqINSS": 0,
+            "nAliqIRRF": 0,
+            "nAliqISS": 0,
+            "nAliqPIS": 0,
+            "nAliqRedBaseINSS": 0,
+            "nBaseISS": 13215.44,
+            "nTotDeducao": 0,
+            "nValorCOFINS": 0,
+            "nValorCSLL": 0,
+            "nValorINSS": 0,
+            "nValorIRRF": 0,
+            "nValorISS": 0,
+            "nValorPIS": 0
+          },
+          "nAliqDesconto": 0,
+          "nCodServico": 617704895,
+          "nIdItem": 617704535,
+          "nQtde": 1,
+          "nSeqItem": 1,
+          "nValUnit": 13215.44,
+          "nValorAcrescimos": 0,
+          "nValorDesconto": 0,
+          "nValorOutrasRetencoes": 0
+        }
+      ]
+    }
+  ]
+}

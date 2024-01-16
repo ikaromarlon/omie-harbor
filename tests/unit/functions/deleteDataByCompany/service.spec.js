@@ -1,12 +1,12 @@
 const { NotFoundException } = require('../../../../src/common/errors')
 const makeService = require('../../../../src/functions/deleteDataByCompany/service')
-const { mockSavedOmieCompanies } = require('../../../mocks')
+const { mockCompany } = require('../../../mocks')
 
 const makeSut = () => {
   const payload = { id: '25c176b6-b200-4575-9217-e23c6105163c' }
 
-  const mockCompaniesRepository = {
-    findById: jest.fn(async () => mockSavedOmieCompanies[0])
+  const mockCompanyRepository = {
+    findById: jest.fn(async () => mockCompany)
   }
 
   const mockRepositories = {
@@ -81,7 +81,7 @@ const makeSut = () => {
   }
 
   const service = makeService({
-    companiesRepository: mockCompaniesRepository,
+    companiesRepository: mockCompanyRepository,
     repositories: mockRepositories,
     sqs: mockSQS,
     logger: mockLogger
@@ -90,7 +90,7 @@ const makeSut = () => {
   return {
     sut: service,
     payload,
-    mockCompaniesRepository,
+    mockCompanyRepository,
     mockRepositories,
     mockLogger,
     mockSQS
@@ -99,10 +99,10 @@ const makeSut = () => {
 
 describe('deleteDataByCompany - service', () => {
   it('Should delete data by company successfully', async () => {
-    const { sut, payload, mockCompaniesRepository, mockRepositories, mockLogger, mockSQS } = makeSut()
+    const { sut, payload, mockCompanyRepository, mockRepositories, mockLogger, mockSQS } = makeSut()
     const result = await sut(payload)
     const { id } = payload
-    expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(id)
+    expect(mockCompanyRepository.findById).toHaveBeenCalledWith(id)
     expect(mockRepositories.categories.deleteMany).toHaveBeenCalledWith({ companyId: id })
     expect(mockRepositories.departments.deleteMany).toHaveBeenCalledWith({ companyId: id })
     expect(mockRepositories.projects.deleteMany).toHaveBeenCalledWith({ companyId: id })
@@ -119,9 +119,9 @@ describe('deleteDataByCompany - service', () => {
     expect(mockSQS.sendCompanyToDataExportQueue).toHaveBeenCalledWith(id)
     expect(result).toEqual({
       company: {
-        id: mockSavedOmieCompanies[0].id,
-        cnpj: mockSavedOmieCompanies[0].cnpj,
-        name: mockSavedOmieCompanies[0].name
+        id: mockCompany.id,
+        cnpj: mockCompany.cnpj,
+        name: mockCompany.name
       },
       deletedRecords: {
         categories: 0,
@@ -141,14 +141,14 @@ describe('deleteDataByCompany - service', () => {
   })
 
   it('Should throw a NotFoundException due to not find company', async () => {
-    const { sut, payload, mockCompaniesRepository, mockRepositories, mockLogger, mockSQS } = makeSut()
+    const { sut, payload, mockCompanyRepository, mockRepositories, mockLogger, mockSQS } = makeSut()
     payload.id = 'any-invalid-company-id'
-    mockCompaniesRepository.findById.mockResolvedValueOnce(null)
+    mockCompanyRepository.findById.mockResolvedValueOnce(null)
     try {
       await sut(payload)
     } catch (error) {
       const { id } = payload
-      expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(id)
+      expect(mockCompanyRepository.findById).toHaveBeenCalledWith(id)
       expect(mockRepositories.categories.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.departments.deleteMany).toHaveBeenCalledTimes(0)
       expect(mockRepositories.projects.deleteMany).toHaveBeenCalledTimes(0)

@@ -1,0 +1,128 @@
+{
+  "pagina": 1,
+  "total_de_paginas": 1,
+  "registros": 1,
+  "total_de_registros": 1,
+  "contratoCadastro": [
+    {
+      "cabecalho": {
+        "cCodIntCtr": "",
+        "cCodSit": "99",
+        "cNumCtr": "2018/2019",
+        "cTipoFat": "01",
+        "dVigFinal": "31/03/2020",
+        "dVigInicial": "01/01/2019",
+        "nCodCli": 617700984,
+        "nCodCtr": 617704532,
+        "nDiaFat": 1,
+        "nValTotMes": 13215
+      },
+      "departamentos": [
+        {
+          "cCodDep": "619153908",
+          "cDesDep": "Empresa Ficticia Ltda",
+          "nPerDep": 100,
+          "nValDep": 13215
+        }
+      ],
+      "emailCliente": {
+        "cEnviarBoleto": "N",
+        "cEnviarLinkNfse": "S",
+        "cEnviarRecibo": "N",
+        "cUtilizarEmails": ""
+      },
+      "infAdic": {
+        "cCidPrestServ": "SAO PAULO",
+        "cCodART": "",
+        "cCodCateg": "1.01.01",
+        "cCodObra": "",
+        "cContato": "Fulano",
+        "cDadosAdicNF": "",
+        "nCodCC": 630881258,
+        "nCodProj": 617693956,
+        "nCodVend": 0
+      },
+      "infoCadastro": {
+        "cImpAPI": "N",
+        "dAlt": "03/01/2020",
+        "dInc": "16/04/2019",
+        "hAlt": "09:17:36",
+        "hInc": "11:09:43",
+        "uAlt": "P000116932",
+        "uInc": "P000114759"
+      },
+      "itensContrato": [
+        {
+          "itemCabecalho": {
+            "aliqDesconto": 0,
+            "cCodCategItem": "1.01.01",
+            "cNaoGerarFinanceiro": "N",
+            "cTpDesconto": "",
+            "codItem": 617704535,
+            "codLC116": "8.02",
+            "codNBS": "",
+            "codServMunic": "8.02",
+            "codServico": 617704895,
+            "natOperacao": "03",
+            "quant": 1,
+            "seq": 1,
+            "valorAcrescimo": 0,
+            "valorDed": 0,
+            "valorDesconto": 0,
+            "valorOutrasRetencoes": 0,
+            "valorTotal": 13215,
+            "valorUnit": 13215
+          },
+          "itemDescrServ": {
+            "descrCompleta": "Treinamentos Gerenciais"
+          },
+          "itemImpostos": {
+            "aliqCOFINS": 0,
+            "aliqCSLL": 0,
+            "aliqINSS": 0,
+            "aliqIR": 0,
+            "aliqISS": 0,
+            "aliqPIS": 0,
+            "redBaseINSS": 0,
+            "retCOFINS": "N",
+            "retCSLL": "N",
+            "retINSS": "N",
+            "retIR": "N",
+            "retISS": "N",
+            "retPIS": "N",
+            "valorCOFINS": 0,
+            "valorCSLL": 0,
+            "valorINSS": 0,
+            "valorIR": 0,
+            "valorISS": 0,
+            "valorPIS": 0
+          },
+          "itemLeiTranspImp": {
+            "aliMunicipal": 0,
+            "aliqEstadual": 0,
+            "aliqFederal": 0,
+            "chave": "",
+            "fonte": ""
+          }
+        }
+      ],
+      "observacoes": {
+        "cObsContrato": ""
+      },
+      "vencTextos": {
+        "cAdContrato": "S",
+        "cAdPeriodo": "S",
+        "cAdVenc": "S",
+        "cAntecipar": "S",
+        "cCodPerRef": "002",
+        "cDiaFim": 0,
+        "cDiaIni": 0,
+        "cPostergar": "N",
+        "cProxMes": "",
+        "cTpVenc": "002",
+        "nDiaFixo": 10,
+        "nDias": 5
+      }
+    }
+  ]
+}

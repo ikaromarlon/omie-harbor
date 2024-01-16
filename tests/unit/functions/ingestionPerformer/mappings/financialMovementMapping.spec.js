@@ -1,10 +1,14 @@
 const titleMapping = require('../../../../../src/functions/ingestionPerformer/mappings/financialMovementMapping')
 const {
   mockOmieFinancialMovementsResponse,
-  mockParsedOmieFinancialMovement,
+  mockFinancialMovement,
   mockOmieDocumentTypesResponse,
   mockOmieEntryOriginsResponse
 } = require('../../../../mocks')
+
+delete mockFinancialMovement.id
+delete mockFinancialMovement.createdAt
+delete mockFinancialMovement.updatedAt
 
 const makeSut = () => {
   const mockOmieFinancialMovement = mockOmieFinancialMovementsResponse.movimentos[0]
@@ -80,7 +84,7 @@ describe('FinancialMovement Mapping', () => {
       accountReceivableId: mockAccountReceivableId
     })
 
-    expect(result).toEqual(mockParsedOmieFinancialMovement)
+    expect(result).toEqual(mockFinancialMovement)
   })
 
   it('Should return mapped financial movement successfully with movement ids and missing title ids', () => {
@@ -121,7 +125,7 @@ describe('FinancialMovement Mapping', () => {
       accountReceivableId: mockAccountReceivableId
     })
 
-    expect(result).toEqual({ ...mockParsedOmieFinancialMovement, externalId: '618738728', movementId: '618738728' })
+    expect(result).toEqual({ ...mockFinancialMovement, externalId: '618738728', movementId: '618738728' })
   })
 
   it('Should return mapped financial movement successfully with movement ids and title ids', () => {
@@ -162,7 +166,7 @@ describe('FinancialMovement Mapping', () => {
       accountReceivableId: mockAccountReceivableId
     })
 
-    expect(result).toEqual({ ...mockParsedOmieFinancialMovement, externalId: '12345678', movementId: '618738728' })
+    expect(result).toEqual({ ...mockFinancialMovement, externalId: '12345678', movementId: '618738728' })
   })
 
   it('Should return mapped financial movement successfully without documentNumber', () => {
@@ -203,7 +207,7 @@ describe('FinancialMovement Mapping', () => {
       accountReceivableId: mockAccountReceivableId
     })
 
-    expect(result).toEqual({ ...mockParsedOmieFinancialMovement, documentNumber: null })
+    expect(result).toEqual({ ...mockFinancialMovement, documentNumber: null })
   })
 
   it('Should return mapped financial movement successfully without installment', () => {
@@ -244,7 +248,7 @@ describe('FinancialMovement Mapping', () => {
       accountReceivableId: mockAccountReceivableId
     })
 
-    expect(result).toEqual({ ...mockParsedOmieFinancialMovement, installment: null })
+    expect(result).toEqual({ ...mockFinancialMovement, installment: null })
   })
 
   it('Should return mapped financial movement successfully missing some dates', () => {
@@ -285,7 +289,7 @@ describe('FinancialMovement Mapping', () => {
       accountReceivableId: mockAccountReceivableId
     })
 
-    expect(result).toEqual({ ...mockParsedOmieFinancialMovement, registerDate: '2019-05-03T03:00:00.000Z', issueDate: null, paymentDate: null, dueDate: null, expectedPaymentDate: null })
+    expect(result).toEqual({ ...mockFinancialMovement, registerDate: '2019-05-03T03:00:00.000Z', issueDate: null, paymentDate: null, dueDate: null, expectedPaymentDate: null })
   })
 
   it('Should return mapped financial movement successfully with reconciliationDate', () => {
@@ -326,7 +330,7 @@ describe('FinancialMovement Mapping', () => {
       accountReceivableId: mockAccountReceivableId
     })
 
-    expect(result).toEqual({ ...mockParsedOmieFinancialMovement, reconciliationDate: '2019-01-02T03:00:00.000Z' })
+    expect(result).toEqual({ ...mockFinancialMovement, reconciliationDate: '2019-01-02T03:00:00.000Z' })
   })
 
   it('Should return mapped financial movement successfully without relationships', () => {
@@ -358,7 +362,7 @@ describe('FinancialMovement Mapping', () => {
     })
 
     expect(result).toEqual({
-      ...mockParsedOmieFinancialMovement,
+      ...mockFinancialMovement,
       categoryId: null,
       departmentId: null,
       projectId: null,

@@ -1,9 +1,16 @@
 const categoryMapping = require('../../../../../src/functions/ingestionPerformer/mappings/categoryMapping')
 const {
   mockOmieCategoriesResponse,
-  mockParsedOmieCategory,
-  mockParsedOmieParentCategory
+  mockCategory,
+  mockParentCategory
 } = require('../../../../mocks')
+
+delete mockCategory.id
+delete mockCategory.createdAt
+delete mockCategory.updatedAt
+delete mockParentCategory.id
+delete mockParentCategory.createdAt
+delete mockParentCategory.updatedAt
 
 const makeSut = () => {
   const [mockOmieCategory, mockOmieParentCategory] = mockOmieCategoriesResponse.categoria_cadastro
@@ -24,7 +31,7 @@ describe('Category Mapping', () => {
       companyId: mockCompanyId,
       omieCategory: mockOmieCategory
     })
-    expect(result).toEqual(mockParsedOmieCategory)
+    expect(result).toEqual(mockCategory)
   })
 
   it('Should return mapped parent category successfully', () => {
@@ -33,6 +40,6 @@ describe('Category Mapping', () => {
       companyId: mockCompanyId,
       omieCategory: mockOmieParentCategory
     })
-    expect(result).toEqual(mockParsedOmieParentCategory)
+    expect(result).toEqual(mockParentCategory)
   })
 })

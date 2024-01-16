@@ -1,6 +1,6 @@
 const { UnprocessableEntityException } = require('../../../../src/common/errors')
 const makeService = require('../../../../src/functions/ingestionDispatcher/service')
-const { mockSavedOmieCompanies } = require('../../../mocks')
+const { mockCompany } = require('../../../mocks')
 
 const makeSut = () => {
   const payload = {
@@ -8,7 +8,7 @@ const makeSut = () => {
   }
 
   const mockCompanyRepository = {
-    find: jest.fn(async () => Promise.resolve(mockSavedOmieCompanies))
+    find: jest.fn(async () => Promise.resolve([mockCompany]))
   }
 
   const mockLogger = {
@@ -54,7 +54,7 @@ describe('ingestionDispatcher - service', () => {
   it('Should find inactive companies and do not send to ingestion', async () => {
     const { sut, mockSQS, mockCompanyRepository, mockLogger } = makeSut()
     const payload = { companyId: ['25c176b6-b200-4575-9217-e23c6105163c'] }
-    mockCompanyRepository.find.mockResolvedValueOnce([{ ...mockSavedOmieCompanies[0], isActive: false }])
+    mockCompanyRepository.find.mockResolvedValueOnce([{ ...mockCompany, isActive: false }])
     try {
       await sut(payload)
     } catch (error) {
@@ -72,7 +72,7 @@ describe('ingestionDispatcher - service', () => {
     const payload = { companyId: ['25c176b6-b200-4575-9217-e23c6105163c'] }
     const result = await sut(payload)
     expect(mockCompanyRepository.find).toHaveBeenCalledWith({ id: ['25c176b6-b200-4575-9217-e23c6105163c'] })
-    expect(mockSQS.sendCompanyToIngestionQueue).toHaveBeenCalledWith(mockSavedOmieCompanies[0].id)
+    expect(mockSQS.sendCompanyToIngestionQueue).toHaveBeenCalledWith(mockCompany.id)
     expect(mockLogger.info).toHaveBeenCalledTimes(1)
     expect(result).toEqual({ success: true })
   })
@@ -81,7 +81,7 @@ describe('ingestionDispatcher - service', () => {
     const { sut, mockCompanyRepository, mockSQS, mockLogger, payload } = makeSut()
     const result = await sut(payload)
     expect(mockCompanyRepository.find).toHaveBeenCalledWith(payload)
-    expect(mockSQS.sendCompanyToIngestionQueue).toHaveBeenCalledWith(mockSavedOmieCompanies[0].id)
+    expect(mockSQS.sendCompanyToIngestionQueue).toHaveBeenCalledWith(mockCompany.id)
     expect(mockLogger.info).toHaveBeenCalledTimes(1)
     expect(result).toEqual({ success: true })
   })

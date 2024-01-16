@@ -1,8 +1,12 @@
 const projectMapping = require('../../../../../src/functions/ingestionPerformer/mappings/projectMapping')
 const {
   mockOmieProjectsResponse,
-  mockParsedOmieProject
+  mockProject
 } = require('../../../../mocks')
+
+delete mockProject.id
+delete mockProject.createdAt
+delete mockProject.updatedAt
 
 const makeSut = () => {
   const mockOmieProject = mockOmieProjectsResponse.cadastro[0]
@@ -22,6 +26,6 @@ describe('Project Mapping', () => {
       companyId: mockCompanyId,
       omieProject: mockOmieProject
     })
-    expect(result).toEqual(mockParsedOmieProject)
+    expect(result).toEqual(mockProject)
   })
 })

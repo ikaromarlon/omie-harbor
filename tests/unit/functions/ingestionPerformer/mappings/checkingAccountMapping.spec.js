@@ -1,10 +1,14 @@
 const checkingAccountMapping = require('../../../../../src/functions/ingestionPerformer/mappings/checkingAccountMapping')
 const {
   mockOmieCheckingAccountsResponse,
-  mockParsedOmieCheckingAccount,
+  mockCheckingAccount,
   mockOmieBanksResponse,
   mockOmieCheckingAccountTypesResponse
 } = require('../../../../mocks')
+
+delete mockCheckingAccount.id
+delete mockCheckingAccount.createdAt
+delete mockCheckingAccount.updatedAt
 
 const makeSut = () => {
   const mockOmieCheckingAccount = mockOmieCheckingAccountsResponse.ListarContasCorrentes[0]
@@ -30,7 +34,7 @@ describe('CheckingAccount Mapping', () => {
       omieBanks: mockOmieBanks,
       omieCheckingAccountTypes: mockOmieCheckingAccountTypes
     })
-    expect(result).toEqual(mockParsedOmieCheckingAccount)
+    expect(result).toEqual(mockCheckingAccount)
   })
 
   it('Should return mapped checkingAccount without bank', () => {
@@ -41,7 +45,7 @@ describe('CheckingAccount Mapping', () => {
       omieBanks: mockOmieBanks,
       omieCheckingAccountTypes: mockOmieCheckingAccountTypes
     })
-    expect(result).toEqual({ ...mockParsedOmieCheckingAccount, bank: { code: null, name: null } })
+    expect(result).toEqual({ ...mockCheckingAccount, bank: { code: null, name: null } })
   })
 
   it('Should return mapped checkingAccount without checkingAccountType', () => {
@@ -52,7 +56,7 @@ describe('CheckingAccount Mapping', () => {
       omieBanks: mockOmieBanks,
       omieCheckingAccountTypes: mockOmieCheckingAccountTypes
     })
-    expect(result).toEqual({ ...mockParsedOmieCheckingAccount, type: { code: null, description: null } })
+    expect(result).toEqual({ ...mockCheckingAccount, type: { code: null, description: null } })
   })
 
   it('Should return mapped checkingAccount without branch', () => {
@@ -63,7 +67,7 @@ describe('CheckingAccount Mapping', () => {
       omieBanks: mockOmieBanks,
       omieCheckingAccountTypes: mockOmieCheckingAccountTypes
     })
-    expect(result).toEqual({ ...mockParsedOmieCheckingAccount, branch: null })
+    expect(result).toEqual({ ...mockCheckingAccount, branch: null })
   })
 
   it('Should return mapped checkingAccount without number', () => {
@@ -74,7 +78,7 @@ describe('CheckingAccount Mapping', () => {
       omieBanks: mockOmieBanks,
       omieCheckingAccountTypes: mockOmieCheckingAccountTypes
     })
-    expect(result).toEqual({ ...mockParsedOmieCheckingAccount, accountNumber: null })
+    expect(result).toEqual({ ...mockCheckingAccount, accountNumber: null })
   })
 
   it('Should return mapped checkingAccount without initialBalance', () => {
@@ -85,6 +89,6 @@ describe('CheckingAccount Mapping', () => {
       omieBanks: mockOmieBanks,
       omieCheckingAccountTypes: mockOmieCheckingAccountTypes
     })
-    expect(result).toEqual({ ...mockParsedOmieCheckingAccount, initialBalance: null, initialBalanceDate: null })
+    expect(result).toEqual({ ...mockCheckingAccount, initialBalance: null, initialBalanceDate: null })
   })
 })

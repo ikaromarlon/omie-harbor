@@ -1,47 +1,47 @@
 const { NotFoundException } = require('../../../../src/common/errors')
 const makeService = require('../../../../src/functions/dataExport/service')
 const {
-  mockSavedOmieCompanies,
-  mockSavedOmieCategories,
-  mockSavedOmieDepartments,
-  mockSavedOmieProjects,
-  mockSavedOmieCustomers,
-  mockSavedOmieProducts,
-  mockSavedOmieServices,
-  mockSavedOmieCheckingAccounts,
-  mockSavedOmieContracts,
-  mockSavedOmieProductOrders,
-  mockSavedOmieServiceOrders,
-  mockSavedOmieProductInvoices,
-  mockSavedOmieServiceInvoices,
-  mockSavedOmieAccountsPayable,
-  mockSavedOmieAccountsReceivable,
-  mockSavedOmieFinancialMovements
+  mockCompany,
+  mockCategory,
+  mockDepartment,
+  mockProject,
+  mockCustomer,
+  mockProduct,
+  mockService,
+  mockCheckingAccount,
+  mockContract,
+  mockProductOrder,
+  mockServiceOrder,
+  mockProductInvoice,
+  mockServiceInvoice,
+  mockAccountPayable,
+  mockAccountReceivable,
+  mockFinancialMovement
 } = require('../../../mocks')
 
 const makeSut = () => {
   const payload = { companyId: '25c176b6-b200-4575-9217-e23c6105163c' }
-  const mockSavedOmieProductsServices = [...mockSavedOmieProducts, ...mockSavedOmieServices]
-  const mockSavedOmieOrders = [...mockSavedOmieProductOrders, ...mockSavedOmieServiceOrders]
-  const mockSavedOmieBillingSaved = [...mockSavedOmieProductInvoices, ...mockSavedOmieServiceInvoices]
+  const mockProductServices = [mockProduct, mockService]
+  const mockOrders = [mockProductOrder, mockServiceOrder]
+  const mockBillingSaved = [mockProductInvoice, mockServiceInvoice]
 
   const mockCompanyRepository = {
-    findById: jest.fn(async () => mockSavedOmieCompanies[0])
+    findById: jest.fn(async () => mockCompany)
   }
 
   const mockRepositories = {
-    categories: { findMany: jest.fn(async () => mockSavedOmieCategories) },
-    departments: { findMany: jest.fn(async () => mockSavedOmieDepartments) },
-    projects: { findMany: jest.fn(async () => mockSavedOmieProjects) },
-    customers: { findMany: jest.fn(async () => mockSavedOmieCustomers) },
-    productsServices: { findMany: jest.fn(async () => mockSavedOmieProductsServices) },
-    checkingAccounts: { findMany: jest.fn(async () => mockSavedOmieCheckingAccounts) },
-    contracts: { findMany: jest.fn(async () => mockSavedOmieContracts) },
-    orders: { findMany: jest.fn(async () => mockSavedOmieOrders) },
-    billing: { findMany: jest.fn(async () => mockSavedOmieBillingSaved) },
-    accountsPayable: { findMany: jest.fn(async () => mockSavedOmieAccountsPayable) },
-    accountsReceivable: { findMany: jest.fn(async () => mockSavedOmieAccountsReceivable) },
-    financialMovements: { findMany: jest.fn(async () => mockSavedOmieFinancialMovements) }
+    categories: { findMany: jest.fn(async () => [mockCategory]) },
+    departments: { findMany: jest.fn(async () => [mockDepartment]) },
+    projects: { findMany: jest.fn(async () => [mockProject]) },
+    customers: { findMany: jest.fn(async () => [mockCustomer]) },
+    productsServices: { findMany: jest.fn(async () => [mockProductServices]) },
+    checkingAccounts: { findMany: jest.fn(async () => [mockCheckingAccount]) },
+    contracts: { findMany: jest.fn(async () => [mockContract]) },
+    orders: { findMany: jest.fn(async () => [mockOrders]) },
+    billing: { findMany: jest.fn(async () => [mockBillingSaved]) },
+    accountsPayable: { findMany: jest.fn(async () => [mockAccountPayable]) },
+    accountsReceivable: { findMany: jest.fn(async () => [mockAccountReceivable]) },
+    financialMovements: { findMany: jest.fn(async () => [mockFinancialMovement]) }
   }
 
   const mockLogger = {
@@ -67,9 +67,9 @@ const makeSut = () => {
     mockRepositories,
     mockLogger,
     mockS3,
-    mockSavedOmieProductsServices,
-    mockSavedOmieOrders,
-    mockSavedOmieBillingSaved
+    mockProductServices,
+    mockOrders,
+    mockBillingSaved
   }
 }
 
@@ -103,7 +103,7 @@ describe('dataExport - service', () => {
   })
 
   it('Should export data to s3 successfully', async () => {
-    const { sut, payload, mockCompanyRepository, mockRepositories, mockLogger, mockS3, mockSavedOmieProductsServices, mockSavedOmieOrders, mockSavedOmieBillingSaved } = makeSut()
+    const { sut, payload, mockCompanyRepository, mockRepositories, mockLogger, mockS3, mockProductServices, mockOrders, mockBillingSaved } = makeSut()
     const result = await sut(payload)
     expect(mockCompanyRepository.findById).toHaveBeenCalledWith(payload.companyId)
     expect(mockLogger.info).toHaveBeenCalledTimes(3)
@@ -120,19 +120,19 @@ describe('dataExport - service', () => {
     expect(mockRepositories.accountsReceivable.findMany).toHaveBeenCalledWith({ companyId: payload.companyId })
     expect(mockRepositories.financialMovements.findMany).toHaveBeenCalledWith({ companyId: payload.companyId })
     expect(mockS3.storeCompanyData).toHaveBeenCalledWith(payload.companyId, {
-      company: mockSavedOmieCompanies[0],
-      categories: mockSavedOmieCategories,
-      departments: mockSavedOmieDepartments,
-      projects: mockSavedOmieProjects,
-      customers: mockSavedOmieCustomers,
-      productsServices: mockSavedOmieProductsServices,
-      checkingAccounts: mockSavedOmieCheckingAccounts,
-      contracts: mockSavedOmieContracts,
-      orders: mockSavedOmieOrders,
-      billing: mockSavedOmieBillingSaved,
-      accountsPayable: mockSavedOmieAccountsPayable,
-      accountsReceivable: mockSavedOmieAccountsReceivable,
-      financialMovements: mockSavedOmieFinancialMovements
+      company: mockCompany,
+      categories: [mockCategory],
+      departments: [mockDepartment],
+      projects: [mockProject],
+      customers: [mockCustomer],
+      productsServices: [mockProductServices],
+      checkingAccounts: [mockCheckingAccount],
+      contracts: [mockContract],
+      orders: [mockOrders],
+      billing: [mockBillingSaved],
+      accountsPayable: [mockAccountPayable],
+      accountsReceivable: [mockAccountReceivable],
+      financialMovements: [mockFinancialMovement]
     })
     expect(result).toEqual({ success: true })
   })

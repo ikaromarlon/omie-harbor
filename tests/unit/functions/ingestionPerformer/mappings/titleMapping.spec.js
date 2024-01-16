@@ -1,9 +1,13 @@
 const titleMapping = require('../../../../../src/functions/ingestionPerformer/mappings/titleMapping')
 const {
   mockOmieAccountsReceivableResponse,
-  mockParsedOmieAccountReceivable,
+  mockAccountReceivable,
   mockOmieDocumentTypesResponse
 } = require('../../../../mocks')
+
+delete mockAccountReceivable.id
+delete mockAccountReceivable.createdAt
+delete mockAccountReceivable.updatedAt
 
 const makeSut = () => {
   const mockOmieTitle = mockOmieAccountsReceivableResponse.titulosEncontrados[0]
@@ -64,7 +68,7 @@ describe('Title Mapping', () => {
       contractId: mockContractId
     })
 
-    expect(result).toEqual(mockParsedOmieAccountReceivable)
+    expect(result).toEqual(mockAccountReceivable)
   })
 
   it('Should return mapped title successfully without documentNumber', () => {
@@ -98,7 +102,7 @@ describe('Title Mapping', () => {
       contractId: mockContractId
     })
 
-    expect(result).toEqual({ ...mockParsedOmieAccountReceivable, documentNumber: null })
+    expect(result).toEqual({ ...mockAccountReceivable, documentNumber: null })
   })
 
   it('Should return mapped title successfully missing some dates', () => {
@@ -132,7 +136,7 @@ describe('Title Mapping', () => {
       contractId: mockContractId
     })
 
-    expect(result).toEqual({ ...mockParsedOmieAccountReceivable, issueDate: null, paymentDate: null })
+    expect(result).toEqual({ ...mockAccountReceivable, issueDate: null, paymentDate: null })
   })
 
   it('Should return mapped title successfully without relationships', () => {
@@ -160,7 +164,7 @@ describe('Title Mapping', () => {
     })
 
     expect(result).toEqual({
-      ...mockParsedOmieAccountReceivable,
+      ...mockAccountReceivable,
       categoryId: null,
       departmentId: null,
       projectId: null,
@@ -204,6 +208,6 @@ describe('Title Mapping', () => {
       contractId: mockContractId
     })
 
-    expect(result).toEqual(mockParsedOmieAccountReceivable)
+    expect(result).toEqual(mockAccountReceivable)
   })
 })

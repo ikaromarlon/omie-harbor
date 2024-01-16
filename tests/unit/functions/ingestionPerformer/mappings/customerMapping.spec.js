@@ -1,11 +1,15 @@
 const customerMapping = require('../../../../../src/functions/ingestionPerformer/mappings/customerMapping')
 const {
   mockOmieCustomersResponse,
-  mockParsedOmieCustomer,
+  mockCustomer,
   mockOmieCnaeResponse,
   mockOmieActivitiesResponse,
   mockOmieBanksResponse
 } = require('../../../../mocks')
+
+delete mockCustomer.id
+delete mockCustomer.createdAt
+delete mockCustomer.updatedAt
 
 const makeSut = () => {
   const mockOmieCustomer = mockOmieCustomersResponse.clientes_cadastro[0]
@@ -34,7 +38,7 @@ describe('Customer Mapping', () => {
       omieActivities: mockOmieActivities,
       omieBanks: mockOmieBanks
     })
-    expect(result).toEqual(mockParsedOmieCustomer)
+    expect(result).toEqual(mockCustomer)
   })
 
   it('Should return mapped customer without first phone', () => {
@@ -46,7 +50,7 @@ describe('Customer Mapping', () => {
       omieActivities: mockOmieActivities,
       omieBanks: mockOmieBanks
     })
-    expect(result).toEqual({ ...mockParsedOmieCustomer, phones: [{ ...mockParsedOmieCustomer.phones[1] }] })
+    expect(result).toEqual({ ...mockCustomer, phones: [{ ...mockCustomer.phones[1] }] })
   })
 
   it('Should return mapped customer without second phone', () => {
@@ -58,7 +62,7 @@ describe('Customer Mapping', () => {
       omieActivities: mockOmieActivities,
       omieBanks: mockOmieBanks
     })
-    expect(result).toEqual({ ...mockParsedOmieCustomer, phones: [{ ...mockParsedOmieCustomer.phones[0] }] })
+    expect(result).toEqual({ ...mockCustomer, phones: [{ ...mockCustomer.phones[0] }] })
   })
 
   it('Should return mapped customer without cnae', () => {
@@ -70,7 +74,7 @@ describe('Customer Mapping', () => {
       omieActivities: mockOmieActivities,
       omieBanks: mockOmieBanks
     })
-    expect(result).toEqual({ ...mockParsedOmieCustomer, cnae: { code: null, description: null } })
+    expect(result).toEqual({ ...mockCustomer, cnae: { code: null, description: null } })
   })
 
   it('Should return mapped customer without checkingAccount', () => {
@@ -83,7 +87,7 @@ describe('Customer Mapping', () => {
       omieBanks: mockOmieBanks
     })
     expect(result).toEqual({
-      ...mockParsedOmieCustomer,
+      ...mockCustomer,
       checkingAccount: {
         bank: {
           code: null,
@@ -108,7 +112,7 @@ describe('Customer Mapping', () => {
       omieActivities: mockOmieActivities,
       omieBanks: mockOmieBanks
     })
-    expect(result).toEqual({ ...mockParsedOmieCustomer, activity: null })
+    expect(result).toEqual({ ...mockCustomer, activity: null })
   })
 
   it('Should return mapped customer without characteristics', () => {
@@ -120,7 +124,7 @@ describe('Customer Mapping', () => {
       omieActivities: mockOmieActivities,
       omieBanks: mockOmieBanks
     })
-    expect(result).toEqual({ ...mockParsedOmieCustomer, characteristics: [] })
+    expect(result).toEqual({ ...mockCustomer, characteristics: [] })
   })
 
   it('Should return mapped customer without tags', () => {
@@ -132,7 +136,7 @@ describe('Customer Mapping', () => {
       omieActivities: mockOmieActivities,
       omieBanks: mockOmieBanks
     })
-    expect(result).toEqual({ ...mockParsedOmieCustomer, tags: [] })
+    expect(result).toEqual({ ...mockCustomer, tags: [] })
   })
 
   it('Should return mapped customer for non legal people', () => {
@@ -144,6 +148,6 @@ describe('Customer Mapping', () => {
       omieActivities: mockOmieActivities,
       omieBanks: mockOmieBanks
     })
-    expect(result).toEqual({ ...mockParsedOmieCustomer, personType: 'F' })
+    expect(result).toEqual({ ...mockCustomer, personType: 'F' })
   })
 })

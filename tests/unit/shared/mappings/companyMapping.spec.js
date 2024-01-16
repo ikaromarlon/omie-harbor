@@ -1,5 +1,9 @@
 const companyMapping = require('../../../../src/shared/mappings/companyMapping')
-const { mockOmieCompaniesResponse, mockParsedOmieCompany, mockOmieCnaeResponse } = require('../../../mocks')
+const { mockOmieCompaniesResponse, mockCompany, mockOmieCnaeResponse } = require('../../../mocks')
+
+delete mockCompany.id
+delete mockCompany.createdAt
+delete mockCompany.updatedAt
 
 const makeSut = () => {
   const mockOmieCompany = mockOmieCompaniesResponse.empresas_cadastro[0]
@@ -22,7 +26,7 @@ describe('Company Mapping', () => {
       omieCompany: mockOmieCompany,
       omieCnae: mockOmieCnae
     })
-    expect(result).toEqual(mockParsedOmieCompany)
+    expect(result).toEqual(mockCompany)
   })
 
   it('Should return mapped without first phone', () => {
@@ -32,7 +36,7 @@ describe('Company Mapping', () => {
       omieCompany: { ...mockOmieCompany, telefone1_ddd: '', telefone1_numero: '' },
       omieCnae: mockOmieCnae
     })
-    expect(result).toEqual({ ...mockParsedOmieCompany, phones: [{ ...mockParsedOmieCompany.phones[1] }] })
+    expect(result).toEqual({ ...mockCompany, phones: [{ ...mockCompany.phones[1] }] })
   })
 
   it('Should return mapped without second phone', () => {
@@ -42,7 +46,7 @@ describe('Company Mapping', () => {
       omieCompany: { ...mockOmieCompany, telefone2_ddd: '', telefone2_numero: '' },
       omieCnae: mockOmieCnae
     })
-    expect(result).toEqual({ ...mockParsedOmieCompany, phones: [{ ...mockParsedOmieCompany.phones[0] }] })
+    expect(result).toEqual({ ...mockCompany, phones: [{ ...mockCompany.phones[0] }] })
   })
 
   it('Should return mapped company without cnae', () => {
@@ -52,6 +56,6 @@ describe('Company Mapping', () => {
       omieCompany: { ...mockOmieCompany, cnae: null },
       omieCnae: mockOmieCnae
     })
-    expect(result).toEqual({ ...mockParsedOmieCompany, cnae: null })
+    expect(result).toEqual({ ...mockCompany, cnae: null })
   })
 })

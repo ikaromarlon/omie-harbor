@@ -1,6 +1,6 @@
 const makeController = require('../../../../src/functions/registerCompany/controller')
 const { UnprocessableEntityException } = require('../../../../src/common/errors')
-const { mockSavedOmieCompanies } = require('../../../mocks')
+const { mockCompany } = require('../../../mocks')
 
 const makeSut = () => {
   const request = {
@@ -9,7 +9,7 @@ const makeSut = () => {
 
   const validateWithSchemaStub = jest.fn(() => request.body)
   const mockSchema = {}
-  const serviceStub = jest.fn(async () => Promise.resolve(mockSavedOmieCompanies[0]))
+  const serviceStub = jest.fn(async () => Promise.resolve(mockCompany))
 
   const controller = makeController({
     schema: mockSchema,
@@ -46,6 +46,6 @@ describe('registerCompany - controller', () => {
     expect(validateWithSchemaStub).toHaveBeenCalledWith(request.body, mockSchema)
     expect(serviceStub).toHaveBeenCalledWith(request.body)
     expect(result.statusCode).toBe(200)
-    expect(result.data).toEqual(mockSavedOmieCompanies[0])
+    expect(result.data).toEqual(mockCompany)
   })
 })

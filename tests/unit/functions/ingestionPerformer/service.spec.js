@@ -46,74 +46,71 @@ const makeSut = () => {
   }
 
   const mockMappings = {
+    companyMapping: jest.fn(() => mocks.mockCompany),
     /** dimensions */
-    companyMapping: jest.fn(() => mocks.mockParsedOmieCompany),
-    categoryMapping: jest.fn(() => mocks.mockParsedOmieCategory),
-    departmentMapping: jest.fn(() => mocks.mockParsedOmieDepartment),
-    projectMapping: jest.fn(() => mocks.mockParsedOmieProject),
-    productMapping: jest.fn(() => mocks.mockParsedOmieProduct),
-    serviceMapping: jest.fn(() => mocks.mockParsedOmieService),
-    customerMapping: jest.fn(() => mocks.mockParsedOmieCustomer),
-    checkingAccountMapping: jest.fn(() => mocks.mockParsedOmieCheckingAccount),
-    contractMapping: jest.fn(() => mocks.mockParsedOmieContract),
-    productOrderMapping: jest.fn(() => mocks.mockParsedOmieProductOrder),
-    serviceOrderMapping: jest.fn(() => mocks.mockParsedOmieServiceOrder),
+    categoryMapping: jest.fn(() => mocks.mockCategory),
+    departmentMapping: jest.fn(() => mocks.mockDepartment),
+    projectMapping: jest.fn(() => mocks.mockProject),
+    productMapping: jest.fn(() => mocks.mockProduct),
+    serviceMapping: jest.fn(() => mocks.mockService),
+    customerMapping: jest.fn(() => mocks.mockCustomer),
+    checkingAccountMapping: jest.fn(() => mocks.mockCheckingAccount),
+    contractMapping: jest.fn(() => mocks.mockContract),
+    productOrderMapping: jest.fn(() => mocks.mockProductOrder),
+    serviceOrderMapping: jest.fn(() => mocks.mockServiceOrder),
     /** facts */
-    productInvoiceMapping: jest.fn(() => mocks.mockParsedOmieProductInvoice),
-    serviceInvoiceMapping: jest.fn(() => mocks.mockParsedOmieServiceInvoice),
-    titleMapping: jest.fn().mockReturnValueOnce(mocks.mockParsedOmieAccountPayable).mockReturnValueOnce(mocks.mockParsedOmieAccountReceivable),
-    financialMovementMapping: jest.fn(() => mocks.mockParsedOmieFinancialMovement)
+    productInvoiceMapping: jest.fn(() => mocks.mockProductInvoice),
+    serviceInvoiceMapping: jest.fn(() => mocks.mockServiceInvoice),
+    titleMapping: jest.fn().mockReturnValueOnce(mocks.mockAccountPayable).mockReturnValueOnce(mocks.mockAccountReceivable),
+    financialMovementMapping: jest.fn(() => mocks.mockFinancialMovement)
   }
 
-  const mockCompaniesRepository = {
-    findById: jest.fn(async () => mocks.mockSavedOmieCompanies[0]),
+  const mockCompanyRepository = {
+    findById: jest.fn(async () => mocks.mockCompany),
     update: jest.fn(async () => null)
   }
 
   const mockRepositories = {
     /** dimensions */
-    companies: {
-      findOne: jest.fn(async () => mocks.mockSavedOmieCompanies[0])
-    },
     categories: {
-      findMany: jest.fn(async () => mocks.mockSavedOmieCategories),
+      findMany: jest.fn(async () => [mocks.mockCategory]),
       createOrUpdateMany: jest.fn(async () => null)
     },
     departments: {
-      findMany: jest.fn(async () => mocks.mockSavedOmieDepartments),
+      findMany: jest.fn(async () => [mocks.mockDepartment]),
       createOrUpdateMany: jest.fn(async () => null)
     },
     projects: {
-      findMany: jest.fn(async () => mocks.mockSavedOmieProjects),
+      findMany: jest.fn(async () => [mocks.mockProject]),
       createOrUpdateMany: jest.fn(async () => null)
     },
     customers: {
-      findMany: jest.fn(async () => mocks.mockSavedOmieCustomers),
+      findMany: jest.fn(async () => [mocks.mockCustomer]),
       createOrUpdateMany: jest.fn(async () => null)
     },
     productsServices: {
-      findMany: jest.fn(async () => [...mocks.mockSavedOmieProducts, ...mocks.mockSavedOmieServices]),
+      findMany: jest.fn(async () => [mocks.mockProduct, mocks.mockService]),
       createOrUpdateMany: jest.fn(async () => null)
     },
     checkingAccounts: {
-      findMany: jest.fn(async () => mocks.mockSavedOmieCheckingAccounts),
+      findMany: jest.fn(async () => [mocks.mockCheckingAccount]),
       createOrUpdateMany: jest.fn(async () => null)
     },
     contracts: {
-      findMany: jest.fn(async () => mocks.mockSavedOmieContracts),
+      findMany: jest.fn(async () => [mocks.mockContract]),
       deleteOldAndCreateNew: jest.fn(async () => null)
     },
     orders: {
-      findMany: jest.fn(async () => [...mocks.mockSavedOmieProductOrders, ...mocks.mockSavedOmieServiceOrders]),
+      findMany: jest.fn(async () => [mocks.mockProductOrder, mocks.mockServiceOrder]),
       deleteOldAndCreateNew: jest.fn(async () => null)
     },
     /** facts */
     billing: {
-      findMany: jest.fn(async () => [...mocks.mockSavedOmieProductInvoices, ...mocks.mockSavedOmieServiceInvoices]),
+      findMany: jest.fn(async () => [mocks.mockProductInvoice, mocks.mockServiceInvoice]),
       deleteOldAndCreateNew: jest.fn(async () => null)
     },
     accountsPayable: {
-      findMany: jest.fn(async () => mocks.mockSavedOmieAccountsPayable),
+      findMany: jest.fn(async () => [mocks.mockAccountPayable]),
       deleteOldAndCreateNew: jest.fn(async () => null)
     },
     accountsReceivable: {
@@ -137,7 +134,7 @@ const makeSut = () => {
   const service = makeService({
     omieService: mockOmieService,
     mappings: mockMappings,
-    companiesRepository: mockCompaniesRepository,
+    companiesRepository: mockCompanyRepository,
     repositories: mockRepositories,
     logger: mockLogger,
     sqs: mockSQS
@@ -150,7 +147,7 @@ const makeSut = () => {
     mockCredentials,
     mockOmieService,
     mockMappings,
-    mockCompaniesRepository,
+    mockCompanyRepository,
     mockRepositories,
     mockLogger,
     mockSQS,
@@ -179,59 +176,59 @@ afterEach(() => {
 describe('ingestionPerformer - service', () => {
   it('Should not find company and throws a NotFoundException', async () => {
     const sutPackage = makeSut()
-    const { sut, payload, mockCompaniesRepository } = sutPackage
+    const { sut, payload, mockCompanyRepository } = sutPackage
     const spySut = jest.spyOn(sutPackage, 'sut')
     payload.companyId = 'any-invalid-or-non-existing-id'
-    mockCompaniesRepository.findById.mockResolvedValue(null)
+    mockCompanyRepository.findById.mockResolvedValue(null)
     try {
       await sut(payload)
     } catch (error) {
       expect(error).toBeInstanceOf(NotFoundException)
       expect(error.message).toBe(`Company ${payload.companyId} not found`)
     }
-    expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(payload.companyId)
+    expect(mockCompanyRepository.findById).toHaveBeenCalledWith(payload.companyId)
     expect(spySut).toHaveReturnedTimes(0)
   })
 
   it('Should find company but throws a UnprocessableEntityException', async () => {
     const sutPackage = makeSut()
-    const { sut, payload, mockCompaniesRepository } = sutPackage
+    const { sut, payload, mockCompanyRepository } = sutPackage
     const spySut = jest.spyOn(sutPackage, 'sut')
-    mockCompaniesRepository.findById.mockResolvedValue({ ...mocks.mockSavedOmieCompanies[0], isActive: false })
+    mockCompanyRepository.findById.mockResolvedValue({ ...mocks.mockCompany, isActive: false })
     try {
       await sut(payload)
     } catch (error) {
       expect(error).toBeInstanceOf(UnprocessableEntityException)
       expect(error.message).toBe(`Company ${payload.companyId} is not active`)
     }
-    expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(payload.companyId)
+    expect(mockCompanyRepository.findById).toHaveBeenCalledWith(payload.companyId)
     expect(spySut).toHaveReturnedTimes(0)
   })
 
   it('Should call companiesRepository.findById successfully', async () => {
-    const { sut, payload, mockCompaniesRepository } = makeSut()
+    const { sut, payload, mockCompanyRepository } = makeSut()
     await sut(payload)
-    expect(mockCompaniesRepository.findById).toHaveBeenCalledWith(payload.companyId)
+    expect(mockCompanyRepository.findById).toHaveBeenCalledWith(payload.companyId)
   })
 
   describe('updateCompany', () => {
     it('Should updated company successfully', async () => {
-      const { sut, payload, mockOmieService, mockCredentials, mockMappings, mockCompanyId, mockCompaniesRepository } = makeSut()
+      const { sut, payload, mockOmieService, mockCredentials, mockMappings, mockCompanyId, mockCompanyRepository } = makeSut()
       await sut(payload)
       expect(mockOmieService.getCompany).toHaveBeenCalledTimes(1)
       expect(mockMappings.companyMapping).toHaveBeenCalledWith({ omieCompany: mocks.mockOmieCompaniesResponse.empresas_cadastro[0], omieCnae: mocks.mockOmieCnaeResponse.cadastros, credentials: mockCredentials })
-      expect(mockCompaniesRepository.update).toHaveBeenCalledWith({ id: mockCompanyId, ...mocks.mockParsedOmieCompany })
+      expect(mockCompanyRepository.update).toHaveBeenCalledWith({ id: mockCompanyId, ...mocks.mockCompany })
     })
 
     it('Should updated company with inactive record successfully', async () => {
-      const { sut, payload, mockOmieService, mockCredentials, mockMappings, mockCompanyId, mockCompaniesRepository } = makeSut()
+      const { sut, payload, mockOmieService, mockCredentials, mockMappings, mockCompanyId, mockCompanyRepository } = makeSut()
       const mockOmieCompanyResponse = { ...mocks.mockOmieCompaniesResponse.empresas_cadastro[0], inativa: 'S' }
       mockOmieService.getCompany.mockResolvedValue(mockOmieCompanyResponse)
-      mockMappings.companyMapping.mockReturnValueOnce({ ...mocks.mockParsedOmieCompany, isActive: false })
+      mockMappings.companyMapping.mockReturnValueOnce({ ...mocks.mockCompany, isActive: false })
       await sut(payload)
       expect(mockOmieService.getCompany).toHaveBeenCalledTimes(1)
       expect(mockMappings.companyMapping).toHaveBeenCalledWith({ omieCompany: mockOmieCompanyResponse, omieCnae: mocks.mockOmieCnaeResponse.cadastros, credentials: mockCredentials })
-      expect(mockCompaniesRepository.update).toHaveBeenCalledWith({ id: mockCompanyId, ...mocks.mockParsedOmieCompany, isActive: false })
+      expect(mockCompanyRepository.update).toHaveBeenCalledWith({ id: mockCompanyId, ...mocks.mockCompany, isActive: false })
     })
   })
 
@@ -242,8 +239,7 @@ describe('ingestionPerformer - service', () => {
         await sut(payload)
         expect(mockOmieService.getCategories).toHaveBeenCalledTimes(1)
         expect(mockMappings.categoryMapping).toHaveBeenCalledWith({ omieCategory: mocks.mockOmieCategoriesResponse.categoria_cadastro[0], companyId: mockCompanyId })
-        expect(mockMappings.categoryMapping).toHaveReturnedWith(mocks.mockParsedOmieCategory)
-        expect(mockRepositories.categories.createOrUpdateMany).toHaveBeenCalledWith([mocks.mockParsedOmieCategory], ['companyId', 'externalId'])
+        expect(mockRepositories.categories.createOrUpdateMany).toHaveBeenCalledWith([mocks.mockCategory], ['companyId', 'externalId'])
       })
     })
 
@@ -253,8 +249,7 @@ describe('ingestionPerformer - service', () => {
         await sut(payload)
         expect(mockOmieService.getDepartments).toHaveBeenCalledTimes(1)
         expect(mockMappings.departmentMapping).toHaveBeenCalledWith({ omieDepartment: mocks.mockOmieDepartmentsResponse.departamentos[0], companyId: mockCompanyId })
-        expect(mockMappings.departmentMapping).toHaveReturnedWith(mocks.mockParsedOmieDepartment)
-        expect(mockRepositories.departments.createOrUpdateMany).toHaveBeenCalledWith([mocks.mockParsedOmieDepartment], ['companyId', 'externalId'])
+        expect(mockRepositories.departments.createOrUpdateMany).toHaveBeenCalledWith([mocks.mockDepartment], ['companyId', 'externalId'])
       })
     })
 
@@ -264,8 +259,7 @@ describe('ingestionPerformer - service', () => {
         await sut(payload)
         expect(mockOmieService.getProjects).toHaveBeenCalledTimes(1)
         expect(mockMappings.projectMapping).toHaveBeenCalledWith({ omieProject: mocks.mockOmieProjectsResponse.cadastro[0], companyId: mockCompanyId })
-        expect(mockMappings.projectMapping).toHaveReturnedWith(mocks.mockParsedOmieProject)
-        expect(mockRepositories.projects.createOrUpdateMany).toHaveBeenCalledWith([mocks.mockParsedOmieProject], ['companyId', 'externalId'])
+        expect(mockRepositories.projects.createOrUpdateMany).toHaveBeenCalledWith([mocks.mockProject], ['companyId', 'externalId'])
       })
     })
 
@@ -276,8 +270,7 @@ describe('ingestionPerformer - service', () => {
         expect(mockOmieService.getCustomers).toHaveBeenCalledTimes(1)
         expect(mockOmieService.getActivities).toHaveBeenCalledTimes(1)
         expect(mockMappings.customerMapping).toHaveBeenCalledWith({ omieCustomer: mocks.mockOmieCustomersResponse.clientes_cadastro[0], omieActivities: mocks.mockOmieActivitiesResponse.lista_tipos_atividade, omieBanks: mocks.mockOmieBanksResponse.fin_banco_cadastro, omieCnae: mocks.mockOmieCnaeResponse.cadastros, companyId: mockCompanyId })
-        expect(mockMappings.customerMapping).toHaveReturnedWith(mocks.mockParsedOmieCustomer)
-        expect(mockRepositories.customers.createOrUpdateMany).toHaveBeenCalledWith([mocks.mockParsedOmieCustomer], ['companyId', 'externalId'])
+        expect(mockRepositories.customers.createOrUpdateMany).toHaveBeenCalledWith([mocks.mockCustomer], ['companyId', 'externalId'])
       })
     })
 
@@ -288,10 +281,8 @@ describe('ingestionPerformer - service', () => {
         expect(mockOmieService.getProducts).toHaveBeenCalledTimes(1)
         expect(mockOmieService.getServices).toHaveBeenCalledTimes(2)
         expect(mockMappings.productMapping).toHaveBeenCalledWith({ omieProduct: mocks.mockOmieProductsResponse.produto_servico_cadastro[0], companyId: mockCompanyId })
-        expect(mockMappings.productMapping).toHaveReturnedWith(mocks.mockParsedOmieProduct)
         expect(mockMappings.serviceMapping).toHaveBeenCalledWith({ omieService: mocks.mockOmieServicesResponse.cadastros[0], companyId: mockCompanyId })
-        expect(mockMappings.serviceMapping).toHaveReturnedWith(mocks.mockParsedOmieService)
-        expect(mockRepositories.productsServices.createOrUpdateMany).toHaveBeenCalledWith([mocks.mockParsedOmieProduct, mocks.mockParsedOmieService], ['companyId', 'externalId'])
+        expect(mockRepositories.productsServices.createOrUpdateMany).toHaveBeenCalledWith([mocks.mockProduct, mocks.mockService], ['companyId', 'externalId'])
       })
     })
 
@@ -302,8 +293,7 @@ describe('ingestionPerformer - service', () => {
         expect(mockOmieService.getCheckingAccounts).toHaveBeenCalledTimes(1)
         expect(mockOmieService.getCheckingAccountTypes).toHaveBeenCalledTimes(1)
         expect(mockMappings.checkingAccountMapping).toHaveBeenCalledWith({ omieCheckingAccount: mocks.mockOmieCheckingAccountsResponse.ListarContasCorrentes[0], omieBanks: mocks.mockOmieBanksResponse.fin_banco_cadastro, omieCheckingAccountTypes: mocks.mockOmieCheckingAccountTypesResponse.cadastros, companyId: mockCompanyId })
-        expect(mockMappings.checkingAccountMapping).toHaveReturnedWith(mocks.mockParsedOmieCheckingAccount)
-        expect(mockRepositories.checkingAccounts.createOrUpdateMany).toHaveBeenCalledWith([mocks.mockParsedOmieCheckingAccount], ['companyId', 'externalId'])
+        expect(mockRepositories.checkingAccounts.createOrUpdateMany).toHaveBeenCalledWith([mocks.mockCheckingAccount], ['companyId', 'externalId'])
       })
     })
 
@@ -327,8 +317,7 @@ describe('ingestionPerformer - service', () => {
           productServiceId: mockServiceId,
           categoryId: mockCategoryId
         })
-        expect(mockMappings.contractMapping).toHaveReturnedWith(mocks.mockParsedOmieContract)
-        expect(mockRepositories.contracts.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockParsedOmieContract], ['companyId', 'externalId', 'type'])
+        expect(mockRepositories.contracts.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockContract], ['companyId', 'externalId', 'type'])
       })
 
       it('Should receive contracts from Omie with departments array but missing department id', async () => {
@@ -355,7 +344,6 @@ describe('ingestionPerformer - service', () => {
           productServiceId: undefined,
           categoryId: undefined
         })
-        expect(mockMappings.contractMapping).toHaveReturnedWith(mocks.mockParsedOmieContract)
       })
     })
 
@@ -378,7 +366,6 @@ describe('ingestionPerformer - service', () => {
           productServiceId: mockProductId,
           categoryId: mockCategoryId
         })
-        expect(mockMappings.productOrderMapping).toHaveReturnedWith(mocks.mockParsedOmieProductOrder)
         expect(mockMappings.serviceOrderMapping).toHaveBeenCalledWith({
           omieOrder: mocks.mockOmieServiceOrdersResponse.osCadastro[0],
           omieOrderDepartment: mocks.mockOmieServiceOrdersResponse.osCadastro[0].Departamentos[0],
@@ -392,8 +379,7 @@ describe('ingestionPerformer - service', () => {
           categoryId: mockCategoryId,
           contractId: mockContractId
         })
-        expect(mockMappings.serviceOrderMapping).toHaveReturnedWith(mocks.mockParsedOmieServiceOrder)
-        expect(mockRepositories.orders.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockParsedOmieProductOrder, mocks.mockParsedOmieServiceOrder], ['companyId', 'externalId', 'type'])
+        expect(mockRepositories.orders.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockProductOrder, mocks.mockServiceOrder], ['companyId', 'externalId', 'type'])
       })
 
       it('Should receive orders from Omie with departments array but missing department id', async () => {
@@ -433,7 +419,6 @@ describe('ingestionPerformer - service', () => {
           productServiceId: undefined,
           categoryId: undefined
         })
-        expect(mockMappings.productOrderMapping).toHaveReturnedWith(mocks.mockParsedOmieProductOrder)
 
         expect(mockMappings.serviceOrderMapping).toHaveBeenCalledWith({
           omieOrder: mockOmieServiceOrder,
@@ -447,7 +432,6 @@ describe('ingestionPerformer - service', () => {
           serviceServiceId: undefined,
           categoryId: undefined
         })
-        expect(mockMappings.serviceOrderMapping).toHaveReturnedWith(mocks.mockParsedOmieServiceOrder)
       })
     })
   })
@@ -463,7 +447,7 @@ describe('ingestionPerformer - service', () => {
           omieInvoice: mocks.mockOmieProductInvoicesResponse.nfCadastro[0],
           omieInvoiceDepartment: mocks.mockOmieProductInvoicesResponse.nfCadastro[0].pedido.Departamentos[0],
           omieInvoiceItem: mocks.mockOmieProductInvoicesResponse.nfCadastro[0].det[0],
-          order: mocks.mockSavedOmieProductOrders[0],
+          order: mocks.mockProductOrder,
           companyId: mockCompanyId,
           customerId: mockCustomerId,
           projectId: mockProjectId,
@@ -471,12 +455,11 @@ describe('ingestionPerformer - service', () => {
           productServiceId: mockProductId,
           categoryId: mockCategoryId
         })
-        expect(mockMappings.productInvoiceMapping).toHaveReturnedWith(mocks.mockParsedOmieProductInvoice)
         expect(mockMappings.serviceInvoiceMapping).toHaveBeenCalledWith({
           omieInvoice: mocks.mockOmieServiceInvoicesResponse.nfseEncontradas[0],
           omieInvoiceDepartment: mocks.mockOmieServiceInvoicesResponse.nfseEncontradas[0].OrdemServico.Departamentos[0],
           omieInvoiceItem: mocks.mockOmieServiceInvoicesResponse.nfseEncontradas[0].ListaServicos[0],
-          order: mocks.mockSavedOmieServiceOrders[0],
+          order: mocks.mockServiceOrder,
           companyId: mockCompanyId,
           customerId: mockCustomerId,
           projectId: mockProjectId,
@@ -485,8 +468,7 @@ describe('ingestionPerformer - service', () => {
           categoryId: mockCategoryId,
           contractId: mockContractId
         })
-        expect(mockMappings.serviceInvoiceMapping).toHaveReturnedWith(mocks.mockParsedOmieServiceInvoice)
-        expect(mockRepositories.billing.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockParsedOmieProductInvoice, mocks.mockParsedOmieServiceInvoice], ['companyId', 'externalId', 'type'])
+        expect(mockRepositories.billing.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockProductInvoice, mocks.mockServiceInvoice], ['companyId', 'externalId', 'type'])
       })
 
       it('Should receive billing from Omie with departments array but missing department id', async () => {
@@ -526,7 +508,6 @@ describe('ingestionPerformer - service', () => {
           productServiceId: undefined,
           categoryId: undefined
         })
-        expect(mockMappings.productInvoiceMapping).toHaveReturnedWith(mocks.mockParsedOmieProductInvoice)
 
         expect(mockMappings.serviceInvoiceMapping).toHaveBeenCalledWith({
           omieInvoice: mockOmieServiceInvoice,
@@ -541,7 +522,6 @@ describe('ingestionPerformer - service', () => {
           categoryId: undefined,
           contractId: undefined
         })
-        expect(mockMappings.serviceInvoiceMapping).toHaveReturnedWith(mocks.mockParsedOmieServiceInvoice)
       })
 
       it('Should call omieMappings.productInvoice successfully without order: undefined', async () => {
@@ -561,7 +541,6 @@ describe('ingestionPerformer - service', () => {
           productServiceId: mockProductId,
           categoryId: undefined
         })
-        expect(mockMappings.productInvoiceMapping).toHaveReturnedWith(mocks.mockParsedOmieProductInvoice)
       })
 
       it('Should call omieMappings.productInvoice successfully without order: 0', async () => {
@@ -581,7 +560,6 @@ describe('ingestionPerformer - service', () => {
           productServiceId: mockProductId,
           categoryId: undefined
         })
-        expect(mockMappings.productInvoiceMapping).toHaveReturnedWith(mocks.mockParsedOmieProductInvoice)
       })
 
       it('Should not call omieMappings.productInvoice due to no matched order', async () => {
@@ -604,8 +582,8 @@ describe('ingestionPerformer - service', () => {
           omieTitleCategory: mocks.mockOmieAccountsPayableResponse.titulosEncontrados[0].cabecTitulo.aCodCateg[0],
           omieTitleEntries: mocks.mockOmieAccountsPayableResponse.titulosEncontrados[0].lancamentos,
           omieDocumentTypes: mocks.mockOmieDocumentTypesResponse.tipo_documento_cadastro,
-          order: mocks.mockSavedOmieServiceOrders[0],
-          billing: mocks.mockSavedOmieServiceInvoices[0],
+          order: mocks.mockServiceOrder,
+          billing: mocks.mockServiceInvoice,
           companyId: mockCompanyId,
           customerId: mockCustomerId,
           projectId: mockProjectId,
@@ -613,8 +591,8 @@ describe('ingestionPerformer - service', () => {
           categoryId: mockCategoryId,
           contractId: mockContractId
         })
-        expect(mockMappings.titleMapping).toHaveNthReturnedWith(1, mocks.mockParsedOmieAccountPayable)
-        expect(mockRepositories.accountsPayable.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockParsedOmieAccountPayable], ['companyId', 'externalId', 'titleId'])
+        expect(mockMappings.titleMapping).toHaveNthReturnedWith(1, mocks.mockAccountPayable)
+        expect(mockRepositories.accountsPayable.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockAccountPayable], ['companyId', 'externalId', 'titleId'])
       })
 
       it('Should receive accountsPayable from Omie with departments array but missing department id', async () => {
@@ -635,8 +613,8 @@ describe('ingestionPerformer - service', () => {
           omieTitleCategory: mockOmieAccountPayable.cabecTitulo.aCodCateg[0],
           omieTitleEntries: [],
           omieDocumentTypes: mocks.mockOmieDocumentTypesResponse.tipo_documento_cadastro,
-          order: mocks.mockSavedOmieServiceOrders[0],
-          billing: mocks.mockSavedOmieServiceInvoices[0],
+          order: mocks.mockServiceOrder,
+          billing: mocks.mockServiceInvoice,
           companyId: mockCompanyId,
           customerId: mockCustomerId,
           projectId: mockProjectId,
@@ -644,8 +622,8 @@ describe('ingestionPerformer - service', () => {
           categoryId: mockCategoryId,
           contractId: mockContractId
         })
-        expect(mockMappings.titleMapping).toHaveNthReturnedWith(1, mocks.mockParsedOmieAccountPayable)
-        expect(mockRepositories.accountsPayable.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockParsedOmieAccountPayable], ['companyId', 'externalId', 'titleId'])
+        expect(mockMappings.titleMapping).toHaveNthReturnedWith(1, mocks.mockAccountPayable)
+        expect(mockRepositories.accountsPayable.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockAccountPayable], ['companyId', 'externalId', 'titleId'])
       })
 
       it('Should call omieMappings.title without categories list: use fixed category in title details', async () => {
@@ -659,8 +637,8 @@ describe('ingestionPerformer - service', () => {
           omieTitleCategory: { cCodCateg: mocks.mockOmieAccountsPayableResponse.titulosEncontrados[0].cabecTitulo.cCodCateg },
           omieTitleEntries: mocks.mockOmieAccountsPayableResponse.titulosEncontrados[0].lancamentos,
           omieDocumentTypes: mocks.mockOmieDocumentTypesResponse.tipo_documento_cadastro,
-          order: mocks.mockSavedOmieServiceOrders[0],
-          billing: mocks.mockSavedOmieServiceInvoices[0],
+          order: mocks.mockServiceOrder,
+          billing: mocks.mockServiceInvoice,
           companyId: mockCompanyId,
           customerId: mockCustomerId,
           projectId: mockProjectId,
@@ -668,7 +646,7 @@ describe('ingestionPerformer - service', () => {
           categoryId: mockCategoryId,
           contractId: mockContractId
         })
-        expect(mockMappings.titleMapping).toHaveNthReturnedWith(1, mocks.mockParsedOmieAccountPayable)
+        expect(mockMappings.titleMapping).toHaveNthReturnedWith(1, mocks.mockAccountPayable)
       })
 
       it('Should call omieMappings.title successfully without relationships', async () => {
@@ -691,7 +669,7 @@ describe('ingestionPerformer - service', () => {
           categoryId: undefined,
           contractId: undefined
         })
-        expect(mockMappings.titleMapping).toHaveNthReturnedWith(1, mocks.mockParsedOmieAccountPayable)
+        expect(mockMappings.titleMapping).toHaveNthReturnedWith(1, mocks.mockAccountPayable)
       })
     })
 
@@ -706,8 +684,8 @@ describe('ingestionPerformer - service', () => {
           omieTitleCategory: mocks.mockOmieAccountsReceivableResponse.titulosEncontrados[0].cabecTitulo.aCodCateg[0],
           omieTitleEntries: mocks.mockOmieAccountsReceivableResponse.titulosEncontrados[0].lancamentos,
           omieDocumentTypes: mocks.mockOmieDocumentTypesResponse.tipo_documento_cadastro,
-          order: mocks.mockSavedOmieServiceOrders[0],
-          billing: mocks.mockSavedOmieServiceInvoices[0],
+          order: mocks.mockServiceOrder,
+          billing: mocks.mockServiceInvoice,
           companyId: mockCompanyId,
           customerId: mockCustomerId,
           projectId: mockProjectId,
@@ -715,8 +693,8 @@ describe('ingestionPerformer - service', () => {
           categoryId: mockCategoryId,
           contractId: mockContractId
         })
-        expect(mockMappings.titleMapping).toHaveNthReturnedWith(2, mocks.mockParsedOmieAccountReceivable)
-        expect(mockRepositories.accountsReceivable.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockParsedOmieAccountReceivable], ['companyId', 'externalId', 'titleId'])
+        expect(mockMappings.titleMapping).toHaveNthReturnedWith(2, mocks.mockAccountReceivable)
+        expect(mockRepositories.accountsReceivable.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockAccountReceivable], ['companyId', 'externalId', 'titleId'])
       })
 
       it('Should call omieMappings.title without title entries', async () => {
@@ -731,8 +709,8 @@ describe('ingestionPerformer - service', () => {
           omieTitleCategory: mockOmieAccountReceivable.cabecTitulo.aCodCateg[0],
           omieTitleEntries: [],
           omieDocumentTypes: mocks.mockOmieDocumentTypesResponse.tipo_documento_cadastro,
-          order: mocks.mockSavedOmieServiceOrders[0],
-          billing: mocks.mockSavedOmieServiceInvoices[0],
+          order: mocks.mockServiceOrder,
+          billing: mocks.mockServiceInvoice,
           companyId: mockCompanyId,
           customerId: mockCustomerId,
           projectId: mockProjectId,
@@ -740,8 +718,8 @@ describe('ingestionPerformer - service', () => {
           categoryId: mockCategoryId,
           contractId: mockContractId
         })
-        expect(mockMappings.titleMapping).toHaveNthReturnedWith(2, mocks.mockParsedOmieAccountReceivable)
-        expect(mockRepositories.accountsReceivable.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockParsedOmieAccountReceivable], ['companyId', 'externalId', 'titleId'])
+        expect(mockMappings.titleMapping).toHaveNthReturnedWith(2, mocks.mockAccountReceivable)
+        expect(mockRepositories.accountsReceivable.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockAccountReceivable], ['companyId', 'externalId', 'titleId'])
       })
 
       it('Should receive accountsReceivable from Omie with departments array but missing department id', async () => {
@@ -761,8 +739,8 @@ describe('ingestionPerformer - service', () => {
           omieTitleCategory: { cCodCateg: mocks.mockOmieAccountsReceivableResponse.titulosEncontrados[0].cabecTitulo.cCodCateg },
           omieTitleEntries: mocks.mockOmieAccountsReceivableResponse.titulosEncontrados[0].lancamentos,
           omieDocumentTypes: mocks.mockOmieDocumentTypesResponse.tipo_documento_cadastro,
-          order: mocks.mockSavedOmieServiceOrders[0],
-          billing: mocks.mockSavedOmieServiceInvoices[0],
+          order: mocks.mockServiceOrder,
+          billing: mocks.mockServiceInvoice,
           companyId: mockCompanyId,
           customerId: mockCustomerId,
           projectId: mockProjectId,
@@ -770,7 +748,7 @@ describe('ingestionPerformer - service', () => {
           categoryId: mockCategoryId,
           contractId: mockContractId
         })
-        expect(mockMappings.titleMapping).toHaveNthReturnedWith(2, mocks.mockParsedOmieAccountReceivable)
+        expect(mockMappings.titleMapping).toHaveNthReturnedWith(2, mocks.mockAccountReceivable)
       })
 
       it('Should call omieMappings.title successfully without relationships', async () => {
@@ -793,7 +771,7 @@ describe('ingestionPerformer - service', () => {
           categoryId: undefined,
           contractId: undefined
         })
-        expect(mockMappings.titleMapping).toHaveNthReturnedWith(2, mocks.mockParsedOmieAccountReceivable)
+        expect(mockMappings.titleMapping).toHaveNthReturnedWith(2, mocks.mockAccountReceivable)
       })
     })
 
@@ -809,8 +787,8 @@ describe('ingestionPerformer - service', () => {
           omieFinancialMovementCategory: mocks.mockOmieFinancialMovementsResponse.movimentos[0].categorias[0],
           omieEntryOrigins: mocks.mockOmieEntryOriginsResponse.origem,
           omieDocumentTypes: mocks.mockOmieDocumentTypesResponse.tipo_documento_cadastro,
-          order: mocks.mockSavedOmieServiceOrders[0],
-          billing: mocks.mockSavedOmieServiceInvoices[0],
+          order: mocks.mockServiceOrder,
+          billing: mocks.mockServiceInvoice,
           companyId: mockCompanyId,
           customerId: mockCustomerId,
           projectId: mockProjectId,
@@ -821,8 +799,7 @@ describe('ingestionPerformer - service', () => {
           accountPayableId: mockAccountPayable,
           accountReceivableId: undefined
         })
-        expect(mockMappings.financialMovementMapping).toHaveReturnedWith(mocks.mockParsedOmieFinancialMovement)
-        expect(mockRepositories.financialMovements.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockParsedOmieFinancialMovement], ['companyId', 'externalId', 'movementId'])
+        expect(mockRepositories.financialMovements.deleteOldAndCreateNew).toHaveBeenCalledWith([mocks.mockFinancialMovement], ['companyId', 'externalId', 'movementId'])
       })
 
       it('Should receive financialMovements from Omie with departments array but missing department id', async () => {
@@ -834,8 +811,8 @@ describe('ingestionPerformer - service', () => {
       it('Should call omieMappings.financialMovement successfully with accountReceivable instead of accountPayable', async () => {
         const { sut, payload, mockCompanyId, mockMappings, mockRepositories, mockCustomerId, mockProjectId, mockDepartmentId, mockCategoryId, mockCheckingAccountId, mockContractId, mockAccountReceivableId } = makeSut()
         mockRepositories.accountsPayable.findMany.mockResolvedValue([])
-        mockRepositories.accountsReceivable.findMany.mockResolvedValue(mocks.mockSavedOmieAccountsReceivable)
-        mockMappings.financialMovementMapping.mockReturnValueOnce({ ...mocks.mockParsedOmieFinancialMovement, accountPayableId: null, accountReceivableId: mockAccountReceivableId })
+        mockRepositories.accountsReceivable.findMany.mockResolvedValue([mocks.mockAccountReceivable])
+        mockMappings.financialMovementMapping.mockReturnValueOnce({ ...mocks.mockFinancialMovement, accountPayableId: null, accountReceivableId: mockAccountReceivableId })
         await sut(payload)
         expect(mockMappings.financialMovementMapping).toHaveBeenCalledWith({
           omieFinancialMovement: mocks.mockOmieFinancialMovementsResponse.movimentos[0],
@@ -843,8 +820,8 @@ describe('ingestionPerformer - service', () => {
           omieFinancialMovementCategory: mocks.mockOmieFinancialMovementsResponse.movimentos[0].categorias[0],
           omieEntryOrigins: mocks.mockOmieEntryOriginsResponse.origem,
           omieDocumentTypes: mocks.mockOmieDocumentTypesResponse.tipo_documento_cadastro,
-          order: mocks.mockSavedOmieServiceOrders[0],
-          billing: mocks.mockSavedOmieServiceInvoices[0],
+          order: mocks.mockServiceOrder,
+          billing: mocks.mockServiceInvoice,
           companyId: mockCompanyId,
           customerId: mockCustomerId,
           projectId: mockProjectId,
@@ -855,7 +832,6 @@ describe('ingestionPerformer - service', () => {
           accountPayableId: undefined,
           accountReceivableId: mockAccountReceivableId
         })
-        expect(mockMappings.financialMovementMapping).toHaveReturnedWith({ ...mocks.mockParsedOmieFinancialMovement, accountPayableId: null, accountReceivableId: mockAccountReceivableId })
       })
 
       it('Should call omieMappings.financialMovement successfully without categories list: use static category in title details', async () => {
@@ -869,8 +845,8 @@ describe('ingestionPerformer - service', () => {
           omieFinancialMovementCategory: { cCodCateg: mocks.mockOmieFinancialMovementsResponse.movimentos[0].detalhes.cCodCateg },
           omieEntryOrigins: mocks.mockOmieEntryOriginsResponse.origem,
           omieDocumentTypes: mocks.mockOmieDocumentTypesResponse.tipo_documento_cadastro,
-          order: mocks.mockSavedOmieServiceOrders[0],
-          billing: mocks.mockSavedOmieServiceInvoices[0],
+          order: mocks.mockServiceOrder,
+          billing: mocks.mockServiceInvoice,
           companyId: mockCompanyId,
           customerId: mockCustomerId,
           projectId: mockProjectId,
@@ -881,7 +857,6 @@ describe('ingestionPerformer - service', () => {
           accountPayableId: mockAccountPayable,
           accountReceivableId: undefined
         })
-        expect(mockMappings.financialMovementMapping).toHaveReturnedWith(mocks.mockParsedOmieFinancialMovement)
       })
 
       it('Should call omieMappings.financialMovement successfully without relationships', async () => {
@@ -907,7 +882,6 @@ describe('ingestionPerformer - service', () => {
           accountPayableId: undefined,
           accountReceivableId: undefined
         })
-        expect(mockMappings.financialMovementMapping).toHaveReturnedWith(mocks.mockParsedOmieFinancialMovement)
       })
     })
   })
