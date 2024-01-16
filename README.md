@@ -74,8 +74,14 @@ npm run deploy:prd
 
 ### Run Tests
 
-Run unit/integration tests using Jest:
+Run unit tests using Jest:
 
 ```bash
-npm test
+npm test:unit
+```
+
+Run integration tests using Jest:
+
+```bash
+npm test:integration
 ```

@@ -1,13 +1,12 @@
-const globalConfig = require('./jest.config')
+const globalConfig = require('../jest.config')
 
 module.exports = {
   ...globalConfig,
+  collectCoverage: true,
   coverageDirectory: '<rootDir>/coverage/unit',
   collectCoverageFrom: [
     '<rootDir>/src/functions/**/*.js',
-    '!<rootDir>/src/functions/**/schema.js',
-    '<rootDir>/src/shared/**/*.js',
-    '!<rootDir>/src/shared/services/**/*.js'
+    '<rootDir>/src/shared/**/*.js'
   ],
   roots: [
     'src',
