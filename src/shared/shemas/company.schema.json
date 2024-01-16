@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "credentials": {
+      "type": "object",
+      "properties": {
+        "appKey": { "type": "string" },
+        "appSecret": { "type": "string" }
+      },
+      "required": ["appKey", "appSecret"],
+      "additionalProperties": false
+    },
+    "externalId": { "type": "string" },
+    "cnpj": { "type": "string" },
+    "name": { "type": "string" },
+    "nickName": { "type": "string" },
+    "cnae": {
+      "type": "object",
+      "properties": {
+        "code": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["code", "description"],
+      "additionalProperties": false
+    },
+    "stateRegistration": { "type": "string" },
+    "municipalRegistration": { "type": "string" },
+    "address": {
+      "type": "object",
+      "properties": {
+        "zipCode": { "type": "string" },
+        "street": { "type": "string" },
+        "number": { "type": "string" },
+        "neighborhood": { "type": "string" },
+        "city": { "type": "string" },
+        "state": { "type": "string" },
+        "additionalInfo": { "type": "string" }
+      },
+      "required": ["zipCode", "street", "number", "neighborhood", "city", "state"],
+      "additionalProperties": false
+    },
+    "email": { "type": "string", "format": "email" },
+    "phones": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "areaCode": { "type": "string" },
+          "number": { "type": "string" }
+        },
+        "required": ["areaCode", "number"],
+        "additionalProperties": false
+      }
+    },
+    "isActive": { "type": "boolean" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  },
+  "required": [
+    "id", "credentials", "externalId", "cnpj", "name", "nickName",
+    "cnae", "stateRegistration", "municipalRegistration", "address",
+    "email", "phones", "isActive", "createdAt", "updatedAt"
+  ],
+  "additionalProperties": false
+}
