@@ -1,5 +1,5 @@
 const { SQSClient, SendMessageCommand } = require('@aws-sdk/client-sqs')
-const config = require('../../config')
+const config = require('../../../config')
 
 module.exports = () => {
   const SQS = new SQSClient()

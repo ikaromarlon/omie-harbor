@@ -1,7 +1,7 @@
 const { S3Client, PutObjectCommand, HeadObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3')
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner')
-const config = require('../../config')
-const { NotFoundException } = require('../../common/errors')
+const config = require('../../../config')
+const { NotFoundException } = require('../../../common/errors')
 
 module.exports = () => {
   const S3 = new S3Client()

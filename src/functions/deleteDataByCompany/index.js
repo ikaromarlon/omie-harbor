@@ -5,7 +5,7 @@ const schema = require('./schema')
 const validateWithSchema = require('../../common/helpers/validateWithSchema')
 const CompaniesRepository = require('../../repositories/companiesRepository')
 const Repositories = require('../../repositories/genericRepository')
-const SQS = require('../../infra/sqs')
+const SQS = require('../../infra/services/sqs')
 const logger = require('../../common/helpers/logger')
 
 const sqs = SQS()
