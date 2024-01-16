@@ -30,11 +30,11 @@ Omie Harbor is a service for ingestion and processing data consumed from [Omie E
 1. [NodeJS v18](https://nodejs.org/dist/latest-v18.x/docs/api/)
 2. [MongoDB](https://www.mongodb.com/docs/)
 3. [Serverless](https://www.serverless.com/framework/docs/)
-4. [AWS Lambda](https://docs.aws.amazon.com/lambda/index.html) + [AWS API Gateway](https://docs.aws.amazon.com/apigateway/index.html)
-5. [AWS S3](https://docs.aws.amazon.com/s3/index.html)
-6. [AWS EventBridge](https://docs.aws.amazon.com/eventbridge/index.html)
-7. [AWS SQS](https://docs.aws.amazon.com/sqs/index.html)
-8. [AWS SES](https://docs.aws.amazon.com/ses/index.html)
+4. [AWS Lambda](https://docs.aws.amazon.com/lambda/index.html)
+5. [AWS API Gateway](https://docs.aws.amazon.com/apigateway/index.html)
+6. [AWS S3](https://docs.aws.amazon.com/s3/index.html)
+7. [AWS EventBridge](https://docs.aws.amazon.com/eventbridge/index.html)
+8. [AWS SQS](https://docs.aws.amazon.com/sqs/index.html)
 
 
 ### Environment Variables
