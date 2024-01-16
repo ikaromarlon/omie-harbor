@@ -3,12 +3,20 @@ const factory = require('./factory')
 
 const state = {
   client: null,
-  db: null
+  db: null,
+  config: null
 }
 
 module.exports = class MongodbHelper {
+  static setup (config) {
+    if (!state.config && config) {
+      state.config = config
+    }
+  }
+
   static async connect (config) {
     if (!state.client) {
+      MongodbHelper.setup(config)
       state.client = await MongoClient.connect(config.uri, {
         minPoolSize: config.options?.minPoolSize,
         maxPoolSize: config.options?.maxPoolSize,
@@ -16,15 +24,20 @@ module.exports = class MongodbHelper {
       })
       state.db = state.client.db(config.dbName)
     }
+    return state.db
   }
 
-  static async collection (name, config) {
-    await MongodbHelper.connect(config)
+  static async collection (name) {
+    await MongodbHelper.connect(state.config)
     return state.db.collection(name)
   }
 
-  static repository (name, config, props = {}) {
-    return factory(name, MongodbHelper, config, props)
+  static repository (name, props = {}) {
+    return factory({
+      name,
+      props,
+      MongodbHelper
+    })
   }
 
   static async ping () {
@@ -36,6 +49,7 @@ module.exports = class MongodbHelper {
   static async disconnect () {
     await state.client?.close()
     state.client = null
+    state.db = null
     state.config = null
   }
 }

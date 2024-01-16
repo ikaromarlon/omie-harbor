@@ -2,6 +2,8 @@ const config = require('../config')
 const MongodbHelper = require('../infra/db/mongodb')
 
 module.exports = () => {
+  MongodbHelper.setup(config.db.mongodb)
+
   const repositories = Object.entries({
     categories: 'categories',
     departments: 'departments',

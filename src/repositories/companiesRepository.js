@@ -2,7 +2,9 @@ const config = require('../config')
 const MongodbHelper = require('../infra/db/mongodb')
 
 module.exports = () => {
-  const repository = MongodbHelper.repository('companies', config.db.mongodb)
+  MongodbHelper.setup(config.db.mongodb)
+
+  const repository = MongodbHelper.repository('companies')
 
   return {
     create: async (data) => {

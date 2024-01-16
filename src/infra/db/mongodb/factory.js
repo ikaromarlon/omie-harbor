@@ -1,28 +1,32 @@
 const { makeDocument, parseDocument, parseDocuments, parseFilters } = require('./utils')
 
-module.exports = (name, MongodbHelper, config, props = {}) => ({
+module.exports = ({
+  name,
+  props = {},
+  MongodbHelper
+}) => ({
   name,
   ...props,
   findOne: async (filter, options = {}) => {
-    const collection = await MongodbHelper.collection(name, config)
+    const collection = await MongodbHelper.collection(name)
     const parsedFilter = parseFilters(filter)
     const result = await collection.findOne(parsedFilter, options)
     return parseDocument(result)
   },
   findMany: async (filter = {}, options = {}) => {
-    const collection = await MongodbHelper.collection(name, config)
+    const collection = await MongodbHelper.collection(name)
     const parsedFilter = parseFilters(filter)
     const result = await collection.find(parsedFilter, options)
     return parseDocuments(result)
   },
   insertOne: async (data, options = {}) => {
-    const collection = await MongodbHelper.collection(name, config)
+    const collection = await MongodbHelper.collection(name)
     const doc = makeDocument(data)
     const result = await collection.insertOne(doc, options)
     return parseDocument({ _id: result.insertedId, ...doc })
   },
   updateOne: async (data, filter = {}, options = {}) => {
-    const collection = await MongodbHelper.collection(name, config)
+    const collection = await MongodbHelper.collection(name)
     const parsedFilter = parseFilters(filter)
     const doc = makeDocument(data, true)
     const result = await collection.findOneAndUpdate(
@@ -33,29 +37,29 @@ module.exports = (name, MongodbHelper, config, props = {}) => ({
     return parseDocument(result)
   },
   deleteOne: async (filter = {}, options = {}) => {
-    const collection = await MongodbHelper.collection(name, config)
+    const collection = await MongodbHelper.collection(name)
     const parsedFilter = parseFilters(filter)
     const result = await collection.deleteOne(parsedFilter, options)
     return Boolean(result.deletedCount)
   },
   deleteMany: async (filter = {}, options = {}) => {
-    const collection = await MongodbHelper.collection(name, config)
+    const collection = await MongodbHelper.collection(name)
     const parsedFilter = parseFilters(filter)
     const result = await collection.deleteMany(parsedFilter, options)
     return result.deletedCount
   },
   count: async (filter = {}, options = {}) => {
-    const collection = await MongodbHelper.collection(name, config)
+    const collection = await MongodbHelper.collection(name)
     const parsedFilter = parseFilters(filter)
     return collection.count(parsedFilter, options)
   },
   aggregate: async (pipeline, options = {}) => {
-    const collection = await MongodbHelper.collection(name, config)
+    const collection = await MongodbHelper.collection(name)
     const result = await collection.aggregate(pipeline, options)
     return parseDocuments(result)
   },
   createOrUpdateOne: async (data, filter = {}, options = {}) => {
-    const collection = await MongodbHelper.collection(name, config)
+    const collection = await MongodbHelper.collection(name)
     const { _id, createdAt, updatedAt, ...other } = makeDocument(data)
     const parsedFilter = Object.keys(filter).length ? parseFilters(filter) : { _id }
     const result = await collection.findOneAndUpdate(
@@ -69,7 +73,7 @@ module.exports = (name, MongodbHelper, config, props = {}) => ({
     return result
   },
   createOrUpdateMany: async (batch, buildFilter) => {
-    const collection = await MongodbHelper.collection(name, config)
+    const collection = await MongodbHelper.collection(name)
     const response = {
       written: 0,
       created: 0,
@@ -104,7 +108,7 @@ module.exports = (name, MongodbHelper, config, props = {}) => ({
     return response
   },
   deleteOldAndCreateNew: async (batch, buildFilter) => {
-    const collection = await MongodbHelper.collection(name, config)
+    const collection = await MongodbHelper.collection(name)
     const response = {
       deleted: 0,
       created: 0
