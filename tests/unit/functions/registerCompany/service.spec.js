@@ -1,5 +1,5 @@
 const makeService = require('../../../../src/functions/registerCompany/service')
-const { NotFoundException, ConflictException } = require('../../../../src/common/errors')
+const { ConflictException } = require('../../../../src/common/errors')
 const { mockOmieCompaniesResponse, mockOmieCnaeResponse, mockParsedOmieCompany, mockSavedOmieCompanies } = require('../../../mocks')
 
 const makeSut = () => {
@@ -47,25 +47,6 @@ describe('registerCompany - service', () => {
     expect(omieServiceStub.getCnae).toHaveBeenCalledTimes(0)
     expect(companyMappingStub).toHaveBeenCalledTimes(0)
     expect(mockCompanyRepository.create).toHaveBeenCalledTimes(0)
-  })
-
-  it('Should return error if company not found at Omie', async () => {
-    const sutPackage = makeSut()
-    const { sut, payload, mockCredentials, omieServiceStub, companyMappingStub, mockCompanyRepository } = sutPackage
-    const spySut = jest.spyOn(sutPackage, 'sut')
-    omieServiceStub.getCompany.mockResolvedValueOnce(null)
-    try {
-      await sut(payload)
-    } catch (error) {
-      expect(error).toBeInstanceOf(NotFoundException)
-      expect(error.message).toBe('Company not found at Omie. Check the AppKey and AppSecret and try again.')
-    }
-    expect(mockCompanyRepository.findByCredentials).toHaveBeenCalledWith(mockCredentials.appKey, mockCredentials.appSecret)
-    expect(omieServiceStub.getCompany).toHaveBeenCalledWith(mockCredentials, true)
-    expect(omieServiceStub.getCnae).toHaveBeenCalledTimes(0)
-    expect(companyMappingStub).toHaveBeenCalledTimes(0)
-    expect(mockCompanyRepository.create).toHaveBeenCalledTimes(0)
-    expect(spySut).toHaveReturnedTimes(0)
   })
 
   it('Should register Omie company successfully', async () => {

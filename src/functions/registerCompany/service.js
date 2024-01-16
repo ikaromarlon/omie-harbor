@@ -1,4 +1,4 @@
-const { NotFoundException, ConflictException } = require('../../common/errors')
+const { ConflictException } = require('../../common/errors')
 
 module.exports = ({
   omieService,
@@ -14,10 +14,6 @@ module.exports = ({
   }
 
   const omieCompany = await omieService.getCompany(credentials, true)
-
-  if (!omieCompany) {
-    throw new NotFoundException('Company not found at Omie. Check the AppKey and AppSecret and try again.')
-  }
 
   const omieCnae = await omieService.getCnae(credentials)
 
