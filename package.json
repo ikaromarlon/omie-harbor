@@ -34,7 +34,6 @@
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.484.0",
-    "@aws-sdk/client-ses": "^3.484.0",
     "@aws-sdk/client-sqs": "^3.484.0",
     "@aws-sdk/s3-request-presigner": "^3.490.0",
     "@types/jest": "^29.5.11",
@@ -47,6 +46,7 @@
     "nodemon": "^3.0.2",
     "serverless": "^3.38.0",
     "serverless-apigateway-service-proxy": "^2.2.1",
+    "serverless-domain-manager": "^7.3.3",
     "serverless-iam-roles-per-function": "^3.2.0",
     "serverless-offline": "^13.3.2",
     "standard": "^17.1.0"

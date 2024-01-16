@@ -47,6 +47,7 @@ package:
     - '!src/shared/**'
 
 plugins:
+  # - serverless-domain-manager
   - serverless-iam-roles-per-function
   - serverless-apigateway-service-proxy
   - serverless-offline
