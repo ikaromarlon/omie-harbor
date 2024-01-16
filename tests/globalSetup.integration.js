@@ -6,5 +6,5 @@ module.exports = async () => {
   await globalSetup()
 
   const db = await MongodbHelper.connect(config.db.mongodb)
-  db.dropDatabase()
+  await db.dropDatabase()
 }

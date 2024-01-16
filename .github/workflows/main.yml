@@ -12,6 +12,7 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
+    environment: Testing
     steps:
 
       - name: Checkout code

@@ -15,7 +15,7 @@
     "test": "npm run test:unit && npm run test:integration",
     "test:unit": "jest --no-cache --passWithNoTests --config tests/config.unit.js",
     "test:integration": "jest --no-cache --passWithNoTests --runInBand --config tests/config.integration.js",
-    "test:staged": "jest --no-cache --passWithNoTests --findRelatedTests",
+    "test:staged": "jest --no-cache --passWithNoTests --runInBand --findRelatedTests",
     "deploy": "sls deploy --verbose",
     "deploy:dev": "npm run deploy -- --stage=dev",
     "deploy:prd": "npm run deploy -- --stage=prd",
