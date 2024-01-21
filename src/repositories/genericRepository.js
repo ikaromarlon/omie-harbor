@@ -17,7 +17,7 @@ module.exports = () => {
     accountsPayable: 'accounts-payable',
     accountsReceivable: 'accounts-receivable',
     financialMovements: 'financial-movements'
-  }).reduce((acc, [key, name]) => ({ ...acc, [key]: MongodbHelper.repository(name, config.db.mongodb) }), {})
+  }).reduce((acc, [key, name]) => ({ ...acc, [key]: MongodbHelper.repository(name) }), {})
 
   return repositories
 }
